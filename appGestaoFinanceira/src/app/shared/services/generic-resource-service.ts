@@ -7,17 +7,25 @@ import {GenericResourceModel} from '../models/generic-resource-model'
 abstract class GenericResourceService< T extends GenericResourceModel>{
    
     protected http: HttpClient;
-    httpHeaders:HttpHeaders;
 
-    constructor(protected nomeApi:string){
-
+    constructor(protected apiName :string){
+      
     }
+
+    public insert(resource: T):Observable<any>{
+        const url = environment.apiUrl + "/"+ this.apiName;
+        return this.http.post(url, resource);
+    }
+
+    public update(resource: T):Observable<any>{
+        const url = environment.apiUrl + "/"+ this.apiName;
+        return this.http.put(url, resource);
+    } 
     
     public delete(resource: T):Observable<any>{
-        const url = environment.apiUrl + "/"+ resource.nomeApi + "/" + resource.id;
-        return this.http.delete(url);
+       const url = environment.apiUrl + "/"+ this.apiName + "/" + resource.id;
+       return this.http.delete(url);
     }    
-    
     
     protected jsonDataToResources(jsonData: any[]): T [] {
         const resourses: T[] = [];

@@ -7,7 +7,9 @@ import {CadastrosBasicosModule} from '../app/features/cadastros-basicos/cadastro
 import {SecurityModule} from '../app/features/security/security.module';
 /*============================*/
 
+/*====importação de componentes====*/
 import { AppComponent } from './app.component';
+/*============================*/
 
 @NgModule({
   declarations: [
@@ -20,6 +22,6 @@ import { AppComponent } from './app.component';
     SecurityModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent] // >> o componente que será inicializado na aplicação  
 })
 export class AppModule { }
