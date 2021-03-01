@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import{ AppRoutingModule } from './app.routing';
 
 /*====importação de módulos====*/
 import {CoreModule} from '../app/core/core.module';
@@ -19,7 +20,8 @@ import { AppComponent } from './app.component';
     BrowserModule,
     CoreModule,
     CadastrosBasicosModule,
-    SecurityModule
+    SecurityModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent] // >> o componente que será inicializado na aplicação  
