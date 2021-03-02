@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginFormComponent implements OnInit {
 
+  mensagem:string;
+  disabled:boolean;
+  
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  autenticar(formLogin):void{
+    console.log(formLogin.value);
+    this.mensagem = "Processando..."; 
+    this.disabled = true;
   }
 
 }

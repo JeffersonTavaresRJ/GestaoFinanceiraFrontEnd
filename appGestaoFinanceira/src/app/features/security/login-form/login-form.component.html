@@ -1,26 +1,39 @@
 <div class="card mt-5 col-4 mx-auto">
 
+  <div class="">
+
+  </div>
+
   <div class="card-header">
     <div class="center">
-       <strong>Acesso</strong>
+      <strong>Login de Usuário</strong>
     </div>
   </div>
 
   <div class="card-body">
-    <form>
+    <form #formLogin="ngForm" (submit)="autenticar(formLogin)">
       <div class="form-group col-12">
         <label for="name">E-mail:</label>
-        <input type="text" class="form-control" id="name" formControlName="name">
+        <input type="text" autocomplete="" class="form-control" name="email" ngModel>
         <!--<app-form-field-error [form-control]="resourceForm.get('email')"></app-form-field-error>-->
       </div>
 
       <div class="form-group col-12 mt-3">
         <label for="description">Senha:</label>
-        <input type="text" class="form-control" id="description" formControlName="description">
+        <input type="text" type="password" class="form-control" name="senha" ngModel>
         <!--<app-form-field-error [form-control]="resourceForm.get('senha')"></app-form-field-error>-->
       </div>
 
-      <button class="btn btn-primary mt-4" type="submit">Entrar</button>
+      <button class="btn btn-primary mt-4" type="submit" [disabled]="disabled">
+        <div [hidden]="mensagem">
+          Acessar Sistema
+        </div>        
+        <div [hidden]="!mensagem">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          {{mensagem}}
+        </div>
+        
+      </button>
     </form>
   </div>
 </div>

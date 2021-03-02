@@ -6,10 +6,12 @@ import{ AppRoutingModule } from './app.routing';
 import {CoreModule} from '../app/core/core.module';
 import {CadastrosBasicosModule} from '../app/features/cadastros-basicos/cadastros-basicos.module';
 import {SecurityModule} from '../app/features/security/security.module';
+import {DashboardsModule} from '../app/features/dashboards/dashboards.module';
 /*============================*/
 
 /*====importação de componentes====*/
 import { AppComponent } from './app.component';
+
 /*============================*/
 
 @NgModule({
@@ -21,6 +23,7 @@ import { AppComponent } from './app.component';
     CoreModule,
     CadastrosBasicosModule,
     SecurityModule,
+    DashboardsModule,
     AppRoutingModule
   ],
   providers: [],
