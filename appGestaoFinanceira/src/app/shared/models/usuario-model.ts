@@ -5,8 +5,7 @@ export class Usuario extends GenericResourceModel{
         public id?: number,
         public nome: string ='',
         public eMail: string = '',
-        public senha: string = '',
-        public nomeApi: string = 'Usuario'
+        public senha: string = ''
     ){
         super();
     }

@@ -5,8 +5,8 @@ export class Categoria extends GenericResourceModel{
     public id?: number,
     public descricao: string = '',
     public tipo: string = '',
-    public status: string = '',
-    public nomeApi: string = 'Categoria'
+    public status?: string,
+    public idUsuario: number=null
    ){
        super();
    }

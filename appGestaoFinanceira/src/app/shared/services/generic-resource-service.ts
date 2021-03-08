@@ -1,43 +1,45 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Injector } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-import {GenericResourceModel} from '../models/generic-resource-model'
+import { GenericResourceModel } from '../models/generic-resource-model'
 
-abstract class GenericResourceService< T extends GenericResourceModel>{
-   
-    protected http: HttpClient;
+export abstract class GenericResourceService<T extends GenericResourceModel>{
 
-    constructor(protected apiName :string){
-      
+    protected apiName: string;
+    private http: HttpClient;
+    private url: string;
+
+    constructor(injector: Injector, apiName: string) {
+        this.apiName = apiName;
+        this.url = `${environment.apiUrl}${this.apiName}`;
+        this.http = injector.get(HttpClient);
     }
 
-    public insert(resource: T):Observable<any>{
-        const url = environment.apiUrl + "/"+ this.apiName;
-        return this.http.post(url, resource);
+    post(resource: any): Observable<any> {
+        return this.http.post(this.url, resource);
     }
 
-    public update(resource: T):Observable<any>{
-        const url = environment.apiUrl + "/"+ this.apiName;
-        return this.http.put(url, resource);
-    } 
-    
-    public delete(resource: T):Observable<any>{
-       const url = environment.apiUrl + "/"+ this.apiName + "/" + resource.id;
-       return this.http.delete(url);
-    }    
-    
-    protected jsonDataToResources(jsonData: any[]): T [] {
+    put(resource: any): Observable<any> {
+        return this.http.put(this.url, resource);
+    }
+
+    delete(id: number): Observable<any> {
+        return this.http.delete(`${this.url}/${id}`);
+    }
+
+    jsonDataToResources(jsonData: any[]): T[] {
         const resourses: T[] = [];
-        jsonData.forEach(element=>resourses.push(element as T));
+        jsonData.forEach(element => resourses.push(element as T));
         return resourses;
     }
 
-    protected jsonDataToResource(jsonData: any): T {
+    jsonDataToResource(jsonData: any): T {
         return jsonData as T;
     }
 
-    protected handlerError(error: any):Observable<any>{
+    protected handlerError(error: any): Observable<any> {
         console.error("ERRO NA REQUISIÇÃO =>" || error);
         return throwError(error);
     }

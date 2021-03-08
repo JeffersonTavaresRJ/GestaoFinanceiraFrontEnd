@@ -5,5 +5,8 @@
     /*alinhar texto a direita*/
     display: flex;
     justify-content: flex-end;
-    width: 100%;
+    width: 100%;       
+}
+.p{
+    vertical-align: middle; 
 }
