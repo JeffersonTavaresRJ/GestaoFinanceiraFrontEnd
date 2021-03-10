@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl:'http://gestaofinanceiraapi/'
+ // apiUrl:'http://gestaofinanceiraapi/'
+    apiUrl: 'https://localhost:44381/'
 };
 
 /*
