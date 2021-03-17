@@ -1,0 +1,10 @@
+<button class="btn btn-dark" type="submit" [disabled]="formButtonMessage">
+    <div [hidden]="formButtonMessage">         
+        <img src="assets\icons\save-white-18dp.svg" class="v-middle"/> 
+        <span class="v-middle"> Salvar</span>     
+    </div>
+    <div [hidden]="!formButtonMessage">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{formButtonMessage}}
+    </div>
+  </button>

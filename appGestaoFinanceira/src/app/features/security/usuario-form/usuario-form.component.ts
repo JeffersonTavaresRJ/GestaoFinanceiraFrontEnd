@@ -16,10 +16,12 @@ export class UsuarioFormComponent extends GenericResourceFormComponent<Usuario>{
     super(injector, usuarioService);
   }
 
+  usuario = {
+    senha:'',
+    confirmarSenha:''
+  };
+
   ngOnInit(): void {
     
   }
-
-
-
 }
