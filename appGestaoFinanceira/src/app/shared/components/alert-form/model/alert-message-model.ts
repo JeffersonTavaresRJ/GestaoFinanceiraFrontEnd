@@ -1,6 +1,6 @@
 export class AlertMessage{
     constructor(
-       public action:string='',
+       public action:string=null,
        public description:string=''
     ){}
 }

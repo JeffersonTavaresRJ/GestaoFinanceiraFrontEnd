@@ -8,10 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ButtonSaveSubmmitComponent implements OnInit {
 
   @Input('form-button-message') formButtonMessage : string='';
+  @Input('form-button-disabled') formButtonDisabled : boolean;
 
   constructor() { }  
 
   ngOnInit(): void {
-  }
+  } 
 
 }

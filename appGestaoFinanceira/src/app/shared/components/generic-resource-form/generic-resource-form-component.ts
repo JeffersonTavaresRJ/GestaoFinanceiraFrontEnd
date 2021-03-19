@@ -1,11 +1,10 @@
 
-import { TYPED_NULL_EXPR } from '@angular/compiler/src/output/output_ast';
 import { OnInit, AfterContentChecked, Injector, Directive } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericResourceModel } from '../../models/generic-resource-model';
 import { GenericResourceService } from '../../services/generic-resource-service';
-import {AlertMessage} from '../alert-form/model/alert-message-model';
+import { AlertMessage } from '../alert-form/model/alert-message-model';
 
 
 
@@ -13,11 +12,13 @@ import {AlertMessage} from '../alert-form/model/alert-message-model';
 export abstract class GenericResourceFormComponent<T extends GenericResourceModel>
     implements OnInit {
 
-    resourceMessageButton: string;    
+    resourceMessageButton: string;
     resourceAlertMessage: AlertMessage;
     resourceForm: FormGroup;
 
-    private validationErrors: any[]=[];
+    protected resourceFormBuilder: FormBuilder;
+
+    private validationErrors: any[] = [];
     private redirectRouterLink: string;
     private router: Router;
     private route: ActivatedRoute;
@@ -28,32 +29,35 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
         this.router = injector.get(Router);
         this.route = injector.get(ActivatedRoute);
+        this.resourceFormBuilder = injector.get(FormBuilder);
     }
 
 
     ngOnInit(): void {
+        this.buildResourceForm();
     }
 
-    resourceValidations(param:string): any[] {
-        return this.validationErrors.filter(i=>i.propertyName==param);
+    resourceValidations(param: string): any[] {
+        return this.validationErrors.filter(i => i.propertyName == param);
     }
 
-
-    resourceSave(formResource) {
+    resourceSave() {
         if (this.resourceCurrentAction() == 'new') {
-            this.resourceCreate(formResource)
+            this.resourceCreate(this.resourceForm.value)
         } else {
-            this.resourceUpdate(formResource)
+            this.resourceUpdate(this.resourceForm.value)
         }
     }
 
-    resourceClearValidations(){
-        this.validationErrors=[];
+    resourceClearValidations() {
+        this.validationErrors = [];
     }
+
+    protected abstract buildResourceForm();
 
     protected resourceCreate(formResource: any): void {
         this.resourceMessageButton = 'Processando...';
-        this.resourceService.post(formResource.value)
+        this.resourceService.post(formResource)
             .subscribe(
                 sucess => this.resourceActionForSucess(sucess),
                 error => this.resourceActionForError(error)
@@ -62,7 +66,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected resourceUpdate(formResource: any): void {
         this.resourceMessageButton = 'Processando...';
-        this.resourceService.put(formResource.value)
+        this.resourceService.put(formResource)
             .subscribe(
                 sucess => this.resourceActionForSucess(sucess),
                 error => this.resourceActionForError(error)
@@ -83,13 +87,13 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             this.router.navigate([this.redirectRouterLink]);
 
         } else {
-            this.resourceMessageButton = '';
+            this.resourceMessageButton = null;
         }
-        this.resourceAlertMessage = new AlertMessage('sucess', s.message);
+        this.resourceAlertMessage = new AlertMessage('success', s.message);
     }
 
     protected resourceActionForError(e): void {
-        this.resourceMessageButton = '';
+        this.resourceMessageButton = null;
 
         if (e.status === 400) {
             this.validationErrors = e.error; //validação de formulários 
@@ -102,9 +106,5 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             console.log(e.error);
         }
 
-    }
-
-    resourceCloseMessage() {
-        this.resourceAlertMessage = null;
     }
 }
