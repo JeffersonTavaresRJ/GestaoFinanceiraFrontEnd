@@ -1,8 +1,5 @@
 <div class="row">
-  <app-alert-form [form-alert-message]="resourceAlertMessage">
-  </app-alert-form>
-
-  <div class="col-6 offset-3 mt-3">
+  <div class="col-6 offset-3 mt-5">
     <h4>Cadastrar Usuário</h4>
     <hr>
     <form [formGroup]="resourceForm" (submit)="resourceSave()">
@@ -42,15 +39,15 @@
             <li *ngIf="validatorConfirmarSenha.errors.senhasNaoConferem">As senhas não conferem</li>
           </ul>
         </span>
-
-      </div>
-
-      <div class="mt-3" style="text-align: right;">
-        <app-button-save-submmit-form [form-button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
-          [form-button-message]="resourceMessageButton">
-        </app-button-save-submmit-form>
       </div>
       
+      <div class="mt-3" style="text-align: right;">
+        <app-button-save-submmit-form 
+          [form-button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+          [form-button-message]="resourceMessageButton"
+          [form-button-label]="'Salvar'">
+        </app-button-save-submmit-form>
+      </div>
     </form>
   </div>
 </div>

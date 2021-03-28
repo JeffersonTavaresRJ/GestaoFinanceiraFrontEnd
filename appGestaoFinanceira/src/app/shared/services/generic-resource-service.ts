@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -7,26 +7,34 @@ import { GenericResourceModel } from '../models/generic-resource-model'
 
 export abstract class GenericResourceService<T extends GenericResourceModel>{
 
-    protected apiName: string;
+    private apiName: string;
     private http: HttpClient;
-    private url: string;
+    private httpHeaders: HttpHeaders;   
 
-    constructor(injector: Injector, apiName: string) {
-        this.apiName = apiName;
-        this.url = `${environment.apiUrl}${this.apiName}`;
-        this.http = injector.get(HttpClient);
+    constructor(injector: Injector) {
+        this.http = injector.get(HttpClient);      
+        this.httpHeaders = new HttpHeaders()
+            .set('Authorization', 'Bearer ' + window.localStorage.getItem(environment.accessToken));
     }
 
-    post(resource: any): Observable<any> {
-        return this.http.post(this.url, resource);
+    private getUrl(apiName:string):string{
+        return `${environment.apiUrl}${apiName}`;
+    }
+
+    post(resource: any): Observable<any> {   
+      return this.http.post(this.getUrl(this.apiName), resource,{headers:this.httpHeaders});
     }
 
     put(resource: any): Observable<any> {
-        return this.http.put(this.url, resource);
+        return this.http.put(this.getUrl(this.apiName), resource,{headers:this.httpHeaders});
     }
 
     delete(id: number): Observable<any> {
-        return this.http.delete(`${this.url}/${id}`);
+        return this.http.delete(`${this.getUrl(this.apiName)}/${id}`, {headers:this.httpHeaders});
+    }
+
+    get(resource: any): Observable<any> {
+        return this.http.get(this.getUrl(this.apiName), {headers:this.httpHeaders});
     }
 
     jsonDataToResources(jsonData: any[]): T[] {
@@ -37,6 +45,10 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
 
     jsonDataToResource(jsonData: any): T {
         return jsonData as T;
+    }   
+    
+    setApiName(apiName:string){
+        this.apiName = apiName;
     }
 
     protected handlerError(error: any): Observable<any> {

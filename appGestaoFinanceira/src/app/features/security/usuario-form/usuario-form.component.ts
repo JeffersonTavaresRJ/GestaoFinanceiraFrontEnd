@@ -2,9 +2,8 @@ import { Component, Injector } from '@angular/core';
 import { Usuario } from '../../../shared/models/usuario-model'
 import { GenericResourceFormComponent } from '../../../shared/components/generic-resource-form/generic-resource-form-component'
 import { UsuarioService } from 'src/app/shared/services/usuario-resource-service';
-import { Validators } from '@angular/forms';
 import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/validacoes-customizadas';
-
+import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 
 @Component({
   selector: 'app-usuario-form',
@@ -13,8 +12,10 @@ import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/
 })
 export class UsuarioFormComponent extends GenericResourceFormComponent<Usuario>{
 
-  constructor(protected injector: Injector, protected usuarioService: UsuarioService) {
-    super(injector, usuarioService);
+  constructor(protected injector: Injector, 
+              protected resourceAlertMessage: AlertMessageForm, 
+              protected usuarioService: UsuarioService) {
+    super(injector,resourceAlertMessage, usuarioService);
   }
 
   protected buildResourceForm() {

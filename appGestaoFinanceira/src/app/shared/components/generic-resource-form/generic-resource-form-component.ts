@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericResourceModel } from '../../models/generic-resource-model';
 import { GenericResourceService } from '../../services/generic-resource-service';
-import { AlertMessage } from '../alert-form/model/alert-message-model';
+import { AlertMessageForm } from '../alert-form/alert-message-form';
 
 
 
@@ -13,7 +13,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     implements OnInit {
 
     resourceMessageButton: string;
-    resourceAlertMessage: AlertMessage;
     resourceForm: FormGroup;
 
     protected resourceFormBuilder: FormBuilder;
@@ -25,6 +24,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
 
     constructor(protected injector: Injector,
+        protected resourceAlertMessage: AlertMessageForm,
         protected resourceService: GenericResourceService<T>) {
 
         this.router = injector.get(Router);
@@ -38,7 +38,12 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     resourceValidations(param: string): any[] {
-        return this.validationErrors.filter(i => i.propertyName == param);
+        
+        if (this.resourceForm.valid && this.validationErrors.length > 0){
+           // debugger;
+            return this.validationErrors.filter(i => i.propertyName == param);
+        }
+        
     }
 
     resourceSave() {
@@ -89,7 +94,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         } else {
             this.resourceMessageButton = null;
         }
-        this.resourceAlertMessage = new AlertMessage('success', s.message);
+        this.resourceAlertMessage.showSuccess(s.message, 'Sr. Usuário');
     }
 
     protected resourceActionForError(e): void {
@@ -100,9 +105,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             console.log(this.validationErrors);
 
         } else if (e.status === 403) {
-            this.resourceAlertMessage = new AlertMessage('error', e.error); //mensagem de crítica          
+            this.resourceAlertMessage.showInfo(e.error, 'Sr. Usuário');//mensagem de crítica
+
         } else {
-            this.resourceAlertMessage = new AlertMessage('error', 'Erro no processamento do servidor');
+            this.resourceAlertMessage.showError('Erro no processamento do servidor', 'Sr. Usuário');
             console.log(e.error);
         }
 

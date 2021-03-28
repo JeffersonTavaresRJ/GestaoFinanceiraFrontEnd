@@ -1,29 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from "@angular/forms";
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { FieldValidationFormComponent } from './components/field-validation-form/field-validation-form.component';
 import { ButtonSaveSubmmitComponent } from './components/buttons/button-save-submmit-form/button-save-submmit-form.component';
-import { AlertFormComponent } from './components/alert-form/alert-form.component';
-
+import { ButtonLogonSubmmitFormComponent } from './components/buttons/button-logon-submmit-form/button-logon-submmit-form.component';
 
 @NgModule({
-  declarations: [FieldValidationFormComponent, 
-                ButtonSaveSubmmitComponent, 
-                AlertFormComponent
+  declarations: [FieldValidationFormComponent,
+    ButtonSaveSubmmitComponent,
+    ButtonLogonSubmmitFormComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    SweetAlert2Module.forRoot(),
-    SweetAlert2Module,
-    SweetAlert2Module.forChild({ /* options */ })
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 2000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true
+    })
   ],
-  exports:[ReactiveFormsModule,
-           FieldValidationFormComponent,
-           ButtonSaveSubmmitComponent,
-           AlertFormComponent,
-           SweetAlert2Module
+  exports: [ReactiveFormsModule,
+    ToastrModule,
+    BrowserAnimationsModule,
+    FieldValidationFormComponent,
+    ButtonSaveSubmmitComponent,
+    ButtonLogonSubmmitFormComponent
   ]
 })
 export class SharedModule { }

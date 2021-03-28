@@ -1,39 +1,85 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img class="logo" src="assets\icons\monetization_on-black-48dp.svg"
-                     alt="logo" 
-                     width="110" 
-                     height="60">
-                 Gestão Financeira
-            </a>   
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" routerLink="login">Login</a>
-              </li>   
-              <li class="nav-item">
-                <a class="nav-link" routerLink="usuario/new">Cadastre-se</a>
-              </li>   
-              <li class="nav-item">
-                <a class="nav-link" href="#">Home</a>
-              </li>              
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Cadastros Básicos
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Categoria</a></li>
-                  <li><a class="dropdown-item" href="#">Item de Movimentação</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Forma de Pagamento</a></li>
-                  <li><a class="dropdown-item" href="#">Conta</a></li>
-                </ul>
-              </li>        
-            </ul>                       
-          </div>         
-        </div>         
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+
+    <a class="navbar-brand" href="#">
+      <img class="logo" src="assets\icons\paid-white-48dp.svg" alt="logo" width="110" height="60">
+      Gestão Financeira
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item" [hidden]="usuarioAutenticado">
+          <a class="nav-link" routerLink="login">Login</a>
+        </li>
+        <li class="nav-item" [hidden]="usuarioAutenticado">
+          <a class="nav-link" routerLink="usuario/new">Cadastre-se</a>
+        </li>
+        <li class="nav-item" [hidden]="!usuarioAutenticado">
+          <a class="nav-link" routerLink="receitas-despesas-dashboard">Home</a>
+        </li>
+        <li class="nav-item dropdown" [hidden]="!usuarioAutenticado">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Cadastros Básicos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Categoria</a></li>
+            <li><a class="dropdown-item" href="#">Item de Movimentação</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Forma de Pagamento</a></li>
+            <li><a class="dropdown-item" href="#">Conta</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="my-1">
+        <li class="nav-item dropdown" [hidden]="!usuarioAutenticado">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarUsuario" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <span style="color: white;">{{user_name}}</span>
+          </a>
+          <ul class="dropdown-menu menuUsuario" aria-labelledby="navbarUsuario">
+            <li><a class="dropdown-item" href="#">Alterar cadastro</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalInterrogative">Logout</a></li>
+              
+          </ul>
+        </li>
+      </ul>
+
+
+    </div>
+  </div>
 </nav>
+
+
+
+<!--
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+-->
+
+<app-modal-interrogative-form 
+   [modal-interrogative-title]="'Sr. Usuário'"
+   [modal-interrogative-message]="'Deseja Realizar logout?'"
+   (modalInterrogativeResponse)="resultLogout($event)">
+</app-modal-interrogative-form>
