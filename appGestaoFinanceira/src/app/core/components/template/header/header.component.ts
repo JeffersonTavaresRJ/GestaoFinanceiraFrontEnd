@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Usuario } from 'src/app/shared/models/usuario-model';
 import { UsuarioService } from 'src/app/shared/services/usuario-resource-service';
 import { environment } from 'src/environments/environment';
 import { AlertMessageForm } from '../../../../shared/components/alert-form/alert-message-form';
@@ -9,24 +10,31 @@ import { AlertMessageForm } from '../../../../shared/components/alert-form/alert
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private usuarioService: UsuarioService, private alertMessageForm: AlertMessageForm) { }
+  constructor(private usuarioService: UsuarioService, 
+              private alertMessageForm: AlertMessageForm) { }
 
-  usuarioAutenticado: boolean;
+  usuarioAutenticado: boolean;  
   user_name: string;
+  private user: Usuario;
   
   ngOnInit(): void {
-    var access_token = window.localStorage.getItem(environment.accessToken);
-    if (access_token != null) {
-     
+    this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
+      
+    if (this.user != null) {
       this.usuarioService.get(JSON.stringify({})).subscribe(
         (s: any) => {
           this.user_name = s.user;
-          this.usuarioAutenticado = true;
+          this.usuarioAutenticado = true;          
         },
         (e: any) => {
-          this.alertMessageForm.showError(e.data.error, 'Sr. Usuário');
+          if (e.status==401){
+            this.alertMessageForm.showError('Sessão expirada', 'Sr. Usuário');            
+          }else{
+            this.alertMessageForm.showError(e.error.error, 'Sr. Usuário');
+            alert(e.error.error);
+          }          
           this.usuarioAutenticado = false;
-          window.localStorage.removeItem(environment.accessToken);
+          window.localStorage.removeItem(environment.keyUser);
           window.location.href = '/login';
         }
       );
@@ -36,7 +44,7 @@ export class HeaderComponent implements OnInit {
   resultLogout(event) {
     this.usuarioAutenticado = event;
     if(!this.usuarioAutenticado){
-      window.localStorage.removeItem(environment.accessToken);
+      window.localStorage.removeItem(environment.keyUser);
       window.location.href = '/login';
     }
   }

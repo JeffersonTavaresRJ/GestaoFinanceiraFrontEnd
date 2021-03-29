@@ -46,12 +46,15 @@ export class LoginFormComponent implements OnInit {
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
         this.messageButton = null;
-        window.localStorage.setItem(environment.accessToken, s.acessToken);
+        window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
         window.location.href = '/receitas-despesas-dashboard';
       },
       (e: any) => {
         this.messageButton = null;
-        if (e.status == 400) {
+        if (e.status == 0) {
+          this.alertMessageForm.showError('Problema no acesso ao servidor', 'Sr. Usuário');
+        }
+        else if (e.status == 400) {
           this.alertMessageForm.showInfo(e.error.message, 'Sr. Usuário');
         } else {
           this.alertMessageForm.showError(e.error, 'Sr. Usuário');

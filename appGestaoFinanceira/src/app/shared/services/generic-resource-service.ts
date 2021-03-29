@@ -4,17 +4,24 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { GenericResourceModel } from '../models/generic-resource-model'
+import { Usuario } from '../models/usuario-model';
 
 export abstract class GenericResourceService<T extends GenericResourceModel>{
 
     private apiName: string;
     private http: HttpClient;
-    private httpHeaders: HttpHeaders;   
+    private httpHeaders: HttpHeaders;
+    private user: Usuario;
 
     constructor(injector: Injector) {
-        this.http = injector.get(HttpClient);      
-        this.httpHeaders = new HttpHeaders()
-            .set('Authorization', 'Bearer ' + window.localStorage.getItem(environment.accessToken));
+        this.http = injector.get(HttpClient);
+        this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
+        debugger;
+        
+        if (this.user!=null){
+            this.httpHeaders = new HttpHeaders()
+            .set('Authorization', 'Bearer '+ this.user.accessToken.toString());
+        };        
     }
 
     private getUrl(apiName:string):string{
