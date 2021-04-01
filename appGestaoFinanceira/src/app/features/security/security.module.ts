@@ -5,10 +5,11 @@ import {SharedModule} from '../../shared/shared.module';
 
 import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { UsuarioFormDeleteComponent } from './usuario-form-delete/usuario-form-delete.component';
 
 
 @NgModule({
-  declarations: [UsuarioFormComponent, LoginFormComponent],
+  declarations: [UsuarioFormComponent, LoginFormComponent, UsuarioFormDeleteComponent],
   imports: [
     CommonModule,
     FormsModule,

@@ -41,10 +41,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  resultLogout(event) {
+  resultEvent(event) {    
     this.usuarioAutenticado = event;
     if(!this.usuarioAutenticado){
-      window.localStorage.removeItem(environment.keyUser);
+      window.localStorage.removeItem(environment.keyUser);      
       window.location.href = '/login';
     }
   }

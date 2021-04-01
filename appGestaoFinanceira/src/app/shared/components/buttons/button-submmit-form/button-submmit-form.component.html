@@ -1,0 +1,10 @@
+<button class="btn btn-dark" type="submit" [disabled]="buttonDisabled">
+    <div [hidden]="buttonMessage">
+      <img [src]="buttonPathIco" class="v-middle" />
+      <span class="v-middle">{{buttonTitle}}</span>    
+    </div>
+    <div [hidden]="!buttonMessage">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{buttonMessage}}
+    </div>
+  </button>

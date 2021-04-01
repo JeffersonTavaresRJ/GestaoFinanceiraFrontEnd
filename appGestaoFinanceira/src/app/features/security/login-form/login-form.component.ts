@@ -43,6 +43,7 @@ export class LoginFormComponent implements OnInit {
 
   autenticar(): void {
     this.messageButton = 'Acessando...';
+    debugger;
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
         this.messageButton = null;

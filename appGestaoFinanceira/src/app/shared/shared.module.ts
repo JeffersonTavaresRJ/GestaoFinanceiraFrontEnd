@@ -4,13 +4,11 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FieldValidationFormComponent } from './components/field-validation-form/field-validation-form.component';
-import { ButtonSaveSubmmitComponent } from './components/buttons/button-save-submmit-form/button-save-submmit-form.component';
-import { ButtonLogonSubmmitFormComponent } from './components/buttons/button-logon-submmit-form/button-logon-submmit-form.component';
+import { ButtonSubmmitFormComponent } from './components/buttons/button-submmit-form/button-submmit-form.component';
 
 @NgModule({
   declarations: [FieldValidationFormComponent,
-    ButtonSaveSubmmitComponent,
-    ButtonLogonSubmmitFormComponent
+    ButtonSubmmitFormComponent
   ],
   imports: [
     CommonModule,
@@ -26,8 +24,7 @@ import { ButtonLogonSubmmitFormComponent } from './components/buttons/button-log
     ToastrModule,
     BrowserAnimationsModule,
     FieldValidationFormComponent,
-    ButtonSaveSubmmitComponent,
-    ButtonLogonSubmmitFormComponent
+    ButtonSubmmitFormComponent,
   ]
 })
 export class SharedModule { }

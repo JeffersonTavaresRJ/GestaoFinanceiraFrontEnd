@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ButtonSaveSubmmitComponent } from './button-save-submmit-form.component';
+import { UsuarioFormDeleteComponent } from './usuario-form-delete.component';
 
-describe('ButtonSaveSubmmitComponent', () => {
-  let component: ButtonSaveSubmmitComponent;
-  let fixture: ComponentFixture<ButtonSaveSubmmitComponent>;
+describe('UsuarioFormDeleteComponent', () => {
+  let component: UsuarioFormDeleteComponent;
+  let fixture: ComponentFixture<UsuarioFormDeleteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ButtonSaveSubmmitComponent ]
+      declarations: [ UsuarioFormDeleteComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ButtonSaveSubmmitComponent);
+    fixture = TestBed.createComponent(UsuarioFormDeleteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

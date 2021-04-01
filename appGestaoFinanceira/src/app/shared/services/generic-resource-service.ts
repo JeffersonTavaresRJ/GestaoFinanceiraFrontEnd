@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-
 import { GenericResourceModel } from '../models/generic-resource-model'
 import { Usuario } from '../models/usuario-model';
 
@@ -16,7 +15,7 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     constructor(injector: Injector) {
         this.http = injector.get(HttpClient);
         this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
-        debugger;
+       // debugger;
         
         if (this.user!=null){
             this.httpHeaders = new HttpHeaders()
@@ -37,7 +36,11 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     }
 
     delete(id: number): Observable<any> {
-        return this.http.delete(`${this.getUrl(this.apiName)}/${id}`, {headers:this.httpHeaders});
+        return this.http.delete(`${this.getUrl(this.apiName)}/${id}`,{headers:this.httpHeaders});
+    }
+
+    getById(id: number): Observable<any> {
+        return this.http.get(`${this.getUrl(this.apiName)}/${id}`, {headers:this.httpHeaders});
     }
 
     get(resource: any): Observable<any> {

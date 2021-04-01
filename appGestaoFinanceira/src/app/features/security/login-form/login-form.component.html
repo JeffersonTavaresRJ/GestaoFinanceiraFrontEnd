@@ -9,7 +9,7 @@
   <div class="card-body">
     <form [formGroup]="formLogin" (submit)="autenticar()">
       <div class="form-group col-12">
-        <label for="name">E-mail:</label>
+        <label for="name">E-Mail:</label>
         <input type="text" class="form-control" formControlName="EMail"/>
         <div *ngIf="!EMail.pristine && EMail.errors">
           <p *ngIf="EMail.errors.email" class="text-danger mt-2">E-mail inválido</p>
@@ -26,9 +26,14 @@
       </div>
 
       <div class="mt-4" style="text-align: right;">
+        <!--
         <app-button-logon-submmit-form [form-button-message]="messageButton"
         [form-button-disabled]="!formLogin.valid || messageButton!=null">
         </app-button-logon-submmit-form>
+        -->
+        <app-button-submmit-form [button-message]="messageButton" [button-disabled]="!formLogin.valid || messageButton!=null"
+         button-title="Acessar Sistema" button-path-ico="assets/icons/lock-white-18dp.svg">
+        </app-button-submmit-form>
       </div>
     </form>
   </div>

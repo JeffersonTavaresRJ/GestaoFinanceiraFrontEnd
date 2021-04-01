@@ -30,6 +30,7 @@ export class UsuarioFormComponent extends GenericResourceFormComponent<Usuario>{
       });
   }
 
+  //propriedade do formulário para pegar validações..
   get validatorConfirmarSenha() {
     return this.resourceForm.get('confirmarSenha');
   }
