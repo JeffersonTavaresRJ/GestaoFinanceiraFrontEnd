@@ -43,9 +43,10 @@ export class LoginFormComponent implements OnInit {
 
   autenticar(): void {
     this.messageButton = 'Acessando...';
-    debugger;
+   // debugger;
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
+        debugger;
         this.messageButton = null;
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
         window.location.href = '/receitas-despesas-dashboard';
