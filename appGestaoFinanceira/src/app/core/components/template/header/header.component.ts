@@ -19,25 +19,25 @@ export class HeaderComponent implements OnInit {
   
   ngOnInit(): void {
     this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
-      
+       
     if (this.user != null) {
+     // debugger;
       this.usuarioService.get(JSON.stringify({})).subscribe(
         (s: any) => {
           this.user_name = s.user;
-          this.usuarioAutenticado = true;          
+          this.usuarioAutenticado = true;                 
         },
         (e: any) => {
           if (e.status==401){
             this.alertMessageForm.showError('Sessão expirada', 'Sr. Usuário');            
           }else{
-            this.alertMessageForm.showError(e.error.error, 'Sr. Usuário');
-            alert(e.error.error);
-          }          
+            this.alertMessageForm.showError(e.error.error, 'Sr. Usuário');           
+          } 
           this.usuarioAutenticado = false;
           window.localStorage.removeItem(environment.keyUser);
           window.location.href = '/login';
         }
-      );
+      );      
     }
   }
 

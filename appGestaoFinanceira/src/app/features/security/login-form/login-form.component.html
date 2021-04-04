@@ -11,26 +11,21 @@
       <div class="form-group col-12">
         <label for="name">E-Mail:</label>
         <input type="text" class="form-control" formControlName="EMail"/>
-        <div *ngIf="!EMail.pristine && EMail.errors">
-          <p *ngIf="EMail.errors.email" class="text-danger mt-2">E-mail inválido</p>
-          <p *ngIf="EMail.errors.required" class="text-danger mt-2">E-mail é obrigatório</p>
+        <div *ngIf="!validatorEMail.pristine && validatorEMail.errors">
+          <p *ngIf="validatorEMail.errors.email" class="text-danger mt-2">E-mail inválido</p>
+          <p *ngIf="validatorEMail.errors.required" class="text-danger mt-2">E-mail é obrigatório</p>
         </div>
       </div>
 
       <div class="form-group col-12 mt-4">
         <label for="description">Senha:</label>
         <input type="text" type="password" class="form-control" formControlName="Senha"/>
-        <div *ngIf="!Senha.pristine && Senha.errors">
-          <p *ngIf="Senha.errors.required" class="text-danger mt-2">Senha é obrigatório</p>
+        <div *ngIf="!validatorSenha.pristine && validatorSenha.errors">
+          <p *ngIf="validatorSenha.errors.required" class="text-danger mt-2">Senha é obrigatório</p>
         </div>
       </div>
 
       <div class="mt-4" style="text-align: right;">
-        <!--
-        <app-button-logon-submmit-form [form-button-message]="messageButton"
-        [form-button-disabled]="!formLogin.valid || messageButton!=null">
-        </app-button-logon-submmit-form>
-        -->
         <app-button-submmit-form [button-message]="messageButton" [button-disabled]="!formLogin.valid || messageButton!=null"
          button-title="Acessar Sistema" button-path-ico="assets/icons/lock-white-18dp.svg">
         </app-button-submmit-form>

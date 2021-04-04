@@ -13,9 +13,9 @@ import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-mes
 export class UsuarioFormComponent extends GenericResourceFormComponent<Usuario>{
 
   constructor(protected injector: Injector, 
-              protected resourceAlertMessage: AlertMessageForm, 
+              protected alertMessage: AlertMessageForm, 
               protected usuarioService: UsuarioService) {
-    super(injector,resourceAlertMessage, usuarioService);
+    super(injector, usuarioService, alertMessage,'/login');
   }
 
   protected buildResourceForm() {

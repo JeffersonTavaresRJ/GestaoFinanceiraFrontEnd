@@ -23,21 +23,21 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.buildForm();
   }
 
-  createForm() {
+  buildForm() {
     this.formLogin = this.formBuilder.group({
       EMail: [null, Validators.compose([Validators.email, Validators.required])],
       Senha: [null, Validators.required]
     });
   }
 
-  get EMail() {
+  get validatorEMail() {
     return this.formLogin.get('EMail');
   }
 
-  get Senha() {
+  get validatorSenha() {
     return this.formLogin.get('Senha');
   }
 
@@ -46,7 +46,6 @@ export class LoginFormComponent implements OnInit {
    // debugger;
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
-        debugger;
         this.messageButton = null;
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
         window.location.href = '/receitas-despesas-dashboard';
@@ -61,7 +60,6 @@ export class LoginFormComponent implements OnInit {
         } else {
           this.alertMessageForm.showError(e.error, 'Sr. Usuário');
           console.log('status: ' + e.status);
-
         }
       });
   }

@@ -1,49 +1,50 @@
 <div class="row">
-    <div class="col-6 offset-3 mt-5">
-      <h4>Confirma a exclusão do Usuário?</h4>
-      <hr>
-      <form [formGroup]="usuarioFormDelete" (submit)="delete()">
+  <div class="col-6 offset-3 mt-5">
+    <h4>Confirma a exclusão do Usuário?</h4>
+    <hr>
+    <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
 
-        <div class="form-group col-12">
-          <label for="nome">Nome:</label>
-          <p><strong>{{usuario.nome}}</strong></p>                
-        </div>
-  
-        <div class="form-group col-12 mt-3">
-            <label for="nome">E-Mail:</label>
-            <p><strong>{{usuario.eMail}}</strong></p>          
-        </div>
-  
-        <div class="row">
-          <div class="col-6">
-            <div class="form-group mt-3">
-              <label for="senha">Senha:</label>
-              <input type="text" type="password" class="form-control" formControlName="senha"/>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group mt-3">
-              <label for="confirmarSenha">Confirmar Senha:</label>
-              <input type="text" type="password" class="form-control" formControlName="confirmarSenha"/>
-            </div>
-          </div>
+      <div class="form-group col-12">
+        <label for="nome">Nome:</label>
+        <p><strong>{{usuario.nome}}</strong></p>
+      </div>
 
-          <span>
-            <ul class="text-danger" *ngIf="!validatorConfirmarSenha.pristine && validatorConfirmarSenha.errors">
-              <li *ngIf="validatorConfirmarSenha.errors.senhasNaoConferem">As senhas não conferem</li>
-            </ul>
-          </span>
+      <div class="form-group col-12 mt-3">
+        <label for="nome">E-Mail:</label>
+        <p><strong>{{usuario.eMail}}</strong></p>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <div class="form-group mt-3">
+            <label for="senha">Senha:</label>
+            <input type="text" type="password" class="form-control" formControlName="senha" />
+          </div>
+        </div>
+        <div class="col-5">
+          <div class="form-group mt-3">
+            <label for="confirmarSenha">Confirmar Senha:</label>
+            <input type="text" type="password" class="form-control" formControlName="confirmarSenha" />
+          </div>
+          <ul class="text-danger" *ngIf="!validatorConfirmarSenha.pristine && validatorConfirmarSenha.errors">
+            <li *ngIf="validatorConfirmarSenha.errors.senhasNaoConferem">As senhas não conferem</li>
+            <li *ngIf="validatorConfirmarSenha.errors.senhaInvalida">{{validatorConfirmarSenha.errors.message}}</li>
+          </ul>
+        </div>
+        <div class="col-2" *ngIf="resourceForm.get('confirmarSenha').value != null && validatorConfirmarSenha.errors==null"
+             style="padding-top: 7%;">
+          <span class="spinner-border" role="status" aria-hidden="true"></span>
         </div>
         
-        <div class="mt-3" style="text-align: right;">
-          <app-button-submmit-form 
-            [button-disabled]="!usuarioFormDelete.valid || messageButton!=null"
-            [button-message]="messageButton"
-            button-path-ico="assets/icons/delete_white_18dp.svg"
-            button-title="Excluir">
-          </app-button-submmit-form>
-        </div>        
+      </div>
 
-      </form>
-    </div>
+      <div class="mt-3" style="text-align: right;">
+        <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+          [button-message]="resourceMessageButton" button-path-ico="assets/icons/delete_white_18dp.svg"
+          button-title="Excluir">
+        </app-button-submmit-form>
+      </div>
+
+    </form>
   </div>
+</div>
