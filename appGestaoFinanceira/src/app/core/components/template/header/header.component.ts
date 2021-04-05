@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AutenticarUsuarioService } from 'src/app/core/services/AutenticarUsuarioService';
 import { Usuario } from 'src/app/shared/models/usuario-model';
 import { UsuarioService } from 'src/app/shared/services/usuario-resource-service';
 import { environment } from 'src/environments/environment';
@@ -11,13 +12,17 @@ import {AlertMessageForm} from '../../../../shared/components/alert-form/alert-m
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private usuarioService: UsuarioService, private alertMessageForm: AlertMessageForm) { }
+  constructor(private usuarioService: UsuarioService, 
+              private alertMessageForm: AlertMessageForm,
+              private autenticarUsuarioService: AutenticarUsuarioService) { }
 
   usuarioAutenticado: boolean;  
   user_name: string;
   private user: Usuario;
   
   ngOnInit(): void {
+
+    this.autenticarUsuarioService.get().subscribe(valor=>this.usuarioAutenticado = valor);    
     this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
        
     if (this.user != null) {

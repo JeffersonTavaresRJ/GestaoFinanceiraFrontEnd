@@ -16,6 +16,7 @@ export class UsuarioFormComponent extends GenericResourceFormComponent<Usuario>{
               protected alertMessage: AlertMessageForm, 
               protected usuarioService: UsuarioService) {
     super(injector, usuarioService, alertMessage,'/login');
+    this.setResourceSubmmitApiName('api/Usuario');
   }
 
   protected buildResourceForm() {

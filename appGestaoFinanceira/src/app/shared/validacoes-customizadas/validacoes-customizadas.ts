@@ -12,42 +12,45 @@ export class ValidacoesCustomizadas {
         control.get('confirmarSenha').setErrors({ senhasNaoConferem: true });
     }
 
-    static validarSenha(usuarioService: UsuarioService) {
+    static validarSenha(usuarioService: UsuarioService, validandoSenha: boolean) {
 
         return (control: AbstractControl) => {
             let senha = control.get('senha').value;
             let confirmarSenha = control.get('confirmarSenha').value;
             let email = control.get('email').value;
-          //  console.log('validando..');
+            //  console.log('validando..');
 
-            if (confirmarSenha!=null && confirmarSenha.length > 0 && senha.length === confirmarSenha.length) {
+            if (confirmarSenha != null && confirmarSenha.length > 0 && senha.length === confirmarSenha.length) {
                 var credentials = {
                     email: email,
                     senha: senha
                 }
-             //   console.log('chamando api..:'+confirmarSenha.length);
+                //   console.log('chamando api..:'+confirmarSenha.length);
+                validandoSenha = true;
                 usuarioService.autenthicate(credentials).subscribe(
                     success => {
-                       // console.log('sucesso!');
-                        return null;
+                       return null;
                     },
                     (errors: any) => {
                         if (errors.status == 0) {
-                          //  console.log('erro servidor!');
+                            //  console.log('erro servidor!');
+                            validandoSenha = false;
                             control.get('confirmarSenha').setErrors({ senhaInvalida: true, message: 'Problema de acesso ao servidor' });
                         }
                         else if (errors.status == 400) {
-                         //   console.log('senha inválida!');
+                            //   console.log('senha inválida!');
+                            validandoSenha = false;
                             control.get('confirmarSenha').setErrors({ senhaInvalida: true, message: 'Senha inválida' });
                         } else {
-                          //  console.log(errors.error);
+                            //  console.log(errors.error);
+                            validandoSenha = false;
                             control.get('confirmarSenha').setErrors({ senhaInvalida: true, message: errors.error });
                         }
                     }
                 )
-            }            
-           // control.get('confirmarSenha').setErrors({ senhaInvalida: false, message: null });
-           return null;
+            }
+            // control.get('confirmarSenha').setErrors({ senhaInvalida: false, message: null });
+            return null;
         }
     }
 }

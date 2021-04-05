@@ -31,20 +31,16 @@
             <li *ngIf="validatorConfirmarSenha.errors.senhaInvalida">{{validatorConfirmarSenha.errors.message}}</li>
           </ul>
         </div>
-        <div class="col-2" *ngIf="resourceForm.get('confirmarSenha').value != null && validatorConfirmarSenha.errors==null"
-             style="padding-top: 7%;">
+        <div class="col-2 style-spinner" *ngIf="validandoSenha">
           <span class="spinner-border" role="status" aria-hidden="true"></span>
         </div>
-        
+        <div class="col-2 style-button" *ngIf="!validandoSenha">
+             <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+             [button-message]="resourceMessageButton" button-path-ico="assets/icons/delete_white_18dp.svg"
+             button-title="Excluir">
+           </app-button-submmit-form>
+        </div>        
       </div>
-
-      <div class="mt-3" style="text-align: right;">
-        <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
-          [button-message]="resourceMessageButton" button-path-ico="assets/icons/delete_white_18dp.svg"
-          button-title="Excluir">
-        </app-button-submmit-form>
-      </div>
-
     </form>
   </div>
 </div>

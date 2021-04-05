@@ -1,5 +1,5 @@
 
-import { OnInit, AfterContentChecked, Injector, Directive } from '@angular/core';
+import { OnInit, Injector, Directive } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericResourceModel } from '../../models/generic-resource-model';
@@ -14,15 +14,15 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     resourceMessageButton: string;
     resourceForm: FormGroup;
+    protected resourceFormBuilder: FormBuilder;    
 
-    protected resourceFormBuilder: FormBuilder;
-
-    private validationErrors: any[] = [];    
+    private validationErrors: any[] = [];
     private router: Router;
     private route: ActivatedRoute;
+    protected resourceSubmmitEventForSuccess = () => { };//evento opcional para ser executado após sucesso
 
 
-    constructor(protected injector: Injector,        
+    constructor(protected injector: Injector,
         protected resourceService: GenericResourceService<T>,
         protected resourceAlertMessage: AlertMessageForm,
         protected redirectRouterLink: string) {
@@ -37,22 +37,25 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     resourceValidations(param: string): any[] {
-        
-        if (this.resourceForm.valid && this.validationErrors.length > 0){
-           // debugger;
+        if (this.resourceForm.valid && this.validationErrors.length > 0) {
+            // debugger;
             return this.validationErrors.filter(i => i.propertyName == param);
         }
-        
+
+    }
+
+    setResourceSubmmitApiName(apiName: string) {
+        this.resourceService.setApiName(apiName);
     }
 
     resourceSubmmit() {
         if (this.resourceCurrentAction() == 'new') {
             this.resourceCreate(this.resourceForm.value)
-        } else if (this.resourceCurrentAction() == 'edit'){
+        } else if (this.resourceCurrentAction() == 'edit') {
             this.resourceUpdate(this.resourceForm.value)
-        }else if (this.resourceCurrentAction() == 'delete'){
+        } else if (this.resourceCurrentAction() == 'delete') {
             this.resourceDelete(this.resourceForm.value.id)
-        }else{
+        } else {
             this.resourceAlertMessage.showError('Rota não encontrada', 'Sr. Usuário');
         }
     }
@@ -63,39 +66,39 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected abstract buildResourceForm();
 
-    protected resourceCreate(formResource: any): void {
+    protected resourceCreate(formResource: any) {
         this.resourceMessageButton = 'Processando...';
         this.resourceService.post(formResource)
             .subscribe(
-                sucess => this.resourceActionForSucess(sucess),
-                error => this.resourceActionForError(error)
+                sucess => { this.resourceActionForSucess(sucess) },
+                error => { this.resourceActionForError(error) }
             );
     }
 
-    protected resourceUpdate(formResource: any): void {
+    protected resourceUpdate(formResource: any) {
         this.resourceMessageButton = 'Atualizando...';
         this.resourceService.put(formResource)
             .subscribe(
-                sucess => this.resourceActionForSucess(sucess),
-                error => this.resourceActionForError(error)
+                sucess => { this.resourceActionForSucess(sucess) },
+                error => { this.resourceActionForError(error) }
             );
     }
 
-    protected resourceDelete(id: number): void {
+    protected resourceDelete(id: number) {
         this.resourceMessageButton = 'Excluindo...';
         this.resourceService.delete(id)
             .subscribe(
-                sucess => this.resourceActionForSucess(sucess),
-                error => this.resourceActionForError(error)
+                sucess => { this.resourceActionForSucess(sucess) },
+                error => { this.resourceActionForError(error) }
             );
     }
 
     protected resourceCurrentAction(): string {
         if (this.route.snapshot.url[1].path == 'new') {
             return 'new'
-        } else if (this.route.snapshot.url[1].path == 'edit'){
+        } else if (this.route.snapshot.url[1].path == 'edit') {
             return 'edit'
-        } else{
+        } else {
             return 'delete'
         }
     }
@@ -103,6 +106,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     protected resourceActionForSucess(s): void {
 
         if (this.redirectRouterLink != null) {
+            this.resourceSubmmitEventForSuccess();
             this.router.navigate([this.redirectRouterLink]);
 
         } else {
@@ -117,11 +121,11 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         if (e.status == 0) {
             this.resourceAlertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');
             console.log(this.validationErrors);
-        } 
+        }
         if (e.status == 400) {
             this.validationErrors = e.error; //validação de formulários (BadRequest)
             console.log(this.validationErrors);
-        } 
+        }
         else if (e.status == 403) {
             this.resourceAlertMessage.showInfo('A Sessão foi expirada', 'Operação Cancelada');//token expirado
             window.location.href = '/login';
