@@ -3,28 +3,32 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { FieldValidationFormComponent } from './components/field-validation-form/field-validation-form.component';
+import { FieldServerErrorsFormComponent } from './components/field-server-errors-form/field-server-errors-form.component';
 import { ButtonSubmmitFormComponent } from './components/buttons/button-submmit-form/button-submmit-form.component';
+import { FieldValidationFormComponent } from './components/field-validation-form/field-validation-form.component';
 
 @NgModule({
-  declarations: [FieldValidationFormComponent,
-    ButtonSubmmitFormComponent
+  declarations: [FieldServerErrorsFormComponent,
+    ButtonSubmmitFormComponent,
+    FieldValidationFormComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      timeOut: 2000,
+      timeOut: 3000,
       positionClass: 'toast-top-right',
-      preventDuplicates: true
+      preventDuplicates: true,
+      enableHtml:true
     })
   ],
   exports: [ReactiveFormsModule,
     ToastrModule,
     BrowserAnimationsModule,
-    FieldValidationFormComponent,
+    FieldServerErrorsFormComponent,
     ButtonSubmmitFormComponent,
+    FieldValidationFormComponent
   ]
 })
 export class SharedModule { }

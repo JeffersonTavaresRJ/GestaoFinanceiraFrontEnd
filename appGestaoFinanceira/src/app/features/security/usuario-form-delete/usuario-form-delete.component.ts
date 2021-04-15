@@ -16,8 +16,7 @@ import { AutenticarUsuarioService } from 'src/app/core/services/AutenticarUsuari
 export class UsuarioFormDeleteComponent extends GenericResourceFormComponent<Usuario> {
 
   usuario: Usuario;
-  validandoSenha: boolean;
-
+  
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService,
     protected alertMessage: AlertMessageForm,
@@ -32,22 +31,19 @@ export class UsuarioFormDeleteComponent extends GenericResourceFormComponent<Usu
     super.setResourceSubmmitApiName('api/Usuario');
     super.resourceSubmmit();
   }
- 
+
+  
   protected buildResourceForm() {
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
 
     this.resourceForm = this.resourceFormBuilder.group({
       id: [this.usuario.id],
-      senha: [null, Validators.required],
-      confirmarSenha: [null, Validators.required]
+      email:[this.usuario.eMail],
+      senha: [null, Validators.compose([Validators.required])],
+      confirmarSenha: [null, Validators.compose([Validators.required])]
     }, {
       validator: [ValidacoesCustomizadas.validarConfirmacaoSenha,
-      ValidacoesCustomizadas.validarSenha(this.usuarioService, this.validandoSenha)]
+      ValidacoesCustomizadas.validarSenha(this.usuarioService)]
     });
   }
-
-  get validatorConfirmarSenha() {
-    return this.resourceForm.get('confirmarSenha');
-  }
-
 }

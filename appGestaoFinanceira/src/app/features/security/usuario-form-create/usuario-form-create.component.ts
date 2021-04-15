@@ -6,11 +6,11 @@ import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 
 @Component({
-  selector: 'app-usuario-form',
-  templateUrl: './usuario-form.component.html',
-  styleUrls: ['./usuario-form.component.css']
+  selector: 'app-usuario-form-create',
+  templateUrl: './usuario-form-create.component.html',
+  styleUrls: ['./usuario-form-create.component.css']
 })
-export class UsuarioFormComponent extends GenericResourceFormComponent<Usuario>{
+export class UsuarioFormCreateComponent extends GenericResourceFormComponent<Usuario>{
 
   constructor(protected injector: Injector, 
               protected alertMessage: AlertMessageForm, 
@@ -22,17 +22,12 @@ export class UsuarioFormComponent extends GenericResourceFormComponent<Usuario>{
   protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({
       nome: [null],
-      eMail: [null],
+      email: [null],
       senha: [null],
       confirmarSenha: [null]
     },
       {
         validator: ValidacoesCustomizadas.validarConfirmacaoSenha
       });
-  }
-
-  //propriedade do formulário para pegar validações..
-  get validatorConfirmarSenha() {
-    return this.resourceForm.get('confirmarSenha');
-  }
+  }  
 }

@@ -1,4 +1,4 @@
-<div class="card mt-5 col-4 mx-auto">
+<div class="card col-4 mx-auto">
 
   <div class="card-header bg-dark">
     <div class="center text-white">
@@ -10,20 +10,15 @@
     <form [formGroup]="formLogin" (submit)="autenticar()">
       <div class="form-group col-12">
         <label for="name">E-Mail:</label>
-        <input type="text" class="form-control" formControlName="EMail"/>
-        <div *ngIf="!validatorEMail.pristine && validatorEMail.errors">
-          <p *ngIf="validatorEMail.errors.email" class="text-danger mt-2">E-mail inválido</p>
-          <p *ngIf="validatorEMail.errors.required" class="text-danger mt-2">E-mail é obrigatório</p>
-        </div>
+        <input type="text" class="form-control" formControlName="email"/>
+        <app-field-validation-form [form-control] = "formLogin.get('email')"></app-field-validation-form>
       </div>
 
       <div class="form-group col-12 mt-4">
         <label for="description">Senha:</label>
-        <input type="text" type="password" class="form-control" formControlName="Senha"/>
-        <div *ngIf="!validatorSenha.pristine && validatorSenha.errors">
-          <p *ngIf="validatorSenha.errors.required" class="text-danger mt-2">Senha é obrigatório</p>
-        </div>
-      </div>
+        <input type="text" type="password" class="form-control" formControlName="senha"/>
+        <app-field-validation-form [form-control] = "formLogin.get('senha')"></app-field-validation-form>
+       </div>
 
       <div class="mt-4" style="text-align: right;">
         <app-button-submmit-form [button-message]="messageButton" [button-disabled]="!formLogin.valid || messageButton!=null"

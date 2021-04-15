@@ -12,15 +12,13 @@ import { AlertMessageForm } from '../alert-form/alert-message-form';
 export abstract class GenericResourceFormComponent<T extends GenericResourceModel>
     implements OnInit {
 
-    resourceMessageButton: string;
-    resourceForm: FormGroup;
-    protected resourceFormBuilder: FormBuilder;    
-
+    resourceMessageButton: string;    
+    resourceForm: FormGroup;    
     private validationErrors: any[] = [];
     private router: Router;
     private route: ActivatedRoute;
     protected resourceSubmmitEventForSuccess = () => { };//evento opcional para ser executado após sucesso
-
+    protected resourceFormBuilder: FormBuilder;  
 
     constructor(protected injector: Injector,
         protected resourceService: GenericResourceService<T>,
@@ -36,14 +34,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.buildResourceForm();
     }
 
-    resourceValidations(param: string): any[] {
-        if (this.resourceForm.valid && this.validationErrors.length > 0) {
-            // debugger;
-            return this.validationErrors.filter(i => i.propertyName == param);
-        }
-
-    }
-
+    
     setResourceSubmmitApiName(apiName: string) {
         this.resourceService.setApiName(apiName);
     }
@@ -62,6 +53,13 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     resourceClearValidations() {
         this.validationErrors = [];
+    }
+
+    resourceErrorsValidations(param:string):any[]{
+        if (this.resourceForm.valid && this.validationErrors.length > 0) {
+            // debugger;
+            return this.validationErrors.filter(i => i.propertyName.toLowerCase() == param);
+        }
     }
 
     protected abstract buildResourceForm();
@@ -119,18 +117,16 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceMessageButton = null;
 
         if (e.status == 0) {
-            this.resourceAlertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');
-            console.log(this.validationErrors);
+            this.resourceAlertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');            
         }
         if (e.status == 400) {
-            this.validationErrors = e.error; //validação de formulários (BadRequest)
-            console.log(this.validationErrors);
+            this.validationErrors = e.error; //validação de formulários (BadRequest)                     
         }
         else if (e.status == 403) {
             this.resourceAlertMessage.showInfo('A Sessão foi expirada', 'Operação Cancelada');//token expirado
             window.location.href = '/login';
         } else {
-            this.resourceAlertMessage.showError(e.error, 'Sr. Usuário');
+            this.resourceAlertMessage.showError(e.error, 'Sr. Usuário');  
             console.log(e.error);
         }
     }

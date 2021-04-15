@@ -31,17 +31,9 @@ export class LoginFormComponent implements OnInit {
 
   buildForm() {
     this.formLogin = this.formBuilder.group({
-      EMail: [null, Validators.compose([Validators.email, Validators.required])],
-      Senha: [null, Validators.required]
+      email: [null, Validators.compose([Validators.email, Validators.required])],
+      senha: [null, Validators.required]
     });
-  }
-
-  get validatorEMail() {
-    return this.formLogin.get('EMail');
-  }
-
-  get validatorSenha() {
-    return this.formLogin.get('Senha');
   }
 
   autenticar(): void {

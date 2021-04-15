@@ -33,11 +33,11 @@ export class HeaderComponent implements OnInit {
           this.usuarioAutenticado = true;                 
         },
         (e: any) => {
-          if (e.status==401){
+         /* if (e.status==401){
             this.alertMessageForm.showError('Sessão expirada', 'Sr. Usuário');            
           }else{
             this.alertMessageForm.showError(e.error.error, 'Sr. Usuário');           
-          } 
+          } */
           this.usuarioAutenticado = false;
           window.localStorage.removeItem(environment.keyUser);
           window.location.href = '/login';
