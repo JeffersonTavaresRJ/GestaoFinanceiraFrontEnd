@@ -4,9 +4,7 @@ import { Usuario } from 'src/app/shared/models/usuario-model';
 import { UsuarioService } from 'src/app/shared/services/usuario-resource-service';
 import { environment } from 'src/environments/environment';
 import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/validacoes-customizadas';
-import { AlertMessageForm } from '../../../shared/components/alert-form/alert-message-form';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
-import { AutenticarUsuarioService } from 'src/app/core/services/AutenticarUsuarioService';
 
 @Component({
   selector: 'app-usuario-form-delete',
@@ -18,21 +16,16 @@ export class UsuarioFormDeleteComponent extends GenericResourceFormComponent<Usu
   usuario: Usuario;
   
   constructor(protected injector: Injector,
-    protected usuarioService: UsuarioService,
-    protected alertMessage: AlertMessageForm,
-    private autenticarUsuarioService: AutenticarUsuarioService) {
-    super(injector, usuarioService, alertMessage, '/login');    
+    protected usuarioService: UsuarioService) {
+    super(injector, usuarioService, '/login');       
   }
 
   resourceSubmmit() {
-    //passando um evento para ser executado caso a api seja executada com sucesso..
-    this.resourceSubmmitEventForSuccess = () => this.autenticarUsuarioService.set(false);
     //alterando a api, que foi alterada na validação da senha no servidor..
-    super.setResourceSubmmitApiName('api/Usuario');
+    super.setResourceSubmmitApiName('api/Usuario');    
     super.resourceSubmmit();
   }
 
-  
   protected buildResourceForm() {
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
 

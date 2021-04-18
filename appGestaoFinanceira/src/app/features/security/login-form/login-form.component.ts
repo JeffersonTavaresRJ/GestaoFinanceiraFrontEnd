@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuarioService } from '../../../shared/services/usuario-resource-service';
 import { AlertMessageForm } from '../../../shared/components/alert-form/alert-message-form';
 import { environment } from 'src/environments/environment';
-import { AutenticarUsuarioService } from 'src/app/core/services/AutenticarUsuarioService';
+import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class LoginFormComponent implements OnInit {
     private usuarioService: UsuarioService,
     private alertMessageForm: AlertMessageForm,
     private formBuilder: FormBuilder,
-    private autenticarUsuarioService: AutenticarUsuarioService) {
+    private autenticarUsuarioObservable: AutenticarUsuarioObservable) {
   }
 
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class LoginFormComponent implements OnInit {
       (s: any) => {
         this.messageButton = null;
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
-        this.autenticarUsuarioService.set(true);//envio de evento para o app-header
+        this.autenticarUsuarioObservable.set(true);//envio de evento para o app-header
         window.location.href = '/receitas-despesas-dashboard';
       },
       (e: any) => {

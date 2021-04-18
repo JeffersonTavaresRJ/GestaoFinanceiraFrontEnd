@@ -5,23 +5,23 @@
 
     <div class="btn-group col-12 mb-3" role="group" aria-label="Basic radio toggle button group">
       <input type="radio" class="btn-check" name="btnradio" id="btnradio1" data-bs-toggle="collapse"
-        data-bs-target="#dadosCadastrais" autocomplete="off" checked>
+        data-bs-target="#dadosCadastrais" autocomplete="off" onclick="this.blur()" checked>
       <label class="btn btn-outline-dark" for="btnradio1">Dados Cadastrais</label>
 
       <input type="radio" class="btn-check" name="btnradio" id="btnradio2" data-bs-toggle="collapse"
-        data-bs-target="#trocaSenha" autocomplete="off">
+        data-bs-target="#trocaSenha" autocomplete="off" onclick="this.blur()">
       <label class="btn btn-outline-dark" for="btnradio2">Troca Senha</label>
     </div>
 
-    <div class="collapse" id="dadosCadastrais" data-bs-parent="#myGroup">
+    <div class="collapse show" id="dadosCadastrais" data-bs-parent="#myGroup">
       <div class="card card-body">
-        Dados Cadastrais
+        <app-usuario-form-update-cadastro></app-usuario-form-update-cadastro>
       </div>
     </div>
 
     <div class="collapse" id="trocaSenha" data-bs-parent="#myGroup">
       <div class="card card-body">
-        Troca Senha
+       <app-usuario-form-update-senha></app-usuario-form-update-senha>
       </div>
     </div>
 

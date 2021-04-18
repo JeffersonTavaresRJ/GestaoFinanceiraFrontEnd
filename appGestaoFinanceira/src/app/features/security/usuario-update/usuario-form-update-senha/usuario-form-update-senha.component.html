@@ -1,0 +1,47 @@
+<form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
+    <div class="row">
+        <div class="form-group col-6">
+            <label for="nome">Nome:</label>
+            <p><strong>{{usuario.nome}}</strong></p>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="form-group col-6">
+            <label for="email">e-mail:</label>
+            <p><strong>{{usuario.eMail}}</strong></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group mt-1">
+                <label for="senha">Senha atual:</label>
+                <input type="text" type="password" class="form-control" formControlName="senhaAtual"
+                    (keyup)="resourceClearValidations()" />
+                <app-field-server-errors-form [server-errors]="resourceErrorsValidations('senhaAtual')"></app-field-server-errors-form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group mt-1">
+                <label for="senha">Nova senha:</label>
+                <input type="text" type="password" class="form-control" formControlName="senha"
+                    (keyup)="resourceClearValidations()" />                
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group mt-1">
+                <label for="confirmarSenha">Confirmar nova senha:</label>
+                <input type="text" type="password" class="form-control" formControlName="confirmarSenha" />
+            </div>
+        </div>
+        <app-field-validation-form [form-control]="resourceForm.get('confirmarSenha')"></app-field-validation-form>
+        <app-field-server-errors-form [server-errors]="resourceErrorsValidations('senha')"></app-field-server-errors-form>
+    </div>
+    <div class="mt-3" style="text-align: right;">
+        <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+            [button-message]="resourceMessageButton" button-path-ico="assets/icons/save-white-18dp.svg"
+            button-title="Salvar">
+        </app-button-submmit-form>
+    </div>
+</form>

@@ -3,7 +3,7 @@ import { BehaviorSubject } from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class AutenticarUsuarioService {
+export class AutenticarUsuarioObservable {
     private autenticado = new BehaviorSubject<boolean>(false);
 
     constructor() { }  

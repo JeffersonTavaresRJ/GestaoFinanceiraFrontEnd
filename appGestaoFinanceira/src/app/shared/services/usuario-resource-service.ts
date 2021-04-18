@@ -1,6 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
 import { Usuario } from "../models/usuario-model";
 import { GenericResourceService } from "./generic-resource-service";
 

@@ -2,6 +2,7 @@
 import { OnInit, Injector, Directive } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
 import { GenericResourceModel } from '../../models/generic-resource-model';
 import { GenericResourceService } from '../../services/generic-resource-service';
 import { AlertMessageForm } from '../alert-form/alert-message-form';
@@ -12,29 +13,32 @@ import { AlertMessageForm } from '../alert-form/alert-message-form';
 export abstract class GenericResourceFormComponent<T extends GenericResourceModel>
     implements OnInit {
 
-    resourceMessageButton: string;    
+    resourceMessageButton: string;
     resourceForm: FormGroup;    
+    resourceSubmmitEventForSuccess = ()=>{};
+    protected autenticarUsuarioObservable: AutenticarUsuarioObservable;
+    protected resourceAlertMessage: AlertMessageForm;
+    protected resourceFormBuilder: FormBuilder;
+
     private validationErrors: any[] = [];
     private router: Router;
     private route: ActivatedRoute;
-    protected resourceSubmmitEventForSuccess = () => { };//evento opcional para ser executado após sucesso
-    protected resourceFormBuilder: FormBuilder;  
 
     constructor(protected injector: Injector,
         protected resourceService: GenericResourceService<T>,
-        protected resourceAlertMessage: AlertMessageForm,
         protected redirectRouterLink: string) {
-
         this.router = injector.get(Router);
         this.route = injector.get(ActivatedRoute);
         this.resourceFormBuilder = injector.get(FormBuilder);
+        this.autenticarUsuarioObservable = injector.get(AutenticarUsuarioObservable);
+        this.resourceAlertMessage = injector.get(AlertMessageForm);
     }
 
     ngOnInit(): void {
         this.buildResourceForm();
     }
 
-    
+
     setResourceSubmmitApiName(apiName: string) {
         this.resourceService.setApiName(apiName);
     }
@@ -55,7 +59,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.validationErrors = [];
     }
 
-    resourceErrorsValidations(param:string):any[]{
+    resourceErrorsValidations(param: string): any[] {
         if (this.resourceForm.valid && this.validationErrors.length > 0) {
             // debugger;
             return this.validationErrors.filter(i => i.propertyName.toLowerCase() == param);
@@ -103,31 +107,43 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected resourceActionForSucess(s): void {
 
-        if (this.redirectRouterLink != null) {
-            this.resourceSubmmitEventForSuccess();
+        if (this.redirectRouterLink != null) {  
+            
+            if (this.redirectRouterLink=='/login'){
+                this.autenticarUsuarioObservable.set(false);
+            }          
             this.router.navigate([this.redirectRouterLink]);
 
         } else {
             this.resourceMessageButton = null;
         }
+        this.resourceSubmmitEventForSuccess();
         this.resourceAlertMessage.showSuccess(s.message, 'Sr. Usuário');
     }
 
     protected resourceActionForError(e): void {
         this.resourceMessageButton = null;
-
+        debugger;
         if (e.status == 0) {
-            this.resourceAlertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');            
+            //servidor fora
+            this.resourceAlertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');
         }
         if (e.status == 400) {
-            this.validationErrors = e.error; //validação de formulários (BadRequest)                     
+            //validação de formulários (BadRequest) 
+            this.validationErrors = e.error;
         }
         else if (e.status == 403) {
-            this.resourceAlertMessage.showInfo('A Sessão foi expirada', 'Operação Cancelada');//token expirado
-            window.location.href = '/login';
-        } else {
-            this.resourceAlertMessage.showError(e.error, 'Sr. Usuário');  
-            console.log(e.error);
+            //token expirado
+            this.resourceAlertMessage.showInfo('Sessão expirada', 'Operação Cancelada');
+            this.autenticarUsuarioObservable.set(false);
+            this.router.navigate(['/login']);
+        }
+        else if (e.status == 418) {
+            //exceções customizadas
+            this.resourceAlertMessage.showInfo(e.error, 'Sr. Usuário');
+        } else {            
+            this.resourceAlertMessage.showError(e.error.error, 'Sr. Usuário');
+            console.log(e.error.error);
         }
     }
 }

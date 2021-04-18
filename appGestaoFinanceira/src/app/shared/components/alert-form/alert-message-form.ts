@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root'
 })
-
 export class AlertMessageForm{
     
     constructor(private toastr: ToastrService){} 

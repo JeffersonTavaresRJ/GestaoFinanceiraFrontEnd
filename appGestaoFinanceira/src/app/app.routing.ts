@@ -11,7 +11,7 @@ import {UsuarioFormDeleteComponent} from './features/security/usuario-form-delet
 import { ReceitasDespesasDashboardComponent } from './features/dashboards/receitas-despesas-dashboard/receitas-despesas-dashboard.component';
 import { CategoriaListComponent } from './features/cadastros-basicos/categoria-list/categoria-list.component';
 import { CategoriaFormComponent } from './features/cadastros-basicos/categoria-form/categoria-form.component';
-import { UsuarioFormUpdateComponent } from './features/security/usuario-form-update/usuario-form-update.component';
+import { UsuarioFormUpdateComponent } from './features/security/usuario-update/usuario-form-update/usuario-form-update.component';
 
 
 //criando o mapeamento de rotas dos componentes
