@@ -1,0 +1,11 @@
+<div class="row mb-2">
+    <div class="col-9">
+        <h4>{{headerTitle}}</h4>
+    </div>
+    <div class="col-3" style="text-align: right;" *ngIf="headerButtonLabel != null">
+        <a class="btn btn-button bg-dark text-light" [routerLink]="headerButtonLink">
+            {{headerButtonLabel}}
+        </a>
+    </div>
+    <hr *ngIf="headerButtonLabel == null">
+</div>

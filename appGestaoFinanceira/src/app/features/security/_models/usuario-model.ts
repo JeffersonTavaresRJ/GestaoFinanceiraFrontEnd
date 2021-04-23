@@ -1,4 +1,4 @@
-import { GenericResourceModel } from './generic-resource-model';
+import { GenericResourceModel } from '../../../shared/_models/generic-resource-model';
 
 export class Usuario extends GenericResourceModel{
     constructor(

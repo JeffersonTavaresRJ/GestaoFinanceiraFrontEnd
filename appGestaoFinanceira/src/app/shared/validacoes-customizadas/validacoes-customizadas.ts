@@ -1,5 +1,5 @@
 import { AbstractControl } from '@angular/forms';
-import { UsuarioService } from '../services/usuario-resource-service';
+import { UsuarioService } from '../../features/security/_services/usuario-service';
 
 export class ValidacoesCustomizadas {
 
@@ -7,6 +7,10 @@ export class ValidacoesCustomizadas {
         let senha = control.get('senha').value;
         let confirmarSenha = control.get('confirmarSenha').value;
         control.get('confirmarSenha').setErrors(null);
+
+        console.log(confirmarSenha);
+        console.log(senha);
+        console.log(senha === confirmarSenha);
 
         if (senha === confirmarSenha) { return null; }
 
@@ -18,7 +22,7 @@ export class ValidacoesCustomizadas {
         return (control: AbstractControl) => {
             let senha = control.get('senha').value;
             let confirmarSenha = control.get('confirmarSenha').value;
-            let email = control.get('email').value;
+            let email = control.get('eMail').value;
             //  console.log('validando..');
 
             if (senha === confirmarSenha && (confirmarSenha != null && confirmarSenha.length > 0)) {

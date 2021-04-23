@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalInterrogative" tabindex="-1" aria-labelledby="modalInterrogativeLabel"
+<div class="modal fade" [id]="modalInterrogativeId" tabindex="-1" aria-labelledby="modalInterrogativeLabel"
   aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -6,12 +6,12 @@
         <h5 class="modal-title" id="modalInterrogativeLabel">{{modalInterrogativeTitle}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <p>{{modalInterrogativeMessage}}</p>
+      <div class="modal-body">        
+          <p [innerHTML]="modalInterrogativeMessage"></p>        
       </div>
       <div class="modal-footer">
-        <button type="button" (click)="onClick(false)" class="btn btn-dark" data-bs-dismiss="modal">Sim</button>
-        <button type="button" (click)="onClick(true)" class="btn btn-dark" data-bs-dismiss="modal">Não</button>
+        <button type="button" (click)="onClick(true)" class="btn btn-dark" data-bs-dismiss="modal">Sim</button>
+        <button type="button" (click)="onClick(false)" class="btn btn-dark" data-bs-dismiss="modal">Não</button>
       </div>
     </div>
   </div>

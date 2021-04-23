@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { GenericResourceModel } from '../models/generic-resource-model'
-import { Usuario } from '../models/usuario-model';
+import { GenericResourceModel } from '../_models/generic-resource-model'
+import { Usuario } from '../../features/security/_models/usuario-model';
 
 export abstract class GenericResourceService<T extends GenericResourceModel>{
 
@@ -43,8 +43,12 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
         return this.http.get(`${this.getUrl(this.apiName)}/${id}`, {headers:this.httpHeaders});
     }
 
-    get(resource: any): Observable<any> {
+    get(): Observable<any> {
         return this.http.get(this.getUrl(this.apiName), {headers:this.httpHeaders});
+    }
+
+    getAll(idUsuario:number): Observable<any> {
+        return this.http.get(`${this.getUrl(this.apiName)}/${idUsuario}`, {headers:this.httpHeaders});
     }
 
     jsonDataToResources(jsonData: any[]): T[] {

@@ -1,12 +1,11 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
-import { Usuario } from "../models/usuario-model";
-import { GenericResourceService } from "./generic-resource-service";
+import { Usuario } from "../_models/usuario-model";
+import { GenericResourceService } from "../../../shared/_services/generic-resource-service";
 
 @Injectable({
     providedIn: 'root'
   })
-
 export class UsuarioService extends GenericResourceService<Usuario>{
 
     constructor(protected injector: Injector) {

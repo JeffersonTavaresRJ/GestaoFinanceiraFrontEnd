@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
-import { Usuario } from 'src/app/shared/models/usuario-model';
-import { UsuarioService } from 'src/app/shared/services/usuario-resource-service';
+import { Usuario } from 'src/app/features/security/_models/usuario-model';
+import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { environment } from 'src/environments/environment';
 import { UpdateUsuarioObservable } from 'src/app/core/services/UpdateUsuarioObservable';
 import { Router } from '@angular/router';
@@ -27,9 +27,10 @@ export class HeaderComponent implements OnInit {
     this.updateUsuarioObservable.getEMail().subscribe(valor => this.user_name = valor);
     
     this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
+    
     if (this.user != null) {
       // debugger;
-      this.usuarioService.get(JSON.stringify({})).subscribe(
+      this.usuarioService.get().subscribe(
         (s: any) => {
           this.user_name = s.user;
           this.usuarioAutenticado = true;
@@ -44,8 +45,8 @@ export class HeaderComponent implements OnInit {
   }
 
   resultEvent(event) {
-    this.usuarioAutenticado = event;
-    if (!this.usuarioAutenticado) {
+    if (event) {
+      this.usuarioAutenticado = false;
       window.localStorage.removeItem(environment.keyUser);
       this.router.navigate(['/login']);
     }

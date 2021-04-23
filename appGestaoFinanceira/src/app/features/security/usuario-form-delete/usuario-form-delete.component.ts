@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { Validators } from '@angular/forms';
-import { Usuario } from 'src/app/shared/models/usuario-model';
-import { UsuarioService } from 'src/app/shared/services/usuario-resource-service';
+import { Usuario } from 'src/app/features/security/_models/usuario-model';
+import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { environment } from 'src/environments/environment';
 import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/validacoes-customizadas';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
@@ -31,7 +31,7 @@ export class UsuarioFormDeleteComponent extends GenericResourceFormComponent<Usu
 
     this.resourceForm = this.resourceFormBuilder.group({
       id: [this.usuario.id],
-      email:[this.usuario.eMail],
+      eMail:[this.usuario.eMail],
       senha: [null, Validators.compose([Validators.required])],
       confirmarSenha: [null, Validators.compose([Validators.required])]
     }, {

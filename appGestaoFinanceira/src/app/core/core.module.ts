@@ -11,7 +11,8 @@ import { ModalInterrogativeFormComponent } from './components/modals/modal-inter
     AppRoutingModule
   ],
   exports: [
-    HeaderComponent
+    HeaderComponent,
+    ModalInterrogativeFormComponent
   ]
 })
 export class CoreModule { }

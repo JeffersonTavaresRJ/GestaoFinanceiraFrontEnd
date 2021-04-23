@@ -20,9 +20,9 @@ const routes: Routes = [
     { path: 'usuario/new', component: UsuarioFormCreateComponent },
     { path: 'usuario/edit', component: UsuarioFormUpdateComponent},
     { path: 'usuario/delete', component: UsuarioFormDeleteComponent },
-    { path: 'categorias', component: CategoriaListComponent },
+    { path: 'categoria', component: CategoriaListComponent },
     { path: 'categoria/new', component: CategoriaFormComponent },
-    { path: ':id/categoria/edit', component: CategoriaFormComponent },
+    { path: 'categoria/:id/edit', component: CategoriaFormComponent },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent }
 ];
 

@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
-import { Usuario } from '../../../shared/models/usuario-model'
+import { Usuario } from '../_models/usuario-model'
 import { GenericResourceFormComponent } from '../../../shared/components/generic-resource-form/generic-resource-form-component'
-import { UsuarioService } from 'src/app/shared/services/usuario-resource-service';
+import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/validacoes-customizadas';
 //import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 
@@ -21,7 +21,7 @@ export class UsuarioFormCreateComponent extends GenericResourceFormComponent<Usu
   protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({
       nome: [null],
-      email: [null],
+      eMail: [null],
       senha: [null],
       confirmarSenha: [null]
     },

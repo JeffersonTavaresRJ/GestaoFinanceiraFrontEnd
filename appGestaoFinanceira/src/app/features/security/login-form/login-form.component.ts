@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UsuarioService } from '../../../shared/services/usuario-resource-service';
+import { UsuarioService } from '../_services/usuario-service';
 import { AlertMessageForm } from '../../../shared/components/alert-form/alert-message-form';
 import { environment } from 'src/environments/environment';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
@@ -31,7 +31,7 @@ export class LoginFormComponent implements OnInit {
 
   buildForm() {
     this.formLogin = this.formBuilder.group({
-      email: [null, Validators.compose([Validators.email, Validators.required])],
+      eMail: [null, Validators.compose([Validators.email, Validators.required])],
       senha: [null, Validators.required]
     });
   }

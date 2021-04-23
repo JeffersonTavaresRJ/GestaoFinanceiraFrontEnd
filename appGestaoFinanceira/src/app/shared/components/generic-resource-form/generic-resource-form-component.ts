@@ -3,8 +3,8 @@ import { OnInit, Injector, Directive } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
-import { GenericResourceModel } from '../../models/generic-resource-model';
-import { GenericResourceService } from '../../services/generic-resource-service';
+import { GenericResourceModel } from '../../_models/generic-resource-model';
+import { GenericResourceService } from '../../_services/generic-resource-service';
 import { AlertMessageForm } from '../alert-form/alert-message-form';
 
 
@@ -14,8 +14,8 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     implements OnInit {
 
     resourceMessageButton: string;
-    resourceForm: FormGroup;    
-    resourceSubmmitEventForSuccess = ()=>{};
+    resourceForm: FormGroup;
+    
     protected autenticarUsuarioObservable: AutenticarUsuarioObservable;
     protected resourceAlertMessage: AlertMessageForm;
     protected resourceFormBuilder: FormBuilder;
@@ -37,7 +37,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     ngOnInit(): void {
         this.buildResourceForm();
     }
-
 
     setResourceSubmmitApiName(apiName: string) {
         this.resourceService.setApiName(apiName);
@@ -72,7 +71,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceMessageButton = 'Processando...';
         this.resourceService.post(formResource)
             .subscribe(
-                sucess => { this.resourceActionForSucess(sucess) },
+                sucess => { 
+                    this.resourceActionForSucess();
+                    this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+                 },
                 error => { this.resourceActionForError(error) }
             );
     }
@@ -81,7 +83,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceMessageButton = 'Atualizando...';
         this.resourceService.put(formResource)
             .subscribe(
-                sucess => { this.resourceActionForSucess(sucess) },
+                sucess => { 
+                    this.resourceActionForSucess();
+                    this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+                 },
                 error => { this.resourceActionForError(error) }
             );
     }
@@ -90,7 +95,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceMessageButton = 'Excluindo...';
         this.resourceService.delete(id)
             .subscribe(
-                sucess => { this.resourceActionForSucess(sucess) },
+                sucess => { 
+                    this.resourceActionForSucess();
+                    this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+                 },
                 error => { this.resourceActionForError(error) }
             );
     }
@@ -105,7 +113,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         }
     }
 
-    protected resourceActionForSucess(s): void {
+    protected resourceActionForSucess(): void {
 
         if (this.redirectRouterLink != null) {  
             
@@ -117,8 +125,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         } else {
             this.resourceMessageButton = null;
         }
-        this.resourceSubmmitEventForSuccess();
-        this.resourceAlertMessage.showSuccess(s.message, 'Sr. Usuário');
+       
     }
 
     protected resourceActionForError(e): void {
