@@ -9,20 +9,11 @@ import { CategoriaService } from '../_services/categoria-service';
   styleUrls: ['./categoria-list.component.css']
 })
 export class CategoriaListComponent extends GenericResourceListComponent<Categoria> {
-  
-  modalInterrogativeMessage:string;
+
+  paginaAtual:number=1;
   
   constructor(protected injector: Injector, protected categoriaService: CategoriaService) {    
     super(injector, categoriaService);
-    categoriaService.setApiName('api/Categoria/GetAll');
   }
-
-  resultEventExclusao(event: any) {
-    //alert(event);
-  }
-
-  modalMessage(descricao: string){
-    this.modalInterrogativeMessage = `${'Confirma a exclusão da categoria '}${descricao.bold()}${'?'}`;
-  }
-  
+    
 }

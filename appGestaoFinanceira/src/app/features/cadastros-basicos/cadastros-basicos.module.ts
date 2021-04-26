@@ -4,13 +4,15 @@ import { CategoriaFormComponent } from './categoria-form/categoria-form.componen
 import { CategoriaListComponent } from './categoria-list/categoria-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoreModule } from 'src/app/core/core.module';
+import{ NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [CategoriaFormComponent, CategoriaListComponent],
   imports: [
     CommonModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    NgxPaginationModule
   ]
 })
 export class CadastrosBasicosModule { }

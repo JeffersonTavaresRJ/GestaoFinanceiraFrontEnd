@@ -6,12 +6,14 @@ import { GenericResourceService } from '../../_services/generic-resource-service
 import { AlertMessageForm } from '../alert-form/alert-message-form';
 
 @Directive()
-export abstract class GenericResourceListComponent<T extends GenericResourceModel> 
-implements OnInit {
+export abstract class GenericResourceListComponent<T extends GenericResourceModel>
+  implements OnInit {
 
   resources: T[] = [];
-  usuario: Usuario;
+  resourceDeleteMessage: string;
   protected resourceAlertMessage: AlertMessageForm;
+  private resourceDeleteId: number;
+  private usuario: Usuario;
 
   constructor(protected injector: Injector,
     private genericResourceService: GenericResourceService<T>) {
@@ -19,20 +21,31 @@ implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));      
-    this.genericResourceService.getAll(this.usuario.id).subscribe(
+    this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
+    this.genericResourceService.getByUser(this.usuario.id).subscribe(
       sucess => this.resources = sucess,
-      error => this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
+      error =>  this.resourceAlertMessage.showError(error.error.message, 'Sr. Usuário')
     );
   }
 
-  abstract resultEventExclusao(event);
+  resourceEventDelete(event) {
+    if (event) {
+      this.deleteResource(this.resourceDeleteId);
+    }
+  };
 
-  deleteReource(id: number) {
+  resourceModalDeleteMessage(id: number, descricao: string) {
+    this.resourceDeleteId = id;
+    this.resourceDeleteMessage = `${'Confirma a exclusão do item '}${descricao.bold()}${'?'}`;;
+  }
+
+  protected deleteResource(id: number) {
     this.genericResourceService.delete(id).subscribe(
-      sucess => this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário'),
+      sucess => {
+        this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+        this.ngOnInit();
+      },
       error => this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
     )
   }
-
 }

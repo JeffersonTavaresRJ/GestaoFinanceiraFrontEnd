@@ -43,6 +43,10 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
         return this.http.get(`${this.getUrl(this.apiName)}/${id}`, {headers:this.httpHeaders});
     }
 
+    getByUser(idUser: number): Observable<any> {
+        return this.http.get(`${this.getUrl(this.apiName)}/${idUser}`, {headers:this.httpHeaders});
+    }
+
     get(): Observable<any> {
         return this.http.get(this.getUrl(this.apiName), {headers:this.httpHeaders});
     }
