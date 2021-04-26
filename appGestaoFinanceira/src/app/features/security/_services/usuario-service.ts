@@ -9,12 +9,11 @@ import { GenericResourceService } from "../../../shared/_services/generic-resour
 export class UsuarioService extends GenericResourceService<Usuario>{
 
     constructor(protected injector: Injector) {
-        super(injector);
-        this.setApiName('api/Usuario');     
+        super(injector,'api/Usuario');          
     }    
 
     autenthicate(credencials: any): Observable<Usuario> {
-        this.setApiName('api/Usuario/Autenthicate');     
+        this.setApiOption('/Autenthicate');     
         return this.post(credencials);
     }    
 

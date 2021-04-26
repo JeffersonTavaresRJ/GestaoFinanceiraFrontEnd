@@ -37,12 +37,6 @@ export class UsuarioFormUpdateCadastroComponent extends GenericResourceFormCompo
 
   }
 
-  resourceSubmmit() {
-    //alterando a api, que pode ser alterada por qq outra tela de usuário..
-    super.setResourceSubmmitApiName('api/Usuario');
-    super.resourceSubmmit();
-  }
-
   resourceActionForSucess() {
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
 

@@ -5,7 +5,6 @@ import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { environment } from 'src/environments/environment';
 import { ValidacoesCustomizadas } from '../../../../shared/validacoes-customizadas/validacoes-customizadas';
-import { SUPER_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-usuario-form-update-senha',
@@ -23,8 +22,7 @@ export class UsuarioFormUpdateSenhaComponent extends GenericResourceFormComponen
   }
 
   resourceSubmmit() {
-    //alterando a api, que pode ser alterada por qq outra tela de usuário..
-    super.setResourceSubmmitApiName('api/Usuario/TrocaSenha');
+    super.setResourceApiOption('/TrocaSenha');
     super.resourceSubmmit();
   }
 
@@ -48,8 +46,6 @@ export class UsuarioFormUpdateSenhaComponent extends GenericResourceFormComponen
   resourceActionForSucess() {
     this.resourceForm.setValue({
       id: this.usuario.id,
-      nome: this.usuario.nome,
-      eMail: this.usuario.eMail,
       senhaAtual: null,
       senha: null,
       confirmarSenha: null

@@ -11,6 +11,7 @@ import { DashboardsModule } from '../app/features/dashboards/dashboards.module';
 
 /*====importação de componentes====*/
 import { AppComponent } from './app.component';
+//import { TipoItemMovimentacaoComponent } from './features/components/dropdowns/tipo-item-movimentacao/tipo-item-movimentacao.component';
 
 /*============================*/
 

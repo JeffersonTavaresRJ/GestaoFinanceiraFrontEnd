@@ -4,6 +4,7 @@ import { CategoriaFormComponent } from './categoria-form/categoria-form.componen
 import { CategoriaListComponent } from './categoria-list/categoria-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoreModule } from 'src/app/core/core.module';
+import { ComponentsBusinessModule } from '../components/components-business-module';
 import{ NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
@@ -12,6 +13,7 @@ import{ NgxPaginationModule } from 'ngx-pagination';
     CommonModule,
     CoreModule,
     SharedModule,
+    ComponentsBusinessModule,
     NgxPaginationModule
   ]
 })

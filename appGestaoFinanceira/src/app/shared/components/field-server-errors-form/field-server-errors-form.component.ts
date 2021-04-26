@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
   selector: 'app-field-server-errors-form',
   template: `<span class="text-danger mt-1" *ngFor="let item of serverErrors">
                   <strong *ngFor="let item of item.errors">{{item}}</strong>
-                </span>`,
+            </span>`,
   styleUrls: ['./field-server-errors-form.component.css']
 })
 export class FieldServerErrorsFormComponent implements OnInit {

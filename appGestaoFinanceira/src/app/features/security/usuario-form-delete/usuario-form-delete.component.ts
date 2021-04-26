@@ -20,12 +20,6 @@ export class UsuarioFormDeleteComponent extends GenericResourceFormComponent<Usu
     super(injector, usuarioService, '/login');       
   }
 
-  resourceSubmmit() {
-    //alterando a api, que foi alterada na validação da senha no servidor..
-    super.setResourceSubmmitApiName('api/Usuario');    
-    super.resourceSubmmit();
-  }
-
   protected buildResourceForm() {
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
 

@@ -38,8 +38,8 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.buildResourceForm();
     }
 
-    setResourceSubmmitApiName(apiName: string) {
-        this.resourceService.setApiName(apiName);
+    setResourceApiOption(apiOption: string) {
+        this.resourceService.setApiOption(apiOption);
     }
 
     resourceSubmmit() {

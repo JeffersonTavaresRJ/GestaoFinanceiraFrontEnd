@@ -8,51 +8,59 @@ import { Usuario } from '../../features/security/_models/usuario-model';
 export abstract class GenericResourceService<T extends GenericResourceModel>{
 
     private apiName: string;
+    private apiOption: string='';
     private http: HttpClient;
     private httpHeaders: HttpHeaders;
     private user: Usuario;
 
-    constructor(injector: Injector) {
+    constructor(injector: Injector, apiName:string) {
         this.http = injector.get(HttpClient);
+        this.apiName = apiName;
         this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
-       // debugger;
-        
-        if (this.user!=null){
+        // debugger;
+
+        if (this.user != null) {
             this.httpHeaders = new HttpHeaders()
-            .set('Authorization', 'Bearer '+ this.user.accessToken.toString());
-        };        
+                .set('Authorization', 'Bearer ' + this.user.accessToken.toString());
+        };
     }
 
-    private getUrl(apiName:string):string{
-        return `${environment.apiUrl}${apiName}`;
+    private getUrl(apiName: string): string {
+        var url = `${environment.apiUrl}${apiName}${this.apiOption}`;
+        this.apiOption = '';
+        return url;
     }
 
-    post(resource: any): Observable<any> {   
-      return this.http.post(this.getUrl(this.apiName), resource,{headers:this.httpHeaders});
+    setApiOption(apiOption: string) {
+        this.apiOption = apiOption;
+    }
+
+    post(resource: any): Observable<any> {
+        return this.http.post(this.getUrl(this.apiName), resource, { headers: this.httpHeaders });
     }
 
     put(resource: any): Observable<any> {
-        return this.http.put(this.getUrl(this.apiName), resource,{headers:this.httpHeaders});
+        return this.http.put(this.getUrl(this.apiName), resource, { headers: this.httpHeaders });
     }
 
     delete(id: number): Observable<any> {
-        return this.http.delete(`${this.getUrl(this.apiName)}/${id}`,{headers:this.httpHeaders});
+        return this.http.delete(`${this.getUrl(this.apiName)}/${id}`, { headers: this.httpHeaders });
     }
 
     getById(id: number): Observable<any> {
-        return this.http.get(`${this.getUrl(this.apiName)}/${id}`, {headers:this.httpHeaders});
+        return this.http.get(`${this.getUrl(this.apiName)}/${id}`, { headers: this.httpHeaders });
     }
 
     getByUser(idUser: number): Observable<any> {
-        return this.http.get(`${this.getUrl(this.apiName)}/${idUser}`, {headers:this.httpHeaders});
+        return this.http.get(`${this.getUrl(this.apiName)}/${idUser}`, { headers: this.httpHeaders });
     }
 
     get(): Observable<any> {
-        return this.http.get(this.getUrl(this.apiName), {headers:this.httpHeaders});
+        return this.http.get(this.getUrl(this.apiName), { headers: this.httpHeaders });
     }
 
-    getAll(idUsuario:number): Observable<any> {
-        return this.http.get(`${this.getUrl(this.apiName)}/${idUsuario}`, {headers:this.httpHeaders});
+    getAll(idUsuario: number): Observable<any> {
+        return this.http.get(`${this.getUrl(this.apiName)}/${idUsuario}`, { headers: this.httpHeaders });
     }
 
     jsonDataToResources(jsonData: any[]): T[] {
@@ -63,11 +71,7 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
 
     jsonDataToResource(jsonData: any): T {
         return jsonData as T;
-    }   
-    
-    setApiName(apiName:string){
-        this.apiName = apiName;
-    }
+    }    
 
     protected handlerError(error: any): Observable<any> {
         console.error("ERRO NA REQUISIÇÃO =>" || error);

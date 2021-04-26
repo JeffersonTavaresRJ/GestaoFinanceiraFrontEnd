@@ -14,8 +14,7 @@ export class UsuarioFormCreateComponent extends GenericResourceFormComponent<Usu
 
   constructor(protected injector: Injector, 
               protected usuarioService: UsuarioService) {
-    super(injector, usuarioService, '/login');
-    this.setResourceSubmmitApiName('api/Usuario');
+    super(injector, usuarioService, '/login');    
   }
 
   protected buildResourceForm() {

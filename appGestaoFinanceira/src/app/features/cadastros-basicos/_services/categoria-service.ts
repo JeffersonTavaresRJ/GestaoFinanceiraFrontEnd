@@ -7,7 +7,6 @@ import { Categoria } from "../_models/categoria-model";
   })
 export class CategoriaService extends GenericResourceService<Categoria>{
     constructor(private injector: Injector){
-        super(injector);
-        this.setApiName('api/Categoria');
+        super(injector, 'api/Categoria');        
     }
 }

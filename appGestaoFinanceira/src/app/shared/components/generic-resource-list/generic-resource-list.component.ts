@@ -21,6 +21,10 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
   }
 
   ngOnInit(): void {
+    this.resourceList();
+  }
+
+  resourceList(){
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     this.genericResourceService.getByUser(this.usuario.id).subscribe(
       sucess => this.resources = sucess,
