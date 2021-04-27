@@ -1,5 +1,5 @@
 
-import { OnInit, Injector, Directive } from '@angular/core';
+import { OnInit, Injector, Directive, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
@@ -11,11 +11,11 @@ import { AlertMessageForm } from '../alert-form/alert-message-form';
 
 @Directive()
 export abstract class GenericResourceFormComponent<T extends GenericResourceModel>
-    implements OnInit {
+    implements OnInit, OnDestroy {
 
     resourceMessageButton: string;
     resourceForm: FormGroup;
-    
+
     protected autenticarUsuarioObservable: AutenticarUsuarioObservable;
     protected resourceAlertMessage: AlertMessageForm;
     protected resourceFormBuilder: FormBuilder;
@@ -71,10 +71,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceMessageButton = 'Processando...';
         this.resourceService.post(formResource)
             .subscribe(
-                sucess => { 
+                sucess => {
                     this.resourceActionForSucess();
                     this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
-                 },
+                },
                 error => { this.resourceActionForError(error) }
             );
     }
@@ -83,10 +83,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceMessageButton = 'Atualizando...';
         this.resourceService.put(formResource)
             .subscribe(
-                sucess => { 
+                sucess => {
                     this.resourceActionForSucess();
                     this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
-                 },
+                },
                 error => { this.resourceActionForError(error) }
             );
     }
@@ -95,10 +95,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceMessageButton = 'Excluindo...';
         this.resourceService.delete(id)
             .subscribe(
-                sucess => { 
+                sucess => {
                     this.resourceActionForSucess();
                     this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
-                 },
+                },
                 error => { this.resourceActionForError(error) }
             );
     }
@@ -115,17 +115,17 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected resourceActionForSucess(): void {
 
-        if (this.redirectRouterLink != null) {  
-            
-            if (this.redirectRouterLink=='/login'){
+        if (this.redirectRouterLink != null) {
+
+            if (this.redirectRouterLink == '/login') {
                 this.autenticarUsuarioObservable.set(false);
-            }          
+            }
             this.router.navigate([this.redirectRouterLink]);
 
         } else {
             this.resourceMessageButton = null;
         }
-       
+
     }
 
     protected resourceActionForError(e): void {
@@ -148,9 +148,13 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         else if (e.status == 418) {
             //exceções customizadas
             this.resourceAlertMessage.showInfo(e.error, 'Sr. Usuário');
-        } else {            
+        } else {
             this.resourceAlertMessage.showError(e.error.error, 'Sr. Usuário');
             console.log(e.error.error);
         }
+    }
+
+    ngOnDestroy() {
+      this.setResourceApiOption('');
     }
 }

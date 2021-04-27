@@ -8,10 +8,6 @@ export class ValidacoesCustomizadas {
         let confirmarSenha = control.get('confirmarSenha').value;
         control.get('confirmarSenha').setErrors(null);
 
-        console.log(confirmarSenha);
-        console.log(senha);
-        console.log(senha === confirmarSenha);
-
         if (senha === confirmarSenha) { return null; }
 
         control.get('confirmarSenha').setErrors({ senhasNaoConferem: true, message: 'Senhas não conferem' });

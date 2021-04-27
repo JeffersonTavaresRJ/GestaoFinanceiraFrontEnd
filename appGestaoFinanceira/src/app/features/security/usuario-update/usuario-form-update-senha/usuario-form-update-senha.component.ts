@@ -18,12 +18,7 @@ export class UsuarioFormUpdateSenhaComponent extends GenericResourceFormComponen
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService,
     private updateUsuarioObservable: UpdateUsuarioObservable) {
-    super(injector, usuarioService, '/login');
-  }
-
-  resourceSubmmit() {
-    super.setResourceApiOption('/TrocaSenha');
-    super.resourceSubmmit();
+    super(injector, usuarioService, '/login');    
   }
 
   protected buildResourceForm() {
@@ -41,6 +36,11 @@ export class UsuarioFormUpdateSenhaComponent extends GenericResourceFormComponen
         validator: ValidacoesCustomizadas.validarConfirmacaoSenha
       });
 
+  }
+
+  resourceSubmmit(){
+    super.setResourceApiOption('/TrocaSenha');
+    super.resourceSubmmit();
   }
 
   resourceActionForSucess() {

@@ -16,7 +16,7 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
   private usuario: Usuario;
 
   constructor(protected injector: Injector,
-    private genericResourceService: GenericResourceService<T>) {
+    private resourceService: GenericResourceService<T>) {
     this.resourceAlertMessage = injector.get(AlertMessageForm);
   }
 
@@ -26,7 +26,7 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
 
   resourceList(){
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
-    this.genericResourceService.getByUser(this.usuario.id).subscribe(
+    this.resourceService.getByUser(this.usuario.id).subscribe(
       sucess => this.resources = sucess,
       error =>  this.resourceAlertMessage.showError(error.error.message, 'Sr. Usuário')
     );
@@ -43,13 +43,21 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
     this.resourceDeleteMessage = `${'Confirma a exclusão do item '}${descricao.bold()}${'?'}`;;
   }
 
+  setResourceApiOption(apiOption: string) {
+    this.resourceService.setApiOption(apiOption);
+}
+
   protected deleteResource(id: number) {
-    this.genericResourceService.delete(id).subscribe(
+    this.resourceService.delete(id).subscribe(
       sucess => {
         this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
         this.ngOnInit();
       },
       error => this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
     )
+  }
+
+  ngOnDestroy() {
+    this.setResourceApiOption('');
   }
 }
