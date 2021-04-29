@@ -28,7 +28,7 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     this.resourceService.getByUser(this.usuario.id).subscribe(
       sucess => this.resources = sucess,
-      error =>  this.resourceAlertMessage.showError(error.error.message, 'Sr. Usuário')
+      error =>  this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
     );
   }
 

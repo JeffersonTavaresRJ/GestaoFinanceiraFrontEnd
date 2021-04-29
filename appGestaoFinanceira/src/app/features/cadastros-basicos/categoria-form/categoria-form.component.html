@@ -1,1 +1,68 @@
-<app-tipo-item-movimentacao></app-tipo-item-movimentacao>
+<div class="card col-8 offset-2">
+  <div class="card-body">
+    <app-header-page-title [header-title]="resourcePageTitle">      
+    </app-header-page-title> 
+
+    <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
+      <div class="row">
+        <div class="form-group col-12">
+          <label for="descricao">Descrição:</label>
+
+          <input type="text" class="form-control mt-1" formControlName="descricao"
+            (keyup)="resourceClearValidations()" />
+           
+          <app-field-validation-form [form-control]="resourceForm.get('descricao')"></app-field-validation-form>
+          <app-field-server-errors-form [server-errors]="resourceErrorsValidations('descricao')"></app-field-server-errors-form>
+
+        </div>              
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-6">
+          <label for="tipo">Tipo:</label>
+          <select class="form-control" formControlName='tipo'>
+            <option value=null>--Selecione--</option>
+            <option *ngFor="let item of tipos" value={{item.Key}}>
+              {{item.Value}}
+            </option>
+          </select>
+          <app-field-validation-form [form-control]="resourceForm.get('tipo')"></app-field-validation-form>
+          <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipo')"></app-field-server-errors-form>
+        </div> 
+      </div>
+    
+      <div class="row mt-3">
+        <div class="col-3">
+          <div *ngIf="resourceCurrentAction()=='edit'">
+            <label for="status">Status:</label>
+            <div class="form-group mt-1">
+              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+  
+                <input type="radio" class="btn-check" formControlName="status" id="btnAtivo"
+                  autocomplete="off" value="true">
+                <label class="btn btn-outline-primary" for="btnAtivo"
+                       [class.active]="resourceForm.get('status').value==true">Ativo</label>
+  
+                <input type="radio" class="btn-check" formControlName="status" id="btnInativo" 
+                 autocomplete="off" value="false">
+                <label class="btn btn-outline-primary" for="btnInativo"
+                      [class.active]="resourceForm.get('status').value==false">Inativo</label>
+              </div>
+              <app-field-validation-form [form-control]="resourceForm.get('status')"></app-field-validation-form>
+              <app-field-server-errors-form [server-errors]="resourceErrorsValidations('status')"></app-field-server-errors-form>
+            </div>
+          </div>          
+        </div>
+
+        <div class="col-9 mt-4" style="text-align: right;">
+          <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+            [button-message]="resourceMessageButton" button-path-ico="assets/icons/save-white-18dp.svg"
+            button-title="Salvar">
+          </app-button-submmit-form>         
+        </div>
+      </div>
+      
+    </form>
+
+  </div>
+</div>

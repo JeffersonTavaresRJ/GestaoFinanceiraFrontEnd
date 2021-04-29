@@ -18,11 +18,11 @@ import { UsuarioFormUpdateComponent } from './features/security/usuario-update/u
 const routes: Routes = [
     { path: 'login', component: LoginFormComponent },
     { path: 'usuario/new', component: UsuarioFormCreateComponent },
-    { path: 'usuario/edit', component: UsuarioFormUpdateComponent},
+    { path: 'usuario/edit/null', component: UsuarioFormUpdateComponent},
     { path: 'usuario/delete', component: UsuarioFormDeleteComponent },
     { path: 'categoria', component: CategoriaListComponent },
     { path: 'categoria/new', component: CategoriaFormComponent },
-    { path: 'categoria/:id/edit', component: CategoriaFormComponent },
+    { path: 'categoria/edit/:id', component: CategoriaFormComponent },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent }
 ];
 

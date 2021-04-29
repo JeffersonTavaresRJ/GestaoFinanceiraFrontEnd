@@ -9,7 +9,7 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
 
     private apiName: string;
     private apiOption: string='';
-    private http: HttpClient;
+    protected http: HttpClient;
     private httpHeaders: HttpHeaders;
     private user: Usuario;
 
@@ -25,8 +25,8 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
         };
     }
 
-    private getUrl(apiName: string): string {
-        var url = `${environment.apiUrl}${apiName}${this.apiOption}`;
+    protected getUrl(): string {
+        var url = `${environment.apiUrl}${this.apiName}${this.apiOption}`;
         this.apiOption = '';
         return url;
     }
@@ -36,38 +36,39 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     }
 
     post(resource: any): Observable<any> {
-        return this.http.post(this.getUrl(this.apiName), resource, { headers: this.httpHeaders });
+        return this.http.post(this.getUrl(), resource, { headers: this.httpHeaders });
     }
 
     put(resource: any): Observable<any> {
-        return this.http.put(this.getUrl(this.apiName), resource, { headers: this.httpHeaders });
+        return this.http.put(this.getUrl(), resource, { headers: this.httpHeaders });
     }
 
     delete(id: number): Observable<any> {
-        return this.http.delete(`${this.getUrl(this.apiName)}/${id}`, { headers: this.httpHeaders });
+        return this.http.delete(`${this.getUrl()}/${id}`, { headers: this.httpHeaders });
     }
 
     getById(id: number): Observable<any> {
-        return this.http.get(`${this.getUrl(this.apiName)}/${id}`, { headers: this.httpHeaders });
+        return this.http.get(`${this.getUrl()}/${id}`, { headers: this.httpHeaders });
     }
 
     getByUser(idUser: number): Observable<any> {
-        return this.http.get(`${this.getUrl(this.apiName)}/${idUser}`, { headers: this.httpHeaders });
+        return this.http.get(`${this.getUrl()}/${idUser}`, { headers: this.httpHeaders });
     }
 
     get(): Observable<any> {
-        return this.http.get(this.getUrl(this.apiName), { headers: this.httpHeaders });
+        return this.http.get(this.getUrl(), { headers: this.httpHeaders });
     }
 
     getAll(idUsuario: number): Observable<any> {
-        return this.http.get(`${this.getUrl(this.apiName)}/${idUsuario}`, { headers: this.httpHeaders });
+        return this.http.get(`${this.getUrl()}/${idUsuario}`, { headers: this.httpHeaders });
     }
 
-    jsonDataToResources(jsonData: any[]): T[] {
-        const resourses: T[] = [];
-        jsonData.forEach(element => resourses.push(element as T));
+    jsonDataToResources(jsonData: any[]): any[] {
+        const resourses: any[] = [];
+        jsonData.forEach(element => resourses.push(element as any));
         return resourses;
     }
+    
 
     jsonDataToResource(jsonData: any): T {
         return jsonData as T;

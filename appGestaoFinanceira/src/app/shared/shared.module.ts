@@ -9,12 +9,14 @@ import { FieldValidationFormComponent } from './components/field-validation-form
 import { HeaderPageTitleComponent } from './components/header-page-title/header-page-title.component';
 import {AppRoutingModule} from '../app.routing';
 import { SpinnerPageLoadingComponent } from './components/spinner-page-loading/spinner-page-loading.component';
+import { StatusComponent } from './components/radiobuttons/status/status.component';
 @NgModule({
   declarations: [FieldServerErrorsFormComponent,
     ButtonSubmmitFormComponent,
     FieldValidationFormComponent,
     HeaderPageTitleComponent,
-    SpinnerPageLoadingComponent
+    SpinnerPageLoadingComponent,
+    StatusComponent
   ],
   imports: [
     CommonModule,
@@ -36,6 +38,7 @@ import { SpinnerPageLoadingComponent } from './components/spinner-page-loading/s
     FieldValidationFormComponent,
     HeaderPageTitleComponent,
     SpinnerPageLoadingComponent,
+    StatusComponent,
     AppRoutingModule
   ]
 })

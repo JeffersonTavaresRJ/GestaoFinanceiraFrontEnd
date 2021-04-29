@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-8 offset-2">
-    <app-header-page-title header-title="Cadastrar Usuário">      
+    <app-header-page-title [header-title]="resourcePageTitle">      
     </app-header-page-title>    
     <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
       <div class="row">

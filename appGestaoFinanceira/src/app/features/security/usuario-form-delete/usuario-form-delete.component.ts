@@ -17,20 +17,22 @@ export class UsuarioFormDeleteComponent extends GenericResourceFormComponent<Usu
   
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService) {
-    super(injector, usuarioService, '/login');       
+    super(injector, new Usuario, usuarioService, '/login');       
   }
 
   protected buildResourceForm() {
-    this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
-
-    this.resourceForm = this.resourceFormBuilder.group({
-      id: [this.usuario.id],
-      eMail:[this.usuario.eMail],
+   this.resourceForm = this.resourceFormBuilder.group({
+      id: [this.resourceUsuario.id],
+      eMail:[this.resourceUsuario.eMail],
       senha: [null, Validators.compose([Validators.required])],
       confirmarSenha: [null, Validators.compose([Validators.required])]
     }, {
       validator: [ValidacoesCustomizadas.validarConfirmacaoSenha,
       ValidacoesCustomizadas.validarSenha(this.usuarioService)]
     });
+  }
+
+  protected resourceDeletePageTitle():string{
+    return 'Confirma a exclusão do usuário?';
   }
 }

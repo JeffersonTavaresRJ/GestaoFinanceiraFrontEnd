@@ -19,15 +19,14 @@ export class UsuarioFormUpdateCadastroComponent extends GenericResourceFormCompo
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService,
     private updateUsuarioObservable: UpdateUsuarioObservable) {
-    super(injector, usuarioService, null);
+    super(injector, new Usuario, usuarioService, null);
   }
 
   protected buildResourceForm() {
-    this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     this.resourceForm = this.resourceFormBuilder.group({
-      id: this.usuario.id,
-      nome: this.usuario.nome,
-      eMail: this.usuario.eMail,
+      id: this.resourceUsuario.id,
+      nome: this.resourceUsuario.nome,
+      eMail: this.resourceUsuario.eMail,
       senha: [null, Validators.required],
       confirmarSenha: [null, Validators.required]
     },

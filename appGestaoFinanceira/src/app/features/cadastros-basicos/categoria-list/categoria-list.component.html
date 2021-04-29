@@ -28,7 +28,7 @@
                                     <strong class="text-danger" *ngIf="categoria.status==false">Inativo</strong>
                                 </td>
                                 <td style="text-align: center;">
-                                    <a [routerLink]="[categoria.id,'edit']" class="btn btn-outline-info btn-sm me-3">
+                                    <a [routerLink]="['edit',categoria.id]" class="btn btn-outline-info btn-sm me-3">
                                         Editar
                                     </a>
                                     <button class="btn btn-outline-danger btn-sm"

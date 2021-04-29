@@ -2,7 +2,10 @@
 import { OnInit, Injector, Directive, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
+import { Usuario } from 'src/app/features/security/_models/usuario-model';
+import { environment } from 'src/environments/environment';
 import { GenericResourceModel } from '../../_models/generic-resource-model';
 import { GenericResourceService } from '../../_services/generic-resource-service';
 import { AlertMessageForm } from '../alert-form/alert-message-form';
@@ -15,6 +18,9 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     resourceMessageButton: string;
     resourceForm: FormGroup;
+    resourcePageTitle: string;
+    resourceUsuario: Usuario;
+    resourceClass_: T;
 
     protected autenticarUsuarioObservable: AutenticarUsuarioObservable;
     protected resourceAlertMessage: AlertMessageForm;
@@ -25,17 +31,28 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     private route: ActivatedRoute;
 
     constructor(protected injector: Injector,
+        protected resourceClass: T,
         protected resourceService: GenericResourceService<T>,
         protected redirectRouterLink: string) {
+
         this.router = injector.get(Router);
         this.route = injector.get(ActivatedRoute);
         this.resourceFormBuilder = injector.get(FormBuilder);
         this.autenticarUsuarioObservable = injector.get(AutenticarUsuarioObservable);
         this.resourceAlertMessage = injector.get(AlertMessageForm);
+        this.resourceClass_ = this.resourceClass;
+
+        this.resourceUsuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     }
 
     ngOnInit(): void {
+        debugger;
+        this.loadResource();
         this.buildResourceForm();
+    }
+
+    ngOnDestroy(): void {
+        this.setResourceApiOption('');
     }
 
     setResourceApiOption(apiOption: string) {
@@ -62,6 +79,19 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         if (this.resourceForm.valid && this.validationErrors.length > 0) {
             // debugger;
             return this.validationErrors.filter(i => i.propertyName.toLowerCase() == param);
+        }
+    }
+
+    resourceCurrentAction(): string {
+        if (this.route.snapshot.url[1].path == 'new') {
+            this.resourcePageTitle = this.resourceCreatePageTitle();
+            return 'new'
+        } else if (this.route.snapshot.url[1].path == 'edit') {
+            this.resourcePageTitle = this.resourceEditPageTitle();
+            return 'edit'
+        } else {
+            this.resourcePageTitle = this.resourceDeletePageTitle();
+            return 'delete'
         }
     }
 
@@ -103,16 +133,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             );
     }
 
-    protected resourceCurrentAction(): string {
-        if (this.route.snapshot.url[1].path == 'new') {
-            return 'new'
-        } else if (this.route.snapshot.url[1].path == 'edit') {
-            return 'edit'
-        } else {
-            return 'delete'
-        }
-    }
-
     protected resourceActionForSucess(): void {
 
         if (this.redirectRouterLink != null) {
@@ -139,7 +159,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             //validação de formulários (BadRequest) 
             this.validationErrors = e.error;
         }
-        else if (e.status == 403) {
+        else if (e.status == 401 || e.status == 403) {
             //token expirado
             this.resourceAlertMessage.showInfo('Sessão expirada', 'Operação Cancelada');
             this.autenticarUsuarioObservable.set(false);
@@ -148,13 +168,41 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         else if (e.status == 418) {
             //exceções customizadas
             this.resourceAlertMessage.showInfo(e.error, 'Sr. Usuário');
+        } else if (e.status == 500) {
+            //error status code 500..
+            this.resourceAlertMessage.showError(e.error, 'Sr. Usuário');
         } else {
-            this.resourceAlertMessage.showError(e.error.error, 'Sr. Usuário');
+            this.resourceAlertMessage.showError(e.error, 'Sr. Usuário');
             console.log(e.error.error);
         }
     }
 
-    ngOnDestroy() {
-      this.setResourceApiOption('');
+    protected resourceCreatePageTitle():string{
+        return 'Novo';
+    }
+
+    protected resourceEditPageTitle():string{
+        return 'Edição';
+    }
+
+    protected resourceDeletePageTitle():string{
+        return 'Exclusão';
+    }
+
+    private loadResource() {
+        if (this.resourceCurrentAction() == 'edit' &&
+            this.route.snapshot.url[2].path != 'null'){
+                this.setResourceApiOption('/GetId');
+                this.route.paramMap.pipe(
+                    switchMap(params => this.resourceService.getById(+params.get("id")))
+            )
+                .subscribe(
+                    (resource) => {
+                        this.resourceForm.patchValue(resource) // binds loaded resource data to resourceForm
+                    },
+                    (error) => this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
+                )
+
+            }            
     }
 }

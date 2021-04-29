@@ -12,9 +12,9 @@ import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/
 })
 export class UsuarioFormCreateComponent extends GenericResourceFormComponent<Usuario>{
 
-  constructor(protected injector: Injector, 
+  constructor(protected injector: Injector,        
               protected usuarioService: UsuarioService) {
-    super(injector, usuarioService, '/login');    
+    super(injector, new Usuario, usuarioService, '/login');    
   }
 
   protected buildResourceForm() {
@@ -27,5 +27,9 @@ export class UsuarioFormCreateComponent extends GenericResourceFormComponent<Usu
       {
         validator: ValidacoesCustomizadas.validarConfirmacaoSenha
       });
-  }  
+  }
+  
+  protected resourceCreatePageTitle():string{
+    return 'Cadastrar Usuário';
+  }
 }
