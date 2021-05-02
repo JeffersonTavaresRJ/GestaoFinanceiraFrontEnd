@@ -20,7 +20,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     resourceForm: FormGroup;
     resourcePageTitle: string;
     resourceUsuario: Usuario;
-    resourceClass_: T;
 
     protected autenticarUsuarioObservable: AutenticarUsuarioObservable;
     protected resourceAlertMessage: AlertMessageForm;
@@ -33,6 +32,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     constructor(protected injector: Injector,
         protected resourceClass: T,
         protected resourceService: GenericResourceService<T>,
+        protected resourceJsonDataToResourceFn: (jsonData)=>T,
         protected redirectRouterLink: string) {
 
         this.router = injector.get(Router);
@@ -40,13 +40,11 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.resourceFormBuilder = injector.get(FormBuilder);
         this.autenticarUsuarioObservable = injector.get(AutenticarUsuarioObservable);
         this.resourceAlertMessage = injector.get(AlertMessageForm);
-        this.resourceClass_ = this.resourceClass;
 
         this.resourceUsuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     }
 
     ngOnInit(): void {
-        debugger;
         this.loadResource();
         this.buildResourceForm();
     }
@@ -60,12 +58,13 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     resourceSubmmit() {
+        this.resourceClass = this.resourceJsonDataToResourceFn(this.resourceForm.value);
         if (this.resourceCurrentAction() == 'new') {
-            this.resourceCreate(this.resourceForm.value)
+            this.resourceCreate(this.resourceClass)
         } else if (this.resourceCurrentAction() == 'edit') {
-            this.resourceUpdate(this.resourceForm.value)
+            this.resourceUpdate(this.resourceClass)
         } else if (this.resourceCurrentAction() == 'delete') {
-            this.resourceDelete(this.resourceForm.value.id)
+            this.resourceDelete(this.resourceClass.id)
         } else {
             this.resourceAlertMessage.showError('Rota não encontrada', 'Sr. Usuário');
         }
@@ -97,9 +96,9 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected abstract buildResourceForm();
 
-    protected resourceCreate(formResource: any) {
+    protected resourceCreate(resourceClass: T) {
         this.resourceMessageButton = 'Processando...';
-        this.resourceService.post(formResource)
+        this.resourceService.post(resourceClass)
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();
@@ -109,9 +108,9 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             );
     }
 
-    protected resourceUpdate(formResource: any) {
+    protected resourceUpdate(resourceClass: T) {
         this.resourceMessageButton = 'Atualizando...';
-        this.resourceService.put(formResource)
+        this.resourceService.put(resourceClass)
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();
@@ -157,7 +156,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         }
         if (e.status == 400) {
             //validação de formulários (BadRequest) 
-            this.validationErrors = e.error;
+            this.validationErrors = e.error;         
         }
         else if (e.status == 401 || e.status == 403) {
             //token expirado
@@ -167,6 +166,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         }
         else if (e.status == 418) {
             //exceções customizadas
+            console.log('exceções customizadas: '+ e);
             this.resourceAlertMessage.showInfo(e.error, 'Sr. Usuário');
         } else if (e.status == 500) {
             //error status code 500..

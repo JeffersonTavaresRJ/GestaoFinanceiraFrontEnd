@@ -14,25 +14,16 @@ export class CategoriaFormComponent extends GenericResourceFormComponent<Categor
 
   constructor(protected injector: Injector,
     protected categoriaService: CategoriaService) {
-    super(injector, new Categoria, categoriaService, null);
+    super(injector, new Categoria, categoriaService, Categoria.fromJson, 'categoria');
   }
 
   tipos: any[] = [];
-
-  ngOnInit(){
-    this.categoriaService.listarTipos().subscribe(
-      sucess => this.tipos = sucess,
-      error => this.resourceAlertMessage.showError(error, 'Sr. Usuário')
-    );
-    super.ngOnInit();
-  }
 
   protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({
       id: [''],
       descricao: ['', Validators.required],
-      tipo: ['', Validators.required],
-      status: ['', Validators.required],
+      status: [''],
       idUsuario: [this.resourceUsuario.id]
     });    
   }
@@ -44,5 +35,4 @@ export class CategoriaFormComponent extends GenericResourceFormComponent<Categor
   protected resourceEditPageTitle():string{
     return 'Edição de Categoria';
   }
-
 }

@@ -12,7 +12,7 @@ export class UsuarioService extends GenericResourceService<Usuario>{
         super(injector,'api/Usuario');          
     }    
 
-    autenthicate(credencials: any): Observable<Usuario> {
+    autenthicate(credencials: Usuario): Observable<Usuario> {
         this.setApiOption('/Autenthicate');     
         return this.post(credencials);
     }    

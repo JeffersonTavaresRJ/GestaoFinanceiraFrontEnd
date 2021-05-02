@@ -5,8 +5,13 @@ export class Usuario extends GenericResourceModel{
         public id?: number,
         public nome: string ='',
         public eMail: string = '',
+        public senha: string = '',
         public accessToken: string = ''
     ){
         super();
+    }
+
+    static fromJson(jsonData: any): Usuario {
+        return Object.assign(new Usuario(), jsonData);
     }
 }

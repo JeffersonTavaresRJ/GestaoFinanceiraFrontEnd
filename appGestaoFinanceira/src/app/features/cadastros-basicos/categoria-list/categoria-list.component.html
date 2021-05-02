@@ -14,7 +14,6 @@
                         <thead>
                             <tr class="bg-dark text-light">
                                 <th>Descrição</th>
-                                <th>Tipo</th>
                                 <th style="text-align: center;">Status</th>
                                 <th style="text-align: center;">Ações</th>
                             </tr>
@@ -22,10 +21,9 @@
                         <tbody>
                             <tr *ngFor="let categoria of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
                                 <td><strong>{{categoria.descricao}}</strong></td>
-                                <td>{{categoria.tipo}}</td>
                                 <td style="text-align: center;">
-                                    <strong class="text-success" *ngIf="categoria.status==true">Ativo</strong>
-                                    <strong class="text-danger" *ngIf="categoria.status==false">Inativo</strong>
+                                    <strong class="text-success" *ngIf="categoria.status=='True'">Ativo</strong>
+                                    <strong class="text-danger" *ngIf="categoria.status=='False'">Inativo</strong>
                                 </td>
                                 <td style="text-align: center;">
                                     <a [routerLink]="['edit',categoria.id]" class="btn btn-outline-info btn-sm me-3">

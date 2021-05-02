@@ -28,7 +28,7 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     this.resourceService.getByUser(this.usuario.id).subscribe(
       sucess => this.resources = sucess,
-      error =>  this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
+      error =>  this.resourceAlertMessage.showError(error, 'Sr. Usuário')
     );
   }
 
@@ -53,7 +53,7 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
         this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
         this.ngOnInit();
       },
-      error => this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
+      error => this.resourceAlertMessage.showError(error, 'Sr. Usuário')
     )
   }
 

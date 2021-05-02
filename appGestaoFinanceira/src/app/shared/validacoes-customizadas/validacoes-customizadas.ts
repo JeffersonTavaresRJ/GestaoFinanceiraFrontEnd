@@ -1,7 +1,10 @@
 import { AbstractControl } from '@angular/forms';
+import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { UsuarioService } from '../../features/security/_services/usuario-service';
 
 export class ValidacoesCustomizadas {
+
+    private static usuario: Usuario;
 
     static validarConfirmacaoSenha(control: AbstractControl) {
         let senha = control.get('senha').value;
@@ -22,14 +25,12 @@ export class ValidacoesCustomizadas {
             //  console.log('validando..');
 
             if (senha === confirmarSenha && (confirmarSenha != null && confirmarSenha.length > 0)) {
-                var credentials = {
-                    email: email,
-                    senha: senha
-                }
-                //   console.log('chamando api..:'+confirmarSenha.length);
+                this.usuario = new Usuario(email=email, senha=senha);
+
+                console.log('chamando api..: '+this.usuario);
                 control.get('confirmarSenha').setErrors({ senhaInvalida: true, message: 'Validando usuário/senha...' });
 
-                usuarioService.autenthicate(credentials).subscribe(
+                usuarioService.autenthicate(this.usuario).subscribe(
                     success => {
                         control.get('confirmarSenha').setErrors(null);
                         return null;

@@ -1,3 +1,3 @@
 export abstract class GenericResourceModel{
-    id?: number
+    id?: number   
 }
