@@ -4,7 +4,7 @@ export class Categoria extends GenericResourceModel{
    constructor(
     public id?: number,
     public descricao: string = '',
-    public status?: string,
+    public status?: boolean,
     public idUsuario: number=null
    ){
        super();

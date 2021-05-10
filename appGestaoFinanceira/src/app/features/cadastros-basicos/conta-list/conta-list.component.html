@@ -3,8 +3,8 @@
         <div class="card">
             <div class="card-header">
                 <app-header-page-title
-                    header-title="Categorias" 
-                    header-button-label="+ Nova Categoria"
+                    header-title="Contas" 
+                    header-button-label="+ Nova Conta"
                     header-button-link="new">
                 </app-header-page-title>
             </div>
@@ -19,18 +19,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let categoria of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
-                                <td><strong>{{categoria.descricao}}</strong></td>
+                            <tr *ngFor="let conta of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
+                                <td><strong>{{conta.descricao}}</strong></td>
                                 <td style="text-align: center;">
-                                    <strong class="text-success" *ngIf="categoria.status==true">Ativo</strong>
-                                    <strong class="text-danger" *ngIf="categoria.status==false">Inativo</strong>
+                                    <strong class="text-success" *ngIf="conta.status==true">Ativo</strong>
+                                    <strong class="text-danger" *ngIf="conta.status==false">Inativo</strong>
                                 </td>
                                 <td style="text-align: center;">
-                                    <a [routerLink]="['edit',categoria.id]" class="btn btn-outline-info btn-sm me-3">
+                                    <a [routerLink]="['edit',conta.id]" class="btn btn-outline-info btn-sm me-3">
                                         Editar
                                     </a>
                                     <button class="btn btn-outline-danger btn-sm"
-                                            (click)="resourceModalDeleteMessage(categoria.id, categoria.descricao)"
+                                            (click)="resourceModalDeleteMessage(conta.id, conta.descricao)"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalDelete">
                                             Excluir

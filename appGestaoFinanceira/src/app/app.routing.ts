@@ -7,10 +7,13 @@ import { Routes, RouterModule } from '@angular/router';
 //importando os componentes que iremos mapear
 import { LoginFormComponent } from './features/security/login-form/login-form.component';
 import { UsuarioFormCreateComponent } from './features/security/usuario-form-create/usuario-form-create.component';
-import {UsuarioFormDeleteComponent} from './features/security/usuario-form-delete/usuario-form-delete.component';
+import { UsuarioFormDeleteComponent} from './features/security/usuario-form-delete/usuario-form-delete.component';
 import { ReceitasDespesasDashboardComponent } from './features/dashboards/receitas-despesas-dashboard/receitas-despesas-dashboard.component';
 import { CategoriaListComponent } from './features/cadastros-basicos/categoria-list/categoria-list.component';
 import { CategoriaFormComponent } from './features/cadastros-basicos/categoria-form/categoria-form.component';
+import { ContaListComponent } from './features/cadastros-basicos/conta-list/conta-list.component';
+import { ContaFormComponent } from './features/cadastros-basicos/conta-form/conta-form.component';
+
 import { UsuarioFormUpdateComponent } from './features/security/usuario-update/usuario-form-update/usuario-form-update.component';
 
 
@@ -23,6 +26,9 @@ const routes: Routes = [
     { path: 'categoria', component: CategoriaListComponent },
     { path: 'categoria/new', component: CategoriaFormComponent },
     { path: 'categoria/edit/:id', component: CategoriaFormComponent },
+    { path: 'conta', component: ContaListComponent },
+    { path: 'conta/new', component: ContaFormComponent },
+    { path: 'conta/edit/:id', component: ContaFormComponent },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent }
 ];
 
