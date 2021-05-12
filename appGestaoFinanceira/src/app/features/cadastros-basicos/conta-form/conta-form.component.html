@@ -22,17 +22,13 @@
             <div *ngIf="resourceCurrentAction()=='edit'">
               <label for="status">Status:</label>
               <div class="form-group mt-1">
-                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-    
-                  <input type="radio" class="btn-check" formControlName="status" id="btnAtivo"
-                    autocomplete="off" value="true">
-                  <label class="btn btn-outline-primary" for="btnAtivo"
-                         [class.active]="resourceForm.get('status').value==true">Ativo</label>
-    
-                  <input type="radio" class="btn-check" formControlName="status" id="btnInativo" 
-                   autocomplete="off" value="false">
-                  <label class="btn btn-outline-primary" for="btnInativo"
-                        [class.active]="resourceForm.get('status').value==false">Inativo</label>
+                <div class="btn-group">
+                  <label (click)="resourceForm.get('status').setValue(true)" [class.active]="resourceForm.get('status').value == true" class="btn btn-outline-primary">
+                    Ativo
+                  </label>
+                  <label (click)="resourceForm.get('status').setValue(false)" [class.active]="resourceForm.get('status').value == false" class="btn btn-outline-primary">
+                    Inativo
+                  </label>
                 </div>
                 <app-field-validation-form [form-control]="resourceForm.get('status')"></app-field-validation-form>
                 <app-field-server-errors-form [server-errors]="resourceErrorsValidations('status')"></app-field-server-errors-form>

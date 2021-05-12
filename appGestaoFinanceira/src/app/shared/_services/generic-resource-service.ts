@@ -37,15 +37,14 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     }
 
     post(resource: T): Observable<any> {
-        debugger;
-        return this.http.post(this.getUrl(), resource, { headers: this.httpHeaders })
+       return this.http.post(this.getUrl(), resource, { headers: this.httpHeaders })
         .pipe(catchError(this.handlerError)/*, 
               --comentado para ler o retorno da mensagem de sucesso da API..
               map(this.jsonDataToResource.bind(this))*/);
     }
 
     put(resource: T): Observable<any> {
-        return this.http.put(this.getUrl(), resource, { headers: this.httpHeaders })
+      return this.http.put(this.getUrl(), resource, { headers: this.httpHeaders })
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
               map(()=>resource)*/);

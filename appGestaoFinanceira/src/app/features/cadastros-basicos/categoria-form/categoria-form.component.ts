@@ -21,9 +21,9 @@ export class CategoriaFormComponent extends GenericResourceFormComponent<Categor
 
   protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({
-      id: [''],
-      descricao: ['', Validators.required],
-      status: [''],
+      id: [null],
+      descricao: [null, Validators.required],
+      status: [null],
       idUsuario: [this.resourceUsuario.id]
     });    
   }
