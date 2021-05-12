@@ -4,6 +4,7 @@ import { UsuarioService } from '../_services/usuario-service';
 import { AlertMessageForm } from '../../../shared/components/alert-form/alert-message-form';
 import { environment } from 'src/environments/environment';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class LoginFormComponent implements OnInit {
     private usuarioService: UsuarioService,
     private alertMessageForm: AlertMessageForm,
     private formBuilder: FormBuilder,
+    private router: Router,
     private autenticarUsuarioObservable: AutenticarUsuarioObservable) {
   }
 
@@ -44,7 +46,7 @@ export class LoginFormComponent implements OnInit {
         this.messageButton = null;
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
         this.autenticarUsuarioObservable.set(true);//envio de evento para o app-header
-        window.location.href = '/receitas-despesas-dashboard';
+        this.router.navigate(['/receitas-despesas-dashboard']);
       },
       (e: any) => {
         this.messageButton = null;

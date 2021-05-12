@@ -200,7 +200,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
                     (resource) => {
                         this.resourceForm.patchValue(resource) // binds loaded resource data to resourceForm
                     },
-                    (error) => this.resourceAlertMessage.showError(error.error, 'Sr. Usuário')
+                    (error) => this.resourceActionForError(error)
                 )
 
             }            
