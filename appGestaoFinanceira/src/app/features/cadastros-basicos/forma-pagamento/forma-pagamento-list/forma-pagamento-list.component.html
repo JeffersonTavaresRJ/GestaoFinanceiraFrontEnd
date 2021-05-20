@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-10 offset-1">
+        <div class="card">
+            <div class="card-header">
+                <app-header-page-title
+                    header-title="Formas de Pagamento" 
+                    header-button-label="+ Nova Forma de Pagamento"
+                    header-button-link="new">
+                </app-header-page-title>
+            </div>
+            <div class="card-body">
+                <div *ngIf="!resourceTableLoading else loading">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="bg-dark text-light">
+                                <th>Descrição</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let formaPagamento of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
+                                <td><strong>{{formaPagamento.descricao}}</strong></td>
+                                <td style="text-align: center;">
+                                    <strong class="text-success" *ngIf="formaPagamento.status==true">Ativo</strong>
+                                    <strong class="text-danger" *ngIf="formaPagamento.status==false">Inativo</strong>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a [routerLink]="['edit',formaPagamento.id]" class="btn btn-outline-info btn-sm me-3">
+                                        Editar
+                                    </a>
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            (click)="resourceModalDeleteMessage(formaPagamento.id, formaPagamento.descricao)"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalDelete">
+                                            Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <pagination-controls (pageChange)="paginaAtual = $event" previousLabel="Anterior" nextLabel="Próximo"></pagination-controls>
+                    </table>                
+                </div>
+                <ng-template #loading>
+                   <app-spinner-page-loading></app-spinner-page-loading>  
+                </ng-template>             
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" 
+    [modal-interrogative-title]="'Sr. Usuário'"
+    [modal-interrogative-message]="resourceDeleteMessage" 
+    (modalInterrogativeResponse)="resourceEventDelete($event)">
+</app-modal-interrogative-form>

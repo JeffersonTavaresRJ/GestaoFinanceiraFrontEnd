@@ -11,7 +11,8 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
 
   resources: T[] = [];
   resourceDeleteMessage: string;
-  protected resourceAlertMessage: AlertMessageForm;
+  resourceTableLoading: boolean;
+  protected resourceAlertMessage: AlertMessageForm;  
   private resourceDeleteId: number;
   private usuario: Usuario;
 
@@ -25,10 +26,17 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
   }
 
   resourceList(){
+    this.resourceTableLoading=true;
     this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     this.resourceService.getByUser(this.usuario.id).subscribe(
-      sucess => this.resources = sucess,
-      error =>  this.resourceAlertMessage.showError(error, 'Sr. Usuário')
+      sucess => {
+        this.resources = sucess; 
+        this.resourceTableLoading = false;
+      },
+      error =>  {
+        this.resourceAlertMessage.showError(error, 'Sr. Usuário');
+        this.resourceTableLoading = false;
+      }
     );
   }
 

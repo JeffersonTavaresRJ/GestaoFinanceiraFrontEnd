@@ -1,8 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
-import { Categoria } from '../_models/categoria-model';
-import { CategoriaService } from '../_services/categoria-service';
+import { Categoria } from '../../_models/categoria-model';
+import { CategoriaService } from '../../_services/categoria-service';
 
 @Component({
   selector: 'app-categoria-form',
