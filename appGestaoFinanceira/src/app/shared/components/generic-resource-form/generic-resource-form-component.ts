@@ -26,8 +26,8 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     protected resourceFormBuilder: FormBuilder;
 
     private validationErrors: any[] = [];
-    private router: Router;
-    private route: ActivatedRoute;
+    protected router: Router;
+    protected route: ActivatedRoute;
 
     constructor(protected injector: Injector,
         protected resourceClass: T,
@@ -45,8 +45,8 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     ngOnInit(): void {
-        this.loadResource();
-        this.buildResourceForm();
+        this.loadResource();    
+        this.buildResourceForm();   
     }
 
     ngOnDestroy(): void {
@@ -58,6 +58,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     resourceSubmmit() {
+      //  debugger;
         this.resourceClass = this.resourceJsonDataToResourceFn(this.resourceForm.value);
         if (this.resourceCurrentAction() == 'new') {
             this.resourceCreate(this.resourceClass)
@@ -94,9 +95,14 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         }
     }
 
+    parseToNumber(propertyName:string){
+        this.resourceForm.get(propertyName).setValue(Number(this.resourceForm.get(propertyName).value));
+    }
+
     protected abstract buildResourceForm();
 
     protected resourceCreate(resourceClass: T) {
+      //  debugger;
         this.resourceMessageButton = 'Processando...';
         this.resourceService.post(resourceClass)
             .subscribe(
@@ -148,6 +154,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     protected resourceActionForError(e): void {
+      //  debugger;
         this.resourceMessageButton = null;
         debugger;
         if (e.status == 0) {
@@ -161,7 +168,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         else if (e.status == 401 || e.status == 403) {
             //token expirado
             this.resourceAlertMessage.showInfo('Sessão expirada', 'Operação Cancelada');
-            this.autenticarUsuarioObservable.set(false);
+            this.autenticarUsuarioObservable.set(false);            
             this.router.navigate(['/login']);
         }
         else if (e.status == 418) {
@@ -189,7 +196,9 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         return 'Exclusão';
     }
 
-    private loadResource() {
+    
+
+    protected loadResource() {
         if (this.resourceCurrentAction() == 'edit' &&
             this.route.snapshot.url[2].path != 'null'){
                 this.setResourceApiOption('/GetId');
@@ -197,8 +206,8 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
                     switchMap(params => this.resourceService.getById(+params.get("id")))
             )
                 .subscribe(
-                    (resource) => {
-                        this.resourceForm.patchValue(resource) // binds loaded resource data to resourceForm
+                    (resource) => {                  
+                        this.resourceForm.patchValue(resource); // binds loaded resource data to resourceForm
                     },
                     (error) => this.resourceActionForError(error)
                 )

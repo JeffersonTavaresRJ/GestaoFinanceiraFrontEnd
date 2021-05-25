@@ -11,19 +11,19 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     private apiName: string;
     private apiOption: string='';
     protected http: HttpClient;
-    private httpHeaders: HttpHeaders;
+    protected httpHeaders: HttpHeaders;
     private user: Usuario;
 
     constructor(injector: Injector, apiName:string) {
         this.http = injector.get(HttpClient);
         this.apiName = apiName;
-        this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
-        // debugger;
-
+       /*
+       this.user = JSON.parse(window.localStorage.getItem(environment.keyUser)); 
         if (this.user != null) {
             this.httpHeaders = new HttpHeaders()
                 .set('Authorization', 'Bearer ' + this.user.accessToken.toString());
-        };
+        };*/
+        
     }
 
     protected getUrl(): string {
@@ -32,11 +32,20 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
         return url;
     }
 
+    getHeaders(){
+        this.user = JSON.parse(window.localStorage.getItem(environment.keyUser)); 
+        if (this.user != null) {
+            this.httpHeaders = new HttpHeaders()
+                .set('Authorization', 'Bearer ' + this.user.accessToken.toString());
+        };
+    }
+
     setApiOption(apiOption: string) {
         this.apiOption = apiOption;
     }
 
     post(resource: T): Observable<any> {
+      this.getHeaders();
        return this.http.post(this.getUrl(), resource, { headers: this.httpHeaders })
         .pipe(catchError(this.handlerError)/*, 
               --comentado para ler o retorno da mensagem de sucesso da API..
@@ -44,6 +53,7 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     }
 
     put(resource: T): Observable<any> {
+      this.getHeaders();
       return this.http.put(this.getUrl(), resource, { headers: this.httpHeaders })
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
@@ -51,6 +61,7 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     }
 
     delete(id: number): Observable<any> {
+        this.getHeaders();
         return this.http.delete(`${this.getUrl()}/${id}`, { headers: this.httpHeaders })
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
@@ -58,19 +69,23 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     }
 
     getById(id: number): Observable<T> {
+        this.getHeaders();
         return this.http.get<T>(`${this.getUrl()}/${id}`, { headers: this.httpHeaders });
     }
 
     getByUser(idUser: number): Observable<T[]> {
+        this.getHeaders();
         return this.http.get<T[]>(`${this.getUrl()}/${idUser}`, { headers: this.httpHeaders });
     }    
 
     getAll(idUsuario: number): Observable<T[]> {
+        this.getHeaders();
         return this.http.get<T[]>(`${this.getUrl()}/${idUsuario}`, { headers: this.httpHeaders });
     }
 
     //retorna todo o tipo de objeto...
     get(): Observable<any[]> {
+        this.getHeaders();
         return this.http.get<any[]>(this.getUrl(), { headers: this.httpHeaders });
     }
 

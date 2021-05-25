@@ -16,11 +16,14 @@ import { ContaFormComponent } from './features/cadastros-basicos/conta/conta-for
 import { UsuarioFormUpdateComponent } from './features/security/usuario-update/usuario-form-update/usuario-form-update.component';
 import { FormaPagamentoFormComponent } from './features/cadastros-basicos/forma-pagamento/forma-pagamento-form/forma-pagamento-form.component';
 import { FormaPagamentoListComponent } from './features/cadastros-basicos/forma-pagamento/forma-pagamento-list/forma-pagamento-list.component';
+import { ItemMovimentacaoListComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-list/item-movimentacao-list.component';
+import { ItemMovimentacaoFormComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-form/item-movimentacao-form.component';
 
 
 //criando o mapeamento de rotas dos componentes
 const routes: Routes = [
-    { path: 'login', component: LoginFormComponent },
+    { path: '', component: LoginFormComponent },
+    { path: 'login', component: LoginFormComponent },    
     { path: 'usuario/new', component: UsuarioFormCreateComponent },
     { path: 'usuario/edit/null', component: UsuarioFormUpdateComponent},
     { path: 'usuario/delete', component: UsuarioFormDeleteComponent },
@@ -33,6 +36,9 @@ const routes: Routes = [
     { path: 'forma-pagamento', component: FormaPagamentoListComponent },
     { path: 'forma-pagamento/new', component: FormaPagamentoFormComponent },
     { path: 'forma-pagamento/edit/:id', component: FormaPagamentoFormComponent },
+    { path: 'item-movimentacao', component: ItemMovimentacaoListComponent },
+    { path: 'item-movimentacao/new', component: ItemMovimentacaoFormComponent },
+    { path: 'item-movimentacao/edit/:id', component: ItemMovimentacaoFormComponent },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent }
 ];
 

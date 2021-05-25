@@ -7,16 +7,14 @@ import { FieldServerErrorsFormComponent } from './components/field-server-errors
 import { ButtonSubmmitFormComponent } from './components/buttons/button-submmit-form/button-submmit-form.component';
 import { FieldValidationFormComponent } from './components/field-validation-form/field-validation-form.component';
 import { HeaderPageTitleComponent } from './components/header-page-title/header-page-title.component';
-import {AppRoutingModule} from '../app.routing';
+import { AppRoutingModule } from '../app.routing';
 import { SpinnerPageLoadingComponent } from './components/spinner-page-loading/spinner-page-loading.component';
-import { StatusComponent } from './components/radiobuttons/status/status.component';
 @NgModule({
   declarations: [FieldServerErrorsFormComponent,
     ButtonSubmmitFormComponent,
     FieldValidationFormComponent,
     HeaderPageTitleComponent,
-    SpinnerPageLoadingComponent,
-    StatusComponent
+    SpinnerPageLoadingComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +36,6 @@ import { StatusComponent } from './components/radiobuttons/status/status.compone
     FieldValidationFormComponent,
     HeaderPageTitleComponent,
     SpinnerPageLoadingComponent,
-    StatusComponent,
     AppRoutingModule
   ]
 })

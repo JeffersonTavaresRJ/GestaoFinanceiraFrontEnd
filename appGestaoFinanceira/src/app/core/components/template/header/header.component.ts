@@ -24,31 +24,22 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.autenticarUsuarioObservable.get().subscribe(valor => this.usuarioAutenticado = valor);
-    this.updateUsuarioObservable.getEMail().subscribe(valor => this.user_name = valor);
-    
-    this.user = JSON.parse(window.localStorage.getItem(environment.keyUser));
-    
-    if (this.user != null) {
-      // debugger;
-      this.usuarioService.get().subscribe(
-        (s: any) => {
-          this.user_name = s.user;
-          this.usuarioAutenticado = true;
-        },
-        (e: any) => {
-          this.usuarioAutenticado = false;
-          window.localStorage.removeItem(environment.keyUser);
-          this.router.navigate(['/login']);
-        }
-      );
+    if (!this.usuarioAutenticado){
+      this.resetUser();
     }
+    this.updateUsuarioObservable.getEMail().subscribe(valor => this.user_name = valor);
   }
 
   resultEvent(event) {
     if (event) {
-      this.usuarioAutenticado = false;
-      window.localStorage.removeItem(environment.keyUser);
-      this.router.navigate(['/login']);
+       this.resetUser();
+       this.router.navigate(['/login']);
+      }
     }
+
+    resetUser(){
+      this.usuarioAutenticado=false;
+      window.localStorage.removeItem(environment.keyUser);
+    }
+
   }
-}

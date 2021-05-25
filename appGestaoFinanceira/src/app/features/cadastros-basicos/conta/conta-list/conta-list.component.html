@@ -9,7 +9,7 @@
                 </app-header-page-title>
             </div>
             <div class="card-body">
-                <div *ngIf="!resourceTableLoading else loading">
+                <div *ngIf="!resourceTableLoading && resources.length > 0 else loading">
                     <table class="table table-hover">
                         <thead>
                             <tr class="bg-dark text-light">
@@ -22,7 +22,7 @@
                             <tr *ngFor="let conta of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
                                 <td><strong>{{conta.descricao}}</strong></td>
                                 <td style="text-align: center;">
-                                    <strong class="text-success" *ngIf="conta.status==true">Ativo</strong>
+                                    <strong class="text-primary" *ngIf="conta.status==true">Ativo</strong>
                                     <strong class="text-danger" *ngIf="conta.status==false">Inativo</strong>
                                 </td>
                                 <td style="text-align: center;">
@@ -41,9 +41,14 @@
                         <pagination-controls (pageChange)="paginaAtual = $event" previousLabel="Anterior" nextLabel="Próximo"></pagination-controls>
                     </table>                
                 </div>
-                <ng-template #loading>
-                   <app-spinner-page-loading></app-spinner-page-loading>  
-                </ng-template>             
+                <ng-template #loading>                    
+                    <div *ngIf="resourceTableLoading">
+                        <app-spinner-page-loading></app-spinner-page-loading> 
+                    </div>  
+                    <div *ngIf="!resourceTableLoading && resources.length==0" style="text-align: center;">
+                        <p><strong>{{resourceMessageTableNotFound}}</strong></p>
+                    </div>                                  
+                </ng-template>           
             </div>
         </div>
     </div>

@@ -3,8 +3,8 @@
         <div class="card">
             <div class="card-header">
                 <app-header-page-title
-                    header-title="Formas de Pagamento" 
-                    header-button-label="+ Nova Forma de Pagamento"
+                    header-title="Itens de Movimentação" 
+                    header-button-label="+ Novo Item de Movimentação"
                     header-button-link="new">
                 </app-header-page-title>
             </div>
@@ -14,23 +14,30 @@
                         <thead>
                             <tr class="bg-dark text-light">
                                 <th>Descrição</th>
+                                <th>Tipo</th>
                                 <th style="text-align: center;">Status</th>
                                 <th style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let formaPagamento of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
-                                <td><strong>{{formaPagamento.descricao}}</strong></td>
-                                <td style="text-align: center;">
-                                    <strong class="text-primary" *ngIf="formaPagamento.status==true">Ativo</strong>
-                                    <strong class="text-danger" *ngIf="formaPagamento.status==false">Inativo</strong>
+                            <tr *ngFor="let itemMovimentacao of resources | orderBy: 'tipoDescricao' | paginate: { itemsPerPage: 3, currentPage: paginaAtual }; let i = index">
+                                <td>
+                                    <strong>{{itemMovimentacao.descricao}}</strong>   
+                                    <p>{{itemMovimentacao.categoria.descricao}}</p>
+                                </td>
+                                <td>
+                                    <strong>{{itemMovimentacao.tipoDescricao}}</strong>                                   
                                 </td>
                                 <td style="text-align: center;">
-                                    <a [routerLink]="['edit',formaPagamento.id]" class="btn btn-outline-info btn-sm me-3">
+                                    <strong class="text-primary" *ngIf="itemMovimentacao.status==true">Ativo</strong>
+                                    <strong class="text-danger" *ngIf="itemMovimentacao.status==false">Inativo</strong>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a [routerLink]="['edit',itemMovimentacao.id]" class="btn btn-outline-info btn-sm me-3">
                                         Editar
                                     </a>
                                     <button class="btn btn-outline-danger btn-sm"
-                                            (click)="resourceModalDeleteMessage(formaPagamento.id, formaPagamento.descricao)"
+                                            (click)="resourceModalDeleteMessage(itemMovimentacao.id, itemMovimentacao.descricao)"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalDelete">
                                             Excluir

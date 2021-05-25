@@ -34,6 +34,9 @@ export class UsuarioFormUpdateCadastroComponent extends GenericResourceFormCompo
         validator: ValidacoesCustomizadas.validarConfirmacaoSenha
       });
 
+    this.updateUsuarioObservable.setNome(this.resourceUsuario.nome);
+    this.updateUsuarioObservable.setEmail(this.resourceUsuario.eMail);
+
   }
 
   resourceActionForSucess() {

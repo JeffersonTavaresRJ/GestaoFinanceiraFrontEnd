@@ -5,6 +5,8 @@ import { AlertMessageForm } from '../../../shared/components/alert-form/alert-me
 import { environment } from 'src/environments/environment';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
 import { Router } from '@angular/router';
+import { ItemMovimentacaoService } from '../../cadastros-basicos/_services/item-movimentacao-service';
+import { UpdateUsuarioObservable } from 'src/app/core/services/UpdateUsuarioObservable';
 
 
 @Component({
@@ -23,29 +25,36 @@ export class LoginFormComponent implements OnInit {
     private alertMessageForm: AlertMessageForm,
     private formBuilder: FormBuilder,
     private router: Router,
-    private autenticarUsuarioObservable: AutenticarUsuarioObservable) {
+    private autenticarUsuarioObservable: AutenticarUsuarioObservable,
+    private updateUsuarioObservable: UpdateUsuarioObservable) {
+      this.autenticarUsuarioObservable.set(false);
   }
 
   ngOnInit(): void {
     this.buildForm();
-    window.localStorage.removeItem(environment.keyUser);
+    window.localStorage.removeItem(environment.keyUser);    
   }
 
   buildForm() {
     this.formLogin = this.formBuilder.group({
       eMail: [null, Validators.compose([Validators.email, Validators.required])],
       senha: [null, Validators.required]
-    });
+    });   
+
   }
 
   autenticar(): void {
     this.messageButton = 'Acessando...';
-   // debugger;
+    debugger;
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
         this.messageButton = null;
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
-        this.autenticarUsuarioObservable.set(true);//envio de evento para o app-header
+
+        //envio de eventos para o app-header..
+        this.updateUsuarioObservable.setEmail(this.formLogin.value.eMail);
+        this.autenticarUsuarioObservable.set(true);
+
         this.router.navigate(['/receitas-despesas-dashboard']);
       },
       (e: any) => {

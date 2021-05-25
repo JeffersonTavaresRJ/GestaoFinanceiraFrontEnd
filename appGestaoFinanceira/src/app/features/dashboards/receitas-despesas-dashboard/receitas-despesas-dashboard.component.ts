@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ItemMovimentacao } from '../../cadastros-basicos/_models/Item-movimentacao-model';
+import { ItemMovimentacaoService } from '../../cadastros-basicos/_services/item-movimentacao-service';
 
 @Component({
   selector: 'app-receitas-despesas-dashboard',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReceitasDespesasDashboardComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private itemMovimentacaoService : ItemMovimentacaoService) { }
+ 
   ngOnInit(): void {
+   /* this.itemMovimentacaoService.setApiOption('/GetId');
+    this.itemMovimentacaoService.getById(6).subscribe(
+      sucess=> alert(JSON.stringify(sucess))
+      );
+      */
   }
 
 }
