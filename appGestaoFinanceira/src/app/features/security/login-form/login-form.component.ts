@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuarioService } from '../_services/usuario-service';
-import { AlertMessageForm } from '../../../shared/components/alert-form/alert-message-form';
 import { environment } from 'src/environments/environment';
-import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
+import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
 import { Router } from '@angular/router';
-import { ItemMovimentacaoService } from '../../cadastros-basicos/_services/item-movimentacao-service';
-import { UpdateUsuarioObservable } from 'src/app/core/services/UpdateUsuarioObservable';
+import { UpdateUsuarioObservable } from 'src/app/core/services/update-usuario-observable';
 
 
 @Component({
@@ -22,7 +20,6 @@ export class LoginFormComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private alertMessageForm: AlertMessageForm,
     private formBuilder: FormBuilder,
     private router: Router,
     private autenticarUsuarioObservable: AutenticarUsuarioObservable,
@@ -57,17 +54,9 @@ export class LoginFormComponent implements OnInit {
 
         this.router.navigate(['/receitas-despesas-dashboard']);
       },
-      (e: any) => {
-        this.messageButton = null;
-        if (e.status == 0) {
-          this.alertMessageForm.showError('Problema no acesso ao servidor', 'Sr. Usuário');
-        }
-        else if (e.status == 400) {
-          this.alertMessageForm.showInfo(e.error.message, 'Sr. Usuário');
-        } else {
-          this.alertMessageForm.showError(e.error, 'Sr. Usuário');
-          console.log('status: ' + e.status);
-        }
+      (e:any)=>{
+         this.messageButton=null;
       });
+      //mensagem de tratamento de erros centralizado no interception..
   }
 }

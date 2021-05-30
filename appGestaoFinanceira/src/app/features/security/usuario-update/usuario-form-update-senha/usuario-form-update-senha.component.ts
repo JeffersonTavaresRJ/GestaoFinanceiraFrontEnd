@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { UpdateUsuarioObservable } from 'src/app/core/services/UpdateUsuarioObservable';
+import { UpdateUsuarioObservable } from 'src/app/core/services/update-usuario-observable';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { ValidacoesCustomizadas } from '../../../../shared/validacoes-customizadas/validacoes-customizadas';

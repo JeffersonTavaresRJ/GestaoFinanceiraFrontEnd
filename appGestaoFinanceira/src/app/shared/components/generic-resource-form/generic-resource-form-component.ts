@@ -3,7 +3,7 @@ import { OnInit, Injector, Directive, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
+import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { environment } from 'src/environments/environment';
 import { GenericResourceModel } from '../../_models/generic-resource-model';
@@ -153,37 +153,13 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     }
 
-    protected resourceActionForError(e): void {
-      //  debugger;
+    protected resourceActionForError(e){
         this.resourceMessageButton = null;
-        debugger;
-        if (e.status == 0) {
-            //servidor fora
-            this.resourceAlertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');
-        }
         if (e.status == 400) {
             //validação de formulários (BadRequest) 
             this.validationErrors = e.error;         
         }
-        else if (e.status == 401 || e.status == 403) {
-            //token expirado
-            this.resourceAlertMessage.showInfo('Sessão expirada', 'Operação Cancelada');
-            this.autenticarUsuarioObservable.set(false);            
-            this.router.navigate(['/login']);
-        }
-        else if (e.status == 418) {
-            //exceções customizadas
-            console.log('exceções customizadas: '+ e);
-            this.resourceAlertMessage.showInfo(e.error, 'Sr. Usuário');
-        } else if (e.status == 500) {
-            //error status code 500..
-            this.resourceAlertMessage.showError(e.error, 'Sr. Usuário');
-        } else {
-            this.resourceAlertMessage.showError(e.error, 'Sr. Usuário');
-            console.log(e.error.error);
-        }
     }
-
     protected resourceCreatePageTitle():string{
         return 'Novo';
     }
@@ -195,9 +171,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     protected resourceDeletePageTitle():string{
         return 'Exclusão';
     }
-
     
-
     protected loadResource() {
         if (this.resourceCurrentAction() == 'edit' &&
             this.route.snapshot.url[2].path != 'null'){

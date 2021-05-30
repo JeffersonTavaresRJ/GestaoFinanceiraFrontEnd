@@ -1,4 +1,10 @@
 <app-header></app-header>
-<div class="container">    
-    <router-outlet></router-outlet>    
+<div class="container mt-5">
+  <router-outlet></router-outlet>
 </div>
+<ngx-spinner bdColor = "rgba(0,0,0,0.8)" 
+   size = "medium" 
+   color = "#f6f5f5" 
+   type = "timer" 
+   [fullScreen] = "false">
+</ngx-spinner>

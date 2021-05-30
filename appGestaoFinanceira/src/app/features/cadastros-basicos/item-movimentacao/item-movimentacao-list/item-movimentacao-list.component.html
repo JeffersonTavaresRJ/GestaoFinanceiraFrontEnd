@@ -49,9 +49,6 @@
                     </table>                
                 </div>
                 <ng-template #loading>                    
-                    <div *ngIf="resourceTableLoading">
-                        <app-spinner-page-loading></app-spinner-page-loading> 
-                    </div>  
                     <div *ngIf="!resourceTableLoading && resources.length==0" style="text-align: center;">
                         <p><strong>{{resourceMessageTableNotFound}}</strong></p>
                     </div>                                  

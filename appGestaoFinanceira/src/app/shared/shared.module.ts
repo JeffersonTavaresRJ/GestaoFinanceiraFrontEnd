@@ -35,8 +35,8 @@ import { SpinnerPageLoadingComponent } from './components/spinner-page-loading/s
     ButtonSubmmitFormComponent,
     FieldValidationFormComponent,
     HeaderPageTitleComponent,
-    SpinnerPageLoadingComponent,
-    AppRoutingModule
+    AppRoutingModule,
+    SpinnerPageLoadingComponent
   ]
 })
 export class SharedModule { }

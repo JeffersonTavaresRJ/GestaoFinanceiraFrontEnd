@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AutenticarUsuarioObservable } from 'src/app/core/services/AutenticarUsuarioObservable';
+import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { environment } from 'src/environments/environment';
-import { UpdateUsuarioObservable } from 'src/app/core/services/UpdateUsuarioObservable';
+import { UpdateUsuarioObservable } from 'src/app/core/services/update-usuario-observable';
 import { Router } from '@angular/router';
 
 @Component({
