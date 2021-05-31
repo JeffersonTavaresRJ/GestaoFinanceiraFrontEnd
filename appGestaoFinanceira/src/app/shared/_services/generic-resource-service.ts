@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Observable, throwError } from "rxjs";
-import { map, catchError } from "rxjs/operators";
+import { catchError } from "rxjs/operators";
 import { environment } from 'src/environments/environment';
 import { GenericResourceModel } from '../_models/generic-resource-model'
 import { Usuario } from '../../features/security/_models/usuario-model';

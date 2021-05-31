@@ -14,6 +14,6 @@ export class CategoriaListComponent extends GenericResourceListComponent<Categor
   
   constructor(protected injector: Injector, protected categoriaService: CategoriaService) {    
     super(injector, categoriaService);
-  }
+  } 
     
 }

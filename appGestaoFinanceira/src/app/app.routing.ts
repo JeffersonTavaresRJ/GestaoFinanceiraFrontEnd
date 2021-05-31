@@ -18,6 +18,10 @@ import { FormaPagamentoFormComponent } from './features/cadastros-basicos/forma-
 import { FormaPagamentoListComponent } from './features/cadastros-basicos/forma-pagamento/forma-pagamento-list/forma-pagamento-list.component';
 import { ItemMovimentacaoListComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-list/item-movimentacao-list.component';
 import { ItemMovimentacaoFormComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-form/item-movimentacao-form.component';
+import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
+import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
+import { FormaPagamentoListResolver } from './features/cadastros-basicos/_guards/forma-pagamento-list-resolver';
+import { ItemMovimentacaoListResolver } from './features/cadastros-basicos/_guards/item-movimentacao-list-resolver';
 
 
 //criando o mapeamento de rotas dos componentes
@@ -27,16 +31,20 @@ const routes: Routes = [
     { path: 'usuario/new', component: UsuarioFormCreateComponent },
     { path: 'usuario/edit/null', component: UsuarioFormUpdateComponent},
     { path: 'usuario/delete', component: UsuarioFormDeleteComponent },
-    { path: 'categoria', component: CategoriaListComponent },
+    { path: 'categoria', component: CategoriaListComponent, 
+             resolve: {resolveResources: CategoriaListResolver} },
     { path: 'categoria/new', component: CategoriaFormComponent },
     { path: 'categoria/edit/:id', component: CategoriaFormComponent },
-    { path: 'conta', component: ContaListComponent },
+    { path: 'conta', component: ContaListComponent,
+             resolve: {resolveResources: ContaListResolver} },
     { path: 'conta/new', component: ContaFormComponent },
     { path: 'conta/edit/:id', component: ContaFormComponent },
-    { path: 'forma-pagamento', component: FormaPagamentoListComponent },
+    { path: 'forma-pagamento', component: FormaPagamentoListComponent,
+             resolve:{resolveResources: FormaPagamentoListResolver} },
     { path: 'forma-pagamento/new', component: FormaPagamentoFormComponent },
     { path: 'forma-pagamento/edit/:id', component: FormaPagamentoFormComponent },
-    { path: 'item-movimentacao', component: ItemMovimentacaoListComponent },
+    { path: 'item-movimentacao', component: ItemMovimentacaoListComponent,
+             resolve:{resolveResources: ItemMovimentacaoListResolver}  },
     { path: 'item-movimentacao/new', component: ItemMovimentacaoFormComponent },
     { path: 'item-movimentacao/edit/:id', component: ItemMovimentacaoFormComponent },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent }
@@ -45,7 +53,11 @@ const routes: Routes = [
 //registrando o mapeamento no Angular
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+    exports: [RouterModule],
+    providers:[CategoriaListResolver,
+               ContaListResolver,
+               FormaPagamentoListResolver,
+               ItemMovimentacaoListResolver]
 })
 
 export class AppRoutingModule { }

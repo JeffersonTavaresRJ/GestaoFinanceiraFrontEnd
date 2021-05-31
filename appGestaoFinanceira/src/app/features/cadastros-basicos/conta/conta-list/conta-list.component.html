@@ -2,14 +2,12 @@
     <div class="col-10 offset-1">
         <div class="card">
             <div class="card-header">
-                <app-header-page-title
-                    header-title="Contas" 
-                    header-button-label="+ Nova Conta"
+                <app-header-page-title header-title="Contas" header-button-label="+ Nova Conta"
                     header-button-link="new">
                 </app-header-page-title>
             </div>
             <div class="card-body">
-                <div *ngIf="!resourceTableLoading && resources.length > 0 else loading">
+                <div *ngIf="resources.length > 0 else loading">
                     <table class="table table-hover">
                         <thead>
                             <tr class="bg-dark text-light">
@@ -19,7 +17,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let conta of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
+                            <tr
+                                *ngFor="let conta of resources | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
                                 <td><strong>{{conta.descricao}}</strong></td>
                                 <td style="text-align: center;">
                                     <strong class="text-primary" *ngIf="conta.status==true">Ativo</strong>
@@ -30,28 +29,26 @@
                                         Editar
                                     </a>
                                     <button class="btn btn-outline-danger btn-sm"
-                                            (click)="resourceModalDeleteMessage(conta.id, conta.descricao)"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalDelete">
-                                            Excluir
+                                        (click)="resourceModalDeleteMessage(conta.id, conta.descricao)"
+                                        data-bs-toggle="modal" data-bs-target="#modalDelete">
+                                        Excluir
                                     </button>
                                 </td>
                             </tr>
                         </tbody>
-                        <pagination-controls (pageChange)="paginaAtual = $event" previousLabel="Anterior" nextLabel="Próximo"></pagination-controls>
-                    </table>                
+                        <pagination-controls (pageChange)="paginaAtual = $event" previousLabel="Anterior"
+                            nextLabel="Próximo"></pagination-controls>
+                    </table>
                 </div>
-                <ng-template #loading>                    
-                    <div *ngIf="!resourceTableLoading && resources.length==0" style="text-align: center;">
+                <ng-template #loading>
+                    <div style="text-align: center;">
                         <p><strong>{{resourceMessageTableNotFound}}</strong></p>
-                    </div>                                  
-                </ng-template>           
+                    </div>
+                </ng-template>
             </div>
         </div>
     </div>
 </div>
-<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" 
-    [modal-interrogative-title]="'Sr. Usuário'"
-    [modal-interrogative-message]="resourceDeleteMessage" 
-    (modalInterrogativeResponse)="resourceEventDelete($event)">
+<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" [modal-interrogative-title]="'Sr. Usuário'"
+    [modal-interrogative-message]="resourceDeleteMessage" (modalInterrogativeResponse)="resourceEventDelete($event)">
 </app-modal-interrogative-form>

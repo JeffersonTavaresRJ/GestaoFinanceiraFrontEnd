@@ -22,7 +22,7 @@ export class AppComponent {
           setTimeout(() => {
             /** spinner ends after 1 seconds */
             this.spinner.hide();
-          }, 1000);          
+          }, 500);          
         }}
       );
   }

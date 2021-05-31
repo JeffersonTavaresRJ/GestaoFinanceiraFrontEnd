@@ -1,8 +1,5 @@
 import { Directive, Injector, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
-import { Usuario } from 'src/app/features/security/_models/usuario-model';
-import { environment } from 'src/environments/environment';
+import { ActivatedRoute } from '@angular/router';
 import { GenericResourceModel } from '../../_models/generic-resource-model';
 import { GenericResourceService } from '../../_services/generic-resource-service';
 import { AlertMessageForm } from '../alert-form/alert-message-form';
@@ -11,22 +8,18 @@ import { AlertMessageForm } from '../alert-form/alert-message-form';
 export abstract class GenericResourceListComponent<T extends GenericResourceModel>
   implements OnInit {
 
-  resources: T[] = [];
+  resources: any[] = [];
   resourceDeleteMessage: string;
-  resourceTableLoading: boolean;
   resourceMessageTableNotFound: string;
   protected resourceAlertMessage: AlertMessageForm;  
-  private autenticarUsuarioObservable : AutenticarUsuarioObservable;
   private resourceDeleteId: number;
-  private usuario: Usuario;
-  private router: Router;
+  private actResourceRoute: ActivatedRoute;
 
   constructor(protected injector: Injector,
     private resourceService: GenericResourceService<T>) {
-    this.router = injector.get(Router);
-    this.resourceAlertMessage = injector.get(AlertMessageForm);
-    this.autenticarUsuarioObservable = injector.get(AutenticarUsuarioObservable);
-    this.resourceMessageTableNotFound = 'Dados não encontrados para a consulta especificada';
+      this.resourceAlertMessage = injector.get(AlertMessageForm);
+      this.actResourceRoute = injector.get(ActivatedRoute);
+      this.resourceMessageTableNotFound = 'Dados não encontrados para a consulta especificada';
   }
 
   ngOnInit(): void {
@@ -34,17 +27,12 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
   }
 
   resourceList(){
-    this.resourceTableLoading=true;
-    this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
-    this.resourceService.getByUser(this.usuario.id).subscribe(
-      sucess => {
-        this.resources = sucess; 
-        this.resourceTableLoading = false;        
-      },
-      error =>  {
-        this.resourceTableLoading = false;
+    this.actResourceRoute.data.subscribe(
+      (sucess:{resolveResources:T[]})=>{
+        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
+        this.resources=sucess.resolveResources
       }
-    );
+    );    
   }
 
 
