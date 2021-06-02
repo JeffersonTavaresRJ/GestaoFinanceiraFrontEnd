@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { GenericResourceListComponent } from 'src/app/shared/components/generic-resource-list/generic-resource-list.component';
-import { ItemMovimentacao } from '../../_models/Item-movimentacao-model';
+import { ItemMovimentacao } from '../../_models/item-movimentacao-model';
 import { ItemMovimentacaoService } from '../../_services/item-movimentacao-service';
 
 @Component({

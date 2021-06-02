@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { Categoria } from '../../_models/categoria-model';
-import { ItemMovimentacao } from '../../_models/Item-movimentacao-model';
+import { ItemMovimentacao } from '../../_models/item-movimentacao-model';
 import { CategoriaService } from '../../_services/categoria-service';
 import { ItemMovimentacaoService } from '../../_services/item-movimentacao-service';
 
@@ -55,21 +55,17 @@ export class ItemMovimentacaoFormComponent extends GenericResourceFormComponent<
 
   loadResource() {
     if (this.resourceCurrentAction() == 'edit') {
-      this.route.params.subscribe(params => {
-        this.id = params['id'];
-      });
-
-      this.itemMovimentacaoService.setApiOption('/GetId');
-      this.itemMovimentacaoService.getById(this.id).subscribe(
-        (itemMovimentacao: ItemMovimentacao) => {
-          this.resourceForm.get('id').setValue(itemMovimentacao.id);
-          this.resourceForm.get('descricao').setValue(itemMovimentacao.descricao);
-          this.resourceForm.get('tipo').setValue(itemMovimentacao.tipo);
-          this.resourceForm.get('status').setValue(itemMovimentacao.status);
-          this.resourceForm.get('idCategoria').setValue(itemMovimentacao.categoria.id);
+      this.actResourceRoute.data.subscribe(
+        (sucess:{resolveResource:ItemMovimentacao})=>{
+          //o resolveResource deve ser o mesmo nome na variável resolve da rota.. 
+          this.resourceForm.get('id').setValue(sucess.resolveResource.id);
+          this.resourceForm.get('descricao').setValue(sucess.resolveResource.descricao);
+          this.resourceForm.get('tipo').setValue(sucess.resolveResource.tipo);
+          this.resourceForm.get('status').setValue(sucess.resolveResource.status);
+          this.resourceForm.get('idCategoria').setValue(sucess.resolveResource.categoria.id);
         },
-        (error) => { this.resourceActionForError(error) }
-      )
+        (error) => this.resourceActionForError(error)
+      );
     }
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemMovimentacao } from '../../cadastros-basicos/_models/Item-movimentacao-model';
+import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
 import { ItemMovimentacaoService } from '../../cadastros-basicos/_services/item-movimentacao-service';
 
 @Component({

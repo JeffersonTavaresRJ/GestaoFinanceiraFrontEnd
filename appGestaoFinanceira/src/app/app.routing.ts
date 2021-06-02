@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core';
 
 //importando as bibliotecas de rotas do angular
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, ActivatedRouteSnapshot } from '@angular/router';
 
 //importando os componentes que iremos mapear
 import { LoginFormComponent } from './features/security/login-form/login-form.component';
@@ -22,6 +22,10 @@ import { CategoriaListResolver } from './features/cadastros-basicos/_guards/cate
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
 import { FormaPagamentoListResolver } from './features/cadastros-basicos/_guards/forma-pagamento-list-resolver';
 import { ItemMovimentacaoListResolver } from './features/cadastros-basicos/_guards/item-movimentacao-list-resolver';
+import { CategoriaFormResolver } from './features/cadastros-basicos/_guards/categoria-form-resolver';
+import { ContaFormResolver } from './features/cadastros-basicos/_guards/conta-form-resolver';
+import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards/forma-pagamento-form-resolver';
+import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
 
 
 //criando o mapeamento de rotas dos componentes
@@ -34,19 +38,23 @@ const routes: Routes = [
     { path: 'categoria', component: CategoriaListComponent, 
              resolve: {resolveResources: CategoriaListResolver} },
     { path: 'categoria/new', component: CategoriaFormComponent },
-    { path: 'categoria/edit/:id', component: CategoriaFormComponent },
+    { path: 'categoria/edit/:id', component: CategoriaFormComponent,
+             resolve: {resolveResource: CategoriaFormResolver}  },
     { path: 'conta', component: ContaListComponent,
              resolve: {resolveResources: ContaListResolver} },
     { path: 'conta/new', component: ContaFormComponent },
-    { path: 'conta/edit/:id', component: ContaFormComponent },
+    { path: 'conta/edit/:id', component: ContaFormComponent,
+             resolve: {resolveResource: ContaFormResolver} },
     { path: 'forma-pagamento', component: FormaPagamentoListComponent,
              resolve:{resolveResources: FormaPagamentoListResolver} },
     { path: 'forma-pagamento/new', component: FormaPagamentoFormComponent },
-    { path: 'forma-pagamento/edit/:id', component: FormaPagamentoFormComponent },
+    { path: 'forma-pagamento/edit/:id', component: FormaPagamentoFormComponent,
+             resolve: {resolveResource: FormaPagamentoFormResolver} },
     { path: 'item-movimentacao', component: ItemMovimentacaoListComponent,
              resolve:{resolveResources: ItemMovimentacaoListResolver}  },
     { path: 'item-movimentacao/new', component: ItemMovimentacaoFormComponent },
-    { path: 'item-movimentacao/edit/:id', component: ItemMovimentacaoFormComponent },
+    { path: 'item-movimentacao/edit/:id', component: ItemMovimentacaoFormComponent,
+             resolve: {resolveResource: ItemMovimentacaoFormResolver} },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent }
 ];
 
@@ -57,7 +65,11 @@ const routes: Routes = [
     providers:[CategoriaListResolver,
                ContaListResolver,
                FormaPagamentoListResolver,
-               ItemMovimentacaoListResolver]
+               ItemMovimentacaoListResolver,
+               CategoriaFormResolver,
+               ContaFormResolver,
+               FormaPagamentoFormResolver,
+               ItemMovimentacaoFormResolver]
 })
 
 export class AppRoutingModule { }

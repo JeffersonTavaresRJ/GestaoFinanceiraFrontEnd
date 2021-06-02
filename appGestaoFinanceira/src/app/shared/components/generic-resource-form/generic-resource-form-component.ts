@@ -2,7 +2,6 @@
 import { OnInit, Injector, Directive, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
 import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { environment } from 'src/environments/environment';
@@ -27,7 +26,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     private validationErrors: any[] = [];
     protected router: Router;
-    protected route: ActivatedRoute;
+    protected actResourceRoute: ActivatedRoute;
 
     constructor(protected injector: Injector,
         protected resourceClass: T,
@@ -36,17 +35,17 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         protected redirectRouterLink: string) {
 
         this.router = injector.get(Router);
-        this.route = injector.get(ActivatedRoute);
         this.resourceFormBuilder = injector.get(FormBuilder);
         this.autenticarUsuarioObservable = injector.get(AutenticarUsuarioObservable);
         this.resourceAlertMessage = injector.get(AlertMessageForm);
+        this.actResourceRoute = injector.get(ActivatedRoute);
 
         this.resourceUsuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     }
 
     ngOnInit(): void {
-        this.loadResource();    
-        this.buildResourceForm();   
+        this.buildResourceForm();  
+        this.loadResource();   
     }
 
     ngOnDestroy(): void {
@@ -83,10 +82,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     resourceCurrentAction(): string {
-        if (this.route.snapshot.url[1].path == 'new') {
+        if (this.actResourceRoute.snapshot.url[1].path == 'new') {
             this.resourcePageTitle = this.resourceCreatePageTitle();
             return 'new'
-        } else if (this.route.snapshot.url[1].path == 'edit') {
+        } else if (this.actResourceRoute.snapshot.url[1].path == 'edit') {
             this.resourcePageTitle = this.resourceEditPageTitle();
             return 'edit'
         } else {
@@ -174,18 +173,15 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     
     protected loadResource() {
         if (this.resourceCurrentAction() == 'edit' &&
-            this.route.snapshot.url[2].path != 'null'){
-                this.setResourceApiOption('/GetId');
-                this.route.paramMap.pipe(
-                    switchMap(params => this.resourceService.getById(+params.get("id")))
-            )
-                .subscribe(
-                    (resource) => {                  
-                        this.resourceForm.patchValue(resource); // binds loaded resource data to resourceForm
+            this.actResourceRoute.snapshot.url[2].path != 'null'){                
+                this.actResourceRoute.data.subscribe(
+                    (sucess:{resolveResource:T})=>{
+                      //o resolveResource deve ser o mesmo nome na variável resolve da rota.. 
+                      this.resourceForm.patchValue(sucess.resolveResource);
+
                     },
                     (error) => this.resourceActionForError(error)
-                )
-
+                  );
             }            
     }
 }

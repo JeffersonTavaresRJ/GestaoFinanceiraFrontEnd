@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
-import { GenericListResolver } from "src/app/shared/_guards/generic-list-resolver";
+import { ActivatedRouteSnapshot } from "@angular/router";
+import { GenericFormResolver } from "src/app/shared/_guards/generic-form-resolver";
 import { Categoria } from "../_models/categoria-model";
 import { CategoriaService } from "../_services/categoria-service";
 
 @Injectable()
-export class CategoriaListResolver extends GenericListResolver<Categoria> {
+export class CategoriaFormResolver extends GenericFormResolver<Categoria> {
     
     constructor(public categoriaService : CategoriaService){  
         super(categoriaService);      
-    }
-    
+    }   
 }
