@@ -15,7 +15,8 @@ import { DashboardsModule } from '../app/features/dashboards/dashboards.module';
 import { AppComponent } from './app.component';
 import { HttpLoadingObservable } from '../app/core/services/http-loading-observable'
 import { HttpRequestInterceptor } from 'src/app/http-request-interceptor';
-//import { TipoItemMovimentacaoComponent } from './features/components/dropdowns/tipo-item-movimentacao/tipo-item-movimentacao.component';
+import { AuthGuard } from './core/_guards/auth-guard';
+const RxJS_Services = [HttpRequestInterceptor, HttpLoadingObservable];
 
 /*============================*/
 
@@ -35,7 +36,8 @@ import { HttpRequestInterceptor } from 'src/app/http-request-interceptor';
   ],
   /*schemas: [CUSTOM_ELEMENTS_SCHEMA],*/
   providers: [
-    HttpLoadingObservable,
+    AuthGuard,
+    RxJS_Services,
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }
   ],  
   bootstrap: [AppComponent] // >> o componente que será inicializado na aplicação  

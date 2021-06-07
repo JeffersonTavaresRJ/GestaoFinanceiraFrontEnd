@@ -63,9 +63,14 @@ export abstract class GenericResourceService<T extends GenericResourceModel>{
     }
 
     //retorna todo o tipo de objeto...
-    get(): Observable<any[]> {
+ /*   get(): Observable<any[]> {
        return this.http.get<any[]>(this.getUrl());
     }
+    */
+
+    get(): Observable<any> {
+        return this.http.get<any>(this.getUrl());
+     }
 
     jsonDataToResources(jsonData: any[]): any[] {
         const resourses: T[] = [];

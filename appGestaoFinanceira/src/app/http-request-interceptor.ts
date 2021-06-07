@@ -6,7 +6,7 @@ import {
     HttpInterceptor
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators'
+import { catchError, finalize, map } from 'rxjs/operators'
 import { HttpLoadingObservable } from './core/services/http-loading-observable'
 import { environment } from '../environments/environment';
 import { Usuario } from './features/security/_models/usuario-model';
@@ -31,10 +31,16 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     ) { }
 
     private user: Usuario;
+    private _countRequests:number=0;
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log('intercept');
+
+        //contador de requests..
+        ++this._countRequests;
         //loading ativo..
-        this.loadingService.show();
+        this.loadingService.setLoading(true);
+    
         
         //cabeçalho com token..
         this.user = JSON.parse(window.localStorage.getItem(environment.keyUser)); 
@@ -47,7 +53,8 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         //chamada recursiva para o próximo request..      
         return next.handle(request)
         .pipe(  
-               catchError(e=>{
+              map(event=>{return event;}), 
+              catchError(e=>{
                 if (e.status == 0) {
                     //servidor fora
                     this.alertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');
@@ -70,8 +77,13 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 }
                 return throwError(e);
                }),
-               //ao finalizar qq operação, oculta o loading..
-                finalize(()=>this.loadingService.hide())
+               //ao finalizar qq operação, oculta o loading..                
+                finalize(()=>{
+                    --this._countRequests;
+                    console.log(this._countRequests);
+                    this.loadingService.setLoading(this._countRequests>0);
+                    console.log('fim intercept');
+                })
               );
     };
 }

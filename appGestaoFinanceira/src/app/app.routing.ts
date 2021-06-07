@@ -26,36 +26,60 @@ import { CategoriaFormResolver } from './features/cadastros-basicos/_guards/cate
 import { ContaFormResolver } from './features/cadastros-basicos/_guards/conta-form-resolver';
 import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards/forma-pagamento-form-resolver';
 import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
+import { AuthGuard } from './core/_guards/auth-guard';
 
 
 //criando o mapeamento de rotas dos componentes
 const routes: Routes = [
     { path: '', component: LoginFormComponent },
     { path: 'login', component: LoginFormComponent },    
-    { path: 'usuario/new', component: UsuarioFormCreateComponent },
-    { path: 'usuario/edit/null', component: UsuarioFormUpdateComponent},
+    { path: 'usuario/new', component: UsuarioFormCreateComponent,
+             canDeactivate:[AuthGuard] },
+    { path: 'usuario/edit/null', component: UsuarioFormUpdateComponent,
+             canDeactivate:[AuthGuard]},
     { path: 'usuario/delete', component: UsuarioFormDeleteComponent },
     { path: 'categoria', component: CategoriaListComponent, 
+             canActivate:[AuthGuard],             
              resolve: {resolveResources: CategoriaListResolver} },
-    { path: 'categoria/new', component: CategoriaFormComponent },
+    { path: 'categoria/new', component: CategoriaFormComponent, 
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard]},
     { path: 'categoria/edit/:id', component: CategoriaFormComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard],
              resolve: {resolveResource: CategoriaFormResolver}  },
     { path: 'conta', component: ContaListComponent,
+             canActivate:[AuthGuard],
              resolve: {resolveResources: ContaListResolver} },
-    { path: 'conta/new', component: ContaFormComponent },
+    { path: 'conta/new', component: ContaFormComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard] },
     { path: 'conta/edit/:id', component: ContaFormComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard],
              resolve: {resolveResource: ContaFormResolver} },
     { path: 'forma-pagamento', component: FormaPagamentoListComponent,
+             canActivate:[AuthGuard],
              resolve:{resolveResources: FormaPagamentoListResolver} },
-    { path: 'forma-pagamento/new', component: FormaPagamentoFormComponent },
-    { path: 'forma-pagamento/edit/:id', component: FormaPagamentoFormComponent,
+    { path: 'forma-pagamento/new', component: FormaPagamentoFormComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard] },
+    { path: 'forma-pagamento/edit/:id', component: FormaPagamentoFormComponent,             
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard],
              resolve: {resolveResource: FormaPagamentoFormResolver} },
     { path: 'item-movimentacao', component: ItemMovimentacaoListComponent,
+             canActivate:[AuthGuard],             
              resolve:{resolveResources: ItemMovimentacaoListResolver}  },
-    { path: 'item-movimentacao/new', component: ItemMovimentacaoFormComponent },
+    { path: 'item-movimentacao/new', component: ItemMovimentacaoFormComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard] },
     { path: 'item-movimentacao/edit/:id', component: ItemMovimentacaoFormComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard],
              resolve: {resolveResource: ItemMovimentacaoFormResolver} },
-    { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent }
+    { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
+             canActivate:[AuthGuard] }
 ];
 
 //registrando o mapeamento no Angular

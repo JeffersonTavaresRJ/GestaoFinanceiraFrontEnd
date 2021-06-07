@@ -17,12 +17,12 @@ export class AppComponent {
       this.HttpLoadingObservable.getLoading().subscribe(
         value=>{
           if(value){
-            this.spinner.show();
+             this.spinner.show();
         }else{
           setTimeout(() => {
             /** spinner ends after 1 seconds */
             this.spinner.hide();
-          }, 500);          
+          }, 200);       
         }}
       );
   }

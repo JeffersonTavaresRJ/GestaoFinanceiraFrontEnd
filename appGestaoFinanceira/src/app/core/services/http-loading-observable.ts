@@ -5,12 +5,8 @@ import { BehaviorSubject, Subject } from "rxjs";
 export class HttpLoadingObservable{
   private isLoading = new BehaviorSubject(false);
   
-  show(){
-    this.isLoading.next(true);
-  }
-
-  hide(){
-    this.isLoading.next(false);
+  setLoading(value:boolean){
+      this.isLoading.next(value); 
   }
 
   getLoading(){

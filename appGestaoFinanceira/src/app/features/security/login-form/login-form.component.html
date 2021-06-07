@@ -9,7 +9,7 @@
   <div class="card-body">
     <form [formGroup]="formLogin" (submit)="autenticar()">
       <div class="form-group col-12">
-        <label for="name">E-Mail:</label>
+        <label for="name">e-mail:</label>
         <input type="text" class="form-control" formControlName="eMail"/>
         <app-field-validation-form [form-control] = "formLogin.get('eMail')"></app-field-validation-form>
       </div>
