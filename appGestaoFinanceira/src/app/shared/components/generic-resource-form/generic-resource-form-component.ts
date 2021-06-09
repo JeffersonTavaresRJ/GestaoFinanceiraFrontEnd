@@ -2,7 +2,7 @@
 import { OnInit, Injector, Directive, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
+import { BSAutenticarUsuario } from 'src/app/core/services/bs-autenticar-usuario';
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { environment } from 'src/environments/environment';
 import { GenericResourceModel } from '../../_models/generic-resource-model';
@@ -20,7 +20,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     resourcePageTitle: string;
     resourceUsuario: Usuario;
 
-    protected autenticarUsuarioObservable: AutenticarUsuarioObservable;
+    protected bsAutenticarUsuario: BSAutenticarUsuario;
     protected resourceAlertMessage: AlertMessageForm;
     protected resourceFormBuilder: FormBuilder;
 
@@ -36,7 +36,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
         this.router = injector.get(Router);
         this.resourceFormBuilder = injector.get(FormBuilder);
-        this.autenticarUsuarioObservable = injector.get(AutenticarUsuarioObservable);
+        this.bsAutenticarUsuario = injector.get(BSAutenticarUsuario);
         this.resourceAlertMessage = injector.get(AlertMessageForm);
         this.actResourceRoute = injector.get(ActivatedRoute);
 
@@ -142,7 +142,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         if (this.redirectRouterLink != null) {
 
             if (this.redirectRouterLink == '/login') {
-                this.autenticarUsuarioObservable.set(false);
+                this.bsAutenticarUsuario.set(false);
             }
             this.router.navigate([this.redirectRouterLink]);
 

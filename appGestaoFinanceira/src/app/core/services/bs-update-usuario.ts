@@ -6,7 +6,7 @@ import { environment } from "src/environments/environment";
     providedIn: 'root'
 })
 
-export class UpdateUsuarioObservable {
+export class BSUpdateUsuario {
 
     private usuario: Usuario;
     private nome =  new BehaviorSubject<string>("");

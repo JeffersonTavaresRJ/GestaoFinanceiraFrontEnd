@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { UpdateUsuarioObservable } from 'src/app/core/services/update-usuario-observable';
+import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
@@ -18,7 +18,7 @@ export class UsuarioFormUpdateCadastroComponent extends GenericResourceFormCompo
 
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService,
-    private updateUsuarioObservable: UpdateUsuarioObservable) {
+    private bsUpdateUsuario: BSUpdateUsuario) {
     super(injector, new Usuario, usuarioService, Usuario.fromJson, null);
   }
 
@@ -34,8 +34,8 @@ export class UsuarioFormUpdateCadastroComponent extends GenericResourceFormCompo
         validator: ValidacoesCustomizadas.validarConfirmacaoSenha
       });
 
-    this.updateUsuarioObservable.setNome(this.resourceUsuario.nome);
-    this.updateUsuarioObservable.setEmail(this.resourceUsuario.eMail);
+    this.bsUpdateUsuario.setNome(this.resourceUsuario.nome);
+    this.bsUpdateUsuario.setEmail(this.resourceUsuario.eMail);
 
   }
 
@@ -44,8 +44,8 @@ export class UsuarioFormUpdateCadastroComponent extends GenericResourceFormCompo
 
     this.usuario.nome = this.resourceForm.value.nome;
     this.usuario.eMail = this.resourceForm.value.eMail;
-    this.updateUsuarioObservable.setNome(this.usuario.nome);
-    this.updateUsuarioObservable.setEmail(this.usuario.eMail);
+    this.bsUpdateUsuario.setNome(this.usuario.nome);
+    this.bsUpdateUsuario.setEmail(this.usuario.eMail);
 
     window.localStorage.setItem(environment.keyUser, JSON.stringify(this.usuario));
 

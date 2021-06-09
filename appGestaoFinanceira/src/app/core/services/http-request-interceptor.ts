@@ -7,11 +7,11 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators'
-import { HttpLoadingObservable } from './core/services/http-loading-observable'
-import { environment } from '../environments/environment';
-import { Usuario } from './features/security/_models/usuario-model';
-import { AlertMessageForm } from './shared/components/alert-form/alert-message-form';
-import { AutenticarUsuarioObservable } from './core/services/autenticar-usuario-observable';
+import { BSHttpLoading } from './bs-http-loading'
+import { environment } from '../../../environments/environment';
+import { Usuario } from '../../features/security/_models/usuario-model';
+import { AlertMessageForm } from '../../shared/components/alert-form/alert-message-form';
+import { BSAutenticarUsuario } from './bs-autenticar-usuario';
 import { Router } from '@angular/router';
 
 /**
@@ -24,9 +24,9 @@ import { Router } from '@angular/router';
 export class HttpRequestInterceptor implements HttpInterceptor {
 
     constructor(
-        public loadingService: HttpLoadingObservable,
+        public bsHttpLoading: BSHttpLoading,
         public alertMessage: AlertMessageForm,
-        public autenticarUsuarioObservable : AutenticarUsuarioObservable,
+        public bsAutenticarUsuario : BSAutenticarUsuario,
         public router : Router
     ) { }
 
@@ -39,7 +39,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         //contador de requests..
         ++this._countRequests;
         //loading ativo..
-        this.loadingService.setLoading(true);
+        this.bsHttpLoading.setLoading(true);
     
         
         //cabeçalho com token..
@@ -62,7 +62,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 else if (e.status == 401 || e.status == 403) {
                     //token expirado
                     this.alertMessage.showInfo('Sessão expirada', 'Operação Cancelada');
-                    this.autenticarUsuarioObservable.set(false);            
+                    this.bsAutenticarUsuario.set(false);            
                     this.router.navigate(['/login']);
                 }
                 else if (e.status == 418) {
@@ -81,7 +81,8 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 finalize(()=>{
                     --this._countRequests;
                     console.log(this._countRequests);
-                    this.loadingService.setLoading(this._countRequests>0);
+                    //enquanto tiver requests sendo realizados, manter o loading ativo..
+                    this.bsHttpLoading.setLoading(this._countRequests>0);
                     console.log('fim intercept');
                 })
               );

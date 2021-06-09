@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
+import { NgModule  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app.routing';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -13,10 +13,10 @@ import { DashboardsModule } from '../app/features/dashboards/dashboards.module';
 
 /*====importação de componentes====*/
 import { AppComponent } from './app.component';
-import { HttpLoadingObservable } from '../app/core/services/http-loading-observable'
-import { HttpRequestInterceptor } from 'src/app/http-request-interceptor';
-import { AuthGuard } from './core/_guards/auth-guard';
-const RxJS_Services = [HttpRequestInterceptor, HttpLoadingObservable];
+import { BSHttpLoading } from './core/services/bs-http-loading'
+import { HttpRequestInterceptor } from 'src/app/core/services/http-request-interceptor';
+import { AuthGuard } from './core/security/auth-guard';
+const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
 
 /*============================*/
 
@@ -34,7 +34,6 @@ const RxJS_Services = [HttpRequestInterceptor, HttpLoadingObservable];
     AppRoutingModule,
     NgxSpinnerModule
   ],
-  /*schemas: [CUSTOM_ELEMENTS_SCHEMA],*/
   providers: [
     AuthGuard,
     RxJS_Services,

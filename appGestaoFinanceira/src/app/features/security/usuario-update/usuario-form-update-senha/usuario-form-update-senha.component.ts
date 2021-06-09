@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { UpdateUsuarioObservable } from 'src/app/core/services/update-usuario-observable';
+import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { ValidacoesCustomizadas } from '../../../../shared/validacoes-customizadas/validacoes-customizadas';
@@ -14,13 +14,13 @@ export class UsuarioFormUpdateSenhaComponent extends GenericResourceFormComponen
 
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService,
-    private updateUsuarioObservable: UpdateUsuarioObservable) {
+    private bsUpdateUsuario: BSUpdateUsuario) {
     super(injector, new UsuarioTrocaSenha, usuarioService, UsuarioTrocaSenha.fromJson, '/login');    
   }
 
   protected buildResourceForm() {
-    this.updateUsuarioObservable.getNome().subscribe(valor => this.resourceUsuario.nome = valor);
-    this.updateUsuarioObservable.getEMail().subscribe(valor => this.resourceUsuario.eMail = valor);
+    this.bsUpdateUsuario.getNome().subscribe(valor => this.resourceUsuario.nome = valor);
+    this.bsUpdateUsuario.getEMail().subscribe(valor => this.resourceUsuario.eMail = valor);
 
     this.resourceForm = this.resourceFormBuilder.group({
       id: this.resourceUsuario.id,

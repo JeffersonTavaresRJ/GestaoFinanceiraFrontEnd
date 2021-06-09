@@ -5,7 +5,7 @@ import { BehaviorSubject } from "rxjs";
   providedIn: 'root'
 })
 
-export class AutenticarUsuarioObservable {
+export class BSAutenticarUsuario {
     private autenticado = new BehaviorSubject<boolean>(false);
 
     constructor() { }  

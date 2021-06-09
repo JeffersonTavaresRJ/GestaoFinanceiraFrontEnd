@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
+import { BSAutenticarUsuario } from 'src/app/core/services/bs-autenticar-usuario';
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { environment } from 'src/environments/environment';
-import { UpdateUsuarioObservable } from 'src/app/core/services/update-usuario-observable';
+import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,9 +13,9 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private usuarioService: UsuarioService,
-    private autenticarUsuarioObservable: AutenticarUsuarioObservable,
-    private updateUsuarioObservable: UpdateUsuarioObservable,
+  constructor(
+    private bsAutenticarUsuario: BSAutenticarUsuario,
+    private bsUpdateUsuario: BSUpdateUsuario,
     private router: Router) { }
 
   usuarioAutenticado: boolean;
@@ -23,11 +23,11 @@ export class HeaderComponent implements OnInit {
   user_name: string;
 
   ngOnInit(): void {
-    this.autenticarUsuarioObservable.get().subscribe(valor => this.usuarioAutenticado = valor);
+    this.bsAutenticarUsuario.get().subscribe(valor => this.usuarioAutenticado = valor);
     if (!this.usuarioAutenticado){
       this.resetUser();
     }
-    this.updateUsuarioObservable.getEMail().subscribe(valor => this.user_name = valor);
+    this.bsUpdateUsuario.getEMail().subscribe(valor => this.user_name = valor);
   }
 
   resultEvent(event) {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { HttpLoadingObservable } from '../app/core/services/http-loading-observable';
+import { BSHttpLoading } from './core/services/bs-http-loading';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +11,10 @@ import { HttpLoadingObservable } from '../app/core/services/http-loading-observa
 export class AppComponent {
   title = 'Gestao Financeira';
   
-  constructor(private HttpLoadingObservable: HttpLoadingObservable,
+  constructor(private bsHttpLoading: BSHttpLoading,
     private spinner: NgxSpinnerService) {
 
-      this.HttpLoadingObservable.getLoading().subscribe(
+      this.bsHttpLoading.getLoading().subscribe(
         value=>{
           if(value){
              this.spinner.show();

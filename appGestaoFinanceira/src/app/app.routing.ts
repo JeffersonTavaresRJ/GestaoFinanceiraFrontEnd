@@ -26,7 +26,8 @@ import { CategoriaFormResolver } from './features/cadastros-basicos/_guards/cate
 import { ContaFormResolver } from './features/cadastros-basicos/_guards/conta-form-resolver';
 import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards/forma-pagamento-form-resolver';
 import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
-import { AuthGuard } from './core/_guards/auth-guard';
+import { AuthGuard } from './core/security/auth-guard';
+import { Error404Component } from './core/components/error404/error404.component';
 
 
 //criando o mapeamento de rotas dos componentes
@@ -79,7 +80,8 @@ const routes: Routes = [
              canDeactivate:[AuthGuard],
              resolve: {resolveResource: ItemMovimentacaoFormResolver} },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
-             canActivate:[AuthGuard] }
+             canActivate:[AuthGuard] },
+    { path: '**', component: Error404Component}
 ];
 
 //registrando o mapeamento no Angular

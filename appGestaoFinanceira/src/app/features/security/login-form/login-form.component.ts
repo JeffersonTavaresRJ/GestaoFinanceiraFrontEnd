@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuarioService } from '../_services/usuario-service';
 import { environment } from 'src/environments/environment';
-import { AutenticarUsuarioObservable } from 'src/app/core/services/autenticar-usuario-observable';
+import { BSAutenticarUsuario } from 'src/app/core/services/bs-autenticar-usuario';
 import { Router } from '@angular/router';
-import { UpdateUsuarioObservable } from 'src/app/core/services/update-usuario-observable';
+import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 
 
 @Component({
@@ -22,9 +22,9 @@ export class LoginFormComponent implements OnInit {
     private usuarioService: UsuarioService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private autenticarUsuarioObservable: AutenticarUsuarioObservable,
-    private updateUsuarioObservable: UpdateUsuarioObservable) {
-      this.autenticarUsuarioObservable.set(false);
+    private bsAutenticarUsuario: BSAutenticarUsuario,
+    private bsUpdateUsuario: BSUpdateUsuario) {
+      this.bsAutenticarUsuario.set(false);
   }
 
   ngOnInit(): void {
@@ -49,8 +49,8 @@ export class LoginFormComponent implements OnInit {
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
 
         //envio de eventos para o app-header..
-        this.updateUsuarioObservable.setEmail(this.formLogin.value.eMail);
-        this.autenticarUsuarioObservable.set(true);
+        this.bsUpdateUsuario.setEmail(this.formLogin.value.eMail);
+        this.bsAutenticarUsuario.set(true);
 
         this.router.navigate(['/receitas-despesas-dashboard']);
       },
