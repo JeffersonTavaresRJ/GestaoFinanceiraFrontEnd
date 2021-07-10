@@ -1,1 +1,105 @@
-<p>mov-prevista-consulta-param works!</p>
+<div class="row mt-5">
+    <div class="col-12">       
+            
+                <app-header-page-title
+                    header-title="Movimentações Previstas" 
+                    header-button-label="+ Nova Previsão"
+                    header-button-link="new">
+                </app-header-page-title>
+                <hr>
+                <!--      
+                <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
+                    <div class="row  mt-3">
+                        
+                        <div class="form-group col-12">
+                            <label for="descricao">Descrição:</label>
+        
+                            <input type="text" class="form-control mt-1" formControlName="descricao"
+                                (keyup)="resourceClearValidations()" />
+        
+                            <app-field-validation-form [form-control]="resourceForm.get('descricao')">
+                            </app-field-validation-form>
+                            <app-field-server-errors-form [server-errors]="resourceErrorsValidations('descricao')">
+                            </app-field-server-errors-form>
+        
+                        </div>
+                        
+                    </div>
+        
+                    <div class="row  mt-3">
+                       
+                        <div class="form-group col-6">
+                            <label for="descricao">Categoria:</label>
+        
+                            <select class="form-control mt-1" formControlName="idCategoria" (keyup)="resourceClearValidations() "
+                                    (change)="parseToNumber('idCategoria')">
+                                <option *ngFor="let categoria of categorias" [value]="categoria.id">{{categoria.descricao}}
+                                </option>
+                            </select>
+        
+                            <app-field-validation-form [form-control]="resourceForm.get('idCategoria')">
+                            </app-field-validation-form>
+                            <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idCategoria')">
+                            </app-field-server-errors-form>
+        
+                        </div>
+        
+                        <div class="form-group col-6">
+                            <label for="descricao">Tipo:</label>
+        
+                            <select class="form-control mt-1" formControlName="tipo" (keyup)="resourceClearValidations()">
+                                <option *ngFor="let tipo of tipos" [value]="tipo.Key">{{tipo.Value}}</option>
+                            </select>
+        
+                            <app-field-validation-form [form-control]="resourceForm.get('tipo')"></app-field-validation-form>
+                            <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipo')">
+                            </app-field-server-errors-form>
+        
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="row mt-3">
+                    
+                        <div class="col-3">
+                            <div *ngIf="resourceCurrentAction()=='edit'">
+                                <label for="status">Status:</label>
+                                <div class="form-group mt-1">
+                                    <div class="btn-group">
+                                        <label (click)="resourceForm.get('status').setValue(true)"
+                                            [class.active]="resourceForm.get('status').value == true"
+                                            class="btn btn-outline-primary">
+                                            Ativo
+                                        </label>
+                                        <label (click)="resourceForm.get('status').setValue(false)"
+                                            [class.active]="resourceForm.get('status').value == false"
+                                            class="btn btn-outline-danger">
+                                            Inativo
+                                        </label>
+                                    </div>
+                                    <app-field-validation-form [form-control]="resourceForm.get('status')">
+                                    </app-field-validation-form>
+                                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('status')">
+                                    </app-field-server-errors-form>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="col-9 mt-4" style="text-align: right;">
+                           <a class="btn btn-dark me-3" routerLink="/item-movimentacao">Cancelar</a>
+                            <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+                                [button-message]="resourceMessageButton" button-path-ico="assets/icons/save-white-18dp.svg"
+                                button-title="Salvar">
+                            </app-button-submmit-form>
+                        </div>
+                        
+                    </div>
+        
+                </form>  
+            -->          
+            <a class="btn btn-dark me-3" routerLink="/mov-prevista-consulta-list">Consultar</a>
+                           
+
+        
+    </div>
+</div>

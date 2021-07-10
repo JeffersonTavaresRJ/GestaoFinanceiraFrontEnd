@@ -1,1 +1,61 @@
-<p>mov-prevista-consulta-list works!</p>
+<div class="row mt-5">
+    <div class="col-12">       
+            
+                <app-header-page-title
+                    header-title="Movimentações Previstas" 
+                    header-button-label="+ Nova Previsão"
+                    header-button-link="new">
+                </app-header-page-title>
+                <hr>
+            <!--
+                <div *ngIf="resources.length > 0 else loading">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="bg-dark text-light">
+                                <th>Descrição</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let categoria of resources | orderBy: 'descricao' | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
+                                <td><strong>{{categoria.descricao}}</strong></td>
+                                <td style="text-align: center;">
+                                    <strong class="text-primary" *ngIf="categoria.status==true">Ativo</strong>
+                                    <strong class="text-danger" *ngIf="categoria.status==false">Inativo</strong>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a [routerLink]="['edit',categoria.id]" class="btn btn-outline-info btn-sm me-3">
+                                        Editar
+                                    </a>
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            (click)="resourceModalDeleteMessage(categoria.id, categoria.descricao)"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalDelete">
+                                            Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <pagination-controls (pageChange)="paginaAtual = $event" previousLabel="Anterior" nextLabel="Próximo"></pagination-controls>
+                    </table>                
+                </div>                               
+                <ng-template #loading>
+                    <div style="text-align: center;">
+                        <p><strong>{{resourceMessageTableNotFound}}</strong></p>
+                    </div>
+                </ng-template>
+                -->
+            
+        
+    </div>
+    <a class="btn btn-dark me-3" routerLink="/mov-prevista-consulta-param">Filtros</a>
+            
+</div>
+<!--
+<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" 
+    [modal-interrogative-title]="'Sr. Usuário'"
+    [modal-interrogative-message]="resourceDeleteMessage" 
+    (modalInterrogativeResponse)="resourceEventDelete($event)">
+</app-modal-interrogative-form>
+-->

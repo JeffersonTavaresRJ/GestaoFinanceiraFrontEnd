@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 
 @Component({
   selector: 'app-mov-prevista-consulta-param',
