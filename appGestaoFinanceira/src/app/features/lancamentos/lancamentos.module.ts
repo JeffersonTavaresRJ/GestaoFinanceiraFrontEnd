@@ -1,17 +1,15 @@
-import {NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ComponentsBusinessModule } from '../components/components-business-module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ReceitaDespesaPrevistaConsultaFormComponent } from './receita-despesa-prevista/receita-despesa-prevista-consulta/receita-despesa-prevista-consulta-form/receita-despesa-prevista-consulta-form.component';
-import { ReceitaDespesaPrevistaConsultaListComponent } from './receita-despesa-prevista/receita-despesa-prevista-consulta/receita-despesa-prevista-consulta-list/receita-despesa-prevista-consulta-list.component';
-import { ReceitaDespesaPrevistaConsultaParametrosComponent } from './receita-despesa-prevista/receita-despesa-prevista-consulta/receita-despesa-prevista-consulta-parametros/receita-despesa-prevista-consulta-parametros.component';
+import { MovPrevistaConsultaParamComponent } from './mov-prevista/mov-prevista-consulta/mov-prevista-consulta-param/mov-prevista-consulta-param.component';
+import { MovPrevistaConsultaListComponent } from './mov-prevista/mov-prevista-consulta/mov-prevista-consulta-list/mov-prevista-consulta-list.component';
+import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-prevista-form.component';
 
 @NgModule({
-  declarations: [ReceitaDespesaPrevistaConsultaFormComponent,
-                 ReceitaDespesaPrevistaConsultaListComponent, 
-                 ReceitaDespesaPrevistaConsultaParametrosComponent],
+  declarations: [MovPrevistaConsultaParamComponent, MovPrevistaConsultaListComponent, MovPrevistaFormComponent],
   imports: [
     CommonModule,
     SharedModule,

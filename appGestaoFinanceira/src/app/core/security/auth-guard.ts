@@ -30,6 +30,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<GenericResourceForm
     }
 
     canDeactivate(component: GenericResourceFormComponent<GenericResourceModel>, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-      return window.confirm('Deseja sair desta tela?');
+      /*para implementar qq rotina ao sair da tela..*/
+      return true;
     }
+    
   }

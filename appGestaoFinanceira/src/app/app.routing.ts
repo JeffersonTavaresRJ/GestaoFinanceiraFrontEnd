@@ -28,6 +28,9 @@ import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards
 import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
 import { AuthGuard } from './core/security/auth-guard';
 import { Error404Component } from './core/components/error404/error404.component';
+import { MovPrevistaConsultaListComponent } from './features/lancamentos/mov-prevista/mov-prevista-consulta/mov-prevista-consulta-list/mov-prevista-consulta-list.component';
+import { MovPrevistaConsultaParamComponent } from './features/lancamentos/mov-prevista/mov-prevista-consulta/mov-prevista-consulta-param/mov-prevista-consulta-param.component';
+import { MovPrevistaFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-form/mov-prevista-form.component';
 
 
 //criando o mapeamento de rotas dos componentes
@@ -78,7 +81,19 @@ const routes: Routes = [
     { path: 'item-movimentacao/edit/:id', component: ItemMovimentacaoFormComponent,
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard],
-             resolve: {resolveResource: ItemMovimentacaoFormResolver} },
+             resolve: {resolveResource: ItemMovimentacaoFormResolver} },             
+    { path: 'mov-prevista/new', component: MovPrevistaFormComponent/*,
+             canActivate:[AuthGuard],             
+             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
+    { path: 'mov-prevista/edit/:idItemMov/:dataRef', component: MovPrevistaFormComponent/*,
+             canActivate:[AuthGuard],             
+             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
+    { path: 'mov-prevista-consulta-param', component: MovPrevistaConsultaParamComponent/*,
+             canActivate:[AuthGuard],             
+             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
+    { path: 'mov-prevista-consulta-list', component: MovPrevistaConsultaListComponent/*,
+             canActivate:[AuthGuard],             
+             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
              canActivate:[AuthGuard] },
     { path: '**', component: Error404Component}

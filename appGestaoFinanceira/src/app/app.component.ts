@@ -8,11 +8,12 @@ import { BSHttpLoading } from './core/services/bs-http-loading';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
+export class AppComponent /*implements OnInit*/ {
   title = 'Gestao Financeira';
   
-  constructor(private bsHttpLoading: BSHttpLoading,
-    private spinner: NgxSpinnerService) {
+  constructor(
+    private bsHttpLoading: BSHttpLoading,
+              private spinner: NgxSpinnerService) {
 
       this.bsHttpLoading.getLoading().subscribe(
         value=>{

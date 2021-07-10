@@ -15,8 +15,6 @@ import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 export class LoginFormComponent implements OnInit {
 
   formLogin: FormGroup;
-  messageButton: string;
-
 
   constructor(
     private usuarioService: UsuarioService,
@@ -41,11 +39,9 @@ export class LoginFormComponent implements OnInit {
   }
 
   autenticar(): void {
-    this.messageButton = 'Acessando...';
     debugger;
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
-        this.messageButton = null;
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
 
         //envio de eventos para o app-header..
@@ -53,9 +49,6 @@ export class LoginFormComponent implements OnInit {
         this.bsAutenticarUsuario.set(true);
 
         this.router.navigate(['/receitas-despesas-dashboard']);
-      },
-      (e:any)=>{
-         this.messageButton=null;
       });
       //mensagem de tratamento de erros centralizado no interception..
   }

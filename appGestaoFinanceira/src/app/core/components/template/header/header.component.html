@@ -35,6 +35,16 @@
             <li><a class="dropdown-item" routerLink="conta">Conta</a></li>
           </ul>
         </li>
+        <li class="nav-item dropdown" [hidden]="!usuarioAutenticado">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Lançamentos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" routerLink="mov-prevista-consulta-param">Previsão de Receitas e Despesas</a></li>
+            <li><a class="dropdown-item" routerLink="mov-prevista-consulta-list">Fluxo de Caixa</a></li>            
+          </ul>
+        </li>
       </ul>
 
       <ul class="my-1">

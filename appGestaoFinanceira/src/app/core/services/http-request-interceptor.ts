@@ -79,6 +79,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                }),
                //ao finalizar qq operação, oculta o loading..                
                 finalize(()=>{
+                    //subtraindo qtde requests..
                     --this._countRequests;
                     console.log(this._countRequests);
                     //enquanto tiver requests sendo realizados, manter o loading ativo..

@@ -31,8 +31,7 @@ export class TipoItemMovimentacaoComponent implements OnInit {
   listarDados(){
     this.categoriaService.setApiOption('/GetAllTipo');
     this.categoriaService.get().subscribe(
-      sucess => this.tipos = sucess,
-      error => this.alertMessage.showError(error, 'Sr. Usuário')
+      sucess => this.tipos = sucess
     );
   }
 
