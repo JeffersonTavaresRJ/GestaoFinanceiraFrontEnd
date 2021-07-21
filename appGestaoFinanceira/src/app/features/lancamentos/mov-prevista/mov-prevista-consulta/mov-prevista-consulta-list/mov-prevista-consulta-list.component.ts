@@ -7,9 +7,61 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MovPrevistaConsultaListComponent implements OnInit {
 
+  movimentacoes = [
+  {
+    dataVencimento:"01/07/2021",
+    itemMovimentacao:"Uber",
+    categoria:"Transporte",
+    tipo:"Despesa",
+    valor:"220,23"
+  },
+  {
+    dataVencimento:"01/07/2021",
+    itemMovimentacao:"Supermercado",
+    categoria:"Alimentação",
+    tipo:"Despesa",
+    valor:"358,23"
+  },
+  {
+    dataVencimento:"08/07/2021",
+    itemMovimentacao:"Energia Elétrica",
+    categoria:"Despesas Fixas",
+    tipo:"Despesa",
+    valor:"147,23"
+  },
+  {
+    dataVencimento:"09/07/2021",
+    itemMovimentacao:"Água e Esgotos",
+    categoria:"Despesas Fixas",
+    tipo:"Despesa",
+    valor:"58,23"
+  },
+  {
+    dataVencimento:"10/07/2021",
+    itemMovimentacao:"Internet",
+    categoria:"Despesas Fixas",
+    tipo:"Despesa",
+    valor:"88,23"
+  },
+  {
+    dataVencimento:"11/07/2021",
+    itemMovimentacao:"Supermercado",
+    categoria:"Alimentação",
+    tipo:"Despesa",
+    valor:"358,23"
+  },
+  {
+    dataVencimento:"12/07/2021",
+    itemMovimentacao:"Supermercado",
+    categoria:"Alimentação",
+    tipo:"Despesa",
+    valor:"358,23"
+  }
+];
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

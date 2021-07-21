@@ -7,6 +7,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { MovPrevistaConsultaParamComponent } from './mov-prevista/mov-prevista-consulta/mov-prevista-consulta-param/mov-prevista-consulta-param.component';
 import { MovPrevistaConsultaListComponent } from './mov-prevista/mov-prevista-consulta/mov-prevista-consulta-list/mov-prevista-consulta-list.component';
 import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-prevista-form.component';
+import {TableModule} from 'primeng/table';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [MovPrevistaConsultaParamComponent, MovPrevistaConsultaListComponent, MovPrevistaFormComponent],
@@ -15,6 +17,9 @@ import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-p
     SharedModule,
     BrowserAnimationsModule,
     ComponentsBusinessModule,
-    CalendarModule ]
+    CalendarModule,
+    TableModule,
+    ScrollingModule
+   ]
 })
 export class LancamentosModule { }

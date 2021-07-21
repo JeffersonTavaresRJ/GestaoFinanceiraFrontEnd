@@ -12,6 +12,6 @@ export class ItemMovimentacaoService extends GenericResourceService<ItemMoviment
 
     public getAllTipo():Observable<any>{
        this.setApiOption('/GetAllTipo');
-       return this.http.get(this.getUrl(),{ headers: this.httpHeaders });
+       return this.http.get(this.getUrl());
     }
 }

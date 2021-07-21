@@ -101,8 +101,8 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     protected abstract buildResourceForm();
 
     protected resourceCreate(resourceClass: T) {
-      //  debugger;
-        this.resourceMessageButton = 'Processando...';
+       //debugger;
+       //this.resourceMessageButton = 'Processando...';
         this.resourceService.post(resourceClass)
             .subscribe(
                 sucess => {
@@ -114,7 +114,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     protected resourceUpdate(resourceClass: T) {
-        this.resourceMessageButton = 'Atualizando...';
+        //this.resourceMessageButton = 'Atualizando...';
         this.resourceService.put(resourceClass)
             .subscribe(
                 sucess => {
@@ -126,8 +126,8 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     protected resourceDelete(id: number) {
-        this.resourceMessageButton = 'Excluindo...';
-        this.resourceService.delete(id)
+        //this.resourceMessageButton = 'Excluindo...';
+        this.resourceService.deleteById(id)
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();

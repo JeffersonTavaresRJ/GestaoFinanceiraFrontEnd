@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
+import { Categoria } from 'src/app/features/cadastros-basicos/_models/categoria-model';
+import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
+import { ItemMovimentacao } from 'src/app/features/cadastros-basicos/_models/item-movimentacao-model';
 
 @Component({
   selector: 'app-mov-prevista-consulta-param',
@@ -8,6 +10,12 @@ import { GenericResourceFormComponent } from 'src/app/shared/components/generic-
 })
 export class MovPrevistaConsultaParamComponent implements OnInit {
 
+  tipos = [];
+  prioridades=[];
+  categorias: Categoria[]=[];
+  itensMovimentacao: ItemMovimentacao[]=[];
+  formasPagamento: FormaPagamento[]=[];
+  
   constructor() { }
 
   ngOnInit(): void {

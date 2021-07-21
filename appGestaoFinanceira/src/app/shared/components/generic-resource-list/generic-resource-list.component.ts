@@ -52,10 +52,11 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
 }
 
   protected deleteResource(id: number) {
-    this.resourceService.delete(id).subscribe(
+    this.resourceService.deleteById(id).subscribe(
       sucess => {
         this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
-        this.ngOnInit();
+        this.resourceService.getAll().subscribe(
+          sucess=> this.resources  = sucess);
       },
       error => this.resourceAlertMessage.showError(error, 'Sr. Usuário')
     )

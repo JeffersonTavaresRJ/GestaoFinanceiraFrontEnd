@@ -1,6 +1,6 @@
 import { GenericResourceModel } from "src/app/shared/_models/generic-resource-model";
 
-export class FormaPagamento extends GenericResourceModel {
+export class FormaPagamento extends GenericResourceModel{
     constructor(
         public id?: number,
         public descricao: string = '',

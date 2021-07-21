@@ -1,4 +1,4 @@
-import { GenericResourceModel } from '../../../shared/_models/generic-resource-model';
+import { GenericResourceModel } from "src/app/shared/_models/generic-resource-model";
 
 export class Categoria extends GenericResourceModel{
    constructor(
@@ -7,7 +7,7 @@ export class Categoria extends GenericResourceModel{
     public status?: boolean,
     public idUsuario: number=null
    ){
-       super();
+     super();
    }
 
    static fromJson(jsonData: any): Categoria {

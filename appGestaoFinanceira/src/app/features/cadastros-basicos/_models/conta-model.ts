@@ -1,6 +1,6 @@
 import { GenericResourceModel } from "src/app/shared/_models/generic-resource-model";
 
-export class Conta extends GenericResourceModel {
+export class Conta extends GenericResourceModel{
     constructor(
         public id?: number,
         public descricao: string = '',

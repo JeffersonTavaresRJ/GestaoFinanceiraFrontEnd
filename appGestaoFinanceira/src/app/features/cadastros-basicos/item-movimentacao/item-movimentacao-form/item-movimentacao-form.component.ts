@@ -25,23 +25,25 @@ export class ItemMovimentacaoFormComponent extends GenericResourceFormComponent<
   categorias: Categoria[]=[];
 
  ngOnInit() {
-    this.itemMovimentacaoService.getAllTipo().subscribe(
-       (tipos)=> this.tipos=tipos,
-       (error:any)=>this.resourceActionForError(error.message)
-     );
- 
-     this.categoriaService.getAll(this.resourceUsuario.id).subscribe(
-       (categorias)=>{
-         if(this.resourceCurrentAction() == 'new'){
-           this.categorias = categorias.filter(c=>c.status==true)
-         }else{
-           this.categorias = categorias
-         }
-       },
-       (error:any)=>this.resourceActionForError(error)
-     );
+   this.itemMovimentacaoService.getAllTipo().subscribe(
+      (tipos)=> this.tipos=tipos,
+      (error:any)=>this.resourceActionForError(error.message)
+    );
+
+    this.categoriaService.getAll().subscribe(
+      (categorias)=>{
+        if(this.resourceCurrentAction() == 'new'){
+          this.categorias = categorias.filter(c=>c.status==true)
+        }else{
+          this.categorias = categorias
+        }
+      },
+      (error:any)=>this.resourceActionForError(error)
+    );
+    
      super.ngOnInit();
    }
+   
 
    protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({

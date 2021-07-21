@@ -1,13 +1,54 @@
 <div class="row mt-5">
-    <div class="col-12">       
-            
-                <app-header-page-title
-                    header-title="Movimentações Previstas" 
-                    header-button-label="+ Nova Previsão"
-                    header-button-link="new">
-                </app-header-page-title>
-                <hr>
-            <!--
+    <div class="col-12">
+       <div class="mb-3">
+          <app-header-page-title header-title="Movimentações Previstas" 
+             header-button-label="+ Nova Previsão"
+             header-button-link="/mov-prevista/new">
+          </app-header-page-title>
+       </div>        
+        
+        <p-table [value]="movimentacoes" [scrollable]="true" scrollHeight="240px"
+        styleClass="p-datatable-striped p-datatable-sm">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Data de Vencimento</th>
+                    <th>Item</th>
+                    <th>Tipo</th>
+                    <th style="text-align: right;">Valor</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-movimentacao>
+                <tr>
+                    <td>{{movimentacao.dataVencimento}}</td>
+                    <td>
+                        <strong>{{movimentacao.itemMovimentacao}}</strong>
+                        <p>{{movimentacao.categoria}}</p>
+                    </td>
+                    <td>{{movimentacao.tipo}}</td>
+                    <td style="text-align: right;">{{movimentacao.valor}}</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm">
+                            Quitar
+                        </button>
+                    </td>
+                    <td style="text-align: center;">
+                        <a class="btn btn-outline-info btn-sm me-3">
+                            Editar
+                        </a>
+                        <button class="btn btn-outline-danger btn-sm">
+                                Excluir
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+        
+        
+        <!--
                 <div *ngIf="resources.length > 0 else loading">
                     <table class="table table-hover">
                         <thead>
@@ -46,11 +87,14 @@
                     </div>
                 </ng-template>
                 -->
-            
-        
+
+
+    </div>    
+</div>
+<div class="row">
+    <div class="col-3">
+        <a class="btn btn-dark me-3" routerLink="/mov-prevista-consulta-param">Filtros</a>
     </div>
-    <a class="btn btn-dark me-3" routerLink="/mov-prevista-consulta-param">Filtros</a>
-            
 </div>
 <!--
 <app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" 
