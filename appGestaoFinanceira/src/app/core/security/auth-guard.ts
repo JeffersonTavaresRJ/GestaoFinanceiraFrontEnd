@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<GenericResourceForm
   
     canActivate(route: ActivatedRouteSnapshot, 
                 state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-      return this.usuarioService.get().pipe(
+       return this.usuarioService.get().pipe(
         map((m)=>{
             if(m.user != null){
               this.bsAutenticarUsuario.set(true);

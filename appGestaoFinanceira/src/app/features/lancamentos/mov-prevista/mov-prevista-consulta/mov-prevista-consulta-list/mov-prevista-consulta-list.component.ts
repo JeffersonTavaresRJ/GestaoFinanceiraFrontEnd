@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MovimentacaoPrevista } from '../../../_models/mov-prevista-model';
 
 @Component({
   selector: 'app-mov-prevista-consulta-list',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mov-prevista-consulta-list.component.css']
 })
 export class MovPrevistaConsultaListComponent implements OnInit {
+
+  actResourceRoute: ActivatedRoute;
 
   movimentacoes = [
   {
@@ -58,10 +62,24 @@ export class MovPrevistaConsultaListComponent implements OnInit {
     valor:"358,23"
   }
 ];
-  constructor() { }
+
+  movPrevistas: MovimentacaoPrevista[];
+  
+  constructor(protected injector: Injector) { 
+    this.actResourceRoute = injector.get(ActivatedRoute);
+  }
 
   ngOnInit(): void {
-    
+    this.movPrevistaList();
+  }
+
+  movPrevistaList(){
+    this.actResourceRoute.data.subscribe(
+      (sucess:{resolveResources:MovimentacaoPrevista[]})=>{
+        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
+        this.movPrevistas=sucess.resolveResources
+      }
+    );   
   }
 
 }

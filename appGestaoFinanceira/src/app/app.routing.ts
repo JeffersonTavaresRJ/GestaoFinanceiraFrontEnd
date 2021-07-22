@@ -31,7 +31,7 @@ import { Error404Component } from './core/components/error404/error404.component
 import { MovPrevistaConsultaListComponent } from './features/lancamentos/mov-prevista/mov-prevista-consulta/mov-prevista-consulta-list/mov-prevista-consulta-list.component';
 import { MovPrevistaConsultaParamComponent } from './features/lancamentos/mov-prevista/mov-prevista-consulta/mov-prevista-consulta-param/mov-prevista-consulta-param.component';
 import { MovPrevistaFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-form/mov-prevista-form.component';
-
+import { MovPrevistaConsultaListResolver } from './features/lancamentos/_guards/mov-prevista-consulta-list-resolver';
 
 //criando o mapeamento de rotas dos componentes
 const routes: Routes = [
@@ -91,9 +91,9 @@ const routes: Routes = [
     { path: 'mov-prevista-consulta-param', component: MovPrevistaConsultaParamComponent/*,
              canActivate:[AuthGuard],             
              resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
-    { path: 'mov-prevista-consulta-list', component: MovPrevistaConsultaListComponent/*,
-             canActivate:[AuthGuard],             
-             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
+    { path: 'mov-prevista-consulta-list', component: MovPrevistaConsultaListComponent,
+             canActivate:[AuthGuard],            
+             resolve:{resolveResources: MovPrevistaConsultaListResolver} },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
              canActivate:[AuthGuard] },
     { path: '**', component: Error404Component}
@@ -110,7 +110,8 @@ const routes: Routes = [
                CategoriaFormResolver,
                ContaFormResolver,
                FormaPagamentoFormResolver,
-               ItemMovimentacaoFormResolver]
+               ItemMovimentacaoFormResolver,
+               MovPrevistaConsultaListResolver]
 })
 
 export class AppRoutingModule { }
