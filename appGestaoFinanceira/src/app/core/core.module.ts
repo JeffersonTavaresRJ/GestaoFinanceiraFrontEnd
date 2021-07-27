@@ -5,11 +5,13 @@ import { Error404Component } from './components/error404/error404.component';
 import { AppRoutingModule } from '../app.routing';
 import { ModalInterrogativeFormComponent } from './components/modals/modal-interrogative-form/modal-interrogative-form.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DateFormatToStringPipe } from '../core/pipes/date/date-format-to-string.pipe';
 
 @NgModule({
   declarations: [HeaderComponent, 
                  Error404Component,
-                 ModalInterrogativeFormComponent],
+                 ModalInterrogativeFormComponent,
+                 DateFormatToStringPipe],
   imports: [
     CommonModule,
     AppRoutingModule,
@@ -18,7 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
   exports: [
     HeaderComponent,
     Error404Component,
-    ModalInterrogativeFormComponent
+    ModalInterrogativeFormComponent,
+    DateFormatToStringPipe
   ]
 })
 export class CoreModule { }

@@ -17,9 +17,9 @@ export class MovPrevistaService extends GenericBaseService<MovimentacaoPrevista>
     return this.http.get<MovimentacaoPrevista>(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`);
   }
 
-  getByDataVencimento(idItemMovimentacao: number, dataVencIni: Date, dataVencFim: Date): Observable<MovimentacaoPrevista[]> {
+  getByDataVencimento(idItemMovimentacao: number, dataVencIni: string, dataVencFim: string): Observable<MovimentacaoPrevista[]> {
     this.setApiOption('/GetByDataVencimento');
-    return this.http.get<MovimentacaoPrevista[]>(`${this.getUrl()}/${' '}/${this.idUsuario}/${this.formatarData(dataVencIni)}/${this.formatarData(dataVencFim)}`);
+    return this.http.get<MovimentacaoPrevista[]>(`${this.getUrl()}/${idItemMovimentacao.toString().replace('0', ' ')}/${this.idUsuario}/${dataVencIni}/${dataVencFim}`);
   }
 
   public GetAllStatus(): Observable<any> {
@@ -31,7 +31,7 @@ export class MovPrevistaService extends GenericBaseService<MovimentacaoPrevista>
     return this.http.delete(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`)
       .pipe(catchError(this.handlerError));
   }
-
+/*
   formatarData(data: Date): string {
     var dia_ = data.getDate();
     var mes_ = data.getMonth()+1;
@@ -54,4 +54,5 @@ export class MovPrevistaService extends GenericBaseService<MovimentacaoPrevista>
     
     return ano + '-' + mes + '-' + dia;
   }
+  */
 }

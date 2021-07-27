@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BSAutenticarUsuario } from 'src/app/core/services/bs-autenticar-usuario';
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
-import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { environment } from 'src/environments/environment';
 import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-header',
@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+
+  dataIni: Date;
+  dataFim: Date;
 
   constructor(
     private bsAutenticarUsuario: BSAutenticarUsuario,
@@ -27,7 +30,19 @@ export class HeaderComponent implements OnInit {
     if (!this.usuarioAutenticado){
       this.resetUser();
     }
+    this.setDataParamMovimentacoes();
     this.bsUpdateUsuario.getEMail().subscribe(valor => this.user_name = valor);
+  }
+
+  setDataParamMovimentacoes(){
+    /*parâmetros da lista de Movimentações (Previstas e Realizadas)
+     data inicial e final dentro do mês corrente..
+    */
+    const dataAtual = new Date();
+    var mes = dataAtual.getMonth();
+    var ano = dataAtual.getFullYear();
+    this.dataIni = new Date(ano, mes, 1);
+    this.dataFim = new Date(ano, mes + 1, 0);
   }
 
   resultEvent(event) {

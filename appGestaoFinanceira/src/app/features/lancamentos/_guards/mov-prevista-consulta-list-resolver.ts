@@ -1,21 +1,27 @@
-import { Injectable, Injector } from '@angular/core';
-import { Resolve } from '@angular/router';
-import{MovimentacaoPrevista } from '../_models/mov-prevista-model';
-import{MovPrevistaService } from '../_services/mov-prevista-service';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
+import { MovPrevistaService } from '../_services/mov-prevista-service';
 
 @Injectable()
-export class MovPrevistaConsultaListResolver
-    implements Resolve<MovimentacaoPrevista[]> {
-   
-    constructor(private movPrevistaService: MovPrevistaService) {
-    }
+export class MovPrevistaConsultaListResolver implements Resolve<MovimentacaoPrevista[]> {
 
-   resolve() {
+  private dataVencIni: string;
+  private dataVencFim: string;
+  private idItemMov: number = 0;
+  constructor(private movPrevistaService: MovPrevistaService,
+    private actResourceRoute: ActivatedRoute) {
+
+  }
+
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
     debugger;
-     const dataAtual = new Date();
-     var mes = dataAtual.getMonth();
-     var ano = dataAtual.getFullYear();
-     return this.movPrevistaService.getByDataVencimento(null, new Date(ano, mes, 1), new Date(ano, mes+1, 0));
-   }
-   
+    if(activatedRouteSnapshot.params['idItemMov']){
+      this.idItemMov = activatedRouteSnapshot.params['idItemMov'];
+    }
+    this.dataVencIni = activatedRouteSnapshot.params['dataVencIni'];
+    this.dataVencFim = activatedRouteSnapshot.params['dataVencFim'];
+    return this.movPrevistaService.getByDataVencimento(this.idItemMov, this.dataVencIni, this.dataVencFim);
+  }
+
 }

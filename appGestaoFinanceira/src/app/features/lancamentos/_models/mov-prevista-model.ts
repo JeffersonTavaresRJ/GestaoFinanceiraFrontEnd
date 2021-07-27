@@ -1,5 +1,6 @@
 import { ItemMovimentacao } from "../../cadastros-basicos/_models/item-movimentacao-model";
 import {FormaPagamento} from '../../cadastros-basicos/_models/forma-pagamento';
+import { ActivatedRoute } from "@angular/router";
 
 export class MovimentacaoPrevista{
     constructor(
@@ -14,10 +15,11 @@ export class MovimentacaoPrevista{
      public status: string=null,
      public statusDescricao: string=null,
      public idFormaPagamento: number=null,
-     public idItemMovimentacao: number=null
+     public idItemMovimentacao: number=null,
+     public Parcela: string=null
     ){}
 
     static fromJson(jsonData: any): MovimentacaoPrevista {
         return Object.assign(new MovimentacaoPrevista(), jsonData);
-      }
+    }    
 }

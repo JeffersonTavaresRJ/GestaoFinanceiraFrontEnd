@@ -1,5 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CategoriaService } from 'src/app/features/cadastros-basicos/_services/categoria-service';
+import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
+import { ItemMovimentacaoService } from 'src/app/features/cadastros-basicos/_services/item-movimentacao-service';
 import { MovimentacaoPrevista } from '../../../_models/mov-prevista-model';
 
 @Component({
@@ -10,67 +13,67 @@ import { MovimentacaoPrevista } from '../../../_models/mov-prevista-model';
 export class MovPrevistaConsultaListComponent implements OnInit {
 
   actResourceRoute: ActivatedRoute;
+  itemMovimentacaoService: ItemMovimentacaoService;
+  categoriaService: CategoriaService;
+  formaPagamentoService: FormaPagamentoService;
 
-  movimentacoes = [
-  {
-    dataVencimento:"01/07/2021",
-    itemMovimentacao:"Uber",
-    categoria:"Transporte",
-    tipo:"Despesa",
-    valor:"220,23"
-  },
-  {
-    dataVencimento:"01/07/2021",
-    itemMovimentacao:"Supermercado",
-    categoria:"Alimentação",
-    tipo:"Despesa",
-    valor:"358,23"
-  },
-  {
-    dataVencimento:"08/07/2021",
-    itemMovimentacao:"Energia Elétrica",
-    categoria:"Despesas Fixas",
-    tipo:"Despesa",
-    valor:"147,23"
-  },
-  {
-    dataVencimento:"09/07/2021",
-    itemMovimentacao:"Água e Esgotos",
-    categoria:"Despesas Fixas",
-    tipo:"Despesa",
-    valor:"58,23"
-  },
-  {
-    dataVencimento:"10/07/2021",
-    itemMovimentacao:"Internet",
-    categoria:"Despesas Fixas",
-    tipo:"Despesa",
-    valor:"88,23"
-  },
-  {
-    dataVencimento:"11/07/2021",
-    itemMovimentacao:"Supermercado",
-    categoria:"Alimentação",
-    tipo:"Despesa",
-    valor:"358,23"
-  },
-  {
-    dataVencimento:"12/07/2021",
-    itemMovimentacao:"Supermercado",
-    categoria:"Alimentação",
-    tipo:"Despesa",
-    valor:"358,23"
-  }
-];
+  pDataVencIni: Date=null;
+  pDataVencFim: Date=null;
+  pTipo: string=null;
+  pPrioridade: string=null;
+  pCategoria: string=null;
+  pItemMovimentacao: string=null;
+  pFormaPagamento: string=null;
+
+  tipos:{key,value}[];
 
   movPrevistas: MovimentacaoPrevista[];
   
   constructor(protected injector: Injector) { 
     this.actResourceRoute = injector.get(ActivatedRoute);
+    this.categoriaService = injector.get(CategoriaService);
+    this.itemMovimentacaoService = injector.get(ItemMovimentacaoService);
+    this.formaPagamentoService = injector.get(FormaPagamentoService);
   }
 
   ngOnInit(): void {
+    this.carregaParametros();
     this.movPrevistaList();
+  }
+
+  carregaParametros(){
+    debugger;
+    this.pDataVencIni = this.actResourceRoute.snapshot.params.dataVencIni;
+    this.pDataVencFim = this.actResourceRoute.snapshot.params.dataVencFim;
+
+    if(this.actResourceRoute.snapshot.queryParams['idTipo']){
+      this.itemMovimentacaoService.getAllTipo().subscribe(
+        (tipos)=> {
+          this.tipos=tipos;
+          this.pTipo = this.tipos.filter(t=>t.key==this.pTipo).map(t=>t.value)[0];
+        }
+      );      
+    }    
+
+
+    if(this.actResourceRoute.snapshot.queryParams['idCategoria']){
+      this.categoriaService.getById(this.actResourceRoute.snapshot.params.idCategoria).subscribe(
+        (categoria)=>this.pCategoria = categoria.descricao
+      );
+    }
+
+    if(this.actResourceRoute.snapshot.queryParams['idItemMov']){
+      this.itemMovimentacaoService.getById(this.actResourceRoute.snapshot.params.idItemMov).subscribe(
+        (itemMov)=>this.pItemMovimentacao = itemMov.descricao
+      );
+    }
+
+    if(this.actResourceRoute.snapshot.queryParams['idFormaPagto']){
+      this.formaPagamentoService.getById(this.actResourceRoute.snapshot.params.idFormaPagto).subscribe(
+        (formaPagto)=>this.pFormaPagamento = formaPagto.descricao
+      );
+    }
+
   }
 
   movPrevistaList(){
