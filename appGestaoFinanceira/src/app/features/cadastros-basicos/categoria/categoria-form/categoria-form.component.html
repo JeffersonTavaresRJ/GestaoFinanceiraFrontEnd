@@ -1,51 +1,51 @@
 <div class="card col-8 offset-2 mt-5">
-  <div class="card-body">
-    <app-header-page-title [header-title]="resourcePageTitle">      
-    </app-header-page-title> 
-
-    <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
-      <div class="row">
-        <div class="form-group col-12">
-          <label for="descricao">Descrição:</label>
-
-          <input type="text" class="form-control mt-1" formControlName="descricao"
-            (keyup)="resourceClearValidations()" />
-           
-          <app-field-validation-form [form-control]="resourceForm.get('descricao')"></app-field-validation-form>
-          <app-field-server-errors-form [server-errors]="resourceErrorsValidations('descricao')"></app-field-server-errors-form>
-
-        </div>              
-      </div>
-   
-      <div class="row mt-3">
-        <div class="col-3">
-          <div *ngIf="resourceCurrentAction()=='edit'">
-            <label for="status">Status:</label>
-            <div class="form-group mt-1">
-              <div class="btn-group">
-                <label (click)="resourceForm.get('status').setValue(true)" [class.active]="resourceForm.get('status').value == true" class="btn btn-outline-primary">
-                  Ativo
-                </label>
-                <label (click)="resourceForm.get('status').setValue(false)" [class.active]="resourceForm.get('status').value == false" class="btn btn-outline-danger">
-                  Inativo
-                </label>
+    <div class="card-body">
+      <app-header-page-title [header-title]="resourcePageTitle">      
+      </app-header-page-title> 
+  
+      <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
+        <div class="row">
+          <div class="form-group col-12">
+            <label for="descricao">Descrição:</label>
+  
+            <input type="text" class="form-control mt-1" formControlName="descricao"
+              (keyup)="resourceClearValidations()" />
+             
+            <app-field-validation-form [form-control]="resourceForm.get('descricao')"></app-field-validation-form>
+            <app-field-server-errors-form [server-errors]="resourceErrorsValidations('descricao')"></app-field-server-errors-form>
+  
+          </div>              
+        </div>
+     
+        <div class="row mt-3">
+          <div class="col-3">
+            <div *ngIf="resourceCurrentAction()=='edit'">
+              <label for="status">Status:</label>
+              <div class="form-group mt-1">
+                <div class="btn-group">
+                  <label (click)="resourceForm.get('status').setValue(true)" [class.active]="resourceForm.get('status').value == true" class="btn btn-outline-primary">
+                    Ativo
+                  </label>
+                  <label (click)="resourceForm.get('status').setValue(false)" [class.active]="resourceForm.get('status').value == false" class="btn btn-outline-danger">
+                    Inativo
+                  </label>
+                </div>
+                <app-field-validation-form [form-control]="resourceForm.get('status')"></app-field-validation-form>
+                <app-field-server-errors-form [server-errors]="resourceErrorsValidations('status')"></app-field-server-errors-form>
               </div>
-              <app-field-validation-form [form-control]="resourceForm.get('status')"></app-field-validation-form>
-              <app-field-server-errors-form [server-errors]="resourceErrorsValidations('status')"></app-field-server-errors-form>
-            </div>
-          </div>          
+            </div>          
+          </div>
+  
+          <div class="col-9 mt-4" style="text-align: right;">
+            <a class="btn btn-dark me-3" routerLink="/categoria">Cancelar</a>
+            <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+              [button-message]="resourceMessageButton" button-path-ico="assets/icons/save-white-18dp.svg"
+              button-title="Salvar">
+            </app-button-submmit-form>         
+          </div>
         </div>
-
-        <div class="col-9 mt-4" style="text-align: right;">
-          <a class="btn btn-dark me-3" routerLink="/categoria">Cancelar</a>
-          <app-button-submmit-form [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
-            [button-message]="resourceMessageButton" button-path-ico="assets/icons/save-white-18dp.svg"
-            button-title="Salvar">
-          </app-button-submmit-form>         
-        </div>
-      </div>
-      
-    </form>
-
+        
+      </form>
+  
+    </div>
   </div>
-</div>

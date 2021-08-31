@@ -1,5 +1,4 @@
 import { Injectable, Injector } from "@angular/core";
-import { AlertMessageForm } from "src/app/shared/components/alert-form/alert-message-form";
 import { GenericResourceService } from "src/app/shared/_services/generic-resource-service";
 import { Categoria } from "../_models/categoria-model";
 import { catchError, map } from "rxjs/operators";
@@ -9,8 +8,7 @@ import { Observable } from "rxjs";
     providedIn: 'root'
   })
 export class CategoriaService extends GenericResourceService<Categoria>{
-    constructor(private injector: Injector,
-                private alertMessage: AlertMessageForm){
+    constructor(private injector: Injector){
         super(injector, 'api/Categoria');        
     }   
 

@@ -8,20 +8,20 @@ export class AlertMessageForm{
     
     constructor(private toastr: ToastrService){} 
 
-     showSuccess(message, title){
+     showSuccess(message: string, title: string){
         this.toastr.success(message, title);
     }
     
-    showError(message, title){
+    showError(message: string, title: string){
         this.toastr.error(message, title);
     }
     
-    showInfo(message, title){
+    showInfo(message: string, title: string){
         this.toastr.info(message, title);
         
     }
     
-    showWarning(message, title){
+    showWarning(message: string, title: string){
         this.toastr.warning(message, title);
     }
 

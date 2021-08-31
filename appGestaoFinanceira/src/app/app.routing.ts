@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 
 //importando as bibliotecas de rotas do angular
 import { Routes, RouterModule, ActivatedRouteSnapshot } from '@angular/router';
+import { Error404Component } from './core/components/error404/error404.component';
+import { AuthGuard } from './core/security/auth-guard';
+import { ReceitasDespesasDashboardComponent } from './features/dashboards/receitas-despesas-dashboard/receitas-despesas-dashboard.component';
 
 //importando os componentes que iremos mapear
 import { LoginFormComponent } from './features/security/login-form/login-form.component';
 import { UsuarioFormCreateComponent } from './features/security/usuario-form-create/usuario-form-create.component';
 import { UsuarioFormDeleteComponent} from './features/security/usuario-form-delete/usuario-form-delete.component';
-import { ReceitasDespesasDashboardComponent } from './features/dashboards/receitas-despesas-dashboard/receitas-despesas-dashboard.component';
 import { CategoriaListComponent } from './features/cadastros-basicos/categoria/categoria-list/categoria-list.component';
 import { CategoriaFormComponent } from './features/cadastros-basicos/categoria/categoria-form/categoria-form.component';
 import { ContaListComponent } from './features/cadastros-basicos/conta/conta-list/conta-list.component';
@@ -18,6 +20,9 @@ import { FormaPagamentoFormComponent } from './features/cadastros-basicos/forma-
 import { FormaPagamentoListComponent } from './features/cadastros-basicos/forma-pagamento/forma-pagamento-list/forma-pagamento-list.component';
 import { ItemMovimentacaoListComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-list/item-movimentacao-list.component';
 import { ItemMovimentacaoFormComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-form/item-movimentacao-form.component';
+import { MovPrevistaListComponent } from './features/lancamentos/mov-prevista/mov-prevista-list/mov-prevista-list.component';
+import { MovPrevistaFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-form/mov-prevista-form.component';
+
 import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
 import { FormaPagamentoListResolver } from './features/cadastros-basicos/_guards/forma-pagamento-list-resolver';
@@ -26,15 +31,13 @@ import { CategoriaFormResolver } from './features/cadastros-basicos/_guards/cate
 import { ContaFormResolver } from './features/cadastros-basicos/_guards/conta-form-resolver';
 import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards/forma-pagamento-form-resolver';
 import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
-import { AuthGuard } from './core/security/auth-guard';
-import { Error404Component } from './core/components/error404/error404.component';
-import { MovPrevistaConsultaListComponent } from './features/lancamentos/mov-prevista/mov-prevista-consulta/mov-prevista-consulta-list/mov-prevista-consulta-list.component';
-import { MovPrevistaConsultaParamComponent } from './features/lancamentos/mov-prevista/mov-prevista-consulta/mov-prevista-consulta-param/mov-prevista-consulta-param.component';
-import { MovPrevistaFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-form/mov-prevista-form.component';
-import { MovPrevistaConsultaListResolver } from './features/lancamentos/_guards/mov-prevista-consulta-list-resolver';
+import { MovPrevistaListResolver } from './features/lancamentos/_guards/mov-prevista-list-resolver';
+import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prevista-form-resolver';
 
 //criando o mapeamento de rotas dos componentes
+
 const routes: Routes = [
+
     { path: '', component: LoginFormComponent },
     { path: 'login', component: LoginFormComponent },    
     { path: 'usuario/new', component: UsuarioFormCreateComponent,
@@ -81,24 +84,18 @@ const routes: Routes = [
     { path: 'item-movimentacao/edit/:id', component: ItemMovimentacaoFormComponent,
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard],
-             resolve: {resolveResource: ItemMovimentacaoFormResolver} },             
-    { path: 'mov-prevista/new', component: MovPrevistaFormComponent/*,
+             resolve: {resolveResource: ItemMovimentacaoFormResolver} },
+    { path: 'mov-prevista/:dataVencIni/:dataVencFim', component: MovPrevistaListComponent,
              canActivate:[AuthGuard],             
-             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
-    { path: 'mov-prevista/edit/:idItemMov/:dataRef', component: MovPrevistaFormComponent/*,
+             resolve:{resolveResources: MovPrevistaListResolver}  },               
+    { path: 'mov-prevista/new/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard]  },
+    { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
              canActivate:[AuthGuard],             
-             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
-    { path: 'mov-prevista-consulta-param', component: MovPrevistaConsultaParamComponent/*,
-             canActivate:[AuthGuard],             
-             resolve:{resolveResources: ItemMovimentacaoListResolver}  */},
-    { path: 'mov-prevista-consulta-list/:dataVencIni/:dataVencFim', component: MovPrevistaConsultaListComponent,
-             canActivate:[AuthGuard],            
-             resolve:{resolveResources: MovPrevistaConsultaListResolver} },
-    { path: 'mov-prevista-consulta-list/:dataVencIni/:dataVencFim/:idTipo/:idPrioridade/:idCategoria/:idItemMov/:idFormaPagto', component: MovPrevistaConsultaListComponent,
-             canActivate:[AuthGuard],            
-             resolve:{resolveResources: MovPrevistaConsultaListResolver} },
+             resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
-             canActivate:[AuthGuard] },
+            /* canActivate:[AuthGuard] */},
     { path: '**', component: Error404Component}
 ];
 
@@ -107,14 +104,15 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
     providers:[CategoriaListResolver,
-               ContaListResolver,
-               FormaPagamentoListResolver,
-               ItemMovimentacaoListResolver,
                CategoriaFormResolver,
+               ContaListResolver,
                ContaFormResolver,
                FormaPagamentoFormResolver,
+               FormaPagamentoListResolver,
+               ItemMovimentacaoListResolver,            
                ItemMovimentacaoFormResolver,
-               MovPrevistaConsultaListResolver]
+               MovPrevistaListResolver,
+               MovPrevistaFormResolver]
 })
 
 export class AppRoutingModule { }

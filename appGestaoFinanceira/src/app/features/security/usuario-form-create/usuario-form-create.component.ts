@@ -3,7 +3,6 @@ import { Usuario } from '../_models/usuario-model'
 import { GenericResourceFormComponent } from '../../../shared/components/generic-resource-form/generic-resource-form-component'
 import { UsuarioService } from 'src/app/features/security/_services/usuario-service';
 import { ValidacoesCustomizadas } from '../../../shared/validacoes-customizadas/validacoes-customizadas';
-//import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 
 @Component({
   selector: 'app-usuario-form-create',

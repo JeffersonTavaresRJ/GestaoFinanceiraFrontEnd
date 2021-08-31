@@ -4,9 +4,8 @@ import { CategoriaFormComponent } from './categoria/categoria-form/categoria-for
 import { CategoriaListComponent } from './categoria/categoria-list/categoria-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoreModule } from 'src/app/core/core.module';
-import { ComponentsBusinessModule } from '../components/components-business-module';
 import{ NgxPaginationModule } from 'ngx-pagination';
-import { Ng2OrderModule } from 'ng2-order-pipe'; 
+import { OrderModule } from 'ngx-order-pipe';
 import { ContaFormComponent } from './conta/conta-form/conta-form.component';
 import { ContaListComponent } from './conta/conta-list/conta-list.component';
 import { FormaPagamentoFormComponent } from './forma-pagamento/forma-pagamento-form/forma-pagamento-form.component';
@@ -15,14 +14,22 @@ import { ItemMovimentacaoFormComponent } from './item-movimentacao/item-moviment
 import { ItemMovimentacaoListComponent } from './item-movimentacao/item-movimentacao-list/item-movimentacao-list.component';
 
 @NgModule({
-  declarations: [CategoriaFormComponent, CategoriaListComponent, ContaFormComponent, ContaListComponent, FormaPagamentoFormComponent, FormaPagamentoListComponent, ItemMovimentacaoFormComponent, ItemMovimentacaoListComponent],
+  declarations: [
+    CategoriaFormComponent,
+    CategoriaListComponent,
+    ContaFormComponent,
+    ContaListComponent,
+    FormaPagamentoFormComponent,
+    FormaPagamentoListComponent,
+    ItemMovimentacaoFormComponent,
+    ItemMovimentacaoListComponent
+  ],
   imports: [
     CommonModule,
     CoreModule,
     SharedModule,
-    ComponentsBusinessModule,
     NgxPaginationModule,
-    Ng2OrderModule
+    OrderModule
   ]
 })
 export class CadastrosBasicosModule { }

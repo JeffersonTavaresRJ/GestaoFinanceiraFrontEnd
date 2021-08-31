@@ -2,24 +2,43 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { ComponentsBusinessModule } from '../components/components-business-module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { MovPrevistaConsultaParamComponent } from './mov-prevista/mov-prevista-consulta/mov-prevista-consulta-param/mov-prevista-consulta-param.component';
-import { MovPrevistaConsultaListComponent } from './mov-prevista/mov-prevista-consulta/mov-prevista-consulta-list/mov-prevista-consulta-list.component';
+import { TableModule } from 'primeng/table';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { PanelModule } from 'primeng/panel';
+import { InputNumberModule } from 'primeng/inputnumber';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import { CoreModule } from 'src/app/core/core.module';
+import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-prevista-list.component';
 import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-prevista-form.component';
-import {TableModule} from 'primeng/table';
-import {ScrollingModule} from '@angular/cdk/scrolling';
+
+
 
 @NgModule({
-  declarations: [MovPrevistaConsultaParamComponent, MovPrevistaConsultaListComponent, MovPrevistaFormComponent],
+  declarations: [
+    MovPrevistaListComponent,
+    MovPrevistaFormComponent
+  ],
   imports: [
     CommonModule,
-    SharedModule,
-    BrowserAnimationsModule,
-    ComponentsBusinessModule,
     CalendarModule,
+    BrowserAnimationsModule,
+    CoreModule,
+    SharedModule,
     TableModule,
-    ScrollingModule
-   ]
+    FormsModule,
+    ReactiveFormsModule,
+    MultiSelectModule,
+    ScrollingModule,
+    InputTextModule,
+    DropdownModule,
+    PanelModule,
+    InputNumberModule,
+    InputTextareaModule
+  ]
 })
 export class LancamentosModule { }

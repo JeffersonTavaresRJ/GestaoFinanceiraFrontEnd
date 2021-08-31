@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { BSAutenticarUsuario } from 'src/app/core/services/bs-autenticar-usuario';
 import { Router } from '@angular/router';
 import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 })
 export class LoginFormComponent implements OnInit {
 
-  formLogin: FormGroup;
+  public formLogin!: FormGroup;
 
   constructor(
     private usuarioService: UsuarioService,
@@ -32,21 +33,21 @@ export class LoginFormComponent implements OnInit {
 
   buildForm() {
     this.formLogin = this.formBuilder.group({
-      eMail: [null, Validators.compose([Validators.email, Validators.required])],
-      senha: [null, Validators.required]
+      eMail: ['', Validators.compose([Validators.email, Validators.required])],
+      senha: ['', Validators.required]
     });   
 
   }
 
   autenticar(): void {
-   // debugger;
+    //debugger;
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));
 
         //envio de eventos para o app-header..
         this.bsUpdateUsuario.setEmail(this.formLogin.value.eMail);
-        this.bsAutenticarUsuario.set(true);
+        this.bsAutenticarUsuario.set(true);       
 
         this.router.navigate(['/receitas-despesas-dashboard']);
       });

@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { GenericResourceListComponent } from 'src/app/shared/components/generic-resource-list/generic-resource-list.component';
 import { Conta } from '../../_models/conta-model';
 import { ContaService } from '../../_services/conta-service';

@@ -9,6 +9,7 @@ import { FieldValidationFormComponent } from './components/field-validation-form
 import { HeaderPageTitleComponent } from './components/header-page-title/header-page-title.component';
 import { AppRoutingModule } from '../app.routing';
 import { SpinnerPageLoadingComponent } from './components/spinner-page-loading/spinner-page-loading.component';
+
 @NgModule({
   declarations: [FieldServerErrorsFormComponent,
     ButtonSubmmitFormComponent,
@@ -21,15 +22,16 @@ import { SpinnerPageLoadingComponent } from './components/spinner-page-loading/s
     ReactiveFormsModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    ToastrModule.forRoot({
+    ToastrModule.forRoot()
+   /* ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
       enableHtml:true
-    })
+    })*/
   ],
   exports: [ReactiveFormsModule,
-    ToastrModule,
+   ToastrModule,
     BrowserAnimationsModule,
     FieldServerErrorsFormComponent,
     ButtonSubmmitFormComponent,
@@ -37,6 +39,5 @@ import { SpinnerPageLoadingComponent } from './components/spinner-page-loading/s
     HeaderPageTitleComponent,
     AppRoutingModule,
     SpinnerPageLoadingComponent
-  ]
-})
+  ]})
 export class SharedModule { }

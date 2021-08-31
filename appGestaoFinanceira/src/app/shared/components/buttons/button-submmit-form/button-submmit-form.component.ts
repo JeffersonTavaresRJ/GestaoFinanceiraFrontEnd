@@ -9,10 +9,10 @@ export class ButtonSubmmitFormComponent implements OnInit {
 
   constructor() { }
 
-  @Input('button-disabled') buttonDisabled:boolean;
-  @Input('button-message') buttonMessage:string;
-  @Input('button-title') buttonTitle:string;
-  @Input('button-path-ico') buttonPathIco:string
+  @Input('button-disabled') buttonDisabled!:boolean;
+  @Input('button-message') buttonMessage!:string;
+  @Input('button-title') buttonTitle!:string;
+  @Input('button-path-ico') buttonPathIco!:string
 
   ngOnInit(): void {
   }

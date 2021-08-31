@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Error404Component } from './error404.component';
+import { MovPrevistaListComponent } from './mov-prevista-list.component';
 
-describe('Error404Component', () => {
-  let component: Error404Component;
-  let fixture: ComponentFixture<Error404Component>;
+describe('MovPrevistaListComponent', () => {
+  let component: MovPrevistaListComponent;
+  let fixture: ComponentFixture<MovPrevistaListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ Error404Component ]
+      declarations: [ MovPrevistaListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Error404Component);
+    fixture = TestBed.createComponent(MovPrevistaListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

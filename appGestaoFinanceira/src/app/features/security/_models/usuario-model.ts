@@ -10,7 +10,9 @@ export class Usuario extends GenericResourceModel{
     ){
         super();
     }
-
+    static setCredentials(eMail:string, senha:string):Usuario{
+        return new Usuario(null, null, eMail, senha, null);
+    }
     static fromJson(jsonData: any): Usuario {
         return Object.assign(new Usuario(), jsonData);
     }

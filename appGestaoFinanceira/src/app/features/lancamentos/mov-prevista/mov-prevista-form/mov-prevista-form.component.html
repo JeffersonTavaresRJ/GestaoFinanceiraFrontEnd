@@ -1,1 +1,148 @@
-<p>mov-prevista-form works!</p>
+<div class="card col-10 offset-1 mt-5">
+    <div class="card-body">
+        <app-header-page-title [header-title]="stPageTitle"
+                               header-button-label=">> Voltar"
+                               [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+        </app-header-page-title>
+        <form [formGroup]="formGroup" (submit)="submmit()">
+            <div class="row  mt-3">
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Categoria:</label>
+                        <p-dropdown [options]="arCategorias" optionLabel="descricao" optionValue="id"
+                            formControlName="idCategoria" placeholder="Selecione a Categoria" [virtualScroll]="true"
+                            [itemSize]="5" [showClear]="true" [filter]="false" (keyup)="clearValidations()"
+                            emptyMessage="Categoria não encontrada" autoDisplayFirst="true"
+                            [disabled]="currentAction()=='edit'"
+                            (onChange)="parseToNumber('idCategoria'); filtrarItemPorCategoria()">
+                        </p-dropdown>
+                    </div>
+                    <app-field-validation-form [form-control]="formGroup.get('idItemMovimentacao')">
+                    </app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="errorsValidations('idItemMovimentacao')">
+                    </app-field-server-errors-form>
+                </div>
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Item Movimentação:</label>
+                        <p-dropdown [options]="arItensMovimentacao" optionLabel="descricao" optionValue="id"
+                            formControlName="idItemMovimentacao" placeholder="Selecione o Item" [virtualScroll]="true"
+                            [itemSize]="5" [showClear]="true" [filter]="false" (keyup)="clearValidations()"
+                            emptyMessage="Item não encontrado"
+                            [disabled]="currentAction()=='edit'"
+                            (onChange)="parseToNumber('idItemMovimentacao'); filtrarCategoriaPorItem()">
+                        </p-dropdown>
+                    </div>
+                    <app-field-validation-form [form-control]="formGroup.get('idItemMovimentacao')">
+                    </app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="errorsValidations('idItemMovimentacao')">
+                    </app-field-server-errors-form>
+                </div>
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Prioridade:</label>
+                        <p-dropdown [options]="arTiposPrioridade" optionLabel="Value" optionValue="Key"
+                            formControlName="tipoPrioridade" placeholder="Selecione a Prioridade" [showClear]="true"
+                            [filter]="false" (keyup)="clearValidations()" emptyMessage="Prioridade não encontrada">
+                        </p-dropdown>
+                    </div>
+                    <app-field-validation-form [form-control]="formGroup.get('tipoPrioridade')">
+                    </app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="errorsValidations('tipoPrioridade')">
+                    </app-field-server-errors-form>
+                </div>
+            </div>
+
+            <div class="row  mt-3">
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Forma de Pagamento:</label>
+                        <p-dropdown [options]="arFormasPagamento" optionLabel="descricao" optionValue="id"
+                            formControlName="idFormaPagamento" placeholder="Selecione a Forma de Pagamento"
+                            [showClear]="true" [filter]="false" (keyup)="clearValidations()"
+                            emptyMessage="Forma de Pagamento não encontrada">
+                        </p-dropdown>
+                    </div>
+                    <app-field-validation-form [form-control]="formGroup.get('idFormaPagamento')">
+                    </app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="errorsValidations('idFormaPagamento')">
+                    </app-field-server-errors-form>
+                </div>
+                <div class="form-group col-4">
+                    <label for="dataVencimento">Data de Vencimento:</label>
+                    <p-calendar inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataVencimento"
+                        [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
+                    </p-calendar>
+
+                    <app-field-validation-form [form-control]="formGroup.get('dataVencimento')">
+                    </app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="errorsValidations('dataVencimento')">
+                    </app-field-server-errors-form>
+
+                </div>
+                <div class="form-group col-3">
+                    <label for="valor">Valor (R$):</label>
+                    <p-inputNumber formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
+                        [minFractionDigits]="2">
+                    </p-inputNumber>
+                    <app-field-validation-form [form-control]="formGroup.get('valor')"></app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="errorsValidations('valor')">
+                    </app-field-server-errors-form>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <textarea formControlName="observacao" id="float-input" rows="2" cols="122"
+                            pInputTextarea></textarea>
+                        <label for="float-input">Observação</label>
+                    </span>
+                    <app-field-server-errors-form [server-errors]="errorsValidations('movimentacao.observacao')">
+                    </app-field-server-errors-form>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="p-fluid col-4">
+                    <div *ngIf="currentAction()=='new'">
+                        <div class="p-field">
+                            <label>Recorrência:</label>
+                            <p-dropdown [options]="arTiposRecorrencia" optionLabel="Value" optionValue="Key"
+                                formControlName="tipoRecorrencia" placeholder="Selecione a Recorrência"
+                                [showClear]="true" [filter]="false" (keyup)="clearValidations()"
+                                emptyMessage="Recorrência não encontrada">
+                            </p-dropdown>
+                        </div>
+                        <app-field-validation-form [form-control]="formGroup.get('tipoRecorrencia')">
+                        </app-field-validation-form>
+                        <app-field-server-errors-form [server-errors]="errorsValidations('tipoRecorrencia')">
+                        </app-field-server-errors-form>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div *ngIf="currentAction()=='new'">
+                        <div class="p-field" *ngIf="formGroup.get('tipoRecorrencia').value=='P'">
+                            <label for="minmax-buttons">Qtde parcelas:</label>
+                            <p-inputNumber formControlName="qtdeParcelas" mode="decimal" [showButtons]="true"
+                                inputId="minmax-buttons" [min]="1" [max]="24">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 mt-4" style="text-align: right;">
+                    <a class="btn btn-dark me-3"
+                        [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+                        Cancelar
+                    </a>
+                    <app-button-submmit-form [button-disabled]="!formGroup.valid"
+                        button-path-ico="assets/icons/save-white-18dp.svg" button-title="Salvar">
+                    </app-button-submmit-form>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>

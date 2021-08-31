@@ -7,9 +7,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class HeaderPageTitleComponent implements OnInit {
 
-  @Input('header-title') headerTitle:string;
-  @Input('header-button-label') headerButtonLabel:string=null;
-  @Input('header-button-link') headerButtonLink:string=null;
+  @Input('header-title') headerTitle!:string;
+  @Input('header-button-label') headerButtonLabel!:string;
+  @Input('header-button-link') headerButtonLink!:string;
   
   constructor() { }
 

@@ -8,12 +8,16 @@ import { environment } from "src/environments/environment";
 
 export class BSUpdateUsuario {
 
-    private usuario: Usuario;
+    private usuario!: Usuario;
     private nome =  new BehaviorSubject<string>("");
     private eMail = new BehaviorSubject<string>("");
     
     constructor(){
-        this.usuario = JSON.parse(window.localStorage.getItem(environment.keyUser));        
+       // debugger;
+        var user = window.localStorage.getItem(environment.keyUser)||'';
+        if (user != ''){
+            this.usuario =  JSON.parse(user);
+        }                
         if(this.usuario != null){
             this.nome =  new BehaviorSubject<string>(this.usuario.nome);
             this.eMail = new BehaviorSubject<string>(this.usuario.eMail);

@@ -30,25 +30,25 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         public router : Router
     ) { }
 
-    private user: Usuario;
+    private user!: Usuario;
     private _countRequests:number=0;
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('intercept');
-
         //contador de requests..
         ++this._countRequests;
         //loading ativo..
         this.bsHttpLoading.setLoading(true);
-    
-        
+
         //cabeçalho com token..
-        this.user = JSON.parse(window.localStorage.getItem(environment.keyUser)); 
-        if(this.user!= null){
-            request =request.clone({
-                setHeaders:{Authorization:`Bearer ${this.user.accessToken.toString()}`}
-            });
-        }        
+        if(window.localStorage.getItem(environment.keyUser)!=null){
+            var user = window.localStorage.getItem(environment.keyUser)||'';
+            if (user != ''){
+                var acessToken_ = JSON.parse(user).accessToken;
+                request =request.clone({
+                    setHeaders:{Authorization:`Bearer ${acessToken_.toString()}`}
+                });
+            }            
+        }      
 
         //chamada recursiva para o próximo request..      
         return next.handle(request)
@@ -71,9 +71,8 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 } else if (e.status == 500) {
                     //error status code 500..
                     this.alertMessage.showError(e.error, 'Sr. Usuário');
-                } else {
+                } else if (e.status != 400){
                     this.alertMessage.showError(e.error, 'Sr. Usuário');
-                    console.log(e.error.error);
                 }
                 return throwError(e);
                }),
@@ -81,11 +80,9 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 finalize(()=>{
                     //subtraindo qtde requests..
                     --this._countRequests;
-                    console.log(this._countRequests);
-                    //enquanto tiver requests sendo realizados, manter o loading ativo..
+                    //enquanto tiver requests sendo realizado, manter o loading ativo..
                     this.bsHttpLoading.setLoading(this._countRequests>0);
-                    console.log('fim intercept');
-                })
+                 })
               );
     };
 }

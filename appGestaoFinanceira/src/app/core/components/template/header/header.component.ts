@@ -13,17 +13,17 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  dataIni: Date;
-  dataFim: Date;
+  dataIni!: Date;
+  dataFim!: Date;
 
   constructor(
     private bsAutenticarUsuario: BSAutenticarUsuario,
     private bsUpdateUsuario: BSUpdateUsuario,
     private router: Router) { }
 
-  usuarioAutenticado: boolean;
-  user: Usuario;
-  user_name: string;
+  usuarioAutenticado: boolean = false;
+  user!: Usuario;
+  user_name!: string;
 
   ngOnInit(): void {
     this.bsAutenticarUsuario.get().subscribe(valor => this.usuarioAutenticado = valor);
@@ -42,10 +42,10 @@ export class HeaderComponent implements OnInit {
     var mes = dataAtual.getMonth();
     var ano = dataAtual.getFullYear();
     this.dataIni = new Date(ano, mes, 1);
-    this.dataFim = new Date(ano, mes + 1, 0);
+    this.dataFim = new Date(ano, mes + 2, 0);
   }
 
-  resultEvent(event) {
+  resultEvent(event: any) {
     if (event) {
        this.resetUser();
        this.router.navigate(['/login']);

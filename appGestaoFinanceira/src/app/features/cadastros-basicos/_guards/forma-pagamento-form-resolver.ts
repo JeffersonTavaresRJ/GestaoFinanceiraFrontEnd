@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot } from "@angular/router";
 import { GenericFormResolver } from "src/app/shared/_guards/generic-form-resolver";
 import { FormaPagamento } from "../_models/forma-pagamento";
 import { FormaPagamentoService } from "../_services/forma-pagamento-service";

@@ -10,7 +10,7 @@ import { FormControl } from '@angular/forms';
 })
 export class FieldValidationFormComponent implements OnInit {
 
-  @Input('form-control') formControl: FormControl;
+  @Input('form-control') formControl!: FormControl;
 
   constructor() { }
 
@@ -30,7 +30,7 @@ export class FieldValidationFormComponent implements OnInit {
   }
 
   private getError(): string | null {
-    if(this.formControl.errors.required){
+    if( this.formControl.errors.required){
       return 'Campo obrigatório';
     }else if( this.formControl.errors.email){
       return 'e-mail inválido';
@@ -39,5 +39,6 @@ export class FieldValidationFormComponent implements OnInit {
     }else if(this.formControl.errors.senhaInvalida){
       return this.formControl.errors.message;
     }
+    return null;
   }
 }

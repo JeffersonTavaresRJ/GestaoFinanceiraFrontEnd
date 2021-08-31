@@ -9,14 +9,17 @@ export abstract class GenericBaseService<T extends Object>{
     private apiName: string;
     private apiOption: string='';
     protected http: HttpClient;
-    protected httpHeaders: HttpHeaders;
-    protected idUsuario: string;
+    protected httpHeaders!: HttpHeaders;
+    protected idUsuario!: string;
 
     constructor(injector: Injector, apiName:string) {
         this.http = injector.get(HttpClient);
         this.apiName = apiName;
         if(window.localStorage.getItem(environment.keyUser)!=null){
-            this.idUsuario = JSON.parse(window.localStorage.getItem(environment.keyUser)).id;
+            var user = window.localStorage.getItem(environment.keyUser)||'';
+            if (user != ''){
+                this.idUsuario = JSON.parse(user).id;
+            }            
         }        
     }
 
@@ -30,7 +33,8 @@ export abstract class GenericBaseService<T extends Object>{
         this.apiOption = apiOption;
     }
 
-    post(resource: T): Observable<any> {     
+    post(resource: T): Observable<any> {   
+       debugger;  
        return this.http.post(this.getUrl(), resource)
         .pipe(catchError(this.handlerError)/*, 
               --comentado para ler o retorno da mensagem de sucesso da API..
@@ -38,6 +42,7 @@ export abstract class GenericBaseService<T extends Object>{
     }
 
     put(resource: T): Observable<any> {
+      debugger;  
       return this.http.put(this.getUrl(), resource)
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
@@ -45,8 +50,11 @@ export abstract class GenericBaseService<T extends Object>{
     }
 
     getAll(): Observable<T[]> {
-       var idUsuario = JSON.parse(window.localStorage.getItem(environment.keyUser)).id;
-       return this.http.get<T[]>(`${this.getUrl()}/${idUsuario}`);
+        var user = window.localStorage.getItem(environment.keyUser)||'';
+        if (user != ''){
+            this.idUsuario = JSON.parse(user).id;
+        } 
+        return this.http.get<T[]>(`${this.getUrl()}/${this.idUsuario}`);
     }
 
     get(): Observable<any> {

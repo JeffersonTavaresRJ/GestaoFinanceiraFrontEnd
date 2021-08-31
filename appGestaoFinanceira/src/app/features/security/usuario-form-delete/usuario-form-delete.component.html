@@ -1,43 +1,43 @@
 <div class="row mt-5">
-  <div class="col-6 offset-3">
-    <app-header-page-title [header-title]="resourcePageTitle">      
-    </app-header-page-title>  
-    <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
-
-      <div class="form-group col-12">
-        <label for="nome">Nome:</label>
-        <p><strong>{{resourceUsuario.nome}}</strong></p>
-      </div>
-
-      <div class="form-group col-12 mt-3">
-        <label for="nome">E-Mail:</label>
-        <p><strong>{{resourceUsuario.eMail}}</strong></p>
-      </div>
-
-      <div class="row">
-        <div class="col-6">
-          <div class="form-group mt-3">
-            <label for="senha">Senha:</label>
-            <input type="text" type="password" class="form-control" formControlName="senha" />
-          </div>
-          <app-field-validation-form [form-control]="resourceForm.get('senha')"></app-field-validation-form>
+    <div class="col-6 offset-3">
+      <app-header-page-title [header-title]="resourcePageTitle">      
+      </app-header-page-title>  
+      <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
+  
+        <div class="form-group col-12">
+          <label for="nome">Nome:</label>
+          <p><strong>{{resourceUsuario.nome}}</strong></p>
         </div>
-        <div class="col-6">
-          <div class="form-group mt-3">
-            <label for="confirmarSenha">Confirmar Senha:</label>
-            <input type="text" type="password" class="form-control" formControlName="confirmarSenha"/>
-          </div>
-          <app-field-validation-form [form-control]="resourceForm.get('confirmarSenha')"></app-field-validation-form>
+  
+        <div class="form-group col-12 mt-3">
+          <label for="nome">E-Mail:</label>
+          <p><strong>{{resourceUsuario.eMail}}</strong></p>
         </div>
-      </div>
-      <div class="mt-3" style="text-align: right;">
-        <app-button-submmit-form 
-            [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
-            [button-message]="resourceMessageButton" 
-            button-path-ico="assets/icons/delete_white_18dp.svg"
-            button-title="Excluir">
-        </app-button-submmit-form>              
-      </div>
-    </form>
+  
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group mt-3">
+              <label for="senha">Senha:</label>
+              <input type="text" type="password" class="form-control" formControlName="senha" />
+            </div>
+            <app-field-validation-form [form-control]="resourceForm.get('senha')"></app-field-validation-form>
+          </div>
+          <div class="col-6">
+            <div class="form-group mt-3">
+              <label for="confirmarSenha">Confirmar Senha:</label>
+              <input type="text" type="password" class="form-control" formControlName="confirmarSenha"/>
+            </div>
+            <app-field-validation-form [form-control]="resourceForm.get('confirmarSenha')"></app-field-validation-form>
+          </div>
+        </div>
+        <div class="mt-3" style="text-align: right;">
+          <app-button-submmit-form 
+              [button-disabled]="!resourceForm.valid || resourceMessageButton!=null"
+              [button-message]="resourceMessageButton" 
+              button-path-ico="assets/icons/delete_white_18dp.svg"
+              button-title="Excluir">
+          </app-button-submmit-form>              
+        </div>
+      </form>
+    </div>
   </div>
-</div>

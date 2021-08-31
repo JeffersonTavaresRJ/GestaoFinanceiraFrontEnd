@@ -3,8 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ReceitasDespesasDashboardComponent } from './receitas-despesas-dashboard/receitas-despesas-dashboard.component';
 
 
+
 @NgModule({
-  declarations: [ReceitasDespesasDashboardComponent],
+  declarations: [
+    ReceitasDespesasDashboardComponent
+  ],
   imports: [
     CommonModule
   ]

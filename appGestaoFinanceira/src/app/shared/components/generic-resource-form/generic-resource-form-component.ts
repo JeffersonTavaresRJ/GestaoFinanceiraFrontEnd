@@ -15,10 +15,10 @@ import { AlertMessageForm } from '../alert-form/alert-message-form';
 export abstract class GenericResourceFormComponent<T extends GenericResourceModel>
     implements OnInit, OnDestroy {
 
-    resourceMessageButton: string;
-    resourceForm: FormGroup;
-    resourcePageTitle: string;
-    resourceUsuario: Usuario;
+    resourceMessageButton!: string;
+    resourceForm!: FormGroup;
+    resourcePageTitle!: string;
+    resourceUsuario!: Usuario;
 
     protected bsAutenticarUsuario: BSAutenticarUsuario;
     protected resourceAlertMessage: AlertMessageForm;
@@ -77,7 +77,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     resourceErrorsValidations(param: string): any[] {
         if (this.resourceForm.valid && this.validationErrors.length > 0) {
             // debugger;
-            return this.validationErrors.filter(i => i.propertyName.toLowerCase() == param);
+            return this.validationErrors.filter(i => i.propertyName.toLowerCase() == param.toLowerCase());
         }
     }
 
@@ -155,7 +155,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     protected resourceActionForError(e){
         this.resourceMessageButton = null;
         if (e.status == 400) {
-            //validação de formulários (BadRequest) 
+            //validações da API (BadRequest) 
             this.validationErrors = e.error;         
         }
     }

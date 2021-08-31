@@ -9,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class FieldServerErrorsFormComponent implements OnInit {
 
-  @Input('server-errors') serverErrors: any[];
+  @Input('server-errors') serverErrors!: any[];
 
   constructor() { }
 

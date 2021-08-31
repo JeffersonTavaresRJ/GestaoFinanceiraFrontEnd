@@ -13,6 +13,7 @@ export class UsuarioService extends GenericResourceService<Usuario>{
     }    
 
     autenthicate(credencials: Usuario): Observable<Usuario> {
+        //debugger;
         this.setApiOption('/Autenthicate');     
         return this.post(credencials);
     }    
