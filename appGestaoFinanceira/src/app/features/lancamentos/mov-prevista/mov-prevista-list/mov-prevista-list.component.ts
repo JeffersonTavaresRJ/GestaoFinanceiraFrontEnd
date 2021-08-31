@@ -100,13 +100,6 @@ export class MovPrevistaListComponent implements OnInit {
     );   
   }
 
-  filtrarTablePorCategoria(idCategoria:number){
-      this.movPrevistaList();//carregar o array com todos os valores para tratar a troca de filtros..
-      if (idCategoria!= null){
-        this.arMovPrevistas= this.arMovPrevistas.filter(m=>(m.itemMovimentacao.categoria.id==idCategoria)); 
-      }     
-  }
-
   filtrarTablePorPeriodo(){
     //debugger;
     this.dataIni = this.arDtRangeDataVenc[0];

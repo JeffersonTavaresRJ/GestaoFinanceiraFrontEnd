@@ -16,16 +16,16 @@
                 </span>
 
                 <span class="p-float-label">
-                    <p-dropdown [options]="arCategorias"  optionLabel="descricao" optionValue="id"
+                    <p-dropdown [options]="arCategorias"  optionLabel="descricao" optionValue="descricao"
                                 [showClear]="true" [autoDisplayFirst]="false"
-                                (onChange)="filtrarTablePorCategoria($event.value)" inputId="dropdown">
+                                (onChange)="dt2.filterGlobal($event.value, 'contains')" inputId="dropdown">
                         <ng-template let-option pTemplate="item">
                             <span>{{option.descricao}}</span>
                         </ng-template>
                     </p-dropdown>
                     <label for="dropdown">Categoria</label>
                 </span>
-
+                 
                 <span class="p-float-label">
                     <p-calendar inputId="calendar" 
                               [(ngModel)]="arDtRangeDataVenc" 
@@ -159,7 +159,7 @@
                         </td>
                         <td>
                             <!--ITEM-->
-                            <strong>{{movimentacao.itemMovimentacao.descricao}}</strong>
+                            <strong>{{movimentacao.itemMovimentacao.descricao}}</strong>                            
                             <p>{{movimentacao.itemMovimentacao.categoria.descricao}}</p>
                         </td>
                         <td>
