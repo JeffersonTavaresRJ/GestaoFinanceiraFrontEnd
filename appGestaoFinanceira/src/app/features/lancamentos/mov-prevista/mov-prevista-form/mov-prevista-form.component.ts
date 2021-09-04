@@ -187,8 +187,7 @@ export class MovPrevistaFormComponent implements OnInit {
           this.formGroup.get('valor').setValue(sucess.resolveMovPrev.valor);
           this.formGroup.get('status').setValue(sucess.resolveMovPrev.status);
           this.formGroup.get('idFormaPagamento').setValue(sucess.resolveMovPrev.formaPagamento.id);
-        },
-        (error) => this.actionForError(error)
+        }
       );
     }
   }

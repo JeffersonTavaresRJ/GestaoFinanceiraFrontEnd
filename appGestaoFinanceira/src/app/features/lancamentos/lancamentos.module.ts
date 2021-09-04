@@ -15,13 +15,15 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import { CoreModule } from 'src/app/core/core.module';
 import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-prevista-list.component';
 import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-prevista-form.component';
+import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
 
 
 
 @NgModule({
   declarations: [
     MovPrevistaListComponent,
-    MovPrevistaFormComponent
+    MovPrevistaFormComponent,
+    MovPrevistaQuitarFormComponent
   ],
   imports: [
     CommonModule,

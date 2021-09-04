@@ -1,0 +1,69 @@
+<div class="card col-10 offset-1 mt-5">
+    <div class="card-body">
+        <app-header-page-title [header-title]="'Quitar Movimentação Prevista'"
+                               header-button-label=">> Voltar"
+                               [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+        </app-header-page-title>
+        <form [formGroup]="formGroup" (submit)="submmit()">
+            <div class="row  mt-3">
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Categoria:</label>
+                        <p><strong>{{formGroup.get('descricaoCategoria').value}}</strong></p>
+                    </div>
+                </div>
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Item Movimentação:</label>
+                        <p><strong>{{formGroup.get('descricaoItemMovimentacao').value}}</strong></p>
+                    </div>
+                </div>
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Prioridade:</label>
+                        <p><strong>{{formGroup.get('descricaoTipoPrioridade').value}}</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Forma de Pagamento:</label>
+                        <p><strong>{{formGroup.get('descricaoFormaPagamento').value}}</strong></p>
+                    </div>
+                </div>
+                <div class="form-group col-4">
+                    <label for="dataVencimento">Data de Vencimento:</label>
+                    <p><strong>{{formGroup.get('dataVencimento').value | date:'dd/MM/yyyy'}}</strong></p>
+                </div>
+                <div class="form-group col-3">
+                    <label for="valor">Valor (R$):</label>
+                    <p><strong>{{formGroup.get('valor').value | currency}}</strong></p>
+                </div>
+            </div>
+
+            <div class="row mt-1">
+                <div class="col-12">
+                    <label for="valor">Observação:</label>
+                    <p><textarea formControlName="observacao" id="float-input" rows="2" cols="122"
+                        disabled = "true"  pInputTextarea></textarea></p>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-6 mt-4" style="text-align: right;">
+                    <a class="btn btn-dark me-3"
+                        [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+                        Cancelar
+                    </a>
+                    <app-button-submmit-form [button-disabled]="!formGroup.valid"
+                        button-path-ico="assets/icons/save-white-18dp.svg" button-title="Salvar">
+                    </app-button-submmit-form>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>

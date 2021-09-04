@@ -176,10 +176,10 @@
                         </td>
                         <td>
                             <!--STATUS-->
-                            <button *ngIf="movimentacao.status=='A'" class="btn btn-outline-primary btn-sm">
+                            <a [routerLink]="['/mov-prevista/quitar',movimentacao.itemMovimentacao.id, movimentacao.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
+                               *ngIf="movimentacao.status=='A'" class="btn btn-outline-primary btn-sm">
                                 Quitar
-                            </button>
-
+                            </a>
                             <img *ngIf="movimentacao.status=='Q'" class="logo text-start"
                                 src="assets\icons\task_alt_black_24dp.svg"
                                 title="Status: {{movimentacao.statusDescricao}}" width="55" height="30">

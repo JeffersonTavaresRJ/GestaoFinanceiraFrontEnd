@@ -33,6 +33,7 @@ import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards
 import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
 import { MovPrevistaListResolver } from './features/lancamentos/_guards/mov-prevista-list-resolver';
 import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prevista-form-resolver';
+import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
 
 //criando o mapeamento de rotas dos componentes
 
@@ -92,6 +93,9 @@ const routes: Routes = [
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard]  },
     { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
+             canActivate:[AuthGuard],             
+             resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
+    { path: 'mov-prevista/quitar/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,

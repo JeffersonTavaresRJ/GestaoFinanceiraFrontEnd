@@ -1,13 +1,13 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { GenericBaseService } from 'src/app/shared/_services/generic-base-service';
+import { GenericResourceService } from 'src/app/shared/_services/generic-resource-service';
 import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MovPrevistaService extends GenericBaseService<MovimentacaoPrevista> {
+export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevista> {
 
   constructor(private injector: Injector) {
     super(injector, 'api/MovimentacaoPrevista');
