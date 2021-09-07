@@ -1,69 +1,136 @@
 <div class="card col-10 offset-1 mt-5">
     <div class="card-body">
-        <app-header-page-title [header-title]="'Quitar Movimentação Prevista'"
-                               header-button-label=">> Voltar"
-                               [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+        <app-header-page-title [header-title]="'Quitar Movimentação Prevista'" header-button-label=">> Voltar"
+            [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
         </app-header-page-title>
-        <form [formGroup]="formGroup" (submit)="submmit()">
-            <div class="row  mt-3">
-                <div class="p-fluid col-4">
-                    <div class="p-field">
-                        <label>Categoria:</label>
-                        <p><strong>{{formGroup.get('descricaoCategoria').value}}</strong></p>
-                    </div>
-                </div>
-                <div class="p-fluid col-4">
-                    <div class="p-field">
-                        <label>Item Movimentação:</label>
-                        <p><strong>{{formGroup.get('descricaoItemMovimentacao').value}}</strong></p>
-                    </div>
-                </div>
-                <div class="p-fluid col-4">
-                    <div class="p-field">
-                        <label>Prioridade:</label>
-                        <p><strong>{{formGroup.get('descricaoTipoPrioridade').value}}</strong></p>
-                    </div>
+        <div class="row  mt-3">
+            <div class="p-fluid col-4">
+                <div class="p-field">
+                    <label>Categoria:</label>
+                    <p><strong>{{descricaoCategoria}}</strong></p>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="p-fluid col-4">
-                    <div class="p-field">
-                        <label>Forma de Pagamento:</label>
-                        <p><strong>{{formGroup.get('descricaoFormaPagamento').value}}</strong></p>
-                    </div>
-                </div>
-                <div class="form-group col-4">
-                    <label for="dataVencimento">Data de Vencimento:</label>
-                    <p><strong>{{formGroup.get('dataVencimento').value | date:'dd/MM/yyyy'}}</strong></p>
-                </div>
-                <div class="form-group col-3">
-                    <label for="valor">Valor (R$):</label>
-                    <p><strong>{{formGroup.get('valor').value | currency}}</strong></p>
+            <div class="p-fluid col-4">
+                <div class="p-field">
+                    <label>Item Movimentação:</label>
+                    <p><strong>{{descricaoItemMovimentacao}}</strong></p>
                 </div>
             </div>
-
-            <div class="row mt-1">
-                <div class="col-12">
-                    <label for="valor">Observação:</label>
-                    <p><textarea formControlName="observacao" id="float-input" rows="2" cols="122"
-                        disabled = "true"  pInputTextarea></textarea></p>
+            <div class="p-fluid col-4">
+                <div class="p-field">
+                    <label>Prioridade:</label>
+                    <p><strong>{{descricaoTipoPrioridade}}</strong></p>
                 </div>
             </div>
+        </div>
 
-            <div class="row mt-3">
-                <div class="col-6 mt-4" style="text-align: right;">
-                    <a class="btn btn-dark me-3"
-                        [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
-                        Cancelar
-                    </a>
-                    <app-button-submmit-form [button-disabled]="!formGroup.valid"
-                        button-path-ico="assets/icons/save-white-18dp.svg" button-title="Salvar">
-                    </app-button-submmit-form>
+        <div class="row">
+            <div class="p-fluid col-4">
+                <div class="p-field">
+                    <label>Forma de Pagamento:</label>
+                    <p><strong>{{descricaoFormaPagamento}}</strong></p>
                 </div>
             </div>
+            <div class="form-group col-4">
+                <label for="dataVencimento">Data de Vencimento:</label>
+                <p><strong>{{dataVencimento | date:'dd/MM/yyyy'}}</strong></p>
+            </div>
+            <div class="form-group col-3">
+                <label for="valor">Valor (R$):</label>
+                <p><strong>{{valor | currency}}</strong></p>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <label>Observação:</label>
+                <div class="text-justify">
+                    <strong>{{observacao}}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="card">
+                <p-table [value]="arMovRealizadas" dataKey="id" editMode="row" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Data de Movimentação</th>
+                            <th>Conta</th>
+                            <th>Forma de Pagamento</th>
+                            <th>Valor</th>
+                            <th style="width:8rem"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-movRealizada let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="movRealizada">
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputMask mask="99/99/9999" [ngModel]="movRealizada.dataMovimentacaoRealizada | date:'dd/MM/yyyy'" placeholder="99/99/9999" slotChar="dd/MM/aaaa"></p-inputMask>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{movRealizada.dataMovimentacaoRealizada | date:'dd/MM/yyyy'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="arContas" optionLabel="descricao" optionValue="id"
+                                            [(ngModel)]="movRealizada.conta.id" [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{movRealizada.conta.descricao}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="arFormasPagamento" optionLabel="descricao"
+                                            optionValue="id" [(ngModel)]="movRealizada.formaPagamento.id"
+                                            [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{movRealizada.formaPagamento.descricao}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="movRealizada.valor">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{movRealizada.valor | currency}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td style="text-align:center">
+                                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                                    icon="pi pi-pencil" (click)="onRowEditInit(movRealizada)"
+                                    class="p-button-rounded p-button-text"></button>
+                                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                                    icon="pi pi-check" (click)="onRowEditSave(movRealizada)"
+                                    class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                                    icon="pi pi-times" (click)="onRowEditCancel(movRealizada, ri)"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
 
-        </form>
-
+        <div class="row mt-3">
+            <div class="col-6 mt-4" style="text-align: right;">
+                <a class="btn btn-dark me-3"
+                    [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+                    Cancelar
+                </a>
+                <app-button-submmit-form button-path-ico="assets/icons/save-white-18dp.svg" button-title="Salvar">
+                </app-button-submmit-form>
+            </div>
+        </div>
     </div>
 </div>

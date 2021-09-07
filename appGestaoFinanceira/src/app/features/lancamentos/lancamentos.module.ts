@@ -12,6 +12,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PanelModule } from 'primeng/panel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import {InputMaskModule} from 'primeng/inputmask';
 import { CoreModule } from 'src/app/core/core.module';
 import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-prevista-list.component';
 import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-prevista-form.component';
@@ -40,7 +41,8 @@ import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quit
     DropdownModule,
     PanelModule,
     InputNumberModule,
-    InputTextareaModule
+    InputTextareaModule,
+    InputMaskModule
   ]
 })
 export class LancamentosModule { }

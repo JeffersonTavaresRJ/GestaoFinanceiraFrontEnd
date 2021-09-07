@@ -6,18 +6,19 @@ import { MovimentacaoRealizada } from '../_models/mov-realizada-model.';
 @Injectable({
   providedIn: 'root'
 })
-export class MovRealizadaServiceService extends GenericResourceService<MovimentacaoRealizada> {
+export class MovRealizadaService extends GenericResourceService<MovimentacaoRealizada> {
 
   constructor(private injector: Injector) { 
-    super(injector, '​api​/MovimentacaoRealizada'); 
+    super(injector, 'api/MovimentacaoRealizada'); 
   }
 
-  getByDataReferencia(idItemMovimentacao: string, dataReferencia: string): Observable<MovimentacaoRealizada[]> {
+  getByDataReferencia(idItemMovimentacao: number, dataReferencia: string): Observable<MovimentacaoRealizada[]> {
     this.setApiOption('/GetByDataReferencia');
+    debugger;
     return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`);
   }
 
-  GetByDataMovimentacaoRealizada(idItemMovimentacao: string, dataMovRealIni: string, dataMovRealFim: string): Observable<MovimentacaoRealizada[]> {
+  GetByDataMovimentacaoRealizada(idItemMovimentacao: number, dataMovRealIni: string, dataMovRealFim: string): Observable<MovimentacaoRealizada[]> {
     this.setApiOption('/GetByDataMovimentacaoRealizada');
     return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${idItemMovimentacao}/${this.idUsuario}/${dataMovRealIni}/${dataMovRealFim}`);
   }
