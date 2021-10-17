@@ -22,7 +22,6 @@ import { LancamentosModule } from './features/lancamentos/lancamentos.module';
 
 import { AppComponent } from './app.component';
 
-
 const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
 
 @NgModule({

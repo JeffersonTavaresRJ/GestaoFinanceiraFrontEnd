@@ -22,6 +22,7 @@ import { ItemMovimentacaoListComponent } from './features/cadastros-basicos/item
 import { ItemMovimentacaoFormComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-form/item-movimentacao-form.component';
 import { MovPrevistaListComponent } from './features/lancamentos/mov-prevista/mov-prevista-list/mov-prevista-list.component';
 import { MovPrevistaFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-form/mov-prevista-form.component';
+import { MovPrevistaFormControlesComponent } from './features/lancamentos/mov-prevista/mov-prevista-form-controles/mov-prevista-form-controles.component';
 
 import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
@@ -92,6 +93,7 @@ const routes: Routes = [
     { path: 'mov-prevista/new/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard]  },
+    { path: 'mov-prevista/controles', component: MovPrevistaFormControlesComponent},
     { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },

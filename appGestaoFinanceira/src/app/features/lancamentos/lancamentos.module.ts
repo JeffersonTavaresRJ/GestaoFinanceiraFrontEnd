@@ -17,6 +17,7 @@ import { CoreModule } from 'src/app/core/core.module';
 import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-prevista-list.component';
 import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-prevista-form.component';
 import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
+import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-form-controles/mov-prevista-form-controles.component';
 
 
 
@@ -24,7 +25,8 @@ import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quit
   declarations: [
     MovPrevistaListComponent,
     MovPrevistaFormComponent,
-    MovPrevistaQuitarFormComponent
+    MovPrevistaQuitarFormComponent,
+    MovPrevistaFormControlesComponent
   ],
   imports: [
     CommonModule,

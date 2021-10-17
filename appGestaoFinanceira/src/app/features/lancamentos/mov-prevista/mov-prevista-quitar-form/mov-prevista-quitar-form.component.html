@@ -1,43 +1,34 @@
-<div class="card col-10 offset-1 mt-5">
+<div class="card col-10 offset-1 mt-5 font-size-small">
     <div class="card-body">
         <app-header-page-title [header-title]="'Quitar Movimentação Prevista'" header-button-label=">> Voltar"
             [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
         </app-header-page-title>
         <div class="row  mt-3">
-            <div class="p-fluid col-4">
-                <div class="p-field">
-                    <label>Categoria:</label>
-                    <p><strong>{{descricaoCategoria}}</strong></p>
-                </div>
+            <div class="form-group col-4">
+                <label>Categoria:</label>
+                <strong>{{descricaoCategoria}}</strong>
             </div>
-            <div class="p-fluid col-4">
-                <div class="p-field">
-                    <label>Item Movimentação:</label>
-                    <p><strong>{{descricaoItemMovimentacao}}</strong></p>
-                </div>
+            <div class="form-group col-4">
+                <label>Item Movimentação:</label>
+                <strong>{{descricaoItemMovimentacao}}</strong>
             </div>
-            <div class="p-fluid col-4">
-                <div class="p-field">
-                    <label>Prioridade:</label>
-                    <p><strong>{{descricaoTipoPrioridade}}</strong></p>
-                </div>
+            <div class="form-group col-4">
+                <label>Prioridade:</label>
+                <strong>{{descricaoTipoPrioridade}}</strong>
             </div>
         </div>
-
         <div class="row">
-            <div class="p-fluid col-4">
-                <div class="p-field">
-                    <label>Forma de Pagamento:</label>
-                    <p><strong>{{descricaoFormaPagamento}}</strong></p>
-                </div>
+            <div class="form-group col-4">
+                <label>Forma de Pagamento:</label>
+                <strong>{{descricaoFormaPagamento}}</strong>
             </div>
             <div class="form-group col-4">
                 <label for="dataVencimento">Data de Vencimento:</label>
-                <p><strong>{{dataVencimento | date:'dd/MM/yyyy'}}</strong></p>
+                <strong>{{dataVencimento | date:'dd/MM/yyyy'}}</strong>
             </div>
-            <div class="form-group col-3">
+            <div class="form-group col-4">
                 <label for="valor">Valor (R$):</label>
-                <p><strong>{{valor | currency}}</strong></p>
+                <strong>{{valor | currency}}</strong>
             </div>
         </div>
         <div class="row mt-1">
@@ -48,82 +39,86 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-1">
-            <div class="card">
-                <p-table [value]="arMovRealizadas" dataKey="id" editMode="row" responsiveLayout="scroll">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Data de Movimentação</th>
-                            <th>Conta</th>
-                            <th>Forma de Pagamento</th>
-                            <th>Valor</th>
-                            <th style="width:8rem"></th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-movRealizada let-editing="editing" let-ri="rowIndex">
-                        <tr [pEditableRow]="movRealizada">
-                            <td>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <p-inputMask mask="99/99/9999" [ngModel]="movRealizada.dataMovimentacaoRealizada | date:'dd/MM/yyyy'" placeholder="99/99/9999" slotChar="dd/MM/aaaa"></p-inputMask>
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{movRealizada.dataMovimentacaoRealizada | date:'dd/MM/yyyy'}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <p-dropdown [options]="arContas" optionLabel="descricao" optionValue="id"
-                                            [(ngModel)]="movRealizada.conta.id" [style]="{'width':'100%'}"></p-dropdown>
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{movRealizada.conta.descricao}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <p-dropdown [options]="arFormasPagamento" optionLabel="descricao"
-                                            optionValue="id" [(ngModel)]="movRealizada.formaPagamento.id"
-                                            [style]="{'width':'100%'}"></p-dropdown>
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{movRealizada.formaPagamento.descricao}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="movRealizada.valor">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{movRealizada.valor | currency}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td style="text-align:center">
-                                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-                                    icon="pi pi-pencil" (click)="onRowEditInit(movRealizada)"
-                                    class="p-button-rounded p-button-text"></button>
-                                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-                                    icon="pi pi-check" (click)="onRowEditSave(movRealizada)"
-                                    class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
-                                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
-                                    icon="pi pi-times" (click)="onRowEditCancel(movRealizada, ri)"
-                                    class="p-button-rounded p-button-text p-button-danger"></button>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </div>
+        <div class="row mt-2">
+            <p-table [value]="arMovRealizadas" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="200px">
+                <ng-template pTemplate="header">
+                    <tr class="font-size-small">
+                        <th>Data de Movimentação</th>
+                        <th>Conta</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Valor</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-movRealizada let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="movRealizada" class="font-size-small">
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputMask mask="99/99/9999" #dataMovRealizada
+                                        [ngModel]="movRealizada.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'"
+                                        placeholder="99/99/9999" slotChar="dd/MM/aaaa"></p-inputMask>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{movRealizada.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="arContas" optionLabel="descricao" optionValue="id"
+                                        [(ngModel)]="movRealizada.conta.id" [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{movRealizada.conta.descricao}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="arFormasPagamento" optionLabel="descricao" optionValue="id"
+                                        [(ngModel)]="movRealizada.formaPagamento.id" [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{movRealizada.formaPagamento.descricao}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber [(ngModel)]="movRealizada.valor" inputId="locale-german"
+                                        mode="decimal" locale="de-DE" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                   <!-- <input pInputText type="text" [(ngModel)]="movRealizada.valor"> -->
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{movRealizada.valor | currency}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="text-align:center">
+                            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                (click)="onRowEditInit(movRealizada)" class="p-button-rounded p-button-text"></button>
+                            <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
+                                (click)="modalDeleteMessage(movRealizada)" class="p-button-rounded p-button-text"
+                                data-bs-toggle="modal" data-bs-target="#modalDelete"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                                (click)="onRowEditSave(movRealizada)"
+                                class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                                (click)="onRowEditCancel(movRealizada, ri)"
+                                class="p-button-rounded p-button-text p-button-danger"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
-
-        <div class="row mt-3">
-            <div class="col-6 mt-4" style="text-align: right;">
+        <div class="row">
+            <div class="col-12 mt-4" style="text-align: right;">
                 <a class="btn btn-dark me-3"
                     [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
                     Cancelar
@@ -134,3 +129,7 @@
         </div>
     </div>
 </div>
+
+<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" [modal-interrogative-title]="'Sr. Usuário'"
+    [modal-interrogative-message]="'Deseja realizar a exclusão?'" (modalInterrogativeResponse)="eventDelete($event)">
+</app-modal-interrogative-form>

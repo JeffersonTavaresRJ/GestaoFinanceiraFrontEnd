@@ -7,7 +7,7 @@ import { ItemMovimentacaoService } from 'src/app/features/cadastros-basicos/_ser
 import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
 import { MovPrevistaService } from '../../_services/mov-prevista-service';
 import { AlertMessageForm } from '../../../../shared/components/alert-form/alert-message-form';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { enumModel } from 'src/app/shared/_models/generic-enum-model';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
@@ -26,6 +26,7 @@ export class MovPrevistaFormComponent implements OnInit {
   formGroup: FormGroup;
   formBuilder: FormBuilder;
   activateRoute: ActivatedRoute;
+  router: Router;
   movimentacaoPrevista: MovimentacaoPrevista;
   itemMovimentacao:ItemMovimentacao
 
@@ -51,7 +52,8 @@ export class MovPrevistaFormComponent implements OnInit {
     this.movimentacaoPrevistaService = injector.get(MovPrevistaService);
     this.alertMessageForm = injector.get(AlertMessageForm);
     this.activateRoute =injector.get(ActivatedRoute);
-    this.formBuilder =injector.get(FormBuilder);    
+    this.formBuilder =injector.get(FormBuilder);   
+    this.router = injector.get(Router); 
   }
 
 
@@ -116,6 +118,14 @@ export class MovPrevistaFormComponent implements OnInit {
       this.arCategorias = this.arCategorias.filter(c=>c.id==this.itemMovimentacao.categoria.id);
       this.formGroup.get('idCategoria').setValue(this.arCategorias[0].id);
     }    
+  }
+
+  gerarControles(){
+        if (this.formGroup.get('tipoRecorrencia').value =="M" || 
+            this.formGroup.get('tipoRecorrencia').value =="P"){
+          
+          this.router.navigate(['/mov-prevista/controles']);
+        }
   }
 
   private builderForm() {
