@@ -57,7 +57,8 @@ export abstract class GenericResourceService<T extends Object>{
       }
   
     getById(id: number): Observable<T> {
-         return this.http.get<T>(`${this.getUrl()}/${id}`);
+         this.setApiOption('/GetId');
+         return this.http.get<T>(`${this.getUrl()}/${id.toString()}`);
       }
 
     getAll(): Observable<T[]> {

@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
+import { Observable } from 'rxjs';
 import {GenericResourceService} from '../../../shared/_services/generic-resource-service';
 import { FormaPagamento } from '../_models/forma-pagamento';
 @Injectable({

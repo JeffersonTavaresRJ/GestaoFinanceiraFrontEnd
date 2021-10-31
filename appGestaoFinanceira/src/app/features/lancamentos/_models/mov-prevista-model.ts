@@ -1,4 +1,5 @@
 import {FormaPagamento} from '../../cadastros-basicos/_models/forma-pagamento';
+import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
 import { Movimentacao } from "./movimentacao";
 
 export class MovimentacaoPrevista extends Movimentacao{
@@ -12,6 +13,7 @@ export class MovimentacaoPrevista extends Movimentacao{
      public qtdeParcelas: string=null
     ){ 
         super();
+        this.itemMovimentacao = new ItemMovimentacao();
         this.formaPagamento = new FormaPagamento();
     }
 

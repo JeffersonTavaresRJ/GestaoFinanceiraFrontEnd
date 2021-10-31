@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { enumModel } from 'src/app/shared/_models/generic-enum-model';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
+import { DateConvert } from 'src/app/shared/functions/date-convert';
 
 @Component({
   selector: 'app-mov-prevista-form',
@@ -28,7 +29,9 @@ export class MovPrevistaFormComponent implements OnInit {
   activateRoute: ActivatedRoute;
   router: Router;
   movimentacaoPrevista: MovimentacaoPrevista;
-  itemMovimentacao:ItemMovimentacao
+  itemMovimentacao:ItemMovimentacao = new ItemMovimentacao();
+  formaPagamento: FormaPagamento = new FormaPagamento();
+  variavel:any;
 
   arCategorias: Categoria[];
   arCategoriasAux: Categoria[];
@@ -123,8 +126,23 @@ export class MovPrevistaFormComponent implements OnInit {
   gerarControles(){
         if (this.formGroup.get('tipoRecorrencia').value =="M" || 
             this.formGroup.get('tipoRecorrencia').value =="P"){
-          
-          this.router.navigate(['/mov-prevista/controles']);
+          debugger;
+          this.formaPagamentoService.getById(this.formGroup.get('idFormaPagamento').value).subscribe(
+            sucess => this.formaPagamento=sucess);
+      
+          this.itemMovimentacaoService.getById(this.formGroup.get('idItemMovimentacao').value).subscribe(
+            sucess => this.itemMovimentacao=sucess);
+
+          console.log(this.variavel);
+          this.movimentacaoPrevista = new MovimentacaoPrevista();
+          this.movimentacaoPrevista.itemMovimentacao = this.itemMovimentacao;
+          this.movimentacaoPrevista.tipoPrioridade = this.formGroup.get('tipoPrioridade').value;
+          this.movimentacaoPrevista.observacao = this.formGroup.get('observacao').value;
+          this.movimentacaoPrevista.dataVencimento = this.formGroup.get('dataVencimento').value;
+          this.movimentacaoPrevista.valor = this.formGroup.get('valor').value;
+          this.movimentacaoPrevista.formaPagamento = this.formaPagamento;
+          this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value; 
+          this.router.navigate(['/mov-prevista/controles/'],{state:{movPrevista:this.movimentacaoPrevista}});
         }
   }
 

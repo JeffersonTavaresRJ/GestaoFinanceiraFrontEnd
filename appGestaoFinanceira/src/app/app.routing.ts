@@ -34,6 +34,7 @@ import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards
 import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
 import { MovPrevistaListResolver } from './features/lancamentos/_guards/mov-prevista-list-resolver';
 import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prevista-form-resolver';
+import { MovPrevistaFormControlesResolver } from './features/lancamentos/_guards/mov-prevista-form-controles-resolver';
 import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
 
 //criando o mapeamento de rotas dos componentes
@@ -93,7 +94,10 @@ const routes: Routes = [
     { path: 'mov-prevista/new/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard]  },
-    { path: 'mov-prevista/controles', component: MovPrevistaFormControlesComponent},
+    { path: 'mov-prevista/controles', 
+             component: MovPrevistaFormControlesComponent,
+             canActivate:[AuthGuard],             
+             resolve:{resolveMovPrevControl: MovPrevistaFormControlesResolver}},
     { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
@@ -118,7 +122,8 @@ const routes: Routes = [
                ItemMovimentacaoListResolver,            
                ItemMovimentacaoFormResolver,
                MovPrevistaListResolver,
-               MovPrevistaFormResolver]
+               MovPrevistaFormResolver,
+               MovPrevistaFormControlesResolver]
 })
 
 export class AppRoutingModule { }
