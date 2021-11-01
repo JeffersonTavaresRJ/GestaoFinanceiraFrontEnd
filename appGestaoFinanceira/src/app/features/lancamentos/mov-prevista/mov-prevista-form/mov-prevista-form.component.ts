@@ -35,9 +35,9 @@ export class MovPrevistaFormComponent implements OnInit {
 
   arCategorias: Categoria[];
   arCategoriasAux: Categoria[];
-  arItensMovimentacao: ItemMovimentacao[];
-  arItensMovimentacaoAux: ItemMovimentacao[];
-  arFormasPagamento: FormaPagamento[];
+  arItensMovimentacao: ItemMovimentacao[]=[];
+  arItensMovimentacaoAux: ItemMovimentacao[]=[];
+  arFormasPagamento: FormaPagamento[]=[];
   arTiposPrioridade: enumModel[];
   arTiposRecorrencia: enumModel[];
   arvalidationErrors: any[]=[];
@@ -124,27 +124,21 @@ export class MovPrevistaFormComponent implements OnInit {
   }
 
   gerarControles(){
-        if (this.formGroup.get('tipoRecorrencia').value =="M" || 
-            this.formGroup.get('tipoRecorrencia').value =="P"){
-          debugger;
-          this.formaPagamentoService.getById(this.formGroup.get('idFormaPagamento').value).subscribe(
-            sucess => this.formaPagamento=sucess);
-      
-          this.itemMovimentacaoService.getById(this.formGroup.get('idItemMovimentacao').value).subscribe(
-            sucess => this.itemMovimentacao=sucess);
+    if (this.formGroup.get('tipoRecorrencia').value =="M" || 
+        this.formGroup.get('tipoRecorrencia').value =="P"){
+     // debugger;
 
-          console.log(this.variavel);
-          this.movimentacaoPrevista = new MovimentacaoPrevista();
-          this.movimentacaoPrevista.itemMovimentacao = this.itemMovimentacao;
-          this.movimentacaoPrevista.tipoPrioridade = this.formGroup.get('tipoPrioridade').value;
-          this.movimentacaoPrevista.observacao = this.formGroup.get('observacao').value;
-          this.movimentacaoPrevista.dataVencimento = this.formGroup.get('dataVencimento').value;
-          this.movimentacaoPrevista.valor = this.formGroup.get('valor').value;
-          this.movimentacaoPrevista.formaPagamento = this.formaPagamento;
-          this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value; 
-          this.router.navigate(['/mov-prevista/controles/'],{state:{movPrevista:this.movimentacaoPrevista}});
-        }
-  }
+      this.movimentacaoPrevista = new MovimentacaoPrevista();
+      this.movimentacaoPrevista.itemMovimentacao = this.arItensMovimentacao.filter(i=>i.id==this.formGroup.get('idItemMovimentacao').value)[0];
+      this.movimentacaoPrevista.tipoPrioridade = this.formGroup.get('tipoPrioridade').value;
+      this.movimentacaoPrevista.observacao = this.formGroup.get('observacao').value;
+      this.movimentacaoPrevista.dataVencimento = this.formGroup.get('dataVencimento').value;
+      this.movimentacaoPrevista.valor = this.formGroup.get('valor').value;
+      this.movimentacaoPrevista.formaPagamento = this.arFormasPagamento.filter(i=>i.id==this.formGroup.get('idFormaPagamento').value)[0];
+      this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value; 
+      this.router.navigate(['/mov-prevista/controles/'],{state:{movPrevista:this.movimentacaoPrevista}});
+    }
+}
 
   private builderForm() {
     this.formGroup = this.formBuilder.group({
@@ -204,7 +198,7 @@ export class MovPrevistaFormComponent implements OnInit {
     if (this.currentAction() == 'edit') {
       this.activateRoute.data.subscribe(
         (sucess:{resolveMovPrev:MovimentacaoPrevista})=>{
-          console.log(sucess);
+          //console.log(sucess);
           //o resolveMovPrev deve ser o mesmo nome na variável resolve da rota.. 
           this.formGroup.get('idCategoria').setValue(sucess.resolveMovPrev.itemMovimentacao.categoria.id);
           this.formGroup.get('idItemMovimentacao').setValue(sucess.resolveMovPrev.itemMovimentacao.id);

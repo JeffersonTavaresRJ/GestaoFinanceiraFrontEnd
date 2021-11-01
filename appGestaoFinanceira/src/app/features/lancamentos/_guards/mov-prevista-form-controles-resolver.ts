@@ -1,30 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
-import { FormaPagamento } from '../../cadastros-basicos/_models/forma-pagamento';
-import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
-import { FormaPagamentoService } from '../../cadastros-basicos/_services/forma-pagamento-service';
-import { ItemMovimentacaoService } from '../../cadastros-basicos/_services/item-movimentacao-service';
 import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 
 @Injectable()
-export class MovPrevistaFormControlesResolver implements Resolve<any[]> {
+export class MovPrevistaFormControlesResolver implements Resolve<MovimentacaoPrevista[]> {
 
   private movimentacaoPrevista: MovimentacaoPrevista;
-  private item: number=0;
+  private movPrev: MovimentacaoPrevista;
+  private item: number;
+  private dataVencimento: Date;
   
-  formaPagamento:FormaPagamento=new FormaPagamento();
-  itemMovimentacao:ItemMovimentacao=new ItemMovimentacao();
-  arMovimentacoesPrevistas:MovimentacaoPrevista[]=[];  
+  arMovimentacoesPrevistas:any[]=[];  
   
-  constructor(private formaPagamentoService: FormaPagamentoService,
-              private itemMovimentacaoService: ItemMovimentacaoService,
-              private router: Router) {
+  constructor(private router: Router) {
 
   }
 
   resolve() {
     
-    debugger;
+    //debugger;
     const nav = this.router.getCurrentNavigation();
     this.movimentacaoPrevista = nav.extras.state.movPrevista;
     
@@ -35,15 +29,33 @@ export class MovPrevistaFormControlesResolver implements Resolve<any[]> {
       //mensal..
       var total = 12 - this.movimentacaoPrevista.dataVencimento.getMonth();
     }
-    
-    while(this.item <= total){
-        this.movimentacaoPrevista.dataVencimento.setMonth(
-          this.movimentacaoPrevista.dataVencimento.getMonth()+this.item);
 
-        this.movimentacaoPrevista.formaPagamento = this.formaPagamento;
-        this.movimentacaoPrevista.itemMovimentacao = this.itemMovimentacao;
+    this.item=0;
+    this.dataVencimento = this.movimentacaoPrevista.dataVencimento;
 
-        this.arMovimentacoesPrevistas[this.item] = this.movimentacaoPrevista;            
+    while(this.item <= total){        
+        this.dataVencimento.setMonth(this.dataVencimento.getMonth()+this.item);
+                
+        this.movPrev = new MovimentacaoPrevista(); 
+        this.movPrev.dataReferencia = new Date(this.dataVencimento.getFullYear(), 
+                                               this.dataVencimento.getMonth()+1,
+                                               0);
+        this.movPrev.dataVencimento = new Date(this.dataVencimento.getFullYear(), 
+                                               this.dataVencimento.getMonth(),
+                                               this.dataVencimento.getDate());
+        this.movPrev.formaPagamento = this.movimentacaoPrevista.formaPagamento;
+        this.movPrev.itemMovimentacao = this.movimentacaoPrevista.itemMovimentacao;
+        this.movPrev.observacao = this.movimentacaoPrevista.observacao;
+        this.movPrev.qtdeParcelas = this.movimentacaoPrevista.qtdeParcelas;
+        this.movPrev.status = this.movimentacaoPrevista.status;
+        this.movPrev.statusDescricao = this.movimentacaoPrevista.statusDescricao;
+        this.movPrev.tipoPrioridade = this.movimentacaoPrevista.tipoPrioridade;
+        this.movPrev.tipoPrioridadeDescricao = this.movimentacaoPrevista.tipoPrioridadeDescricao;
+        this.movPrev.tipoRecorrencia = this.movimentacaoPrevista.tipoRecorrencia;
+        this.movPrev.valor = this.movimentacaoPrevista.valor;
+        
+        this.arMovimentacoesPrevistas.push(JSON.parse(JSON.stringify(this.movPrev)));
+
         this.item++;
       };
     return this.arMovimentacoesPrevistas;

@@ -15,46 +15,48 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-product let-editing="editing" let-ri="rowIndex">
-                <tr [pEditableRow]="movPrevControle">
-                    <td>{{movPrevControle.id}}</td>
-                    <td>{{movPrevControle.idItemMovimentacao}}</td>
-                    <td>{{movPrevControle.dataReferencia}}</td>
-                    <td>{{movPrevControle.tipoPrioridade}}</td>
-                    <td>{{movPrevControle.observacao}}</td>
+                <tr [pEditableRow]="MovimentacaoPrevista">
+                    <td>{{++id}}</td>
+                    <td><!--{{MovimentacaoPrevista.itemMovimentacao.descricao}}--></td>
+                    <td>{{MovimentacaoPrevista.dataReferencia | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{MovimentacaoPrevista.tipoPrioridade}}</td>
+                    <td>{{MovimentacaoPrevista.observacao}}</td>
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-inputMask mask="99/99/9999" #dataMovRealizada
-                                    [ngModel]="movPrevControle.dataVencimento | date: 'dd/MM/yyyy'"
+                                    [ngModel]="MovimentacaoPrevista.dataVencimento | date: 'dd/MM/yyyy'"
                                     placeholder="99/99/9999" slotChar="dd/MM/aaaa"></p-inputMask>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{movPrevControle.dataVencimento | date: 'dd/MM/yyyy'}}
+                                {{MovimentacaoPrevista.dataVencimento | date: 'dd/MM/yyyy'}}
                             </ng-template>
                         </p-cellEditor>
                     </td>
                     <td>
                         <p-cellEditor>
+                            <!--
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="arFormasPagamento" optionLabel="descricao" optionValue="id"
-                                    [(ngModel)]="movPrevControle.formaPagamento.id" [style]="{'width':'100%'}">
+                                    [(ngModel)]="MovimentacaoPrevista.formaPagamento.id" [style]="{'width':'100%'}">
                                 </p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{movPrevControle.formaPagamento.descricao}}
+                                {{MovimentacaoPrevista.formaPagamento.descricao}}
                             </ng-template>
+                            -->
                         </p-cellEditor>
                     </td>
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-inputNumber [(ngModel)]="movPrevControle.valor" inputId="locale-german"
+                                <p-inputNumber [(ngModel)]="MovimentacaoPrevista.valor" inputId="locale-german"
                                     mode="decimal" locale="de-DE" [minFractionDigits]="2">
                                 </p-inputNumber>
                                <!-- <input pInputText type="text" [(ngModel)]="movRealizada.valor"> -->
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{movPrevControle.valor | currency}}
+                                {{MovimentacaoPrevista.valor | currency}}
                             </ng-template>
                         </p-cellEditor>
                     </td>

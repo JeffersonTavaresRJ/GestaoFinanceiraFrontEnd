@@ -93,6 +93,7 @@ export class MovPrevistaListComponent implements OnInit {
   private movPrevistaList(){
     this.actResourceRoute.data.subscribe(
       (sucess:{resolveResources:MovimentacaoPrevista[]})=>{
+        debugger;
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
         this.arMovPrevistas=sucess.resolveResources;
         this.boLoading = false;
