@@ -9,6 +9,8 @@ export class MovPrevistaFormControlesResolver implements Resolve<MovimentacaoPre
   private movPrev: MovimentacaoPrevista;
   private item: number;
   private dataVencimento: Date;
+  dataIni: string;
+  dataFim: string;
   
   arMovimentacoesPrevistas:any[]=[];  
   
@@ -18,23 +20,28 @@ export class MovPrevistaFormControlesResolver implements Resolve<MovimentacaoPre
 
   resolve() {
     
-    //debugger;
+    debugger;
     const nav = this.router.getCurrentNavigation();
     this.movimentacaoPrevista = nav.extras.state.movPrevista;
-    
+
     if(this.movimentacaoPrevista.tipoRecorrencia=="P"){
       //parcelado..
       total = 1;
     }else{
       //mensal..
-      var total = 12 - this.movimentacaoPrevista.dataVencimento.getMonth();
+      var total = 12 - (this.movimentacaoPrevista.dataVencimento.getMonth()+1);
     }
 
     this.item=0;
     this.dataVencimento = this.movimentacaoPrevista.dataVencimento;
+    //limpeza do array..
+    this.arMovimentacoesPrevistas.length=0;
 
-    while(this.item <= total){        
-        this.dataVencimento.setMonth(this.dataVencimento.getMonth()+this.item);
+    while(this.item <= total){  
+       
+        if (this.item > 0){
+          this.dataVencimento.setMonth(this.dataVencimento.getMonth()+1);
+        }
                 
         this.movPrev = new MovimentacaoPrevista(); 
         this.movPrev.dataReferencia = new Date(this.dataVencimento.getFullYear(), 

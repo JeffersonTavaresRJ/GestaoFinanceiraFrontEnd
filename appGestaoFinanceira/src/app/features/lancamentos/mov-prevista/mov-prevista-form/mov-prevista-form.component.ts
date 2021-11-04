@@ -126,7 +126,7 @@ export class MovPrevistaFormComponent implements OnInit {
   gerarControles(){
     if (this.formGroup.get('tipoRecorrencia').value =="M" || 
         this.formGroup.get('tipoRecorrencia').value =="P"){
-     // debugger;
+      debugger;
 
       this.movimentacaoPrevista = new MovimentacaoPrevista();
       this.movimentacaoPrevista.itemMovimentacao = this.arItensMovimentacao.filter(i=>i.id==this.formGroup.get('idItemMovimentacao').value)[0];
@@ -136,7 +136,12 @@ export class MovPrevistaFormComponent implements OnInit {
       this.movimentacaoPrevista.valor = this.formGroup.get('valor').value;
       this.movimentacaoPrevista.formaPagamento = this.arFormasPagamento.filter(i=>i.id==this.formGroup.get('idFormaPagamento').value)[0];
       this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value; 
-      this.router.navigate(['/mov-prevista/controles/'],{state:{movPrevista:this.movimentacaoPrevista}});
+
+     this.router.navigate(['/mov-prevista/controles/'],{
+          queryParams: { dataIni: DateConvert.formatDateYYYYMMDD(this.dataIni, '-'), 
+                         dataFim: DateConvert.formatDateYYYYMMDD(this.dataFim, '-') }, 
+          state:{ movPrevista:this.movimentacaoPrevista }
+        });
     }
 }
 

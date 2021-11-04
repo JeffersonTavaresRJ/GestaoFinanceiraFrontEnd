@@ -1,6 +1,6 @@
 export class DateConvert{
 
-    static formatDate(date):string {
+    static formatDateDDMMYYYY(date, separador):string {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
@@ -11,10 +11,10 @@ export class DateConvert{
         if (day.length < 2) 
             day = '0' + day;
     
-        return [year, month, day].join('-');
+        return [day, month, year].join(separador);
     }
 
-    static formatDateDDMMYYYY(date):string {
+    static formatDateYYYYMMDD(date, separador):string {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
@@ -25,7 +25,7 @@ export class DateConvert{
         if (day.length < 2) 
             day = '0' + day;
     
-        return [day, month, year].join('-');
+        return [year, month, day].join(separador);
     }
    
 }

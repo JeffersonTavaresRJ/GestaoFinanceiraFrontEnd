@@ -109,6 +109,7 @@
                                 formControlName="tipoRecorrencia" placeholder="Selecione a Recorrência"
                                 [showClear]="true" [filter]="false" (keyup)="clearValidations()"
                                 emptyMessage="Recorrência não encontrada"
+                                [disabled]="!formGroup.valid"
                                 (click)="gerarControles()">
                             </p-dropdown>
                         </div>
@@ -121,17 +122,6 @@
             </div>
 
             <div class="row mt-3">
-                <div class="col-2">
-                    <div *ngIf="currentAction()=='new'">
-                        <div class="p-field" *ngIf="formGroup.get('tipoRecorrencia').value=='P'">
-                            <label for="minmax-buttons">Qtde parcelas:</label>
-                            <p-inputNumber formControlName="qtdeParcelas" mode="decimal" [showButtons]="true"
-                                inputId="minmax-buttons" [min]="1" [max]="24">
-                            </p-inputNumber>
-                        </div>
-                    </div>
-                </div>
-
                <div class="col-12 mt-4" style="text-align: right;" *ngIf="formGroup.get('tipoRecorrencia').value=='N'">
                     <a class="btn btn-dark me-3"
                         [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
@@ -140,12 +130,9 @@
                     <app-button-submmit-form [button-disabled]="!formGroup.valid"
                         button-path-ico="assets/icons/save-white-18dp.svg" button-title="Salvar">
                     </app-button-submmit-form>
-                </div>
-
-               
+                </div>               
             </div>
 
         </form>
-
     </div>
 </div>

@@ -92,7 +92,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
   carregarTable() {
     this.movRealizadaService.getByDataReferencia(this.idItemMovimentacao,
-      DateConvert.formatDate(this.dataReferencia)).subscribe(result => this.arMovRealizadas = result);
+      DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-')).subscribe(result => this.arMovRealizadas = result);
   }
 
   onRowEditInit(movRealizada: MovimentacaoRealizada) {

@@ -105,7 +105,7 @@ export class MovPrevistaListComponent implements OnInit {
     //debugger;
     this.dataIni = this.arDtRangeDataVenc[0];
     this.dataFim = this.arDtRangeDataVenc[1];
-    this.movPrevistaService.getByDataVencimento(DateConvert.formatDate(this.arDtRangeDataVenc[0]), DateConvert.formatDate(this.arDtRangeDataVenc[1]))
+    this.movPrevistaService.getByDataVencimento(DateConvert.formatDateYYYYMMDD(this.arDtRangeDataVenc[0], '-'), DateConvert.formatDateYYYYMMDD(this.arDtRangeDataVenc[1], '-'))
                            .subscribe( result=> this.arMovPrevistas = result);    
     }
 
@@ -116,7 +116,7 @@ export class MovPrevistaListComponent implements OnInit {
     
     eventDelete(event){
       if(event){
-        this.movPrevistaService.delete(this.idItemMovimentacao, DateConvert.formatDate(this.dataReferencia))
+        this.movPrevistaService.delete(this.idItemMovimentacao, DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-'))
             .subscribe(sucess=>{
                                  this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
                                  this.filtrarTablePorPeriodo()
