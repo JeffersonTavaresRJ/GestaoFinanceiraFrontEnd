@@ -34,7 +34,7 @@ export abstract class GenericResourceService<T extends Object>{
     }
 
     post(resource: T): Observable<any> {   
-       debugger;  
+       //debugger;  
        return this.http.post(this.getUrl(), resource)
         .pipe(catchError(this.handlerError)/*, 
               --comentado para ler o retorno da mensagem de sucesso da API..

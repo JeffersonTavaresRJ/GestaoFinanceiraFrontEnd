@@ -12,11 +12,14 @@ import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
 export class MovPrevistaFormControlesComponent implements OnInit {
 
   arMovPrevistaControles:MovimentacaoPrevista[];
+  movimentacaoPrevista: MovimentacaoPrevista;
+  movimentacaoPrevistaAux: MovimentacaoPrevista;
   arFormasPagamento:FormaPagamento[];
   arStDate:string[];
   dataIni:Date;
   dataFim:Date;
-  val:number;
+  nrTotalParcelas:number;
+  nrParcela:number;
 
   tipoRecorrencia:string;
   
@@ -44,14 +47,14 @@ export class MovPrevistaFormControlesComponent implements OnInit {
     this.movPrevistaControlesList();
   }
 
-  alterarParcelas(value){
-    console.log("Qtde Parcelas: " + value);
+  gerarRecorrencias(){ 
+    this.arMovPrevistaControles = MovimentacaoPrevista.gerarRecorrencias(this.arMovPrevistaControles[0], this.nrTotalParcelas-1);  
   }
 
   private movPrevistaControlesList(){
     this.activatedRouter.data.subscribe(
       (sucess:{resolveMovPrevControl:MovimentacaoPrevista[]})=>{
-        debugger;
+        //debugger;
         this.arMovPrevistaControles = sucess.resolveMovPrevControl;
         this.tipoRecorrencia = sucess.resolveMovPrevControl[0].tipoRecorrencia;
       }

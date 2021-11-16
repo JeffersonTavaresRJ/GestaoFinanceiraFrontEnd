@@ -7,10 +7,11 @@
                  header-button-label="+ Nova Previsão"
                 [header-button-link]="['/mov-prevista/new',dataIni | DateFormatToString, dataFim | DateFormatToString]">
             </app-header-page-title>
-            <div class="p-field col-1 p-md-1" *ngIf="tipoRecorrencia=='P'">
+            <div class="p-field col-1 p-md-3" *ngIf="tipoRecorrencia=='P'">
                 <label for="minmax-buttons">Parcelas:</label>
-                <p-inputNumber [readonly]="true" (onInput)="alterarParcelas($event.value)" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="2" [max]="24">
+                <p-inputNumber size="3" [(ngModel)]="nrTotalParcelas" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="2" [max]="24">
                 </p-inputNumber>
+                <button pButton pRipple type="button" icon="pi pi-bookmark" (click)="gerarRecorrencias()" class="p-button-rounded p-button-secondary"></button>
             </div>
             </div> 
             <div class="card-body">
