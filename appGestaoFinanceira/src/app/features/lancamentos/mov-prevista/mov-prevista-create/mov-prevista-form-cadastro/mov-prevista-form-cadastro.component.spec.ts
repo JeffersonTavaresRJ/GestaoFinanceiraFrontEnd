@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MovPrevistaFormComponent } from './mov-prevista-form.component';
+import { MovPrevistaFormComponent } from './mov-prevista-form-cadastro.component';
 
 describe('MovPrevistaFormComponent', () => {
   let component: MovPrevistaFormComponent;

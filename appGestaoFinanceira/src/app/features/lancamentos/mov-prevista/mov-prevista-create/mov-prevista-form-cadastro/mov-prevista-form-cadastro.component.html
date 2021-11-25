@@ -1,8 +1,7 @@
 <div class="card col-10 offset-1 mt-5">
     <div class="card-body">
-        <app-header-page-title [header-title]="stPageTitle"
-                               header-button-label=">> Voltar"
-                               [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+        <app-header-page-title [header-title]="stPageTitle" header-button-label=">> Voltar"
+            [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
         </app-header-page-title>
         <form [formGroup]="formGroup" (submit)="submmit()">
             <div class="row  mt-3">
@@ -28,8 +27,7 @@
                         <p-dropdown [options]="arItensMovimentacao" optionLabel="descricao" optionValue="id"
                             formControlName="idItemMovimentacao" placeholder="Selecione o Item" [virtualScroll]="true"
                             [itemSize]="5" [showClear]="true" [filter]="false" (keyup)="clearValidations()"
-                            emptyMessage="Item não encontrado"
-                            [disabled]="currentAction()=='edit'"
+                            emptyMessage="Item não encontrado" [disabled]="currentAction()=='edit'"
                             (onChange)="parseToNumber('idItemMovimentacao'); filtrarCategoriaPorItem()">
                         </p-dropdown>
                     </div>
@@ -108,9 +106,8 @@
                             <p-dropdown [options]="arTiposRecorrencia" optionLabel="Value" optionValue="Key"
                                 formControlName="tipoRecorrencia" placeholder="Selecione a Recorrência"
                                 [showClear]="true" [filter]="false" (keyup)="clearValidations()"
-                                emptyMessage="Recorrência não encontrada"
-                                [disabled]="!formGroup.valid"
-                                (click)="gerarControles()">
+                                emptyMessage="Recorrência não encontrada" [disabled]="!formGroup.valid"
+                                (onChange)="gerarRecorrencias()">
                             </p-dropdown>
                         </div>
                         <app-field-validation-form [form-control]="formGroup.get('tipoRecorrencia')">
@@ -122,7 +119,7 @@
             </div>
 
             <div class="row mt-3">
-               <div class="col-12 mt-4" style="text-align: right;" *ngIf="formGroup.get('tipoRecorrencia').value=='N'">
+                <div class="col-12 mt-4" style="text-align: right;" *ngIf="formGroup.get('tipoRecorrencia').value=='N'">
                     <a class="btn btn-dark me-3"
                         [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
                         Cancelar
@@ -130,9 +127,28 @@
                     <app-button-submmit-form [button-disabled]="!formGroup.valid"
                         button-path-ico="assets/icons/save-white-18dp.svg" button-title="Salvar">
                     </app-button-submmit-form>
-                </div>               
+                </div>
             </div>
 
         </form>
     </div>
+    <p-dialog [header]="headerRecorrencia" [(visible)]="displayModal" [modal]="true" [style]="{width: '80vw'}"
+        onHide="closeModal()" [resizable]="false" [maximizable]="true" appendTo="body">
+        <app-mov-prevista-form-controles [arMovPrevistas]="arMovimentacoesPrevistas"
+            (arMovPrevistasEditada)="eventOutPut($event)" [tipoRecorrencia]="formGroup.get('tipoRecorrencia').value">
+        </app-mov-prevista-form-controles>
+        <ng-template pTemplate="footer">
+            <div class="row">
+                <div class="col-6">
+                    Total: {{nrTotalValorPrevisto}}
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-dark">
+                        <img src="assets//icons//save-white-18dp.svg" class="v-middle" />
+                        <span class="v-middle">Salvar</span>
+                    </button>
+                </div> 
+            </div>                       
+        </ng-template>
+    </p-dialog>
 </div>

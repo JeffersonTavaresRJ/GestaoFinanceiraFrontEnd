@@ -13,18 +13,19 @@ import { PanelModule } from 'primeng/panel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {InputMaskModule} from 'primeng/inputmask';
+import {DialogModule} from 'primeng/dialog';
 import { CoreModule } from 'src/app/core/core.module';
 import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-prevista-list.component';
-import { MovPrevistaFormComponent } from './mov-prevista/mov-prevista-form/mov-prevista-form.component';
+import { MovPrevistaFormCadastroComponent } from './mov-prevista/mov-prevista-create/mov-prevista-form-cadastro/mov-prevista-form-cadastro.component';
 import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
-import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-form-controles/mov-prevista-form-controles.component';
+import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-create/mov-prevista-form-controles/mov-prevista-form-controles.component';
 
 
 
 @NgModule({
   declarations: [
     MovPrevistaListComponent,
-    MovPrevistaFormComponent,
+    MovPrevistaFormCadastroComponent,
     MovPrevistaQuitarFormComponent,
     MovPrevistaFormControlesComponent
   ],
@@ -44,7 +45,8 @@ import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-f
     PanelModule,
     InputNumberModule,
     InputTextareaModule,
-    InputMaskModule
+    InputMaskModule,
+    DialogModule
   ]
 })
 export class LancamentosModule { }

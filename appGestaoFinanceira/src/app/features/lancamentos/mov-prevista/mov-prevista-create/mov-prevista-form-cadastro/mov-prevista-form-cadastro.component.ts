@@ -4,43 +4,47 @@ import { Categoria } from 'src/app/features/cadastros-basicos/_models/categoria-
 import { ItemMovimentacao } from 'src/app/features/cadastros-basicos/_models/item-movimentacao-model';
 import { CategoriaService } from 'src/app/features/cadastros-basicos/_services/categoria-service';
 import { ItemMovimentacaoService } from 'src/app/features/cadastros-basicos/_services/item-movimentacao-service';
-import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
-import { MovPrevistaService } from '../../_services/mov-prevista-service';
-import { AlertMessageForm } from '../../../../shared/components/alert-form/alert-message-form';
+import { MovimentacaoPrevista } from '../../../_models/mov-prevista-model';
+import { MovPrevistaService } from '../../../_services/mov-prevista-service';
+import { AlertMessageForm } from '../../../../../shared/components/alert-form/alert-message-form';
 import { ActivatedRoute, Router } from '@angular/router';
 import { enumModel } from 'src/app/shared/_models/generic-enum-model';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
-import { DateConvert } from 'src/app/shared/functions/date-convert';
 
 @Component({
-  selector: 'app-mov-prevista-form',
-  templateUrl: './mov-prevista-form.component.html',
-  styleUrls: ['./mov-prevista-form.component.css']
+  selector: 'app-mov-prevista-form-cadastro',
+  templateUrl: './mov-prevista-form-cadastro.component.html',
+  styleUrls: ['./mov-prevista-form-cadastro.component.css']
 })
-export class MovPrevistaFormComponent implements OnInit {
+export class MovPrevistaFormCadastroComponent implements OnInit {
 
   stPageTitle: string;
-  arStDate:string[];
-  dataIni:Date;
-  dataFim:Date;
+  arStDate: string[];
+  dataIni: Date;
+  dataFim: Date;
+  displayModal: boolean;
+  headerRecorrencia: string;
+  nrTotalRecorrencias: number;
+  nrTotalValorPrevisto:number=0;
   formGroup: FormGroup;
   formBuilder: FormBuilder;
   activateRoute: ActivatedRoute;
   router: Router;
   movimentacaoPrevista: MovimentacaoPrevista;
-  itemMovimentacao:ItemMovimentacao = new ItemMovimentacao();
+  itemMovimentacao: ItemMovimentacao = new ItemMovimentacao();
   formaPagamento: FormaPagamento = new FormaPagamento();
-  variavel:any;
+
 
   arCategorias: Categoria[];
   arCategoriasAux: Categoria[];
-  arItensMovimentacao: ItemMovimentacao[]=[];
-  arItensMovimentacaoAux: ItemMovimentacao[]=[];
-  arFormasPagamento: FormaPagamento[]=[];
+  arItensMovimentacao: ItemMovimentacao[] = [];
+  arItensMovimentacaoAux: ItemMovimentacao[] = [];
+  arFormasPagamento: FormaPagamento[] = [];
+  arMovimentacoesPrevistas: MovimentacaoPrevista[] = [];
   arTiposPrioridade: enumModel[];
   arTiposRecorrencia: enumModel[];
-  arvalidationErrors: any[]=[];
+  arvalidationErrors: any[] = [];
 
   categoriaService: CategoriaService;
   itemMovimentacaoService: ItemMovimentacaoService;
@@ -54,9 +58,9 @@ export class MovPrevistaFormComponent implements OnInit {
     this.formaPagamentoService = injector.get(FormaPagamentoService);
     this.movimentacaoPrevistaService = injector.get(MovPrevistaService);
     this.alertMessageForm = injector.get(AlertMessageForm);
-    this.activateRoute =injector.get(ActivatedRoute);
-    this.formBuilder =injector.get(FormBuilder);   
-    this.router = injector.get(Router); 
+    this.activateRoute = injector.get(ActivatedRoute);
+    this.formBuilder = injector.get(FormBuilder);
+    this.router = injector.get(Router);
   }
 
 
@@ -68,11 +72,11 @@ export class MovPrevistaFormComponent implements OnInit {
     this.load();
 
     this.arStDate = this.activateRoute.snapshot.params.dataVencIni.split('-');
-    this.dataIni=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);
+    this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
     this.arStDate = this.activateRoute.snapshot.params.dataVencFim.split('-');
-    this.dataFim=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);
-   
-  }  
+    this.dataFim = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
+
+  }
 
   parseToNumber(propertyName: string) {
     this.formGroup.get(propertyName).setValue(Number(this.formGroup.get(propertyName).value));
@@ -80,10 +84,10 @@ export class MovPrevistaFormComponent implements OnInit {
 
   submmit() {
     debugger;
-    this.movimentacaoPrevista= MovimentacaoPrevista.fromJson(this.formGroup.value);
-    if(this.currentAction()=="new"){
+    this.movimentacaoPrevista = MovimentacaoPrevista.fromJson(this.formGroup.value);
+    if (this.currentAction() == "new") {
       this.create(this.movimentacaoPrevista)
-    }else if(this.currentAction()=="edit"){
+    } else if (this.currentAction() == "edit") {
       this.update(this.movimentacaoPrevista)
     }
   }
@@ -94,56 +98,91 @@ export class MovPrevistaFormComponent implements OnInit {
 
   errorsValidations(param: string): any[] {
     if (this.formGroup.valid && this.arvalidationErrors.length > 0) {
-        debugger;
-        return this.arvalidationErrors.filter(i => i.propertyName.toLowerCase() == param.toLowerCase());
+      debugger;
+      return this.arvalidationErrors.filter(i => i.propertyName.toLowerCase() == param.toLowerCase());
     }
   }
 
-  filtrarItemPorCategoria(){
+  filtrarItemPorCategoria() {
     this.arItensMovimentacao = this.arItensMovimentacaoAux;
     //debugger;
 
-    if(this.formGroup.get('idCategoria').value > 0){
-      this.arItensMovimentacao = this.arItensMovimentacao.filter(i=>i.categoria.id==this.formGroup.get('idCategoria').value);
-    
-      if(this.arItensMovimentacao.length==1){
+    if (this.formGroup.get('idCategoria').value > 0) {
+      this.arItensMovimentacao = this.arItensMovimentacao.filter(i => i.categoria.id == this.formGroup.get('idCategoria').value);
+
+      if (this.arItensMovimentacao.length == 1) {
         this.formGroup.get('idItemMovimentacao').setValue(this.arItensMovimentacao[0].id);
-      } 
-    }       
+      }
+    }
   }
 
-  filtrarCategoriaPorItem(){
+  filtrarCategoriaPorItem() {
     this.arCategorias = this.arCategoriasAux;
-    this.itemMovimentacao = this.arItensMovimentacao.filter(i=>i.id==this.formGroup.get('idItemMovimentacao').value)[0];
+    this.itemMovimentacao = this.arItensMovimentacao.filter(i => i.id == this.formGroup.get('idItemMovimentacao').value)[0];
     debugger;
 
-    if(this.formGroup.get('idItemMovimentacao').value > 0){
-      this.arCategorias = this.arCategorias.filter(c=>c.id==this.itemMovimentacao.categoria.id);
+    if (this.formGroup.get('idItemMovimentacao').value > 0) {
+      this.arCategorias = this.arCategorias.filter(c => c.id == this.itemMovimentacao.categoria.id);
       this.formGroup.get('idCategoria').setValue(this.arCategorias[0].id);
-    }    
+    }
   }
 
-  gerarControles(){
-    if (this.formGroup.get('tipoRecorrencia').value =="M" || 
-        this.formGroup.get('tipoRecorrencia').value =="P"){
+  gerarRecorrencias() {
+    if (this.formGroup.get('tipoRecorrencia').value == "M" ||
+      this.formGroup.get('tipoRecorrencia').value == "P") {
       debugger;
 
       this.movimentacaoPrevista = new MovimentacaoPrevista();
-      this.movimentacaoPrevista.itemMovimentacao = this.arItensMovimentacao.filter(i=>i.id==this.formGroup.get('idItemMovimentacao').value)[0];
+      this.movimentacaoPrevista.itemMovimentacao = this.arItensMovimentacao.filter(i => i.id == this.formGroup.get('idItemMovimentacao').value)[0];
       this.movimentacaoPrevista.tipoPrioridade = this.formGroup.get('tipoPrioridade').value;
       this.movimentacaoPrevista.observacao = this.formGroup.get('observacao').value;
       this.movimentacaoPrevista.dataVencimento = this.formGroup.get('dataVencimento').value;
       this.movimentacaoPrevista.valor = this.formGroup.get('valor').value;
-      this.movimentacaoPrevista.formaPagamento = this.arFormasPagamento.filter(i=>i.id==this.formGroup.get('idFormaPagamento').value)[0];
-      this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value; 
+      this.movimentacaoPrevista.formaPagamento = this.arFormasPagamento.filter(i => i.id == this.formGroup.get('idFormaPagamento').value)[0];
+      this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value;
 
-     this.router.navigate(['/mov-prevista/controles/'],{
-          queryParams: { dataIni: DateConvert.formatDateYYYYMMDD(this.dataIni, '-'), 
-                         dataFim: DateConvert.formatDateYYYYMMDD(this.dataFim, '-') }, 
-          state:{ movPrevista:this.movimentacaoPrevista }
-        });
+      if (this.movimentacaoPrevista.tipoRecorrencia == 'P') {
+        this.headerRecorrencia = "Recorrências em Parcelas"
+        this.nrTotalRecorrencias = 1;
+      } else {
+        this.headerRecorrencia = "Recorrência Mensal"
+        this.nrTotalRecorrencias = (12 - this.movimentacaoPrevista.dataVencimento.getMonth()) - 1;
+      }
+      this.arMovimentacoesPrevistas.length = 0;
+      this.arMovimentacoesPrevistas = MovimentacaoPrevista.gerarRecorrencias(this.movimentacaoPrevista, this.nrTotalRecorrencias);
+      this.totalizarValorPrevisto();
+      this.displayModal = true;
     }
-}
+  }
+
+  closeModal() {
+    this.displayModal = false;
+  }
+
+  currentAction(): string {
+    if (this.activateRoute.snapshot.url[1].path == 'new') {
+      this.stPageTitle = "Nova Movimentação Prevista";
+      return 'new'
+    } else if (this.activateRoute.snapshot.url[1].path == 'edit') {
+      this.stPageTitle = "Editar Movimentação Prevista";
+      return 'edit';
+    }
+  }
+
+  eventOutPut(event:MovimentacaoPrevista[]){
+    this.arMovimentacoesPrevistas = event.slice();
+    console.log(this.arMovimentacoesPrevistas);
+    this.totalizarValorPrevisto();
+  }
+
+  private totalizarValorPrevisto(){
+    var total=0;
+    debugger;
+    this.arMovimentacoesPrevistas.forEach(function(mp){
+      total+= mp.valor;
+    });
+    this.nrTotalValorPrevisto = total;
+  }
 
   private builderForm() {
     this.formGroup = this.formBuilder.group({
@@ -156,8 +195,8 @@ export class MovPrevistaFormComponent implements OnInit {
       valor: [null, Validators.required],
       status: [null],
       idFormaPagamento: [null, Validators.required],
-      tipoRecorrencia:['N'],
-      qtdeParcelas:[1]
+      tipoRecorrencia: ['N'],
+      qtdeParcelas: [1]
     });
   }
 
@@ -172,7 +211,7 @@ export class MovPrevistaFormComponent implements OnInit {
 
     this.itemMovimentacaoService.getAll().subscribe(
       (result) => {
-        this.arItensMovimentacao = result;        
+        this.arItensMovimentacao = result;
         this.arItensMovimentacao.filter(i => i.status == true);
         this.arItensMovimentacaoAux = this.arItensMovimentacao;
       }
@@ -202,7 +241,7 @@ export class MovPrevistaFormComponent implements OnInit {
   private load() {
     if (this.currentAction() == 'edit') {
       this.activateRoute.data.subscribe(
-        (sucess:{resolveMovPrev:MovimentacaoPrevista})=>{
+        (sucess: { resolveMovPrev: MovimentacaoPrevista }) => {
           //console.log(sucess);
           //o resolveMovPrev deve ser o mesmo nome na variável resolve da rota.. 
           this.formGroup.get('idCategoria').setValue(sucess.resolveMovPrev.itemMovimentacao.categoria.id);
@@ -218,16 +257,6 @@ export class MovPrevistaFormComponent implements OnInit {
       );
     }
   }
-
-  currentAction(): string {
-    if (this.activateRoute.snapshot.url[1].path == 'new') {
-        this.stPageTitle = "Nova Movimentação Prevista";
-        return 'new'
-    } else if (this.activateRoute.snapshot.url[1].path == 'edit') {
-        this.stPageTitle = "Editar Movimentação Prevista";
-        return 'edit';    
-    }
-}
 
   private create(movimentacaoPrevista: MovimentacaoPrevista) {
     this.movimentacaoPrevistaService.post(movimentacaoPrevista)
@@ -257,5 +286,5 @@ export class MovPrevistaFormComponent implements OnInit {
     }
   }
 
-  
+
 }

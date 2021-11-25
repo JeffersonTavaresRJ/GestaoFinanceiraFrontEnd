@@ -21,8 +21,8 @@ import { FormaPagamentoListComponent } from './features/cadastros-basicos/forma-
 import { ItemMovimentacaoListComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-list/item-movimentacao-list.component';
 import { ItemMovimentacaoFormComponent } from './features/cadastros-basicos/item-movimentacao/item-movimentacao-form/item-movimentacao-form.component';
 import { MovPrevistaListComponent } from './features/lancamentos/mov-prevista/mov-prevista-list/mov-prevista-list.component';
-import { MovPrevistaFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-form/mov-prevista-form.component';
-import { MovPrevistaFormControlesComponent } from './features/lancamentos/mov-prevista/mov-prevista-form-controles/mov-prevista-form-controles.component';
+import { MovPrevistaFormCadastroComponent } from './features/lancamentos/mov-prevista/mov-prevista-create/mov-prevista-form-cadastro/mov-prevista-form-cadastro.component';
+import { MovPrevistaFormControlesComponent } from './features/lancamentos/mov-prevista//mov-prevista-create/mov-prevista-form-controles/mov-prevista-form-controles.component';
 
 import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
@@ -91,14 +91,14 @@ const routes: Routes = [
     { path: 'mov-prevista/:dataVencIni/:dataVencFim', component: MovPrevistaListComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveResources: MovPrevistaListResolver}  },               
-    { path: 'mov-prevista/new/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
+    { path: 'mov-prevista/new/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard]  },
     { path: 'mov-prevista/controles', 
              component: MovPrevistaFormControlesComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrevControl: MovPrevistaFormControlesResolver}},
-    { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormComponent,
+    { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
     { path: 'mov-prevista/quitar/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,

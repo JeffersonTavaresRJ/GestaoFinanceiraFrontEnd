@@ -5,12 +5,14 @@ import { Movimentacao } from "./movimentacao";
 export class MovimentacaoPrevista extends Movimentacao{
     constructor(
      public formaPagamento: FormaPagamento=null,
+     public idFormaPagamento: number=null,
      public dataVencimento: Date=null,
      public valor: number=null,
      public status: string=null,
      public statusDescricao: string=null,
      public tipoRecorrencia: string=null,
-     public qtdeParcelas: string=null
+     public nrParcela: number=null,
+     public nrParcelaTotal: number=null
     ){ 
         super();
         this.itemMovimentacao = new ItemMovimentacao();
@@ -30,29 +32,33 @@ export class MovimentacaoPrevista extends Movimentacao{
         //debugger;
         while(item <= total){  
        
-            if (item > 0){
-                movimentacaoPrevista.dataVencimento.setMonth(movimentacaoPrevista.dataVencimento.getMonth()+1);
-            }
-                    
             this.movPrev = new MovimentacaoPrevista(); 
+            
             this.movPrev.dataReferencia = new Date(movimentacaoPrevista.dataVencimento.getFullYear(), 
-                                                   movimentacaoPrevista.dataVencimento.getMonth()+1,
+                                                   movimentacaoPrevista.dataVencimento.getMonth()+item+1,
                                                    0);
             this.movPrev.dataVencimento = new Date(movimentacaoPrevista.dataVencimento.getFullYear(), 
-                                                   movimentacaoPrevista.dataVencimento.getMonth(),
+                                                   movimentacaoPrevista.dataVencimento.getMonth()+item,
                                                    movimentacaoPrevista.dataVencimento.getDate());
             this.movPrev.formaPagamento = movimentacaoPrevista.formaPagamento;
+            this.movPrev.idFormaPagamento = movimentacaoPrevista.formaPagamento.id;
             this.movPrev.itemMovimentacao = movimentacaoPrevista.itemMovimentacao;
             this.movPrev.observacao = movimentacaoPrevista.observacao;
-            this.movPrev.qtdeParcelas = movimentacaoPrevista.qtdeParcelas;
             this.movPrev.status = movimentacaoPrevista.status;
             this.movPrev.statusDescricao = movimentacaoPrevista.statusDescricao;
             this.movPrev.tipoPrioridade = movimentacaoPrevista.tipoPrioridade;
             this.movPrev.tipoPrioridadeDescricao = movimentacaoPrevista.tipoPrioridadeDescricao;
             this.movPrev.tipoRecorrencia = movimentacaoPrevista.tipoRecorrencia;
             this.movPrev.valor = movimentacaoPrevista.valor;
+
+            if(movimentacaoPrevista.tipoRecorrencia=='P'){
+                this.movPrev.nrParcela = item+1;
+                this.movPrev.nrParcelaTotal = total;
+            }else{
+                this.movPrev.nrParcela = item+1;
+                this.movPrev.nrParcelaTotal = item+1;
+            }
             
-           // this.arMovimentacoesPrevistas.push(JSON.parse(JSON.stringify(this.movPrev)));
             this.arMovimentacoesPrevistas.push(this.movPrev);
     
             item++;
