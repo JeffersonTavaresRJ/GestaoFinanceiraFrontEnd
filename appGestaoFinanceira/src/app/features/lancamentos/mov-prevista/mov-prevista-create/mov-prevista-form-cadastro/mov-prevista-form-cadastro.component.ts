@@ -1,5 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
+
 import { Categoria } from 'src/app/features/cadastros-basicos/_models/categoria-model';
 import { ItemMovimentacao } from 'src/app/features/cadastros-basicos/_models/item-movimentacao-model';
 import { CategoriaService } from 'src/app/features/cadastros-basicos/_services/categoria-service';
@@ -15,7 +17,8 @@ import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_servi
 @Component({
   selector: 'app-mov-prevista-form-cadastro',
   templateUrl: './mov-prevista-form-cadastro.component.html',
-  styleUrls: ['./mov-prevista-form-cadastro.component.css']
+  styleUrls: ['./mov-prevista-form-cadastro.component.css'],
+  providers: [ConfirmationService]
 })
 export class MovPrevistaFormCadastroComponent implements OnInit {
 
@@ -24,9 +27,12 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   dataIni: Date;
   dataFim: Date;
   displayModal: boolean;
+  criticaNovaParcela: boolean;
   headerRecorrencia: string;
   nrTotalRecorrencias: number;
-  nrTotalValorPrevisto:number=0;
+  nrTotalRecorrenciasOld: number;
+  nrTotalValorPrevisto: number = 0;
+  nrDiferencaTotalValorPrevisto:number=0;
   formGroup: FormGroup;
   formBuilder: FormBuilder;
   activateRoute: ActivatedRoute;
@@ -50,9 +56,11 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   itemMovimentacaoService: ItemMovimentacaoService;
   formaPagamentoService: FormaPagamentoService;
   movimentacaoPrevistaService: MovPrevistaService;
+
   alertMessageForm: AlertMessageForm;
 
-  constructor(protected injector: Injector) {
+  constructor(private confirmationService: ConfirmationService,
+    protected injector: Injector) {
     this.categoriaService = injector.get(CategoriaService);
     this.itemMovimentacaoService = injector.get(ItemMovimentacaoService);
     this.formaPagamentoService = injector.get(FormaPagamentoService);
@@ -62,8 +70,6 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
     this.formBuilder = injector.get(FormBuilder);
     this.router = injector.get(Router);
   }
-
-
 
   ngOnInit(): void {
 
@@ -125,63 +131,6 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
       this.arCategorias = this.arCategorias.filter(c => c.id == this.itemMovimentacao.categoria.id);
       this.formGroup.get('idCategoria').setValue(this.arCategorias[0].id);
     }
-  }
-
-  gerarRecorrencias() {
-    if (this.formGroup.get('tipoRecorrencia').value == "M" ||
-      this.formGroup.get('tipoRecorrencia').value == "P") {
-      debugger;
-
-      this.movimentacaoPrevista = new MovimentacaoPrevista();
-      this.movimentacaoPrevista.itemMovimentacao = this.arItensMovimentacao.filter(i => i.id == this.formGroup.get('idItemMovimentacao').value)[0];
-      this.movimentacaoPrevista.tipoPrioridade = this.formGroup.get('tipoPrioridade').value;
-      this.movimentacaoPrevista.observacao = this.formGroup.get('observacao').value;
-      this.movimentacaoPrevista.dataVencimento = this.formGroup.get('dataVencimento').value;
-      this.movimentacaoPrevista.valor = this.formGroup.get('valor').value;
-      this.movimentacaoPrevista.formaPagamento = this.arFormasPagamento.filter(i => i.id == this.formGroup.get('idFormaPagamento').value)[0];
-      this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value;
-
-      if (this.movimentacaoPrevista.tipoRecorrencia == 'P') {
-        this.headerRecorrencia = "Recorrências em Parcelas"
-        this.nrTotalRecorrencias = 1;
-      } else {
-        this.headerRecorrencia = "Recorrência Mensal"
-        this.nrTotalRecorrencias = (12 - this.movimentacaoPrevista.dataVencimento.getMonth()) - 1;
-      }
-      this.arMovimentacoesPrevistas.length = 0;
-      this.arMovimentacoesPrevistas = MovimentacaoPrevista.gerarRecorrencias(this.movimentacaoPrevista, this.nrTotalRecorrencias);
-      this.totalizarValorPrevisto();
-      this.displayModal = true;
-    }
-  }
-
-  closeModal() {
-    this.displayModal = false;
-  }
-
-  currentAction(): string {
-    if (this.activateRoute.snapshot.url[1].path == 'new') {
-      this.stPageTitle = "Nova Movimentação Prevista";
-      return 'new'
-    } else if (this.activateRoute.snapshot.url[1].path == 'edit') {
-      this.stPageTitle = "Editar Movimentação Prevista";
-      return 'edit';
-    }
-  }
-
-  eventOutPut(event:MovimentacaoPrevista[]){
-    this.arMovimentacoesPrevistas = event.slice();
-    console.log(this.arMovimentacoesPrevistas);
-    this.totalizarValorPrevisto();
-  }
-
-  private totalizarValorPrevisto(){
-    var total=0;
-    debugger;
-    this.arMovimentacoesPrevistas.forEach(function(mp){
-      total+= mp.valor;
-    });
-    this.nrTotalValorPrevisto = total;
   }
 
   private builderForm() {
@@ -287,4 +236,101 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   }
 
 
+  /*========================================================
+                  FUNCTIONS PARA DIALOG
+  ========================================================*/
+  gerarRecorrencias() {
+    if (this.formGroup.get('tipoRecorrencia').value == "M" ||
+      this.formGroup.get('tipoRecorrencia').value == "P") {
+      debugger;
+
+      this.movimentacaoPrevista = new MovimentacaoPrevista();
+      this.movimentacaoPrevista.itemMovimentacao = this.arItensMovimentacao.filter(i => i.id == this.formGroup.get('idItemMovimentacao').value)[0];
+      this.movimentacaoPrevista.tipoPrioridade = this.formGroup.get('tipoPrioridade').value;
+      this.movimentacaoPrevista.observacao = this.formGroup.get('observacao').value;
+      this.movimentacaoPrevista.dataVencimento = this.formGroup.get('dataVencimento').value;
+      this.movimentacaoPrevista.valor = this.formGroup.get('valor').value;
+      this.movimentacaoPrevista.formaPagamento = this.arFormasPagamento.filter(i => i.id == this.formGroup.get('idFormaPagamento').value)[0];
+      this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value;
+
+      if (this.movimentacaoPrevista.tipoRecorrencia == 'P') {
+        this.headerRecorrencia = "Recorrências em Parcelas"
+        this.nrTotalRecorrencias = 2;
+        this.nrTotalRecorrenciasOld = 2;
+        this.criticaNovaParcela = false;  
+      } else {
+        this.headerRecorrencia = "Recorrência Mensal"
+        this.nrTotalRecorrencias = (12 - this.movimentacaoPrevista.dataVencimento.getMonth());
+      }      
+      this.carregarArrayMovPrevistas(this.nrTotalRecorrencias);
+    }
+  }
+
+  confirmarGeracaoParcelas() {
+    if (this.criticaNovaParcela) {
+      this.confirmationService.confirm({
+        message: 'Ao adicionar novas parcelas, qualquer edição será desfeita. Deseja Continuar?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
+        accept: () => {
+          this.criticaNovaParcela = false;
+          this.carregarArrayMovPrevistas(this.nrTotalRecorrencias);
+        },
+        reject: () => {
+          this.nrTotalRecorrencias = this.nrTotalRecorrenciasOld;
+          return false;
+        }
+      });
+    } else {
+      this.carregarArrayMovPrevistas(this.nrTotalRecorrencias);
+    }
+  }
+
+  carregarArrayMovPrevistas(nrTotal: number) {    
+    if((this.movimentacaoPrevista.valor/nrTotal) < 1){
+      this.alertMessageForm.showError("Valor da parcela é menor do que R$1,00. Operação cancelada", "Sr. Usuário");
+      return false;
+    }
+
+    this.arMovimentacoesPrevistas.length = 0;
+    this.nrTotalRecorrenciasOld = this.nrTotalRecorrencias;
+    
+    this.arMovimentacoesPrevistas = MovimentacaoPrevista.gerarRecorrencias(this.movimentacaoPrevista, nrTotal - 1);
+    this.totalizarValorPrevisto();
+    this.displayModal = true;   
+  }
+
+  closeModal() {
+    this.displayModal = false;     
+  }
+
+  currentAction(): string {
+    if (this.activateRoute.snapshot.url[1].path == 'new') {
+      this.stPageTitle = "Nova Movimentação Prevista";
+      return 'new'
+    } else if (this.activateRoute.snapshot.url[1].path == 'edit') {
+      this.stPageTitle = "Editar Movimentação Prevista";
+      return 'edit';
+    }
+  }
+
+  eventArMovPrevistasEdit(event: MovimentacaoPrevista[]) {
+    this.arMovimentacoesPrevistas = event.slice();
+    console.log(this.arMovimentacoesPrevistas);
+    this.totalizarValorPrevisto();
+  }
+
+  eventEdicaoParcela(event:boolean){
+    //se ocorreu a edição de qualquer parcela, emite mensagem de crítica..
+    this.criticaNovaParcela = event;
+  }
+
+  private totalizarValorPrevisto() {
+    var valorInicial = 0;
+    this.nrTotalValorPrevisto = this.arMovimentacoesPrevistas.reduce(function (valorTotal, mp) {
+      return valorTotal + mp.valor;
+    }, valorInicial);
+    this.nrDiferencaTotalValorPrevisto = this.movimentacaoPrevista.valor - this.nrTotalValorPrevisto;
+  }
 }

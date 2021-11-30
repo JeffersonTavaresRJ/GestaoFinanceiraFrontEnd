@@ -132,23 +132,42 @@
 
         </form>
     </div>
-    <p-dialog [header]="headerRecorrencia" [(visible)]="displayModal" [modal]="true" [style]="{width: '80vw'}"
+    <p-dialog [header]="headerRecorrencia" [(visible)]="displayModal" 
+              [modal]="true" [style]="{width: '80vw'}"
         onHide="closeModal()" [resizable]="false" [maximizable]="true" appendTo="body">
+
         <app-mov-prevista-form-controles [arMovPrevistas]="arMovimentacoesPrevistas"
-            (arMovPrevistasEditada)="eventOutPut($event)" [tipoRecorrencia]="formGroup.get('tipoRecorrencia').value">
+            (arMovPrevistasEditada)="eventArMovPrevistasEdit($event)" 
+            (edicaoParcela)="eventEdicaoParcela($event)"
+            [tipoRecorrencia]="formGroup.get('tipoRecorrencia').value">
         </app-mov-prevista-form-controles>
+
+        
         <ng-template pTemplate="footer">
             <div class="row">
-                <div class="col-6">
-                    Total: {{nrTotalValorPrevisto}}
+                <div class="col-2" style="text-align: left;">
+                    <strong>Total: {{nrTotalValorPrevisto | currency}}</strong>
+                    <p *ngIf="nrDiferencaTotalValorPrevisto != 0">
+                        <strong class="text-danger">Diferença: {{nrDiferencaTotalValorPrevisto | currency}}</strong>
+                    </p>
                 </div>
-                <div class="col-6">
+                <div class="col-8" style="text-align: center;">
+                    <div *ngIf="formGroup.get('tipoRecorrencia').value=='P'">                        
+                        <p-inputNumber [(ngModel)]="nrTotalRecorrencias" [showButtons]="true" mode="decimal" [min]="2"
+                            [max]="24" [size]="2" (onInput)="confirmarGeracaoParcelas()">
+                        </p-inputNumber>                        
+                    </div>
+                </div>
+                <div class="col-2">
                     <button class="btn btn-dark">
                         <img src="assets//icons//save-white-18dp.svg" class="v-middle" />
                         <span class="v-middle">Salvar</span>
                     </button>
-                </div> 
-            </div>                       
+                </div>
+            </div>
         </ng-template>
-    </p-dialog>
+    </p-dialog> 
+
+    <p-confirmDialog header="Confirmar geração de parcelas" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+      
 </div>

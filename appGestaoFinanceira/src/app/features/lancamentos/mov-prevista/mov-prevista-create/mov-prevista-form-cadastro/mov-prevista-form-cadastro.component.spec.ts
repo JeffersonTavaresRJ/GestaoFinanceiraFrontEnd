@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MovPrevistaFormComponent } from './mov-prevista-form-cadastro.component';
+import { MovPrevistaFormCadastroComponent } from './mov-prevista-form-cadastro.component';
 
 describe('MovPrevistaFormComponent', () => {
-  let component: MovPrevistaFormComponent;
-  let fixture: ComponentFixture<MovPrevistaFormComponent>;
+  let component: MovPrevistaFormCadastroComponent;
+  let fixture: ComponentFixture<MovPrevistaFormCadastroComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MovPrevistaFormComponent ]
+      declarations: [ MovPrevistaFormCadastroComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MovPrevistaFormComponent);
+    fixture = TestBed.createComponent(MovPrevistaFormCadastroComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

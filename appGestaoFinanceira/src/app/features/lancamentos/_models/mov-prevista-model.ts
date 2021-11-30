@@ -27,9 +27,11 @@ export class MovimentacaoPrevista extends Movimentacao{
     }
     
     static gerarRecorrencias(movimentacaoPrevista: MovimentacaoPrevista, total: number):MovimentacaoPrevista[]{
+                
         var item = 0;
+        var valorSum=0;
         this.arMovimentacoesPrevistas.length=0;
-        //debugger;
+        
         while(item <= total){  
        
             this.movPrev = new MovimentacaoPrevista(); 
@@ -40,6 +42,12 @@ export class MovimentacaoPrevista extends Movimentacao{
             this.movPrev.dataVencimento = new Date(movimentacaoPrevista.dataVencimento.getFullYear(), 
                                                    movimentacaoPrevista.dataVencimento.getMonth()+item,
                                                    movimentacaoPrevista.dataVencimento.getDate());
+
+            //tratamento para o mês de fevereiro, quando o dia for 29 (ano não bissexto),30 ou 31..
+            this.movPrev.dataVencimento = this.movPrev.dataVencimento > this.movPrev.dataReferencia ? 
+                                            this.movPrev.dataReferencia : this.movPrev.dataVencimento;
+            
+            
             this.movPrev.formaPagamento = movimentacaoPrevista.formaPagamento;
             this.movPrev.idFormaPagamento = movimentacaoPrevista.formaPagamento.id;
             this.movPrev.itemMovimentacao = movimentacaoPrevista.itemMovimentacao;
@@ -49,20 +57,28 @@ export class MovimentacaoPrevista extends Movimentacao{
             this.movPrev.tipoPrioridade = movimentacaoPrevista.tipoPrioridade;
             this.movPrev.tipoPrioridadeDescricao = movimentacaoPrevista.tipoPrioridadeDescricao;
             this.movPrev.tipoRecorrencia = movimentacaoPrevista.tipoRecorrencia;
-            this.movPrev.valor = movimentacaoPrevista.valor;
+            this.movPrev.nrParcela = item+1;
+            this.movPrev.nrParcelaTotal = total;
 
             if(movimentacaoPrevista.tipoRecorrencia=='P'){
-                this.movPrev.nrParcela = item+1;
-                this.movPrev.nrParcelaTotal = total;
+                this.movPrev.valor = movimentacaoPrevista.valor/(total+1);
+                this.movPrev.valor = Math.round(this.movPrev.valor * 100) / 100;                
+
+                if(item == total){
+                    //a última parcela será a diferença do valor total..
+                    this.movPrev.valor = Math.abs(movimentacaoPrevista.valor - valorSum);                    
+                }else{
+                    valorSum += this.movPrev.valor;
+                }   
+
             }else{
-                this.movPrev.nrParcela = item+1;
-                this.movPrev.nrParcelaTotal = item+1;
+                this.movPrev.valor = movimentacaoPrevista.valor;
             }
             
             this.arMovimentacoesPrevistas.push(this.movPrev);
     
             item++;
           };
-        return this.arMovimentacoesPrevistas;
+        return this.arMovimentacoesPrevistas.sort(function(a,b){return b.nrParcela-a.nrParcela});
     }
 }

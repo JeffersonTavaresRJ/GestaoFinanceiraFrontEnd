@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app.routing';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+
 import ptBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(ptBr);
@@ -13,7 +14,7 @@ import { BSHttpLoading } from './core/services/bs-http-loading';
 import { HttpRequestInterceptor } from './core/services/http-request-interceptor';
 
 //importação dos modulos do sistema..
-import{ CoreModule } from './core/core.module';
+import { CoreModule } from './core/core.module';
 import { CadastrosBasicosModule } from '../app/features/cadastros-basicos/cadastros-basicos.module';
 import { SecurityModule } from './features/security/security.module';
 import { DashboardsModule } from './features/dashboards/dashboards.module';
@@ -39,7 +40,7 @@ const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
     DashboardsModule,
     AppRoutingModule
   ],
-  providers: [ 
+  providers: [
     RxJS_Services,
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: 'pt' },/*Configuração da vírgula e ponto para a moeda Brasil*/
