@@ -3,6 +3,9 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { GenericResourceService } from 'src/app/shared/_services/generic-resource-service';
 import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
+import { MovimentacaoPrevistaCommandCreate } from './_commands/mov-prevista/mov-prevista-cmd-create';
+import { MovimentacaoPrevistaCommandDelete } from './_commands/mov-prevista/mov-prevista-cmd-delete';
+import { MovimentacaoPrevistaCommandUpdate } from './_commands/mov-prevista/mov-prevista-cmd-update';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +13,10 @@ import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevista> {
 
   constructor(private injector: Injector) {
-    super(injector, 'api/MovimentacaoPrevista');
+    super(injector, 'api/MovimentacaoPrevista', 
+          MovimentacaoPrevistaCommandCreate.convertModelToCommand,
+          MovimentacaoPrevistaCommandUpdate.convertModelToCommand,
+          MovimentacaoPrevistaCommandDelete.convertModelToCommand);
   }
 
   getByKey(idItemMovimentacao: number, dataReferencia: string): Observable<MovimentacaoPrevista> {

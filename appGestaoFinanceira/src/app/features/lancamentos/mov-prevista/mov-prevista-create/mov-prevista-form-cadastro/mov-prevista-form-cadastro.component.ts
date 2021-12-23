@@ -14,6 +14,7 @@ import { enumModel } from 'src/app/shared/_models/generic-enum-model';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
 
+
 @Component({
   selector: 'app-mov-prevista-form-cadastro',
   templateUrl: './mov-prevista-form-cadastro.component.html',
@@ -27,6 +28,7 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   dataIni: Date;
   dataFim: Date;
   displayModal: boolean;
+  displayErrors: boolean;
   criticaNovaParcela: boolean;
   headerRecorrencia: string;
   nrTotalRecorrencias: number;
@@ -91,6 +93,11 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   submmit() {
     debugger;
     this.movimentacaoPrevista = MovimentacaoPrevista.fromJson(this.formGroup.value);
+    this.movimentacaoPrevista.itemMovimentacao.id = this.formGroup.get('idItemMovimentacao').value;
+    this.movimentacaoPrevista.formaPagamento.id = this.formGroup.get('idFormaPagamento').value;
+    this.movimentacaoPrevista.nrParcela = 1;
+    this.movimentacaoPrevista.nrParcelaTotal = 1;
+    
     if (this.currentAction() == "new") {
       this.create(this.movimentacaoPrevista)
     } else if (this.currentAction() == "edit") {
@@ -100,6 +107,7 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
 
   clearValidations() {
     this.arvalidationErrors = [];
+    this.displayErrors = false;
   }
 
   errorsValidations(param: string): any[] {
@@ -191,7 +199,7 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
     if (this.currentAction() == 'edit') {
       this.activateRoute.data.subscribe(
         (sucess: { resolveMovPrev: MovimentacaoPrevista }) => {
-          //console.log(sucess);
+          console.log(sucess);
           //o resolveMovPrev deve ser o mesmo nome na variável resolve da rota.. 
           this.formGroup.get('idCategoria').setValue(sucess.resolveMovPrev.itemMovimentacao.categoria.id);
           this.formGroup.get('idItemMovimentacao').setValue(sucess.resolveMovPrev.itemMovimentacao.id);
@@ -208,7 +216,8 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   }
 
   private create(movimentacaoPrevista: MovimentacaoPrevista) {
-    this.movimentacaoPrevistaService.post(movimentacaoPrevista)
+    //classe colocada entre colchetes para ser considerada como array de 01 elemento..
+    this.movimentacaoPrevistaService.postArray( [movimentacaoPrevista] )
       .subscribe(
         sucess => {
           this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
@@ -218,6 +227,7 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   }
 
   private update(movimentacaoPrevista: MovimentacaoPrevista) {
+    debugger;
     this.movimentacaoPrevistaService.put(movimentacaoPrevista)
       .subscribe(
         sucess => {
@@ -232,6 +242,7 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
     if (e.status == 400) {
       //validações da API (BadRequest) 
       this.arvalidationErrors = e.error;
+      this.displayErrors = true;
     }
   }
 
@@ -254,12 +265,12 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
       this.movimentacaoPrevista.tipoRecorrencia = this.formGroup.get('tipoRecorrencia').value;
 
       if (this.movimentacaoPrevista.tipoRecorrencia == 'P') {
-        this.headerRecorrencia = "Recorrências em Parcelas"
+        this.headerRecorrencia = "Novas Movimentações Previstas (Recorrência Parcelada)"
         this.nrTotalRecorrencias = 2;
         this.nrTotalRecorrenciasOld = 2;
         this.criticaNovaParcela = false;  
       } else {
-        this.headerRecorrencia = "Recorrência Mensal"
+        this.headerRecorrencia = "Novas Movimentações Previstas (Recorrência Mensal)"
         this.nrTotalRecorrencias = (12 - this.movimentacaoPrevista.dataVencimento.getMonth());
       }      
       this.carregarArrayMovPrevistas(this.nrTotalRecorrencias);
@@ -324,6 +335,13 @@ export class MovPrevistaFormCadastroComponent implements OnInit {
   eventEdicaoParcela(event:boolean){
     //se ocorreu a edição de qualquer parcela, emite mensagem de crítica..
     this.criticaNovaParcela = event;
+  }
+
+  createArray(movPrevistas: MovimentacaoPrevista[]){
+    this.movimentacaoPrevistaService.postArray(movPrevistas).subscribe(
+      sucess=>{this.alertMessageForm.showSuccess(sucess.message, "Sr. Usuário")},
+      error=>{this.actionForError(error);}
+    );
   }
 
   private totalizarValorPrevisto() {

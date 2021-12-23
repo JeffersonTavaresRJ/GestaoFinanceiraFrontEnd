@@ -3,13 +3,19 @@ import { GenericResourceService } from "src/app/shared/_services/generic-resourc
 import { Categoria } from "../_models/categoria-model";
 import { catchError, map } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { CategoriaCommandCreate } from "./commands/categoria/categoria-cmd-create";
+import { CategoriaCommandUpdate } from "./commands/categoria/categoria-cmd-update";
+import { CategoriaCommandDelete } from "./commands/categoria/categoria-cmd-delete";
 
 @Injectable({
     providedIn: 'root'
   })
 export class CategoriaService extends GenericResourceService<Categoria>{
     constructor(private injector: Injector){
-        super(injector, 'api/Categoria');        
+        super(injector, 'api/Categoria',
+        CategoriaCommandCreate.convertModelToCommand,
+        CategoriaCommandUpdate.convertModelToCommand,
+        CategoriaCommandDelete.convertModelToCommand);        
     }   
 
     listarTipos(): Observable<any[]>{ 

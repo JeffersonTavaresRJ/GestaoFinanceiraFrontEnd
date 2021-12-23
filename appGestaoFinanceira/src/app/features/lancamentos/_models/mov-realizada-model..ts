@@ -18,19 +18,4 @@ export class MovimentacaoRealizada extends Movimentacao{
   static fromJson(jsonData: any): MovimentacaoRealizada {
     return Object.assign(new MovimentacaoRealizada(), jsonData);
   }
-
-  static fromPut(movRealizada: MovimentacaoRealizada):any{
-    //debugger;
-    return {
-      idItemMovimentacao: movRealizada.itemMovimentacao.id,
-      dataReferencia: movRealizada.dataReferencia,
-      tipoPrioridade: movRealizada.tipoPrioridade,
-      observacao: movRealizada.observacao,
-      id: movRealizada.id,
-      dataMovimentacaoRealizada: movRealizada.dataMovimentacaoRealizada,
-      valor: movRealizada.valor,
-      idFormaPagamento: movRealizada.formaPagamento.id,
-      idConta: movRealizada.conta.id
-    };
-  }
 }

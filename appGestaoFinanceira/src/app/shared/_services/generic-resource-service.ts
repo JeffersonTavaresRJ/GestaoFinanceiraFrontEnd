@@ -3,18 +3,27 @@ import { Injector } from '@angular/core';
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { environment } from 'src/environments/environment';
+import { GenericCommand } from './commands/generic-cmd';
 
 export abstract class GenericResourceService<T extends Object>{
 
     private apiName: string;
     private apiOption: string='';
+    private arcommandCreate: GenericCommand[]=[];
     protected http: HttpClient;
     protected httpHeaders!: HttpHeaders;
     protected idUsuario!: string;
 
-    constructor(injector: Injector, apiName:string) {
+    constructor(injector: Injector, 
+                apiName:string,
+                //passando método como parâmetro..
+                protected  convertModelToCmdCreate: (model: T)=>GenericCommand,
+                protected  convertModelToCmdUpdate: (model: T)=>GenericCommand,
+                protected  convertModelToCmdDelete: (model: T)=>GenericCommand) 
+    {
         this.http = injector.get(HttpClient);
         this.apiName = apiName;
+
         if(window.localStorage.getItem(environment.keyUser)!=null){
             var user = window.localStorage.getItem(environment.keyUser)||'';
             if (user != ''){
@@ -34,27 +43,52 @@ export abstract class GenericResourceService<T extends Object>{
     }
 
     post(resource: T): Observable<any> {   
-       //debugger;  
-       return this.http.post(this.getUrl(), resource)
+       debugger;
+       var command = this.convertModelToCmdCreate(resource);
+       return this.http.post(this.getUrl(), command)
         .pipe(catchError(this.handlerError)/*, 
               --comentado para ler o retorno da mensagem de sucesso da API..
               map(this.jsonDataToResource.bind(this))*/);
     }
 
+    postArray(resources: T[]): Observable<any> {   
+        debugger;  
+
+        resources.forEach(element=>{
+            this.arcommandCreate.push(this.convertModelToCmdCreate(element));
+        });
+
+        return this.http.post(this.getUrl(), this.arcommandCreate)
+         .pipe(catchError(this.handlerError)/*, 
+               --comentado para ler o retorno da mensagem de sucesso da API..
+               map(this.jsonDataToResource.bind(this))*/);
+    }
+
     put(resource: T): Observable<any> {
       debugger;  
-      return this.http.put(this.getUrl(), resource)
+      var command = this.convertModelToCmdUpdate(resource);
+      return this.http.put(this.getUrl(), command)
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
               map(()=>resource)*/);
     }
 
+    deleteByKey(resource: T): Observable<any> {
+        debugger;  
+        var command = this.convertModelToCmdDelete(resource);
+        return this.http.delete(`${this.getUrl()}/${command}`)
+          .pipe(catchError(this.handlerError)/*,
+                --comentado para ler o retorno da mensagem de sucesso da API..
+                map(()=>resource)*/);
+      }
+
     deleteById(id: number): Observable<any> {
+        debugger;  
         return this.http.delete(`${this.getUrl()}/${id}`)
           .pipe(catchError(this.handlerError)/*,
                 --comentado para ler o retorno da mensagem de sucesso da API..
                 map(()=>null)*/);
-      }
+    }
   
     getById(id: number): Observable<T> {
          this.setApiOption('/GetId');

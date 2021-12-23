@@ -56,12 +56,11 @@ export class MovimentacaoPrevista extends Movimentacao{
             this.movPrev.statusDescricao = movimentacaoPrevista.statusDescricao;
             this.movPrev.tipoPrioridade = movimentacaoPrevista.tipoPrioridade;
             this.movPrev.tipoPrioridadeDescricao = movimentacaoPrevista.tipoPrioridadeDescricao;
-            this.movPrev.tipoRecorrencia = movimentacaoPrevista.tipoRecorrencia;
-            this.movPrev.nrParcela = item+1;
-            this.movPrev.nrParcelaTotal = total;
+            this.movPrev.tipoRecorrencia = movimentacaoPrevista.tipoRecorrencia;            
 
             if(movimentacaoPrevista.tipoRecorrencia=='P'){
-                this.movPrev.valor = movimentacaoPrevista.valor/(total+1);
+                //Recorrência Parcelada..
+                this.movPrev.valor = movimentacaoPrevista.valor/(total);
                 this.movPrev.valor = Math.round(this.movPrev.valor * 100) / 100;                
 
                 if(item == total){
@@ -69,16 +68,22 @@ export class MovimentacaoPrevista extends Movimentacao{
                     this.movPrev.valor = Math.abs(movimentacaoPrevista.valor - valorSum);                    
                 }else{
                     valorSum += this.movPrev.valor;
-                }   
+                }
+                
+                this.movPrev.nrParcela = item+1;
+                this.movPrev.nrParcelaTotal = total;
 
             }else{
+                //Recorrência Mensal..
                 this.movPrev.valor = movimentacaoPrevista.valor;
+                this.movPrev.nrParcela = 1;
+                this.movPrev.nrParcelaTotal = 1;
             }
             
             this.arMovimentacoesPrevistas.push(this.movPrev);
     
             item++;
           };
-        return this.arMovimentacoesPrevistas.sort(function(a,b){return b.nrParcela-a.nrParcela});
+        return this.arMovimentacoesPrevistas.sort(function(a,b){return b.dataReferencia.getMonth()-a.dataReferencia.getMonth()});
     }
 }

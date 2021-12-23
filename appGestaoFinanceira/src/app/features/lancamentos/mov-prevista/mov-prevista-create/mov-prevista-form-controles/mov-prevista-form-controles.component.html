@@ -1,4 +1,4 @@
-<p-table [value]="arMovPrevistas" dataKey="nrParcela" editMode="row" responsiveLayout="scroll">
+<p-table [value]="arMovPrevistas" dataKey="dataReferencia" editMode="row" responsiveLayout="scroll">
     <ng-template pTemplate="header">
         <tr>
             <th>Item de Movimentação</th>
@@ -16,7 +16,7 @@
                         {{movPrevista.itemMovimentacao.descricao}}
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{movPrevista.itemMovimentacao.descricao}}
+                        {{movPrevista.itemMovimentacao.descricao}}                        
                     </ng-template>
                 </p-cellEditor>
             </td>

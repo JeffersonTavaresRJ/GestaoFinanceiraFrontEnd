@@ -1,4 +1,5 @@
 <div class="card col-10 offset-1 mt-5">
+
     <div class="card-body">
         <app-header-page-title [header-title]="stPageTitle" header-button-label=">> Voltar"
             [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
@@ -15,11 +16,7 @@
                             [disabled]="currentAction()=='edit'"
                             (onChange)="parseToNumber('idCategoria'); filtrarItemPorCategoria()">
                         </p-dropdown>
-                    </div>
-                    <app-field-validation-form [form-control]="formGroup.get('idItemMovimentacao')">
-                    </app-field-validation-form>
-                    <app-field-server-errors-form [server-errors]="errorsValidations('idItemMovimentacao')">
-                    </app-field-server-errors-form>
+                    </div>                    
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
@@ -99,6 +96,7 @@
                     <app-field-server-errors-form [server-errors]="errorsValidations('movimentacao.observacao')">
                     </app-field-server-errors-form>
                 </div>
+
                 <div class="p-fluid col-4">
                     <div *ngIf="currentAction()=='new'">
                         <div class="p-field">
@@ -132,6 +130,7 @@
 
         </form>
     </div>
+
     <p-dialog [header]="headerRecorrencia" [(visible)]="displayModal" 
               [modal]="true" [style]="{width: '80vw'}"
         onHide="closeModal()" [resizable]="false" [maximizable]="true" appendTo="body">
@@ -146,10 +145,12 @@
         <ng-template pTemplate="footer">
             <div class="row">
                 <div class="col-2" style="text-align: left;">
-                    <strong>Total: {{nrTotalValorPrevisto | currency}}</strong>
-                    <p *ngIf="nrDiferencaTotalValorPrevisto != 0">
-                        <strong class="text-danger">Diferença: {{nrDiferencaTotalValorPrevisto | currency}}</strong>
-                    </p>
+                    <div *ngIf="formGroup.get('tipoRecorrencia').value=='P'">
+                        <strong>Total: {{nrTotalValorPrevisto | currency}}</strong>
+                        <p *ngIf="nrDiferencaTotalValorPrevisto != 0">
+                           <strong class="text-danger">Diferença: {{nrDiferencaTotalValorPrevisto | currency}}</strong>
+                        </p>
+                    </div>                    
                 </div>
                 <div class="col-8" style="text-align: center;">
                     <div *ngIf="formGroup.get('tipoRecorrencia').value=='P'">                        
@@ -159,7 +160,7 @@
                     </div>
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-dark">
+                    <button class="btn btn-dark" (click)="createArray(arMovimentacoesPrevistas)">
                         <img src="assets//icons//save-white-18dp.svg" class="v-middle" />
                         <span class="v-middle">Salvar</span>
                     </button>
@@ -167,6 +168,25 @@
             </div>
         </ng-template>
     </p-dialog> 
+
+    <p-dialog [modal]="true" [(visible)]="displayErrors" [style]="{width: '50vw'}">
+        <ng-template pTemplate="header">
+            <div style="text-align: left;">
+                <img class="logo" src="assets\icons\report_problem_black_24dp.svg" width="55" height="30">
+                <strong>Erros de Validação</strong>
+            </div>            
+        </ng-template>
+
+        <ul>
+            <li *ngFor="let error of arvalidationErrors" class="text-danger">
+                <strong>{{ error.errors }}</strong>
+            </li>
+        </ul>
+        
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="displayErrors=false" label="Ok" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-dialog>
 
     <p-confirmDialog header="Confirmar geração de parcelas" icon="pi pi-exclamation-triangle"></p-confirmDialog>
       
