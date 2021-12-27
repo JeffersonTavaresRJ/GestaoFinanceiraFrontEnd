@@ -1,3 +1,4 @@
+import { Observable, Observer } from 'rxjs';
 import {FormaPagamento} from '../../cadastros-basicos/_models/forma-pagamento';
 import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
 import { Movimentacao } from "./movimentacao";
@@ -26,13 +27,13 @@ export class MovimentacaoPrevista extends Movimentacao{
         return Object.assign(new MovimentacaoPrevista(), jsonData);
     }
     
-    static gerarRecorrencias(movimentacaoPrevista: MovimentacaoPrevista, total: number):MovimentacaoPrevista[]{
-                
+    static gerarRecorrencias(movimentacaoPrevista: MovimentacaoPrevista, total: number):Observable<MovimentacaoPrevista[]>{
+        //debugger;
         var item = 0;
         var valorSum=0;
         this.arMovimentacoesPrevistas.length=0;
         
-        while(item <= total){  
+        while(item < total){  
        
             this.movPrev = new MovimentacaoPrevista(); 
             
@@ -60,18 +61,17 @@ export class MovimentacaoPrevista extends Movimentacao{
 
             if(movimentacaoPrevista.tipoRecorrencia=='P'){
                 //Recorrência Parcelada..
-                this.movPrev.valor = movimentacaoPrevista.valor/(total);
-                this.movPrev.valor = Math.round(this.movPrev.valor * 100) / 100;                
-
-                if(item == total){
-                    //a última parcela será a diferença do valor total..
-                    this.movPrev.valor = Math.abs(movimentacaoPrevista.valor - valorSum);                    
-                }else{
-                    valorSum += this.movPrev.valor;
-                }
-                
                 this.movPrev.nrParcela = item+1;
                 this.movPrev.nrParcelaTotal = total;
+
+                if(this.movPrev.nrParcela == this.movPrev.nrParcelaTotal){
+                    debugger;
+                    //a última parcela será a diferença do valor total..                    
+                    this.movPrev.valor= Number((movimentacaoPrevista.valor - valorSum).toFixed(2));                    
+                }else{
+                    this.movPrev.valor = Number((movimentacaoPrevista.valor/(total)).toFixed(2));
+                    valorSum += this.movPrev.valor;
+                }
 
             }else{
                 //Recorrência Mensal..
@@ -84,6 +84,14 @@ export class MovimentacaoPrevista extends Movimentacao{
     
             item++;
           };
-        return this.arMovimentacoesPrevistas.sort(function(a,b){return b.dataReferencia.getMonth()-a.dataReferencia.getMonth()});
+          //ordenação por YYYYMM numérico..
+          this.arMovimentacoesPrevistas.sort(function(a,b){return (((b.dataReferencia.getFullYear()*100)+b.dataReferencia.getMonth())-
+            ((a.dataReferencia.getFullYear()*100)+a.dataReferencia.getMonth()));
+        });
+        
+        return new Observable(o=>{
+            o.next(this.arMovimentacoesPrevistas)
+            o.complete();            
+        });        
     }
 }

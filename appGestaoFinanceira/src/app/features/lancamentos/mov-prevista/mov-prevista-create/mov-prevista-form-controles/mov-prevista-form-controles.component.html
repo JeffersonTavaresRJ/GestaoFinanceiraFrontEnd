@@ -1,74 +1,132 @@
-<p-table [value]="arMovPrevistas" dataKey="dataReferencia" editMode="row" responsiveLayout="scroll">
+<!--TABELA DE RECORRÊNCIAS-->
+<p-dialog [header]="headerDialog" [(visible)]="displayModal" [modal]="true" [style]="{width: '80vw'}"
+    onHide="closeModal()" [resizable]="false" [maximizable]="true" appendTo="body">
+    
+    <p-table [value]="arMovPrevistas" dataKey="dataReferencia" editMode="row" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Item de Movimentação</th>
+                <th>Forma de Pagamento</th>
+                <th>Data de Vencimento</th>
+                <th>Valor</th>
+                <th style="width:8rem"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-movPrevista let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="movPrevista">
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            {{movPrevista.itemMovimentacao.descricao}}
+                            <p style="font-size: small;" *ngIf="movPrevista.nrParcelaTotal > 1">Parcela: ({{movPrevista.nrParcela}}/{{movPrevista.nrParcelaTotal}})</p>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{movPrevista.itemMovimentacao.descricao}}
+                            <p style="font-size: small;" *ngIf="movPrevista.nrParcelaTotal > 1">Parcela: ({{movPrevista.nrParcela}}/{{movPrevista.nrParcelaTotal}})</p>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-dropdown [options]="arFormasPagamento" optionLabel="descricao" optionValue="id"
+                                [(ngModel)]="movPrevista.idFormaPagamento" [style]="{'width':'100%'}"
+                                emptyMessage="Forma de Pagamento não encontrada">
+                            </p-dropdown>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{movPrevista.formaPagamento.descricao}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputMask [(ngModel)]="arStDataVencimento[ri]" mask="99/99/9999" slotChar=" ">
+                            </p-inputMask>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{movPrevista.dataVencimento | date: 'dd/MM/yyyy'}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber [(ngModel)]="arStValor[ri]" inputId="locale-german" mode="decimal"
+                                locale="de-DE" [minFractionDigits]="2">
+                            </p-inputNumber>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{movPrevista.valor | currency}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <td style="text-align:center">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        (click)="onRowEditInit(movPrevista, ri)" class="p-button-rounded p-button-text"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                        (click)="onRowEditSave(movPrevista, ri)"
+                        class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                        (click)="onRowEditCancel(movPrevista, ri)"
+                        class="p-button-rounded p-button-text p-button-danger"></button>
+                </td>
+            </tr>
+        </ng-template>        
+    </p-table>
+
+    <ng-template pTemplate="footer">
+        <div class="row">
+            <div class="col-2" style="text-align: left;">
+                <div *ngIf="movimentacaoPrevista.tipoRecorrencia=='P'">
+                    <strong>Total: {{nrTotalValorParcelado | currency}}</strong>
+                    <p *ngIf="nrDiferValorParcelado != 0">
+                        <strong class="text-danger">Diferença: {{nrDiferValorParcelado | currency }}</strong>
+                    </p>
+                </div>
+            </div>
+            <div class="col-8" style="text-align: center;">
+                <div *ngIf="movimentacaoPrevista.tipoRecorrencia=='P'">
+                    <p-inputNumber [(ngModel)]="nrTotalRecorrencias" [showButtons]="true" mode="decimal" [min]="2"
+                        [max]="24" [size]="2" (onInput)="confirmarGeracaoParcelas()">
+                    </p-inputNumber>
+                </div>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-dark" (click)="post(arMovPrevistas)">
+                    <img src="assets//icons//save-white-18dp.svg" class="v-middle" />
+                    <span class="v-middle">Salvar</span>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<!--DIALOG DE ERROS-->
+<p-dialog [modal]="true" [(visible)]="displayError" [style]="{width: '50vw'}">
     <ng-template pTemplate="header">
-        <tr>
-            <th>Item de Movimentação</th>
-            <th>Forma de Pagamento</th>
-            <th>Data de Vencimento</th>
-            <th>Valor</th>
-            <th style="width:8rem"></th>
-        </tr>
+        <div style="text-align: left;">
+            <img class="logo" src="assets\icons\report_problem_black_24dp.svg" width="55" height="30">
+            <strong>Erros de Validação</strong>
+        </div>
     </ng-template>
-    <ng-template pTemplate="body" let-movPrevista let-editing="editing" let-ri="rowIndex">
-        <tr [pEditableRow]="movPrevista">
-            <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        {{movPrevista.itemMovimentacao.descricao}}
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{movPrevista.itemMovimentacao.descricao}}                        
-                    </ng-template>
-                </p-cellEditor>
-            </td>
 
-            <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <p-dropdown [options]="arFormasPagamento" optionLabel="descricao" optionValue="id"
-                            [(ngModel)]="movPrevista.idFormaPagamento" [style]="{'width':'100%'}"
-                            emptyMessage="Forma de Pagamento não encontrada">
-                        </p-dropdown>
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{movPrevista.formaPagamento.descricao}}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
+    <ul>
+        <li *ngFor="let error of arvalidationErrors" class="text-danger">
+            <strong>{{ error.errors }}</strong>
+        </li>
+    </ul>
 
-            <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <p-inputMask [(ngModel)]="stDataVencimento[ri]" mask="99/99/9999" slotChar=" "></p-inputMask>
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{movPrevista.dataVencimento | date: 'dd/MM/yyyy'}}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
-
-            <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <p-inputNumber [(ngModel)]="stValor[ri]" inputId="locale-german" mode="decimal" locale="de-DE"
-                            [minFractionDigits]="2">
-                        </p-inputNumber>
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{movPrevista.valor | currency}}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
-
-            <td style="text-align:center">
-                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                    (click)="onRowEditInit(movPrevista, ri)" class="p-button-rounded p-button-text"></button>
-                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                    (click)="onRowEditSave(movPrevista, ri)"
-                    class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
-                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                    (click)="onRowEditCancel(movPrevista, ri)"
-                    class="p-button-rounded p-button-text p-button-danger"></button>
-            </td>
-        </tr>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="clearValidations()" label="Ok" styleClass="p-button-text"></p-button>
     </ng-template>
-</p-table>
+</p-dialog>
+
+<!--CONFIRM DIALOG PARCELAS EDITADAS-->
+<p-confirmDialog header="Confirmar geração de parcelas" icon="pi pi-exclamation-triangle">
+</p-confirmDialog>

@@ -1,9 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
 import { MovimentacaoPrevista } from '../../../_models/mov-prevista-model';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
+import { ConfirmationService } from 'primeng/api';
+import { MovPrevistaService } from '../../../_services/mov-prevista-service';
 
 
 @Component({
@@ -12,27 +14,37 @@ import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-mes
   styleUrls: ['./mov-prevista-form-controles.component.css']
 })
 export class MovPrevistaFormControlesComponent implements OnInit {
-  
-  @Input() arMovPrevistas:MovimentacaoPrevista[];
-  @Input() tipoRecorrencia:string;
-  @Output() arMovPrevistasEditada = new EventEmitter(); 
-  @Output('edicaoParcela') parcelaEditada = new EventEmitter(); 
 
-  arFormasPagamento:FormaPagamento[];
-  arStDate:string[];
-  nrTotalRecorrencias:number=2;
+  @Input('MovPrevista') movimentacaoPrevista: MovimentacaoPrevista;
+
+  displayModal: boolean;
+  displayError: boolean;
+  headerDialog: string;
+  criticaNovaParcela: boolean;
+  nrTotalRecorrencias: number;
+  nrTotalRecorrenciasOld: number;
+  nrTotalValorParcelado: number=0;
+  nrDiferValorParcelado: number=0;
+
+  arFormasPagamento: FormaPagamento[];
+  arMovPrevistas: MovimentacaoPrevista[]=[];
+  arStDate: string[];
+  arvalidationErrors: any[] = [];
+
   //arrays para criticar a data e o valor, não alterando diretamente o objeto..
-  stDataVencimento:string[]=[];
-  stValor:string[]=[];
+  arStDataVencimento: string[] = [];
+  arStValor: string[] = [];
 
-  dtVen: Date;
-  nrVal:number;
+  dtDataVencimento: Date;
+  nrValor: number;
 
   clonedMovPrevista: { [s: string]: MovimentacaoPrevista; } = {};
-  
+
   constructor(private formaPagamentoService: FormaPagamentoService,
-              private alertMessageForm: AlertMessageForm) { }
-  
+    private movPrevistaService: MovPrevistaService,
+    private confirmationService: ConfirmationService,
+    private alertMessageForm: AlertMessageForm) { }
+
 
   ngOnInit(): void {
     this.formaPagamentoService.getAll().subscribe(
@@ -42,50 +54,76 @@ export class MovPrevistaFormControlesComponent implements OnInit {
       }
     );
   }
-  
-  onRowEditInit(movPrevista: MovimentacaoPrevista, ri:number) {
-    this.stDataVencimento[ri] = DateConvert.formatDateDDMMYYYY(movPrevista.dataVencimento, '/');
-    this.stValor[ri]=movPrevista.valor.toString();
-    this.clonedMovPrevista[movPrevista.nrParcela] = {...movPrevista};    
+
+  ngOnChanges(changes: SimpleChanges) {
+    debugger;
+    this.movimentacaoPrevista = changes.movimentacaoPrevista.currentValue;
+
+    if (this.movimentacaoPrevista != null &&
+        (this.movimentacaoPrevista.tipoRecorrencia == 'P' ||
+         this.movimentacaoPrevista.tipoRecorrencia == 'M')
+      ){
+      if (this.movimentacaoPrevista.tipoRecorrencia == 'P') {
+        this.headerDialog = "Novas Movimentações Previstas (Recorrências Parceladas)";
+        this.nrTotalRecorrencias = 2;
+      } else {
+        this.headerDialog = "Novas Movimentações Previstas (Recorrência Mensal)";
+        this.nrTotalRecorrencias = (12 - (this.movimentacaoPrevista.dataVencimento.getMonth()));
+      } 
+      this.carregarArrayMovPrevistas(this.nrTotalRecorrencias);
+    }     
   }
 
-  onRowEditSave(movPrevista: MovimentacaoPrevista, ri:number) {
+  closeModal() {
+    this.displayModal = false;
+  }
+
+
+
+
+  /*======EDIÇÃO DE LINHA==========*/
+  onRowEditInit(movPrevista: MovimentacaoPrevista, ri: number) {
+    this.arStDataVencimento[ri] = DateConvert.formatDateDDMMYYYY(movPrevista.dataVencimento, '/');
+    this.arStValor[ri] = movPrevista.valor.toString();
+    this.clonedMovPrevista[movPrevista.nrParcela] = { ...movPrevista };
+  }
+
+  onRowEditSave(movPrevista: MovimentacaoPrevista, ri: number) {
     debugger;
     //crítica do valor..
-    if (!(Number.parseFloat(this.stValor[ri]) > 0)){
+    if (!(Number.parseFloat(this.arStValor[ri]) > 0)) {
       this.alertMessageForm.showError("Valor Inválido", "Sr. Usuário");
       return false;
     }
 
     //crítica da data de vencimento..
-    this.arStDate = this.stDataVencimento[ri].split('/');
+    this.arStDate = this.arStDataVencimento[ri].split('/');
 
-    if(Number.parseInt(this.arStDate[2]) != movPrevista.dataReferencia.getFullYear() ||
-      (Number.parseInt(this.arStDate[1])-1) != movPrevista.dataReferencia.getMonth()){
-          this.alertMessageForm.showError("Data fora do mês/ano da recorrência", "Sr. Usuário");
-          return false;
-      }
-    
+    if (Number.parseInt(this.arStDate[2]) != movPrevista.dataReferencia.getFullYear() ||
+      (Number.parseInt(this.arStDate[1]) - 1) != movPrevista.dataReferencia.getMonth()) {
+      this.alertMessageForm.showError("Data fora do mês/ano da recorrência", "Sr. Usuário");
+      return false;
+    }
+
     //sinaliza que ocorreu uma edição da recorrência de parcela, para mensagem interrogativa na tela de cadastro..
-    this.dtVen = new Date(Number.parseInt(this.arStDate[2]), Number.parseInt(this.arStDate[1])-1, Number.parseInt(this.arStDate[0]));
-    this.nrVal = Number.parseFloat(this.stValor[ri]);
+    this.dtDataVencimento = new Date(Number.parseInt(this.arStDate[2]), Number.parseInt(this.arStDate[1]) - 1, Number.parseInt(this.arStDate[0]));
+    this.nrValor = Number.parseFloat(this.arStValor[ri]);
 
-    if( DateConvert.formatDateDDMMYYYY(movPrevista.dataVencimento, '/') != DateConvert.formatDateDDMMYYYY(this.dtVen, '/') || 
-        movPrevista.valor != this.nrVal){
-        this.parcelaEditada.emit(true);   
+    if (DateConvert.formatDateDDMMYYYY(movPrevista.dataVencimento, '/') != DateConvert.formatDateDDMMYYYY(this.dtDataVencimento, '/') ||
+      movPrevista.valor != this.nrValor) {
+      this.criticaNovaParcela = true;
     }
 
     //setando o value de cada objeto..
-    movPrevista.dataVencimento = new Date(Number.parseInt(this.arStDate[2]), Number.parseInt(this.arStDate[1])-1, Number.parseInt(this.arStDate[0]));
-    movPrevista.valor = Number.parseFloat(this.stValor[ri]);
+    movPrevista.dataVencimento = new Date(Number.parseInt(this.arStDate[2]), Number.parseInt(this.arStDate[1]) - 1, Number.parseInt(this.arStDate[0]));
+    movPrevista.valor = Number.parseFloat(this.arStValor[ri]);
 
     this.arFormasPagamento.filter(f => f.id == movPrevista.idFormaPagamento).map(f => {
-         movPrevista.formaPagamento = f;
+      movPrevista.formaPagamento = f;
     });
 
+    this.calcDiferenca(this.movimentacaoPrevista.valor);
     delete this.clonedMovPrevista[movPrevista.nrParcela];
-    this.arMovPrevistasEditada.emit(this.arMovPrevistas);      
-       
   }
 
   onRowEditCancel(movPrevista: MovimentacaoPrevista, ri: number) {
@@ -93,17 +131,72 @@ export class MovPrevistaFormControlesComponent implements OnInit {
     delete this.clonedMovPrevista[movPrevista.nrParcela];
   }
 
-  /*
-  private getIdxArray(movPrevista: MovimentacaoPrevista):number{
-      var idx=0;
-    this.arMovPrevistas.forEach(function(mp){
-        if(mp.itemMovimentacao.id==movPrevista.itemMovimentacao.id &&
-           mp.dataReferencia == movPrevista.dataReferencia){
-             return idx
-        }
-        idx++;    
-    });   
-    return idx;
+
+
+  /*======GERAÇÃO DE RECORRÊNCIAS========*/
+  calcDiferenca(valorTotal: number){
+    this.nrTotalValorParcelado = 0;
+    this.arMovPrevistas.forEach(element => { this.nrTotalValorParcelado += element.valor });
+    this.nrDiferValorParcelado = Number(valorTotal) - Number(this.nrTotalValorParcelado.toFixed(2));
   }
-  */
+
+  confirmarGeracaoParcelas() {
+    if (this.criticaNovaParcela) {
+      this.confirmationService.confirm({
+        message: 'Ao adicionar novas parcelas, qualquer edição será desfeita. Deseja Continuar?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
+        accept: () => {
+          this.criticaNovaParcela = false;
+          this.carregarArrayMovPrevistas(this.nrTotalRecorrencias);
+        },
+        reject: () => {
+          this.nrTotalRecorrencias = this.nrTotalRecorrenciasOld;
+          return false;
+        }
+      });
+    } else {
+      this.carregarArrayMovPrevistas(this.nrTotalRecorrencias);
+    }
+  }
+
+  carregarArrayMovPrevistas(nrTotal: number) {
+    if ((this.movimentacaoPrevista.valor / nrTotal) < 1) {
+      this.alertMessageForm.showError("Valor da parcela é menor do que R$1,00. Operação cancelada", "Sr. Usuário");
+      return false;
+    }
+
+    this.arMovPrevistas.length = 0;
+    this.nrTotalRecorrenciasOld = nrTotal;
+
+    MovimentacaoPrevista.gerarRecorrencias(this.movimentacaoPrevista, this.nrTotalRecorrencias).subscribe(
+      (movPrevistas) => {
+        this.arMovPrevistas = movPrevistas;
+        this.calcDiferenca(this.movimentacaoPrevista.valor);
+        this.displayModal = true;
+      });
+  }
+
+
+  /*=======MÉTODOS PARA CHAMADA DA API=======*/
+  post(movPrevistas: MovimentacaoPrevista[]) {
+    this.movPrevistaService.postArray(movPrevistas).subscribe(
+      sucess => { this.alertMessageForm.showSuccess(sucess.message, "Sr. Usuário") },
+      error => { this.actionForError(error); }
+    );
+  }
+
+  private actionForError(e) {
+    if (e.status == 400) {
+      //validações da API (BadRequest) 
+      this.arvalidationErrors = e.error;
+      this.displayError = true;
+    }
+  }
+
+  clearValidations() {
+    this.arvalidationErrors = [];
+    this.displayError = false;
+  }
 }

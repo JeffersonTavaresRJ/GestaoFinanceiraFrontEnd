@@ -22,7 +22,6 @@ import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quit
 import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-create/mov-prevista-form-controles/mov-prevista-form-controles.component';
 
 
-
 @NgModule({
   declarations: [
     MovPrevistaListComponent,
