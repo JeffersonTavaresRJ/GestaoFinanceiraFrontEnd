@@ -1,9 +1,13 @@
+import { FormGroup } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 import {FormaPagamento} from '../../cadastros-basicos/_models/forma-pagamento';
 import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
 import { Movimentacao } from "./movimentacao";
 
 export class MovimentacaoPrevista extends Movimentacao{
+    
+    private static movimentacaoPrevista: MovimentacaoPrevista = new MovimentacaoPrevista();
+    
     constructor(
      public formaPagamento: FormaPagamento=null,
      public idFormaPagamento: number=null,
@@ -25,6 +29,15 @@ export class MovimentacaoPrevista extends Movimentacao{
 
     static fromJson(jsonData: any): MovimentacaoPrevista {
         return Object.assign(new MovimentacaoPrevista(), jsonData);
+    }
+
+    static formGroupToJson(formGroup: FormGroup): MovimentacaoPrevista {
+        this.movimentacaoPrevista = Object.assign(new MovimentacaoPrevista(), formGroup.value);
+        this.movimentacaoPrevista.itemMovimentacao.id = formGroup.get('idItemMovimentacao').value;
+        this.movimentacaoPrevista.formaPagamento.id = formGroup.get('idFormaPagamento').value;
+        this.movimentacaoPrevista.nrParcela = 1;
+        this.movimentacaoPrevista.nrParcelaTotal = 1; 
+        return this.movimentacaoPrevista;
     }
     
     static gerarRecorrencias(movimentacaoPrevista: MovimentacaoPrevista, total: number):Observable<MovimentacaoPrevista[]>{

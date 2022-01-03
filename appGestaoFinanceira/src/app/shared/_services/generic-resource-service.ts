@@ -52,8 +52,8 @@ export abstract class GenericResourceService<T extends Object>{
     }
 
     postArray(resources: T[]): Observable<any> {   
-        debugger;  
-
+        debugger; 
+        this.arcommandCreate.length = 0;
         resources.forEach(element=>{
             this.arcommandCreate.push(this.convertModelToCmdCreate(element));
         });

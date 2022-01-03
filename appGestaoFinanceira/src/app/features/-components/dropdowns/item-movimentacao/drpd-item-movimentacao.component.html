@@ -1,0 +1,16 @@
+<form [formGroup]="formGroupResource">
+    <p-dropdown [options]="arResourceModel" 
+                optionLabel="descricao" 
+                optionValue="id" 
+                [formControlName]="formControlName" 
+                placeholder="Selecione o Item" 
+                [virtualScroll]="true" 
+                [itemSize]="5"
+                [showClear]="true" 
+                [filter]="false"
+                (onChange)="onChange()"
+                emptyMessage="Item não encontrado"
+                autoDisplayFirst="true" 
+                [disabled]="isDisabled">
+    </p-dropdown>
+</form>

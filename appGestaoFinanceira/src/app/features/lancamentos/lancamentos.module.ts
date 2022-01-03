@@ -16,6 +16,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CoreModule } from 'src/app/core/core.module';
+import { ComponentsModule } from '../-components/-components.module';
 import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-prevista-list.component';
 import { MovPrevistaFormCadastroComponent } from './mov-prevista/mov-prevista-create/mov-prevista-form-cadastro/mov-prevista-form-cadastro.component';
 import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
@@ -47,7 +48,8 @@ import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-c
     InputTextareaModule,
     InputMaskModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ComponentsModule
   ]
 })
 export class LancamentosModule { }

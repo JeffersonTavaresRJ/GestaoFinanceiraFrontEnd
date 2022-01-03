@@ -1,0 +1,16 @@
+<form [formGroup]="formGroupResource">
+    <p-dropdown [options]="arAny" 
+                optionLabel="Value" 
+                optionValue="Key" 
+                [formControlName]="formControlName" 
+                placeholder="Selecione a Prioridade" 
+                [virtualScroll]="true" 
+                [itemSize]="3"
+                [showClear]="true" 
+                [filter]="false" 
+                (onChange)="onChange()"
+                emptyMessage="Prioridade não encontrada"
+                autoDisplayFirst="true" 
+                [disabled]="isDisabled">
+    </p-dropdown>
+</form>

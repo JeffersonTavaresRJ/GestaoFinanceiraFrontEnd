@@ -9,24 +9,26 @@
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Categoria:</label>
-                        <p-dropdown [options]="arCategorias" optionLabel="descricao" optionValue="id"
-                            formControlName="idCategoria" placeholder="Selecione a Categoria" [virtualScroll]="true"
-                            [itemSize]="5" [showClear]="true" [filter]="false" (keyup)="clearValidations()"
-                            emptyMessage="Categoria não encontrada" autoDisplayFirst="true"
-                            [disabled]="currentAction()=='edit'"
-                            (onChange)="parseToNumber('idCategoria'); filtrarItemPorCategoria()">
-                        </p-dropdown>
+                        <app-dropdown-categoria 
+                              [formGroup]="formGroup"
+                              formControlName="idCategoria"
+                              [disabled]="currentAction()=='edit'"
+                              [selectByStatus]="currentAction()=='new'"
+                              (OnChange)="getCategoria($event)">
+                        </app-dropdown-categoria>
                     </div>
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Item Movimentação:</label>
-                        <p-dropdown [options]="arItensMovimentacao" optionLabel="descricao" optionValue="id"
-                            formControlName="idItemMovimentacao" placeholder="Selecione o Item" [virtualScroll]="true"
-                            [itemSize]="5" [showClear]="true" [filter]="false" (keyup)="clearValidations()"
-                            emptyMessage="Item não encontrado" [disabled]="currentAction()=='edit'"
-                            (onChange)="parseToNumber('idItemMovimentacao'); filtrarCategoriaPorItem()">
-                        </p-dropdown>
+                        <app-dropdown-item-movimentacao 
+                              [formGroup]="formGroup"
+                              formControlName="idItemMovimentacao"
+                              [disabled]="currentAction()=='edit'"
+                              [selectByStatus]="currentAction()=='new'"
+                              [selectByIdCategoria]="formGroup.get('idCategoria').value"
+                              (OnChange)="getItemMovimentacao($event)">
+                        </app-dropdown-item-movimentacao>
                     </div>
                     <app-field-validation-form [form-control]="formGroup.get('idItemMovimentacao')">
                     </app-field-validation-form>
@@ -36,10 +38,11 @@
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Prioridade:</label>
-                        <p-dropdown [options]="arTiposPrioridade" optionLabel="Value" optionValue="Key"
-                            formControlName="tipoPrioridade" placeholder="Selecione a Prioridade" [showClear]="true"
-                            [filter]="false" (keyup)="clearValidations()" emptyMessage="Prioridade não encontrada">
-                        </p-dropdown>
+                        <app-dropdown-prioridade 
+                              [formGroup]="formGroup"
+                              formControlName="tipoPrioridade"
+                              (OnChange)="clear($event)">
+                        </app-dropdown-prioridade>
                     </div>
                     <app-field-validation-form [form-control]="formGroup.get('tipoPrioridade')">
                     </app-field-validation-form>
@@ -52,11 +55,12 @@
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Forma de Pagamento:</label>
-                        <p-dropdown [options]="arFormasPagamento" optionLabel="descricao" optionValue="id"
-                            formControlName="idFormaPagamento" placeholder="Selecione a Forma de Pagamento"
-                            [showClear]="true" [filter]="false" (keyup)="clearValidations()"
-                            emptyMessage="Forma de Pagamento não encontrada">
-                        </p-dropdown>
+                        <app-dropdown-forma-pagamento 
+                               [formGroup]="formGroup"
+                               formControlName="idFormaPagamento"
+                               [selectByStatus]="currentAction()=='new'"
+                               (OnChange)="getFormaPagamento($event)">
+                        </app-dropdown-forma-pagamento>
                     </div>
                     <app-field-validation-form [form-control]="formGroup.get('idFormaPagamento')">
                     </app-field-validation-form>
