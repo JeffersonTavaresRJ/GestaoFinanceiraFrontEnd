@@ -1,0 +1,27 @@
+
+tr.small>td {
+   line-height: 0.5;
+
+}
+
+.scroll {
+    height: 400px;
+    overflow-y: scroll;
+  }
+
+  /*input do calendário*/
+  :host ::ng-deep .p-inputtext{
+    text-align: center !important;
+    font-weight: bold;
+    width:100px  !important;
+    margin-left: 20px !important;
+  }
+  /*calendário*/
+  :host ::ng-deep .p-datepicker-group-container{
+    width:200px  !important;
+  } 
+
+  .card-body{
+    padding-left: 0px;
+    padding-right: 0px;
+  }

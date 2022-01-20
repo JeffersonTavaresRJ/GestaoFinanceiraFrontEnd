@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
     var mes = dataAtual.getMonth();
     var ano = dataAtual.getFullYear();
     this.dataIni = new Date(ano, mes, 1);
-    this.dataFim = new Date(ano, mes + 2, 0);
+    this.dataFim = new Date(ano, mes + 1, 0);
   }
 
   resultEvent(event: any) {

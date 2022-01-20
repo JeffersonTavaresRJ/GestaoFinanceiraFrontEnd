@@ -1,0 +1,73 @@
+<div class="card mt-2">
+    <div class="card-header">
+            <div class="row">
+                <div class="col-4">
+                    <h4>Fluxo de Caixa</h4>
+                </div>
+                <div class="field col-4" style="text-align: center;">
+                    <label for="monthpicker"><strong>Mês/Ano:</strong></label>
+                    <p-calendar placeholder="Mês/Ano" inputId="monthpicker" [(ngModel)]="dateMonth" view="month"
+                        dateFormat="mm/yy" [readonlyInput]="true" (onSelect)="carregarDados()">
+                    </p-calendar>
+                </div>
+                <div class="col-4" style="text-align: right;">
+                    <a class="btn btn-button bg-dark text-light" [routerLink]="">
+                        + Novo Lançamento
+                    </a>
+                </div>
+            </div>
+    </div>
+    <div class="card-body">
+        <div *ngIf="results.length > 0 else loading" class="scroll">
+                <div>
+                    <table class="table table-sm">
+                        <tbody *ngFor="let item of results">
+                            <tr>
+                                <td class="small table-secondary" colspan="3">
+                                    <img src="assets\icons\calendar_month_black_24dp.svg" width="32"
+                                        style="vertical-align: middle" />
+                                    <strong>{{item.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let movRealizada of item.values">
+                                <td class="small" style="width: 3%;">
+                                    <!--PRIORIDADE-->
+                                    <span *ngIf="movRealizada.tipoPrioridade=='A'">
+                                        <img class="logo" src="assets\icons\arrow_circle_up_black_24dp.svg"
+                                            title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
+                                    </span>
+                                    <span *ngIf="movRealizada.tipoPrioridade=='M'">
+                                        <img class="logo" src="assets\icons\remove_circle_outline_black_24dp.svg"
+                                            title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
+                                    </span>
+                                    <span *ngIf="movRealizada.tipoPrioridade=='B'">
+                                        <img class="logo" src="assets\icons\arrow_circle_down_black_24dp.svg"
+                                            title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
+                                    </span>
+                                </td>
+                                <td class="small">
+                                    <!--ITEM MOVIMENTAÇÃO-->
+                                    <strong>{{movRealizada.itemMovimentacao.descricao}}</strong>
+                                    <p class="text-muted">{{movRealizada.itemMovimentacao.categoria.descricao}}</p>
+                                </td>
+                                <td class="small pt-3" style="text-align: right;">
+                                    <!--VALOR-->
+                                    <strong [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
+                                        {{movRealizada.valor | currency}}
+                                    </strong>
+                                </td>
+                            </tr>                           
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+        <ng-template #loading>
+            <div style="text-align: center;">
+                <p><strong>Não existem Lançamentos no mês selecionado</strong></p>
+            </div>
+        </ng-template>
+    </div>
+    <div class="card-footer">
+        Card footer
+    </div>
+</div>

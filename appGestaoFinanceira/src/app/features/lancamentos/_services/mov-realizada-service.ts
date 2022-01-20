@@ -24,8 +24,13 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`);
   }
 
-  GetByDataMovimentacaoRealizada(idItemMovimentacao: number, dataMovRealIni: string, dataMovRealFim: string): Observable<MovimentacaoRealizada[]> {
-    this.setApiOption('/GetByDataMovimentacaoRealizada');
-    return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${idItemMovimentacao}/${this.idUsuario}/${dataMovRealIni}/${dataMovRealFim}`);
+  GetByDataMovimentacaoRealizada(dataMovRealIni: string, dataMovRealFim: string, idItemMovimentacao: number=null): Observable<MovimentacaoRealizada[]> {
+    this.setApiOption('/GetByDataMovimentacaoRealizada'); 
+    //parâmetro opcional da API..   
+    var _idItemMovimentacao = ' ';
+    if(idItemMovimentacao!=null){
+      _idItemMovimentacao = idItemMovimentacao.toString() 
+    }
+    return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${this.idUsuario}/${dataMovRealIni}/${dataMovRealFim}/${_idItemMovimentacao}`);
   }
 }

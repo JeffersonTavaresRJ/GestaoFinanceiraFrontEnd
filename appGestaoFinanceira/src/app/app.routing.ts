@@ -23,6 +23,8 @@ import { ItemMovimentacaoFormComponent } from './features/cadastros-basicos/item
 import { MovPrevistaListComponent } from './features/lancamentos/mov-prevista/mov-prevista-list/mov-prevista-list.component';
 import { MovPrevistaFormCadastroComponent } from './features/lancamentos/mov-prevista/mov-prevista-create/mov-prevista-form-cadastro/mov-prevista-form-cadastro.component';
 import { MovPrevistaFormControlesComponent } from './features/lancamentos/mov-prevista//mov-prevista-create/mov-prevista-form-controles/mov-prevista-form-controles.component';
+import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
+import { MovRealizadaListComponent } from './features/lancamentos/mov-realizada/mov-realizada-list/mov-realizada-list.component';
 
 import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
@@ -34,7 +36,7 @@ import { FormaPagamentoFormResolver } from './features/cadastros-basicos/_guards
 import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guards/item-movimentacao-form-resolver';
 import { MovPrevistaListResolver } from './features/lancamentos/_guards/mov-prevista-list-resolver';
 import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prevista-form-resolver';
-import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
+import { MovRealizadaListResolver } from './features/lancamentos/_guards/mov-realizada-list-resolver';
 
 //criando o mapeamento de rotas dos componentes
 
@@ -102,6 +104,9 @@ const routes: Routes = [
     { path: 'mov-prevista/quitar/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
+    { path: 'mov-realizada/:dataRealIni/:dataRealFim', component: MovRealizadaListComponent,
+             canActivate:[AuthGuard],             
+             resolve:{resolveMovReal: MovRealizadaListResolver}  },
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
             /* canActivate:[AuthGuard] */},
     { path: '**', component: Error404Component}
@@ -120,7 +125,8 @@ const routes: Routes = [
                ItemMovimentacaoListResolver,            
                ItemMovimentacaoFormResolver,
                MovPrevistaListResolver,
-               MovPrevistaFormResolver]
+               MovPrevistaFormResolver,
+               MovRealizadaListResolver]
 })
 
 export class AppRoutingModule { }

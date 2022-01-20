@@ -42,7 +42,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" [routerLink]="['mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">Previsão de Receitas e Despesas</a></li>
-            <li><a class="dropdown-item" routerLink="mov-prevista-consulta-list">Fluxo de Caixa</a></li>            
+            <li><a class="dropdown-item" [routerLink]="['mov-realizada',dataIni | DateFormatToString, dataFim | DateFormatToString]">Fluxo de Caixa</a></li>            
           </ul>
         </li>
       </ul>
