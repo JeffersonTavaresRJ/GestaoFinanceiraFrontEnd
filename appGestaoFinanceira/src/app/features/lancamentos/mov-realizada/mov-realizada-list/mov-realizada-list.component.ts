@@ -15,7 +15,7 @@ export class MovRealizadaListComponent implements OnInit {
   dateMonth: Date;
 
   constructor(private actResourceRoute: ActivatedRoute,
-              private movRealizadaService: MovRealizadaService) { }
+              private movRealizadaService: MovRealizadaService) {}
 
   ngOnInit(): void {
     this.movRealizadaList();

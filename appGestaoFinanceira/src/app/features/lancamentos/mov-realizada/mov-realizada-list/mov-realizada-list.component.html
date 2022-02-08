@@ -17,16 +17,22 @@
                 </div>
             </div>
     </div>
-    <div class="card-body">
-        <div *ngIf="results.length > 0 else loading" class="scroll">
+    <div class="card-body"  class="scroll">
+        <div *ngIf="results.length > 0 else loading">
                 <div>
                     <table class="table table-sm">
                         <tbody *ngFor="let item of results">
                             <tr>
                                 <td class="small table-secondary" colspan="3">
-                                    <img src="assets\icons\calendar_month_black_24dp.svg" width="32"
-                                        style="vertical-align: middle" />
-                                    <strong>{{item.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong>
+                                    <div class="row" style="margin: 0px 0px;">
+                                        <div class="col-6" style="text-align: left;">
+                                            <img src="assets\icons\calendar_month_black_24dp.svg" width="32" style="vertical-align: middle" />
+                                            <strong>{{item.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong>
+                                        </div>
+                                        <div class="col-6 mt-1" style="text-align: right; padding: 0px 0px;">
+                                            <strong>Saldo: R$0,00</strong>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr *ngFor="let movRealizada of item.values">
@@ -52,9 +58,12 @@
                                 </td>
                                 <td class="small pt-3" style="text-align: right;">
                                     <!--VALOR-->
-                                    <strong [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
-                                        {{movRealizada.valor | currency}}
-                                    </strong>
+                                    {{movRealizada.valor | currency}}
+                                    <!--
+                                    <label [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
+                                        
+                                    </label>
+                                    -->
                                 </td>
                             </tr>                           
                         </tbody>
@@ -68,6 +77,12 @@
         </ng-template>
     </div>
     <div class="card-footer">
-        Card footer
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnMR" autocomplete="off" checked>
+            <label class="btn btn-outline-dark" for="btnMR">Movimentação Realizada</label>
+          
+            <input type="radio" class="btn-check" name="btnradio" id="btnMP" autocomplete="off">
+            <label class="btn btn-outline-dark" for="btnMP">Movimentação Prevista</label>
+          </div>
     </div>
 </div>

@@ -190,7 +190,7 @@
                                *ngIf="movimentacao.status!='Q'" class="btn btn-outline-info btn-sm me-3">
                                 Editar
                             </a>
-                            <button *ngIf="movimentacao.status!='Q' || movimentacao.parcela== ''" 
+                            <button *ngIf="movimentacao.status!='Q' && movimentacao.parcela== ''" 
                                     class="btn btn-outline-danger btn-sm" 
                                     (click)="modalDeleteMessage(movimentacao.itemMovimentacao.id, movimentacao.dataReferencia)"
                                     data-bs-toggle="modal"
