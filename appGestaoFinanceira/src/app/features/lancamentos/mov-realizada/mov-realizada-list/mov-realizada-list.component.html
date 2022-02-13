@@ -2,7 +2,7 @@
     <div class="card-header">
             <div class="row">
                 <div class="col-4">
-                    <h4>Fluxo de Caixa</h4>
+                    <h4>Fluxo Diário</h4>
                 </div>
                 <div class="field col-4" style="text-align: center;">
                     <label for="monthpicker"><strong>Mês/Ano:</strong></label>
@@ -27,15 +27,15 @@
                                     <div class="row" style="margin: 0px 0px;">
                                         <div class="col-6" style="text-align: left;">
                                             <img src="assets\icons\calendar_month_black_24dp.svg" width="32" style="vertical-align: middle" />
-                                            <strong>{{item.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong>
+                                            <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong>
                                         </div>
                                         <div class="col-6 mt-1" style="text-align: right; padding: 0px 0px;">
-                                            <strong>Saldo: R$0,00</strong>
+                                            <strong>Saldo: {{item.valor | currency}}</strong>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-                            <tr *ngFor="let movRealizada of item.values">
+                            <tr *ngFor="let movRealizada of item.movimentacoesRealizadas">
                                 <td class="small" style="width: 3%;">
                                     <!--PRIORIDADE-->
                                     <span *ngIf="movRealizada.tipoPrioridade=='A'">

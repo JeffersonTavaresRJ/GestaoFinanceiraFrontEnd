@@ -13,6 +13,7 @@ export class MovRealizadaListComponent implements OnInit {
 
   results: {dataMovimentacaoRealizada: Date,values:any[]} [];
   dateMonth: Date;
+  arStDate:string[];
 
   constructor(private actResourceRoute: ActivatedRoute,
               private movRealizadaService: MovRealizadaService) {}
@@ -22,17 +23,28 @@ export class MovRealizadaListComponent implements OnInit {
   }
 
   private movRealizadaList(){
+    this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
+    this.dateMonth=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);
+    
     this.actResourceRoute.data.subscribe(
-      (sucess:{resolveMovReal: MovimentacaoRealizada[]})=>{
-        this.results = this.GroupByDataMovimentacaoRealizada(sucess.resolveMovReal);        
-        this.dateMonth = new Date(this.results[0].dataMovimentacaoRealizada);
-        var year = this.dateMonth.getFullYear();
-        var month= this.dateMonth.getMonth();
-        this.dateMonth = new Date(year,month,1,0,0,0,0);
+      (sucess:{resolveMovReal: any[]})=>{
+        this.results = sucess.resolveMovReal;   
       }
     );
   }
 
+  carregarDados(){
+    var ano = this.dateMonth.getFullYear();
+    var mes = this.dateMonth.getMonth();
+    var dataIni = new Date(ano, mes, 1).toString();
+    var dataFim = new Date(ano, mes+1, 0).toString();
+    this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(dataIni, '-'), 
+                                                   DateConvert.formatDateYYYYMMDD(dataFim, '-')).subscribe(
+      (sucess:any[])=>{
+        this.results = sucess;
+      })
+  }
+  /*
   GroupByDataMovimentacaoRealizada(arMovRealizada: MovimentacaoRealizada[]): any[]
   {
     debugger;
@@ -50,17 +62,6 @@ export class MovRealizadaListComponent implements OnInit {
            );
     return resultGroup;
   }
-
-  carregarDados(){
-    var ano = this.dateMonth.getFullYear();
-    var mes = this.dateMonth.getMonth();
-    var dataIni = new Date(ano, mes, 1).toString();
-    var dataFim = new Date(ano, mes+1, 0).toString();
-    this.movRealizadaService.GetByDataMovimentacaoRealizada(DateConvert.formatDateYYYYMMDD(dataIni, '-'), 
-                                                            DateConvert.formatDateYYYYMMDD(dataFim, '-')).subscribe(
-      (sucess:MovimentacaoRealizada[])=>{
-        this.results = this.GroupByDataMovimentacaoRealizada(sucess);
-      })
-  }
+  */ 
 
 }
