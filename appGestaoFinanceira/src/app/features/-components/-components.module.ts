@@ -6,15 +6,15 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DropDownItemMovimentacaoComponent } from './dropdowns/item-movimentacao/drpd-item-movimentacao.component';
 import { DropDownFormaPagamentoComponent } from './dropdowns/forma-pagamento/drpd-forma-pagamento.component';
 import { DropDownPrioridadeComponent } from './dropdowns/prioridade/drpd-prioridade.component';
-
-
+import { DropDownContaComponent } from './dropdowns/conta/drpd-conta.component';
 
 @NgModule({
   declarations: [
     DropDownCategoriaComponent,
     DropDownItemMovimentacaoComponent,
     DropDownFormaPagamentoComponent,
-    DropDownPrioridadeComponent
+    DropDownPrioridadeComponent,
+    DropDownContaComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +26,7 @@ import { DropDownPrioridadeComponent } from './dropdowns/prioridade/drpd-priorid
     DropDownCategoriaComponent,
     DropDownItemMovimentacaoComponent,
     DropDownFormaPagamentoComponent,
-    DropDownPrioridadeComponent]
+    DropDownPrioridadeComponent,
+    DropDownContaComponent]
 })
 export class ComponentsModule { }

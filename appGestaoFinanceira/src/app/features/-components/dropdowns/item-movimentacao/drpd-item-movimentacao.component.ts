@@ -10,7 +10,7 @@ import { GenericResourceDropDownComponent } from 'src/app/shared/components/gene
 })
 export class DropDownItemMovimentacaoComponent extends GenericResourceDropDownComponent<ItemMovimentacao> {
 
-  @Input('selectByIdCategoria') idCategoria: boolean;
+  @Input('select-by-idCategoria') idCategoria: boolean;
 
   constructor(protected itemMovimentacaoService: ItemMovimentacaoService) { 
     super(itemMovimentacaoService);
@@ -33,12 +33,12 @@ export class DropDownItemMovimentacaoComponent extends GenericResourceDropDownCo
       this.arResourceModel = this.arResourceModel.filter(i=>i.categoria.id==idCategoria);
       //se tiver somente um item, seta no dropdown o valor..
       if(this.arResourceModel.length==1){
-        this.formGroupResource.get(this.formControlName).setValue(this.arResourceModel[0].id);
+        this.formControl.setValue(this.arResourceModel[0].id);
         //envia a instância do objeto selecionado para o componente pai..
         this._onChange.emit(this.arResourceModel[0]);
       }     
     }else{
-      this.formGroupResource.get(this.formControlName).setValue(-1);
+      this.formControl.setValue(-1);
     }    
   } 
 }

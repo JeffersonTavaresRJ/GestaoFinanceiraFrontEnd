@@ -5,16 +5,14 @@ export class ContaCommandUpdate extends GenericCommand {
     constructor(
         public id: number=null,
         public descricao: string = null,
-        public status: boolean = null,
-        public idUsuario: number = null
+        public status: boolean = null
     ) { super(); };
 
     static convertModelToCommand(conta: Conta):ContaCommandUpdate{
         return new ContaCommandUpdate(
             conta.id,
             conta.descricao,
-            conta.status,
-            conta.idUsuario            
+            conta.status           
         )
     }
 }

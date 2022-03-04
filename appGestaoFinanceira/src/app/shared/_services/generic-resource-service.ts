@@ -94,13 +94,18 @@ export abstract class GenericResourceService<T extends Object>{
          this.setApiOption('/GetId');
          return this.http.get<T>(`${this.getUrl()}/${id.toString()}`);
       }
-
+/*
     getAll(): Observable<T[]> {
         var user = window.localStorage.getItem(environment.keyUser)||'';
         if (user != ''){
             this.idUsuario = JSON.parse(user).id;
         } 
         return this.http.get<T[]>(`${this.getUrl()}/${this.idUsuario}`);
+    }
+    */
+
+    getAll(): Observable<T[]> {
+        return this.http.get<T[]>(`${this.getUrl()}`);
     }
 
     get(): Observable<any> {

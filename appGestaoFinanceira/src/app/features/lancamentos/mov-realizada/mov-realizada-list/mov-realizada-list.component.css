@@ -9,13 +9,23 @@ tr.small>td {
     overflow-y: scroll;
   }
 
-  /*input do calendário*/
   :host ::ng-deep .p-inputtext{
-    text-align: center !important;
     font-weight: bold;
-    width:100px  !important;
-    margin-left: 20px !important;
+   }
+
+  /*input do dropdown da conta*/
+  :host ::ng-deep .p-dropdown-label .p-inputtext{
+    text-align: left !important;
+    padding-left: 1px !important;
+    padding-right: 0px !important;
+   }
+
+    
+  :host ::ng-deep .p-calendar > .p-inputtext{
+    text-align: center !important;
+    width:100px  !important;    
   }
+  
   /*calendário*/
   :host ::ng-deep .p-datepicker-group-container{
     width:200px  !important;
@@ -25,3 +35,8 @@ tr.small>td {
     padding-left: 0px;
     padding-right: 0px;
   }
+  
+/*margin-left dos labels da conta e calendário*/
+:host ::ng-deep .p-inputwrapper-filled{
+  margin-left: 10px;
+}

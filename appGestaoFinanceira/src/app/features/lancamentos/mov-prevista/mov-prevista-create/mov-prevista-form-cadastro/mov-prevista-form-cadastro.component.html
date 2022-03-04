@@ -10,10 +10,10 @@
                     <div class="p-field">
                         <label>Categoria:</label>
                         <app-dropdown-categoria 
-                              [formGroup]="formGroup"
-                              formControlName="idCategoria"
+                              [form-group]="formGroup"
+                              [form-control]="formGroup.get('idCategoria')"
                               [disabled]="currentAction()=='edit'"
-                              [selectByStatus]="currentAction()=='new'"
+                              [select-by-status]="currentAction()=='new'"
                               (OnChange)="getCategoria($event)">
                         </app-dropdown-categoria>
                     </div>
@@ -22,11 +22,11 @@
                     <div class="p-field">
                         <label>Item Movimentação:</label>
                         <app-dropdown-item-movimentacao 
-                              [formGroup]="formGroup"
-                              formControlName="idItemMovimentacao"
+                              [form-group]="formGroup"
+                              [form-control]="formGroup.get('idItemMovimentacao')"
                               [disabled]="currentAction()=='edit'"
-                              [selectByStatus]="currentAction()=='new'"
-                              [selectByIdCategoria]="formGroup.get('idCategoria').value"
+                              [select-by-status]="currentAction()=='new'"
+                              [select-by-idCategoria]="formGroup.get('idCategoria').value"
                               (OnChange)="getItemMovimentacao($event)">
                         </app-dropdown-item-movimentacao>
                     </div>
@@ -39,8 +39,8 @@
                     <div class="p-field">
                         <label>Prioridade:</label>
                         <app-dropdown-prioridade 
-                              [formGroup]="formGroup"
-                              formControlName="tipoPrioridade"
+                              [form-group]="formGroup"
+                              [form-control]="formGroup.get('tipoPrioridade')"
                               (OnChange)="clear($event)">
                         </app-dropdown-prioridade>
                     </div>
@@ -56,9 +56,9 @@
                     <div class="p-field">
                         <label>Forma de Pagamento:</label>
                         <app-dropdown-forma-pagamento 
-                               [formGroup]="formGroup"
-                               formControlName="idFormaPagamento"
-                               [selectByStatus]="currentAction()=='new'"
+                               [form-group]="formGroup"
+                               [form-control]="formGroup.get('idFormaPagamento')"
+                               [select-by-status]="currentAction()=='new'"
                                (OnChange)="getFormaPagamento($event)">
                         </app-dropdown-forma-pagamento>
                     </div>

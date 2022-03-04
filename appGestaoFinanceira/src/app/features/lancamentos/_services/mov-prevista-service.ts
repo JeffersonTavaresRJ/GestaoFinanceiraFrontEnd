@@ -30,7 +30,7 @@ export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevi
     if(idItemMovimentacao!=null){
       _idItemMovimentacao = idItemMovimentacao.toString() 
     }
-    return this.http.get<MovimentacaoPrevista[]>(`${this.getUrl()}/${this.idUsuario}/${dataVencIni}/${dataVencFim}/${_idItemMovimentacao}`);
+    return this.http.get<MovimentacaoPrevista[]>(`${this.getUrl()}/${dataVencIni}/${dataVencFim}/${_idItemMovimentacao}`);
   }
 
   public GetAllStatus(): Observable<any> {

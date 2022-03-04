@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MovPrevistaService } from 'src/app/features/lancamentos/_services/mov-prevista-service';
 
 @Component({
@@ -9,8 +9,8 @@ import { MovPrevistaService } from 'src/app/features/lancamentos/_services/mov-p
 })
 export class DropDownPrioridadeComponent{
 
-  @Input('formGroup') formGroupResource: FormGroup;
-  @Input('formControlName') formControlName: string;
+  @Input('form-group') formGroupResource: FormGroup;
+  @Input('form-control') formControl: FormControl;
   @Input('disabled') isDisabled: boolean;
   @Output('OnChange') _onChange = new EventEmitter();
 

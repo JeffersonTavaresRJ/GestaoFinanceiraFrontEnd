@@ -4,8 +4,7 @@ export class FormaPagamento extends GenericResourceModel{
     constructor(
         public id?: number,
         public descricao: string = '',
-        public status?: boolean,
-        public idUsuario: number = null
+        public status?: boolean
     ) {
         super();
     }

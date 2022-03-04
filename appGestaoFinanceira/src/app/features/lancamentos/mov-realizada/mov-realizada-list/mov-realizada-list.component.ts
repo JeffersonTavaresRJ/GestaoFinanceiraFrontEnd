@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
-import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 
 @Component({
@@ -11,24 +12,34 @@ import { MovRealizadaService } from '../../_services/mov-realizada-service';
 })
 export class MovRealizadaListComponent implements OnInit {
 
-  results: {dataMovimentacaoRealizada: Date,values:any[]} [];
+  results:    any[];
+  resultsAux: any[];
+  formGroup: FormGroup;
+  
   dateMonth: Date;
   arStDate:string[];
 
   constructor(private actResourceRoute: ActivatedRoute,
-              private movRealizadaService: MovRealizadaService) {}
+              private movRealizadaService: MovRealizadaService,
+              protected formBuilder: FormBuilder) {
+        this.formGroup = this.formBuilder.group({
+           idConta:[1]
+        });                
+  }
 
   ngOnInit(): void {
     this.movRealizadaList();
   }
 
   private movRealizadaList(){
+    debugger;
     this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
-    this.dateMonth=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);
+    this.dateMonth=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);    
     
     this.actResourceRoute.data.subscribe(
       (sucess:{resolveMovReal: any[]})=>{
-        this.results = sucess.resolveMovReal;   
+        this.results = sucess.resolveMovReal; 
+        this.resultsAux = this.results;  
       }
     );
   }
@@ -42,7 +53,14 @@ export class MovRealizadaListComponent implements OnInit {
                                                    DateConvert.formatDateYYYYMMDD(dataFim, '-')).subscribe(
       (sucess:any[])=>{
         this.results = sucess;
-      })
+        this.resultsAux = this.results;
+        this.dateMonth = new Date(ano, mes, 1);
+    })
+  }
+
+  getConta(_ev: Conta){
+   // this.formGroup.get("idConta").setValue(_ev.id);
+    this.results = this.resultsAux.filter(x=>x.conta.id===this.formGroup.get("idConta").value);    
   }
   /*
   GroupByDataMovimentacaoRealizada(arMovRealizada: MovimentacaoRealizada[]): any[]

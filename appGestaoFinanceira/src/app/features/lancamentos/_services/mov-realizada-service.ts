@@ -26,6 +26,6 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
 
   GetGroupBySaldoDiario(dataMovRealIni: string, dataMovRealFim: string): Observable<any[]> {
     this.setApiOption('/GetGroupBySaldoDiario'); 
-    return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${this.idUsuario}/${dataMovRealIni}/${dataMovRealFim}`);
+    return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${dataMovRealIni}/${dataMovRealFim}`);
   }
 }

@@ -3,14 +3,12 @@ import { FormaPagamento } from "../../../_models/forma-pagamento";
 
 export class FormaPagamentoCommandCreate extends GenericCommand {
     constructor(
-        public descricao: string = null,
-        public idUsuario: number = null
+        public descricao: string = null
     ) { super();  };
 
     static convertModelToCommand(categoria: FormaPagamento):FormaPagamentoCommandCreate{
         return new FormaPagamentoCommandCreate(
-            categoria.descricao,
-            categoria.idUsuario
+            categoria.descricao
         )
     }
 }

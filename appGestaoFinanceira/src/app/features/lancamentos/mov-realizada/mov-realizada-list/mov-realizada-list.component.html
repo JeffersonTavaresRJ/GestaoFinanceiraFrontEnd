@@ -1,16 +1,25 @@
 <div class="card mt-2">
     <div class="card-header">
             <div class="row">
-                <div class="col-4">
+                <div class="col-2">
                     <h4>Fluxo Diário</h4>
-                </div>
-                <div class="field col-4" style="text-align: center;">
-                    <label for="monthpicker"><strong>Mês/Ano:</strong></label>
-                    <p-calendar placeholder="Mês/Ano" inputId="monthpicker" [(ngModel)]="dateMonth" view="month"
-                        dateFormat="mm/yy" [readonlyInput]="true" (onSelect)="carregarDados()">
+                </div>                
+                   <div class="field col-4">  
+                        <label><strong>Conta:</strong></label>                        
+                        <app-dropdown-conta                             
+                             [form-group]="formGroup"
+                             [form-control]="formGroup.get('idConta')"
+                             [style]="{'width':'70%'}"
+                             (OnChange)="getConta($event)">
+                        </app-dropdown-conta>                                        
+                    </div>
+                <div class="field col-3" style="text-align: center;">
+                    <label><strong>Mês/Ano:</strong></label>
+                    <p-calendar placeholder="Mês/Ano" [(ngModel)]="dateMonth" view="month"
+                        dateFormat="M/yy" [readonlyInput]="true" (onSelect)="carregarDados()">
                     </p-calendar>
                 </div>
-                <div class="col-4" style="text-align: right;">
+                <div class="col-3" style="text-align: right;">
                     <a class="btn btn-button bg-dark text-light" [routerLink]="">
                         + Novo Lançamento
                     </a>
@@ -21,7 +30,7 @@
         <div *ngIf="results.length > 0 else loading">
                 <div>
                     <table class="table table-sm">
-                        <tbody *ngFor="let item of results">
+                        <tbody *ngFor="let item of results; let f = first">
                             <tr>
                                 <td class="small table-secondary" colspan="3">
                                     <div class="row" style="margin: 0px 0px;">
@@ -30,7 +39,8 @@
                                             <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong>
                                         </div>
                                         <div class="col-6 mt-1" style="text-align: right; padding: 0px 0px;">
-                                            <strong>Saldo: {{item.valor | currency}}</strong>
+                                            <strong *ngIf="f==false">Saldo: {{item.valor | currency}}</strong>
+                                            <strong *ngIf="f==true"> Saldo Atual: {{item.valor | currency}}</strong>
                                         </div>
                                     </div>
                                 </td>

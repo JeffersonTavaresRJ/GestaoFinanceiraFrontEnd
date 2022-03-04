@@ -1,16 +1,18 @@
-<form [formGroup]="formGroupResource">
     <p-dropdown [options]="arResourceModel" 
+                [inputId]="inputId"
                 optionLabel="descricao" 
                 optionValue="id" 
                 [formControl]="formControl"
-                placeholder="Selecione a Categoria" 
+                placeholder="Selecione a Conta"
                 [virtualScroll]="true" 
                 [itemSize]="5"
                 [showClear]="true" 
                 [filter]="false" 
                 (onChange)="onChange()"
-                emptyMessage="Categoria não encontrada"
+                emptyMessage="Não encontrado"
                 autoDisplayFirst="true" 
-                [disabled]="isDisabled">
+                [disabled]="isDisabled"
+                autoWidth="false" 
+                [style]="style"
+                [styleClass]="styleClass">
     </p-dropdown>
-</form>
