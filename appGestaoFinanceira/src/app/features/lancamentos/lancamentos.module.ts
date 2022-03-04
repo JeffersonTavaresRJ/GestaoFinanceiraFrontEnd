@@ -21,7 +21,7 @@ import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-p
 import { MovPrevistaFormCadastroComponent } from './mov-prevista/mov-prevista-create/mov-prevista-form-cadastro/mov-prevista-form-cadastro.component';
 import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
 import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-create/mov-prevista-form-controles/mov-prevista-form-controles.component';
-import { MovRealizadaCreateComponent } from './mov-realizada/mov-realizada-create/mov-realizada-create.component';
+import { MovRealizadaFormCadastroComponent } from './mov-realizada/mov-realizada-form-cadastro/mov-realizada-form-cadastro.component';
 import { MovRealizadaListComponent } from './mov-realizada/mov-realizada-list/mov-realizada-list.component';
 
 
@@ -31,7 +31,7 @@ import { MovRealizadaListComponent } from './mov-realizada/mov-realizada-list/mo
     MovPrevistaFormCadastroComponent,
     MovPrevistaQuitarFormComponent,
     MovPrevistaFormControlesComponent,
-    MovRealizadaCreateComponent,
+    MovRealizadaFormCadastroComponent,
     MovRealizadaListComponent
   ],
   imports: [

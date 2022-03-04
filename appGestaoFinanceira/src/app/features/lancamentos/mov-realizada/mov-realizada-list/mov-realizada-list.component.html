@@ -15,12 +15,12 @@
                     </div>
                 <div class="field col-3" style="text-align: center;">
                     <label><strong>Mês/Ano:</strong></label>
-                    <p-calendar placeholder="Mês/Ano" [(ngModel)]="dateMonth" view="month"
+                    <p-calendar placeholder="Mês/Ano" [(ngModel)]="dataReferencia" view="month"
                         dateFormat="M/yy" [readonlyInput]="true" (onSelect)="carregarDados()">
                     </p-calendar>
                 </div>
                 <div class="col-3" style="text-align: right;">
-                    <a class="btn btn-button bg-dark text-light" [routerLink]="">
+                    <a class="btn btn-button bg-dark text-light" [routerLink]="['/mov-realizada/new', dataReferencia | DateFormatToString]" >
                         + Novo Lançamento
                     </a>
                 </div>
@@ -40,12 +40,13 @@
                                         </div>
                                         <div class="col-6 mt-1" style="text-align: right; padding: 0px 0px;">
                                             <strong *ngIf="f==false">Saldo: {{item.valor | currency}}</strong>
-                                            <strong *ngIf="f==true"> Saldo Atual: {{item.valor | currency}}</strong>
+                                            <strong *ngIf="f==true"> Saldo no mês: {{item.valor | currency}}</strong>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-                            <tr *ngFor="let movRealizada of item.movimentacoesRealizadas">
+                            <tr *ngFor="let movRealizada of item.movimentacoesRealizadas" 
+                                [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
                                 <td class="small" style="width: 3%;">
                                     <!--PRIORIDADE-->
                                     <span *ngIf="movRealizada.tipoPrioridade=='A'">
@@ -64,16 +65,25 @@
                                 <td class="small">
                                     <!--ITEM MOVIMENTAÇÃO-->
                                     <strong>{{movRealizada.itemMovimentacao.descricao}}</strong>
-                                    <p class="text-muted">{{movRealizada.itemMovimentacao.categoria.descricao}}</p>
+                                    <p [class.text-muted]="movRealizada.itemMovimentacao.tipo=='D'">{{movRealizada.itemMovimentacao.categoria.descricao}}</p>
                                 </td>
                                 <td class="small pt-3" style="text-align: right;">
                                     <!--VALOR-->
-                                    {{movRealizada.valor | currency}}
-                                    <!--
-                                    <label [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
-                                        
-                                    </label>
-                                    -->
+                                    <label *ngIf="movRealizada.itemMovimentacao.tipo=='D'">-</label>{{movRealizada.valor | currency}}
+                                    <br>
+                                    <div *ngIf="item.status=='A'">
+                                        <!--EDIÇÃO/EXCLUSÃO-->
+                                        <a  title="Editar" [routerLink]="['/mov-realizada/edit',movRealizada.id, dataReferencia | DateFormatToString]" 
+                                            class="btn btn btn-outline-light me-1 btn-sm">
+                                            <img src="../../../../../assets/icons/edit_note_black_18dp.svg">
+                                        </a>
+                                        <button  title="Excluir" class="btn btn btn-outline-light btn-sm" 
+                                                (click)="modalDeleteMessage(movRealizada.id)"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalDelete">
+                                                <img src="../../../../../assets/icons/delete_black_18dp.svg">
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>                           
                         </tbody>
@@ -96,3 +106,8 @@
           </div>
     </div>
 </div>
+<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" 
+    [modal-interrogative-title]="'Sr. Usuário'"
+    [modal-interrogative-message]="'Deseja realizar a exclusão?'" 
+    (modalInterrogativeResponse)="eventDelete($event)">
+</app-modal-interrogative-form>

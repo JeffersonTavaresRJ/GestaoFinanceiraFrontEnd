@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
+import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 
@@ -16,11 +17,13 @@ export class MovRealizadaListComponent implements OnInit {
   resultsAux: any[];
   formGroup: FormGroup;
   
-  dateMonth: Date;
+  dataReferencia: Date;
   arStDate:string[];
+  idMovimentacaoRealizada : number;
 
   constructor(private actResourceRoute: ActivatedRoute,
               private movRealizadaService: MovRealizadaService,
+              private alertMessageForm: AlertMessageForm,
               protected formBuilder: FormBuilder) {
         this.formGroup = this.formBuilder.group({
            idConta:[1]
@@ -34,7 +37,7 @@ export class MovRealizadaListComponent implements OnInit {
   private movRealizadaList(){
     debugger;
     this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
-    this.dateMonth=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);    
+    this.dataReferencia=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);    
     
     this.actResourceRoute.data.subscribe(
       (sucess:{resolveMovReal: any[]})=>{
@@ -45,8 +48,8 @@ export class MovRealizadaListComponent implements OnInit {
   }
 
   carregarDados(){
-    var ano = this.dateMonth.getFullYear();
-    var mes = this.dateMonth.getMonth();
+    var ano = this.dataReferencia.getFullYear();
+    var mes = this.dataReferencia.getMonth();
     var dataIni = new Date(ano, mes, 1).toString();
     var dataFim = new Date(ano, mes+1, 0).toString();
     this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(dataIni, '-'), 
@@ -54,13 +57,27 @@ export class MovRealizadaListComponent implements OnInit {
       (sucess:any[])=>{
         this.results = sucess;
         this.resultsAux = this.results;
-        this.dateMonth = new Date(ano, mes, 1);
+        this.dataReferencia = new Date(ano, mes, 1);
     })
   }
 
   getConta(_ev: Conta){
    // this.formGroup.get("idConta").setValue(_ev.id);
     this.results = this.resultsAux.filter(x=>x.conta.id===this.formGroup.get("idConta").value);    
+  }
+
+  modalDeleteMessage(_idMovimentacaoRealizada: number){
+    this.idMovimentacaoRealizada = _idMovimentacaoRealizada;
+  }
+
+  eventDelete(event){
+    if(event){
+      this.movRealizadaService.deleteById(this.idMovimentacaoRealizada)
+          .subscribe(sucess=>{
+                               this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
+                               this.carregarDados()
+                              });
+    }
   }
   /*
   GroupByDataMovimentacaoRealizada(arMovRealizada: MovimentacaoRealizada[]): any[]

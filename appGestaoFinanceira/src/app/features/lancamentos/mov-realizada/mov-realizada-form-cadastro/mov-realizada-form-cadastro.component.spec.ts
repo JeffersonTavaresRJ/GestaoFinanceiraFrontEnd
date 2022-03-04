@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MovRealizadaCreateComponent } from './mov-realizada-create.component';
+import { MovRealizadaFormCadastroComponent } from './mov-realizada-form-cadastro.component';
 
 describe('MovRealizadaCreateComponent', () => {
-  let component: MovRealizadaCreateComponent;
-  let fixture: ComponentFixture<MovRealizadaCreateComponent>;
+  let component: MovRealizadaFormCadastroComponent;
+  let fixture: ComponentFixture<MovRealizadaFormCadastroComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MovRealizadaCreateComponent ]
+      declarations: [ MovRealizadaFormCadastroComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MovRealizadaCreateComponent);
+    fixture = TestBed.createComponent(MovRealizadaFormCadastroComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

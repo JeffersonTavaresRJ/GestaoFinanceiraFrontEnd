@@ -4,6 +4,10 @@ tr.small>td {
 
 }
 
+.text-success{
+  font-weight: bold;
+}
+
 .scroll {
     height: 400px;
     overflow-y: scroll;

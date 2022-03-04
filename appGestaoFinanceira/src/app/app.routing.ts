@@ -25,6 +25,7 @@ import { MovPrevistaFormCadastroComponent } from './features/lancamentos/mov-pre
 import { MovPrevistaFormControlesComponent } from './features/lancamentos/mov-prevista//mov-prevista-create/mov-prevista-form-controles/mov-prevista-form-controles.component';
 import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
 import { MovRealizadaListComponent } from './features/lancamentos/mov-realizada/mov-realizada-list/mov-realizada-list.component';
+import { MovRealizadaFormCadastroComponent } from './features/lancamentos/mov-realizada/mov-realizada-form-cadastro/mov-realizada-form-cadastro.component';
 
 import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
@@ -37,18 +38,21 @@ import { ItemMovimentacaoFormResolver } from './features/cadastros-basicos/_guar
 import { MovPrevistaListResolver } from './features/lancamentos/_guards/mov-prevista-list-resolver';
 import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prevista-form-resolver';
 import { MovRealizadaListResolver } from './features/lancamentos/_guards/mov-realizada-list-resolver';
+import { MovRealizadaFormResolver } from './features/lancamentos/_guards/mov-realizada-form-resolver';
 
 //criando o mapeamento de rotas dos componentes
 
 const routes: Routes = [
 
     { path: '', component: LoginFormComponent },
-    { path: 'login', component: LoginFormComponent },    
+    { path: 'login', component: LoginFormComponent },   
+    //================================================================================================= 
     { path: 'usuario/new', component: UsuarioFormCreateComponent,
              canDeactivate:[AuthGuard] },
     { path: 'usuario/edit/null', component: UsuarioFormUpdateComponent,
              canDeactivate:[AuthGuard]},
     { path: 'usuario/delete', component: UsuarioFormDeleteComponent },
+    //=================================================================================================
     { path: 'categoria', component: CategoriaListComponent, 
              canActivate:[AuthGuard],             
              resolve: {resolveResources: CategoriaListResolver} },
@@ -59,6 +63,7 @@ const routes: Routes = [
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard],
              resolve: {resolveResource: CategoriaFormResolver}  },
+    //=================================================================================================
     { path: 'conta', component: ContaListComponent,
              canActivate:[AuthGuard],
              resolve: {resolveResources: ContaListResolver} },
@@ -69,6 +74,7 @@ const routes: Routes = [
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard],
              resolve: {resolveResource: ContaFormResolver} },
+    //=================================================================================================
     { path: 'forma-pagamento', component: FormaPagamentoListComponent,
              canActivate:[AuthGuard],
              resolve:{resolveResources: FormaPagamentoListResolver} },
@@ -79,6 +85,7 @@ const routes: Routes = [
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard],
              resolve: {resolveResource: FormaPagamentoFormResolver} },
+    //=================================================================================================
     { path: 'item-movimentacao', component: ItemMovimentacaoListComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveResources: ItemMovimentacaoListResolver}  },
@@ -89,6 +96,7 @@ const routes: Routes = [
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard],
              resolve: {resolveResource: ItemMovimentacaoFormResolver} },
+    //=================================================================================================
     { path: 'mov-prevista/:dataVencIni/:dataVencFim', component: MovPrevistaListComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveResources: MovPrevistaListResolver}  },               
@@ -104,11 +112,21 @@ const routes: Routes = [
     { path: 'mov-prevista/quitar/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
+    //=================================================================================================
+    { path: 'mov-realizada/new/:dataReferencia', component: MovRealizadaFormCadastroComponent,
+             canActivate:[AuthGuard],
+             canDeactivate:[AuthGuard]  },
+    //=======rotas com "resolve" devem ficar por último para execução da rota correta==================
+    { path: 'mov-realizada/edit/:idMovReal/:dataReferencia', component: MovRealizadaFormCadastroComponent,
+             canActivate:[AuthGuard],             
+             resolve:{resolveMovReal: MovRealizadaFormResolver}  },
     { path: 'mov-realizada/:dataRealIni/:dataRealFim', component: MovRealizadaListComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovReal: MovRealizadaListResolver}  },
+     //================================================================================================
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
             /* canActivate:[AuthGuard] */},
+    //=================================================================================================
     { path: '**', component: Error404Component}
 ];
 
@@ -126,7 +144,8 @@ const routes: Routes = [
                ItemMovimentacaoFormResolver,
                MovPrevistaListResolver,
                MovPrevistaFormResolver,
-               MovRealizadaListResolver]
+               MovRealizadaListResolver,
+               MovRealizadaFormResolver]
 })
 
 export class AppRoutingModule { }
