@@ -28,6 +28,8 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
       idItemMovimentacao:[null],
       idConta:[null],
       idFormaPagamento:[null],
+      tipoPrioridade:[null],
+      observacao:[null],
       dataMovimentacaoRealizada:[null],
       valor:[null]
     });    

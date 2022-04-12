@@ -57,7 +57,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     resourceSubmmit() {
-      //  debugger;
+        debugger;
         this.resourceClass = this.resourceJsonDataToResourceFn(this.resourceForm.value);
         if (this.resourceCurrentAction() == 'new') {
             this.resourceCreate(this.resourceClass)

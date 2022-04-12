@@ -37,18 +37,18 @@
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
-                        <label>Conta:</label>
-                        <app-dropdown-conta 
+                        <label>Prioridade:</label>
+                        <app-dropdown-prioridade 
                               [form-group]="resourceForm"
-                              [form-control]="resourceForm.get('idConta')"
+                              [form-control]="resourceForm.get('tipoPrioridade')"
                               (OnChange)="resourceClearValidations()">
-                        </app-dropdown-conta>
+                        </app-dropdown-prioridade>
                     </div>
-                    <app-field-validation-form [form-control]="resourceForm.get('idConta')">
+                    <app-field-validation-form [form-control]="resourceForm.get('tipoPrioridade')">
                     </app-field-validation-form>
-                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idConta')">
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipoPrioridade')">
                     </app-field-server-errors-form>
-                </div>
+                </div>                
             </div>
 
             <div class="row  mt-3">
@@ -66,25 +66,53 @@
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idFormaPagamento')">
                     </app-field-server-errors-form>
                 </div>
-                <div class="form-group col-4">
-                    <label for="dataVencimento">Data do Pagamento:</label>
-                    <p-calendar inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataMovimentacaoRealizada"
-                        [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
-                    </p-calendar>
-
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label for="dataMovimentacaoRealizada">Data do Pagamento:</label>
+                        <p-calendar inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataMovimentacaoRealizada"
+                            [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
+                        </p-calendar>
+                    </div>
                     <app-field-validation-form [form-control]="resourceForm.get('dataMovimentacaoRealizada')">
                     </app-field-validation-form>
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('dataMovimentacaoRealizada')">
                     </app-field-server-errors-form>
 
                 </div>
-                <div class="form-group col-3">
-                    <label for="valor">Valor (R$):</label>
-                    <p-inputNumber formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
-                        [minFractionDigits]="2">
-                    </p-inputNumber>
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label for="valor">Valor (R$):</label>
+                        <p-inputNumber formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
+                            [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>                    
                     <app-field-validation-form [form-control]="resourceForm.get('valor')"></app-field-validation-form>
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('valor')">
+                    </app-field-server-errors-form>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="p-fluid col-8">
+                    <span class="p-float-label">
+                        <textarea formControlName="observacao" id="float-input" rows="2" cols="70"
+                            pInputTextarea></textarea>
+                        <label for="float-input">Observação</label>
+                    </span>
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('observacao')">
+                    </app-field-server-errors-form>
+                </div>
+                <div class="p-fluid col-4">
+                    <div class="p-field">
+                        <label>Conta:</label>
+                        <app-dropdown-conta 
+                              [form-group]="resourceForm"
+                              [form-control]="resourceForm.get('idConta')"
+                              (OnChange)="resourceClearValidations()">
+                        </app-dropdown-conta>
+                    </div>
+                    <app-field-validation-form [form-control]="resourceForm.get('idConta')">
+                    </app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idConta')">
                     </app-field-server-errors-form>
                 </div>
             </div>
