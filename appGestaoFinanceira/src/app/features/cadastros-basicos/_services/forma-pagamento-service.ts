@@ -11,8 +11,8 @@ import { FormaPagamentoCommandUpdate } from './commands/forma-pagamento/forma-pa
 export class FormaPagamentoService extends GenericResourceService<FormaPagamento>{
     constructor(injector: Injector){
         super(injector, 'api/FormaPagamento',
-        FormaPagamentoCommandCreate.convertModelToCommand,
-        FormaPagamentoCommandUpdate.convertModelToCommand,
-        FormaPagamentoCommandDelete.convertModelToCommand);
+        FormaPagamentoCommandCreate.convertFormGroupToCommand,
+        FormaPagamentoCommandUpdate.convertFormGroupToCommand,
+        FormaPagamentoCommandDelete.convertFormGroupToCommand);
     }
 }

@@ -13,7 +13,7 @@ export class ContaFormComponent extends GenericResourceFormComponent<Conta> {
   
   constructor(protected injector: Injector,
               private contaService: ContaService) {
-    super(injector, new Conta(), contaService, Conta.fromJson, 'conta');
+    super(injector, contaService, '/conta');
    }
 
    protected buildResourceForm() {

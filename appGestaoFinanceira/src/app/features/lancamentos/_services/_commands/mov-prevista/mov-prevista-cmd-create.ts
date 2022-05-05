@@ -1,5 +1,5 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
-import { MovimentacaoPrevista } from "../../../_models/mov-prevista-model";
 
 export class MovimentacaoPrevistaCommandCreate extends GenericCommand {
         
@@ -15,19 +15,19 @@ export class MovimentacaoPrevistaCommandCreate extends GenericCommand {
         public nrParcelaTotal: number
     ) { super();  };
 
-    static convertModelToCommand(movimentacaoPrevista: MovimentacaoPrevista):MovimentacaoPrevistaCommandCreate{
-        return new MovimentacaoPrevistaCommandCreate(
-            movimentacaoPrevista.itemMovimentacao.id,
-            movimentacaoPrevista.tipoPrioridade,
-            movimentacaoPrevista.observacao,
-            new Date(movimentacaoPrevista.dataVencimento.getFullYear(), 
-                    movimentacaoPrevista.dataVencimento.getMonth()+1,
+    static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoPrevistaCommandCreate{
+       return new MovimentacaoPrevistaCommandCreate(
+            formGroup.get('idItemMovimentacao').value,
+            formGroup.get('tipoPrioridade').value,
+            formGroup.get('observacao').value,
+            new Date(formGroup.get('dataVencimento').value.getFullYear(),
+                     formGroup.get('dataVencimento').value.getMonth()+1,
                     0),
-            movimentacaoPrevista.dataVencimento,
-            movimentacaoPrevista.valor,
-            movimentacaoPrevista.formaPagamento.id,
-            movimentacaoPrevista.nrParcela,
-            movimentacaoPrevista.nrParcelaTotal
+            formGroup.get('dataVencimento').value,
+            formGroup.get('valor').value,
+            formGroup.get('idFormaPagamento').value,
+            formGroup.get('nrParcela').value,
+            formGroup.get('nrParcelaTotal').value
         )
     }
 }

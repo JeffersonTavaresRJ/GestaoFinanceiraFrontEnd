@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { Usuario } from "src/app/features/security/_models/usuario-model";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
 
@@ -7,9 +8,9 @@ export class UsuarioCommandDelete extends GenericCommand {
         public id: number = null
     ) { super();  };
 
-    static convertModelToCommand(usuario: Usuario):UsuarioCommandDelete{
+    static convertFormGroupToCommand(formGroup: FormGroup):UsuarioCommandDelete{
         return new UsuarioCommandDelete(
-            usuario.id
+            formGroup.get('id').value
         )
     }
 }

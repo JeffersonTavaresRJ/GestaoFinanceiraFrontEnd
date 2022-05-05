@@ -12,8 +12,9 @@ export class ItemMovimentacao extends GenericResourceModel{
     ){
         super();
     }
-
+/*
     static fromJson(jsonData: any): ItemMovimentacao {
        return Object.assign(new ItemMovimentacao(), jsonData);
       }
+      */
 }

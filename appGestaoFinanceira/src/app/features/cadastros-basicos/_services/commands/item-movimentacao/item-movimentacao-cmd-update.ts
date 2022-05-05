@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
 import { ItemMovimentacao } from "../../../_models/item-movimentacao-model";
 
@@ -11,13 +12,13 @@ export class ItemMovimentacaoCommandUpdate extends GenericCommand {
         public idCategoria: number = null
     ) { super(); };
 
-    static convertModelToCommand(itemMovimentacao: ItemMovimentacao):ItemMovimentacaoCommandUpdate{
+    static convertFormGroupToCommand(formGroup: FormGroup):ItemMovimentacaoCommandUpdate{
         return new ItemMovimentacaoCommandUpdate(
-            itemMovimentacao.id,
-            itemMovimentacao.descricao,
-            itemMovimentacao.tipo,
-            itemMovimentacao.status,
-            itemMovimentacao.idCategoria            
+            formGroup.get('id').value,
+            formGroup.get('descricao').value,
+            formGroup.get('tipo').value,
+            formGroup.get('status').value,
+            formGroup.get('idCategoria').value      
         )
     }
 }

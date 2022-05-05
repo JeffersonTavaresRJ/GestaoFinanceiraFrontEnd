@@ -11,9 +11,9 @@ import { ItemMovimentacaoCommandUpdate } from "./commands/item-movimentacao/item
 export class ItemMovimentacaoService extends GenericResourceService<ItemMovimentacao>{
     constructor(private injector: Injector){
         super(injector, 'api/ItemMovimentacao',
-        ItemMovimentacaoCommandCreate.convertModelToCommand,
-        ItemMovimentacaoCommandUpdate.convertModelToCommand,
-        ItemMovimentacaoCommandDelete.convertModelToCommand);
+        ItemMovimentacaoCommandCreate.convertFormGroupToCommand,
+        ItemMovimentacaoCommandUpdate.convertFormGroupToCommand,
+        ItemMovimentacaoCommandDelete.convertFormGroupToCommand);
     }
 
     public getAllTipo():Observable<any>{

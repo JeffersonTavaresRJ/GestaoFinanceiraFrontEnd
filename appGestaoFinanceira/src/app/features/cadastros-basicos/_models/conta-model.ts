@@ -8,9 +8,10 @@ export class Conta extends GenericResourceModel{
     ) {
         super();
     }
-
+/*
     static fromJson(jsonData: any): Conta {
         return Object.assign(new Conta(), jsonData);
     }
+    */
 
 }

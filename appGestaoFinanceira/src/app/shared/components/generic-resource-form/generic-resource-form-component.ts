@@ -23,15 +23,13 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     protected bsAutenticarUsuario: BSAutenticarUsuario;
     protected resourceAlertMessage: AlertMessageForm;
     protected resourceFormBuilder: FormBuilder;
-
-    private validationErrors: any[] = [];
-    protected router: Router;
     protected actResourceRoute: ActivatedRoute;
 
+    private validationErrors: any[] = [];
+    private router: Router;
+    
     constructor(protected injector: Injector,
-        protected resourceClass: T,
         protected resourceService: GenericResourceService<T>,
-        protected resourceJsonDataToResourceFn: (jsonData)=>T,
         protected redirectRouterLink: string) {
 
         this.router = injector.get(Router);
@@ -39,7 +37,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         this.bsAutenticarUsuario = injector.get(BSAutenticarUsuario);
         this.resourceAlertMessage = injector.get(AlertMessageForm);
         this.actResourceRoute = injector.get(ActivatedRoute);
-
         this.resourceUsuario = JSON.parse(window.localStorage.getItem(environment.keyUser));
     }
 
@@ -58,13 +55,12 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     resourceSubmmit() {
         debugger;
-        this.resourceClass = this.resourceJsonDataToResourceFn(this.resourceForm.value);
         if (this.resourceCurrentAction() == 'new') {
-            this.resourceCreate(this.resourceClass)
+            this.resourceCreate()
         } else if (this.resourceCurrentAction() == 'edit') {
-            this.resourceUpdate(this.resourceClass)
+            this.resourceUpdate()
         } else if (this.resourceCurrentAction() == 'delete') {
-            this.resourceDelete(this.resourceClass.id)
+            this.resourceDelete()
         } else {
             this.resourceAlertMessage.showError('Rota não encontrada', 'Sr. Usuário');
         }
@@ -100,10 +96,10 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected abstract buildResourceForm();
 
-    protected resourceCreate(resourceClass: T) {
+    protected resourceCreate() {
        //debugger;
        //this.resourceMessageButton = 'Processando...';
-        this.resourceService.post(resourceClass)
+        this.resourceService.post(this.resourceForm)
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();
@@ -113,9 +109,9 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             );
     }
 
-    protected resourceUpdate(resourceClass: T) {
+    protected resourceUpdate() {
         //this.resourceMessageButton = 'Atualizando...';
-        this.resourceService.put(resourceClass)
+        this.resourceService.put(this.resourceForm)
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();
@@ -125,9 +121,9 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             );
     }
 
-    protected resourceDelete(id: number) {
+    protected resourceDelete() {
         //this.resourceMessageButton = 'Excluindo...';
-        this.resourceService.deleteById(id)
+        this.resourceService.deleteByKey(this.resourceForm)
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();

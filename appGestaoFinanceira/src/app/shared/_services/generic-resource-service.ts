@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { environment } from 'src/environments/environment';
@@ -17,9 +18,9 @@ export abstract class GenericResourceService<T extends Object>{
     constructor(injector: Injector, 
                 apiName:string,
                 //passando método como parâmetro..
-                protected  convertModelToCmdCreate: (model: T)=>GenericCommand,
-                protected  convertModelToCmdUpdate: (model: T)=>GenericCommand,
-                protected  convertModelToCmdDelete: (model: T)=>GenericCommand) 
+                protected  convertFormGroupToCmdCreate: (formControl: FormGroup)=>GenericCommand,
+                protected  convertFormGroupToCmdUpdate: (formControl: FormGroup)=>GenericCommand,
+                protected  convertFormGroupToCmdDelete: (formControl: FormGroup)=>GenericCommand) 
     {
         this.http = injector.get(HttpClient);
         this.apiName = apiName;
@@ -42,20 +43,20 @@ export abstract class GenericResourceService<T extends Object>{
         this.apiOption = apiOption;
     }
 
-    post(resource: T): Observable<any> {   
+    post(formGroup: FormGroup): Observable<any> {   
        debugger;
-       var command = this.convertModelToCmdCreate(resource);
+       var command = this.convertFormGroupToCmdCreate(formGroup);
        return this.http.post(this.getUrl(), command)
         .pipe(catchError(this.handlerError)/*, 
               --comentado para ler o retorno da mensagem de sucesso da API..
               map(this.jsonDataToResource.bind(this))*/);
     }
 
-    postArray(resources: T[]): Observable<any> {   
+    postArray(formGroup: FormGroup[]): Observable<any> {   
         debugger; 
         this.arcommandCreate.length = 0;
-        resources.forEach(element=>{
-            this.arcommandCreate.push(this.convertModelToCmdCreate(element));
+        formGroup.forEach(element=>{
+            this.arcommandCreate.push(this.convertFormGroupToCmdCreate(element));
         });
 
         return this.http.post(this.getUrl(), this.arcommandCreate)
@@ -64,18 +65,18 @@ export abstract class GenericResourceService<T extends Object>{
                map(this.jsonDataToResource.bind(this))*/);
     }
 
-    put(resource: T): Observable<any> {
+    put(formGroup: FormGroup): Observable<any> {
       debugger;  
-      var command = this.convertModelToCmdUpdate(resource);
+      var command = this.convertFormGroupToCmdUpdate(formGroup);
       return this.http.put(this.getUrl(), command)
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
               map(()=>resource)*/);
     }
 
-    deleteByKey(resource: T): Observable<any> {
+    deleteByKey(formGroup: FormGroup): Observable<any> {
         debugger;  
-        var command = this.convertModelToCmdDelete(resource);
+        var command = this.convertFormGroupToCmdDelete(formGroup);
         return this.http.delete(`${this.getUrl()}/${command}`)
           .pipe(catchError(this.handlerError)/*,
                 --comentado para ler o retorno da mensagem de sucesso da API..

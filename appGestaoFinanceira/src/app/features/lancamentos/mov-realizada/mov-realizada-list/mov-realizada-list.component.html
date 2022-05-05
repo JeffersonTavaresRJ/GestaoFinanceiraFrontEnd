@@ -20,7 +20,7 @@
                     </p-calendar>
                 </div>
                 <div class="col-3" style="text-align: right;">
-                    <a class="btn btn-button bg-dark text-light" [routerLink]="['/mov-realizada/new', dataReferencia | DateFormatToString]" >
+                    <a class="btn btn-button bg-dark text-light" [routerLink]="['/mov-realizada/new', dataIni | DateFormatToString, dataFim | DateFormatToString]" >
                         + Novo Lançamento
                     </a>
                 </div>
@@ -73,7 +73,7 @@
                                     <br>
                                     <div *ngIf="item.status=='A'">
                                         <!--EDIÇÃO/EXCLUSÃO-->
-                                        <a  title="Editar" [routerLink]="['/mov-realizada/edit',movRealizada.id, dataReferencia | DateFormatToString]" 
+                                        <a  title="Editar" [routerLink]="['/mov-realizada/edit',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
                                             class="btn btn btn-outline-light me-1 btn-sm">
                                             <img src="../../../../../assets/icons/edit_note_black_18dp.svg">
                                         </a>

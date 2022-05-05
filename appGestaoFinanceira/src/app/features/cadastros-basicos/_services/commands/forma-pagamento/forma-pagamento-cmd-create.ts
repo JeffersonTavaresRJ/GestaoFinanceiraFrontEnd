@@ -1,14 +1,14 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
-import { FormaPagamento } from "../../../_models/forma-pagamento";
 
 export class FormaPagamentoCommandCreate extends GenericCommand {
     constructor(
         public descricao: string = null
     ) { super();  };
 
-    static convertModelToCommand(categoria: FormaPagamento):FormaPagamentoCommandCreate{
+    static convertFormGroupToCommand(formGroup: FormGroup):FormaPagamentoCommandCreate{
         return new FormaPagamentoCommandCreate(
-            categoria.descricao
+            formGroup.get('descricao').value
         )
     }
 }

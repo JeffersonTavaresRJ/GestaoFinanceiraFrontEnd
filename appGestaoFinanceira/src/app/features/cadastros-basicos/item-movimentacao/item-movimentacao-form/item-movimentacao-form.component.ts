@@ -17,7 +17,7 @@ export class ItemMovimentacaoFormComponent extends GenericResourceFormComponent<
   constructor(protected injector: Injector,
     protected categoriaService: CategoriaService,
     protected itemMovimentacaoService: ItemMovimentacaoService) {
-    super(injector, new ItemMovimentacao(), itemMovimentacaoService, ItemMovimentacao.fromJson, '/item-movimentacao');
+    super(injector, itemMovimentacaoService, '/item-movimentacao');
   }
 
   id: number;

@@ -1,19 +1,19 @@
 <!--CADASTRO-->
 <div class="card col-10 offset-1 mt-5">
     <div class="card-body">
-        <app-header-page-title [header-title]="stPageTitle" header-button-label=">> Voltar"
+        <app-header-page-title [header-title]="resourcePageTitle" header-button-label=">> Voltar"
             [header-button-link]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
         </app-header-page-title>
-        <form [formGroup]="formGroup" (submit)="submmit()">
+        <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
             <div class="row  mt-3">
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Categoria:</label>
                         <app-dropdown-categoria 
-                              [form-group]="formGroup"
-                              [form-control]="formGroup.get('idCategoria')"
-                              [disabled]="currentAction()=='edit'"
-                              [select-by-status]="currentAction()=='new'"
+                              [form-group]="resourceForm"
+                              [form-control]="resourceForm.get('idCategoria')"
+                              [disabled]="resourceCurrentAction()=='edit'"
+                              [select-by-status]="resourceCurrentAction()=='new'"
                               (OnChange)="getCategoria($event)">
                         </app-dropdown-categoria>
                     </div>
@@ -22,31 +22,31 @@
                     <div class="p-field">
                         <label>Item Movimentação:</label>
                         <app-dropdown-item-movimentacao 
-                              [form-group]="formGroup"
-                              [form-control]="formGroup.get('idItemMovimentacao')"
-                              [disabled]="currentAction()=='edit'"
-                              [select-by-status]="currentAction()=='new'"
-                              [select-by-idCategoria]="formGroup.get('idCategoria').value"
+                              [form-group]="resourceForm"
+                              [form-control]="resourceForm.get('idItemMovimentacao')"
+                              [disabled]="resourceCurrentAction()=='edit'"
+                              [select-by-status]="resourceCurrentAction()=='new'"
+                              [select-by-idCategoria]="resourceForm.get('idCategoria').value"
                               (OnChange)="getItemMovimentacao($event)">
                         </app-dropdown-item-movimentacao>
                     </div>
-                    <app-field-validation-form [form-control]="formGroup.get('idItemMovimentacao')">
+                    <app-field-validation-form [form-control]="resourceForm.get('idItemMovimentacao')">
                     </app-field-validation-form>
-                    <app-field-server-errors-form [server-errors]="errorsValidations('idItemMovimentacao')">
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idItemMovimentacao')">
                     </app-field-server-errors-form>
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Prioridade:</label>
                         <app-dropdown-prioridade 
-                              [form-group]="formGroup"
-                              [form-control]="formGroup.get('tipoPrioridade')"
+                              [form-group]="resourceForm"
+                              [form-control]="resourceForm.get('tipoPrioridade')"
                               (OnChange)="clear($event)">
                         </app-dropdown-prioridade>
                     </div>
-                    <app-field-validation-form [form-control]="formGroup.get('tipoPrioridade')">
+                    <app-field-validation-form [form-control]="resourceForm.get('tipoPrioridade')">
                     </app-field-validation-form>
-                    <app-field-server-errors-form [server-errors]="errorsValidations('tipoPrioridade')">
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipoPrioridade')">
                     </app-field-server-errors-form>
                 </div>
             </div>
@@ -56,15 +56,15 @@
                     <div class="p-field">
                         <label>Forma de Pagamento:</label>
                         <app-dropdown-forma-pagamento 
-                               [form-group]="formGroup"
-                               [form-control]="formGroup.get('idFormaPagamento')"
-                               [select-by-status]="currentAction()=='new'"
+                               [form-group]="resourceForm"
+                               [form-control]="resourceForm.get('idFormaPagamento')"
+                               [select-by-status]="resourceCurrentAction()=='new'"
                                (OnChange)="getFormaPagamento($event)">
                         </app-dropdown-forma-pagamento>
                     </div>
-                    <app-field-validation-form [form-control]="formGroup.get('idFormaPagamento')">
+                    <app-field-validation-form [form-control]="resourceForm.get('idFormaPagamento')">
                     </app-field-validation-form>
-                    <app-field-server-errors-form [server-errors]="errorsValidations('idFormaPagamento')">
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idFormaPagamento')">
                     </app-field-server-errors-form>
                 </div>
                 <div class="form-group col-4">
@@ -73,9 +73,9 @@
                         [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
                     </p-calendar>
 
-                    <app-field-validation-form [form-control]="formGroup.get('dataVencimento')">
+                    <app-field-validation-form [form-control]="resourceForm.get('dataVencimento')">
                     </app-field-validation-form>
-                    <app-field-server-errors-form [server-errors]="errorsValidations('dataVencimento')">
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('dataVencimento')">
                     </app-field-server-errors-form>
 
                 </div>
@@ -84,8 +84,8 @@
                     <p-inputNumber formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
                         [minFractionDigits]="2">
                     </p-inputNumber>
-                    <app-field-validation-form [form-control]="formGroup.get('valor')"></app-field-validation-form>
-                    <app-field-server-errors-form [server-errors]="errorsValidations('valor')">
+                    <app-field-validation-form [form-control]="resourceForm.get('valor')"></app-field-validation-form>
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('valor')">
                     </app-field-server-errors-form>
                 </div>
             </div>
@@ -97,36 +97,36 @@
                             pInputTextarea></textarea>
                         <label for="float-input">Observação</label>
                     </span>
-                    <app-field-server-errors-form [server-errors]="errorsValidations('movimentacao.observacao')">
+                    <app-field-server-errors-form [server-errors]="resourceErrorsValidations('movimentacao.observacao')">
                     </app-field-server-errors-form>
                 </div>
 
                 <div class="p-fluid col-4">
-                    <div *ngIf="currentAction()=='new'">
+                    <div *ngIf="resourceCurrentAction()=='new'">
                         <div class="p-field">
                             <label>Recorrência:</label>
                             <p-dropdown [options]="arTiposRecorrencia" optionLabel="Value" optionValue="Key"
                                 formControlName="tipoRecorrencia" placeholder="Selecione a Recorrência"
-                                [showClear]="true" [filter]="false" (keyup)="clearValidations()"
-                                emptyMessage="Recorrência não encontrada" [disabled]="!formGroup.valid"
+                                [showClear]="true" [filter]="false" (keyup)="resourceClearValidations()"
+                                emptyMessage="Recorrência não encontrada" [disabled]="!resourceForm.valid"
                                 (onChange)="gerarRecorrencias()">
                             </p-dropdown>
                         </div>
-                        <app-field-validation-form [form-control]="formGroup.get('tipoRecorrencia')">
+                        <app-field-validation-form [form-control]="resourceForm.get('tipoRecorrencia')">
                         </app-field-validation-form>
-                        <app-field-server-errors-form [server-errors]="errorsValidations('tipoRecorrencia')">
+                        <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipoRecorrencia')">
                         </app-field-server-errors-form>
                     </div>
                 </div>
             </div>
 
             <div class="row mt-3">
-                <div class="col-12 mt-4" style="text-align: right;" *ngIf="formGroup.get('tipoRecorrencia').value=='N'">
+                <div class="col-12 mt-4" style="text-align: right;" *ngIf="resourceForm.get('tipoRecorrencia').value=='N'">
                     <a class="btn btn-dark me-3"
                         [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">
                         Cancelar
                     </a>
-                    <app-button-submmit-form [button-disabled]="!formGroup.valid"
+                    <app-button-submmit-form [button-disabled]="!resourceForm.valid"
                         button-path-ico="assets/icons/save-white-18dp.svg" button-title="Salvar">
                     </app-button-submmit-form>
                 </div>

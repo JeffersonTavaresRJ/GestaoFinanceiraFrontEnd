@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
 import { MovimentacaoRealizada } from "../../../_models/mov-realizada-model.";
 
@@ -15,19 +16,19 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
         public idConta: number = null
     ) { super(); };
 
-    static convertModelToCommand(movimentacaoRealizada: MovimentacaoRealizada):MovimentacaoRealizadaCommandUpdate{
+    static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandUpdate{
         return new MovimentacaoRealizadaCommandUpdate(
-            movimentacaoRealizada.id,
-            movimentacaoRealizada.itemMovimentacao.id,
-            new Date(movimentacaoRealizada.dataMovimentacaoRealizada.getFullYear(), 
-            movimentacaoRealizada.dataMovimentacaoRealizada.getMonth()+1,
-            0),
-            movimentacaoRealizada.tipoPrioridade,
-            movimentacaoRealizada.observacao,
-            movimentacaoRealizada.dataMovimentacaoRealizada,
-            movimentacaoRealizada.valor,
-            movimentacaoRealizada.formaPagamento.id,
-            movimentacaoRealizada.conta.id            
-        )
+            formGroup.get('id').value,
+            formGroup.get('idItemMovimentacao').value,
+            new Date(formGroup.get('dataMovimentacaoRealizada').value.getFullYear(),
+                     formGroup.get('dataMovimentacaoRealizada').value.getMonth()+1,
+                    0),
+            formGroup.get('tipoPrioridade').value,
+            formGroup.get('observacao').value,            
+            formGroup.get('dataMovimentacaoRealizada').value,
+            formGroup.get('valor').value,
+            formGroup.get('idFormaPagamento').value,
+            formGroup.get('idConta').value
+        );
     }
 }

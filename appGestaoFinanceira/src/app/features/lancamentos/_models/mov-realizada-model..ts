@@ -1,4 +1,3 @@
-import { DateConvert } from "src/app/shared/functions/date-convert";
 import { Conta } from "../../cadastros-basicos/_models/conta-model";
 import { FormaPagamento } from "../../cadastros-basicos/_models/forma-pagamento";
 import { ItemMovimentacao } from "../../cadastros-basicos/_models/item-movimentacao-model";
@@ -20,20 +19,4 @@ export class MovimentacaoRealizada extends Movimentacao{
      this.formaPagamento = new FormaPagamento();
      this.conta = new Conta();
    }
-
-  static fromJson(jsonData: any): MovimentacaoRealizada {
-    return new MovimentacaoRealizada(
-      new ItemMovimentacao(Number.parseInt(jsonData.idItemMovimentacao), null, null, true, null, null),
-      new Conta(Number.parseInt(jsonData.idConta), null, true),
-      new FormaPagamento(Number.parseInt(jsonData.idFormaPagamento), null, true),
-      new Date(new Date(jsonData.dataMovimentacaoRealizada).getFullYear(),
-      new Date(jsonData.dataMovimentacaoRealizada).getMonth()+1,
-      0),
-      jsonData.id,
-      new Date(jsonData.dataMovimentacaoRealizada),
-      jsonData.tipoPrioridade,
-      jsonData.observacao,
-      jsonData.valor
-    );
-  }
 }

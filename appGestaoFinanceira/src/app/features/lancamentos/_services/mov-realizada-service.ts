@@ -13,9 +13,9 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
 
   constructor(private injector: Injector) { 
     super(injector, 'api/MovimentacaoRealizada',
-    MovimentacaoRealizadaCommandCreate.convertModelToCommand,
-    MovimentacaoRealizadaCommandUpdate.convertModelToCommand,
-    MovimentacaoRealizadaCommandDelete.convertModelToCommand); 
+    MovimentacaoRealizadaCommandCreate.convertFormGroupToCommand,
+    MovimentacaoRealizadaCommandUpdate.convertFormGroupToCommand,
+    MovimentacaoRealizadaCommandDelete.convertFormGroupToCommand); 
   }
 
   getByDataReferencia(idItemMovimentacao: number, dataReferencia: string): Observable<MovimentacaoRealizada[]> {

@@ -1,19 +1,7 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
-import { MovimentacaoRealizada } from "../../../_models/mov-realizada-model.";
 
 export class MovimentacaoRealizadaCommandCreate extends GenericCommand {
-        /*
-{
-    "idItemMovimentacao": 0,
-    "dataReferencia": "2022-04-12T20:08:38.030Z",
-    "tipoPrioridade": "string",
-    "observacao": "string",
-    "dataMovimentacaoRealizada": "2022-04-12T20:08:38.031Z",
-    "valor": 0,
-    "idFormaPagamento": 0,
-    "idConta": 0
-  }
-        */
     constructor(
         public idItemMovimentacao: number = null,
         public dataReferencia: Date = null,
@@ -25,18 +13,18 @@ export class MovimentacaoRealizadaCommandCreate extends GenericCommand {
         public idConta: number = null
     ) { super();  };
 
-    static convertModelToCommand(movimentacaoRealizada: MovimentacaoRealizada):MovimentacaoRealizadaCommandCreate{
+    static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandCreate{
         return new MovimentacaoRealizadaCommandCreate(
-            movimentacaoRealizada.itemMovimentacao.id,
-            new Date(movimentacaoRealizada.dataMovimentacaoRealizada.getFullYear(), 
-            movimentacaoRealizada.dataMovimentacaoRealizada.getMonth()+1,
-            0),
-            movimentacaoRealizada.tipoPrioridade,
-            movimentacaoRealizada.observacao,
-            movimentacaoRealizada.dataMovimentacaoRealizada,
-            movimentacaoRealizada.valor,
-            movimentacaoRealizada.formaPagamento.id,
-            movimentacaoRealizada.conta.id
+            formGroup.get('idItemMovimentacao').value,
+            new Date(formGroup.get('dataMovimentacaoRealizada').value.getFullYear(),
+                     formGroup.get('dataMovimentacaoRealizada').value.getMonth()+1,
+                    0),
+            formGroup.get('tipoPrioridade').value,
+            formGroup.get('observacao').value,            
+            formGroup.get('dataMovimentacaoRealizada').value,
+            formGroup.get('valor').value,
+            formGroup.get('idFormaPagamento').value,
+            formGroup.get('idConta').value
         );
     }
 }

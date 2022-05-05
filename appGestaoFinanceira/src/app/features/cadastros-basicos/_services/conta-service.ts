@@ -10,8 +10,8 @@ import { ContaCommandUpdate } from "./commands/conta/conta-cmd-update";
 export class ContaService extends GenericResourceService<Conta>{
     constructor(private injector: Injector) {
         super(injector, 'api/Conta',
-        ContaCommandCreate.convertModelToCommand,
-        ContaCommandUpdate.convertModelToCommand,
-        ContaCommandDelete.convertModelToCommand)
+        ContaCommandCreate.convertFormGroupToCommand,
+        ContaCommandUpdate.convertFormGroupToCommand,
+        ContaCommandDelete.convertFormGroupToCommand)
     }
 }

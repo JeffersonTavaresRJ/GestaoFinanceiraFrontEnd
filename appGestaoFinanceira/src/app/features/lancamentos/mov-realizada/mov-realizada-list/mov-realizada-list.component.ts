@@ -19,6 +19,8 @@ export class MovRealizadaListComponent implements OnInit {
   
   dataReferencia: Date;
   arStDate:string[];
+  dataIni: Date;
+  dataFim: Date;
   idMovimentacaoRealizada : number;
 
   constructor(private actResourceRoute: ActivatedRoute,
@@ -36,8 +38,13 @@ export class MovRealizadaListComponent implements OnInit {
 
   private movRealizadaList(){
     debugger;
-    this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
-    this.dataReferencia=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);    
+    this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');    
+    
+    this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
+    this.dataReferencia = this.dataIni;
+
+    this.arStDate = this.actResourceRoute.snapshot.params.dataRealFim.split('-');
+    this.dataFim = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
     
     this.actResourceRoute.data.subscribe(
       (sucess:{resolveMovReal: any[]})=>{
@@ -50,10 +57,11 @@ export class MovRealizadaListComponent implements OnInit {
   carregarDados(){
     var ano = this.dataReferencia.getFullYear();
     var mes = this.dataReferencia.getMonth();
-    var dataIni = new Date(ano, mes, 1).toString();
-    var dataFim = new Date(ano, mes+1, 0).toString();
-    this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(dataIni, '-'), 
-                                                   DateConvert.formatDateYYYYMMDD(dataFim, '-')).subscribe(
+    this.dataIni = new Date(ano, mes, 1);
+    this.dataFim = new Date(ano, mes+1, 0);    
+    
+    this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(this.dataIni.toString(), '-'), 
+                                                   DateConvert.formatDateYYYYMMDD(this.dataFim.toString(), '-')).subscribe(
       (sucess:any[])=>{
         this.results = sucess;
         this.resultsAux = this.results;
