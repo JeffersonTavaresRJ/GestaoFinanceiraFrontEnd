@@ -19,7 +19,7 @@ export class UsuarioFormUpdateCadastroComponent extends GenericResourceFormCompo
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService,
     private bsUpdateUsuario: BSUpdateUsuario) {
-    super(injector, new Usuario, usuarioService, Usuario.fromJson, null);
+    super(injector, usuarioService, null);
   }
 
   protected buildResourceForm() {

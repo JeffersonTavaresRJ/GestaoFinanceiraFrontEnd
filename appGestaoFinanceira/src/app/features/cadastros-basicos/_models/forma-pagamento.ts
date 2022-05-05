@@ -8,9 +8,10 @@ export class FormaPagamento extends GenericResourceModel{
     ) {
         super();
     }
-
+/*
     static fromJson(jsonData: any): FormaPagamento {
         return Object.assign(new FormaPagamento(), jsonData);
     }
+    */
 
 }

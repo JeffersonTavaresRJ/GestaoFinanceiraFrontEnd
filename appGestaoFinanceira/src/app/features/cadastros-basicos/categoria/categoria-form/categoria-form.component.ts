@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { Categoria } from '../../_models/categoria-model';
@@ -14,7 +14,7 @@ export class CategoriaFormComponent extends GenericResourceFormComponent<Categor
 
   constructor(protected injector: Injector,
     protected categoriaService: CategoriaService) {
-    super(injector, new Categoria, categoriaService, Categoria.fromJson, 'categoria');
+    super(injector, categoriaService, '/categoria');
   }
 
   tipos: any[] = [];

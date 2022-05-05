@@ -6,6 +6,7 @@ import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { ConfirmationService } from 'primeng/api';
 import { MovPrevistaService } from '../../../_services/mov-prevista-service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class MovPrevistaFormControlesComponent implements OnInit {
 
   arFormasPagamento: FormaPagamento[];
   arMovPrevistas: MovimentacaoPrevista[]=[];
+  arFormGroup: FormGroup[]=[];
   arStDate: string[];
   arvalidationErrors: any[] = [];
 
@@ -181,10 +183,28 @@ export class MovPrevistaFormControlesComponent implements OnInit {
 
   /*=======MÉTODOS PARA CHAMADA DA API=======*/
   post(movPrevistas: MovimentacaoPrevista[]) {
-    this.movPrevistaService.postArray(movPrevistas).subscribe(
+
+    //carregando o array formGroup..
+    movPrevistas.forEach(element=>{
+      this.arFormGroup.push(new FormBuilder().group({
+        idItemMovimentacao: [element.itemMovimentacao.id],
+        tipoPrioridade: [element.tipoPrioridade],
+        observacao:[element.observacao],
+        dataReferencia:[element.dataReferencia],
+        dataVencimento:[element.dataVencimento],
+        valor:[element.valor],
+        idFormaPagamento:[element.idFormaPagamento],
+        nrParcela:[element.nrParcela],
+        nrParcelaTotal:[element.nrParcelaTotal]
+      }));
+    });
+    
+
+    this.movPrevistaService.postArray(this.arFormGroup).subscribe(
       sucess => { this.alertMessageForm.showSuccess(sucess.message, "Sr. Usuário") },
       error => { this.actionForError(error); }
     );
+
   }
 
   private actionForError(e) {

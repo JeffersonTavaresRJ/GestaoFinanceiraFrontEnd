@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { Usuario } from "src/app/features/security/_models/usuario-model";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
 
@@ -9,11 +10,11 @@ export class UsuarioCommandCreate extends GenericCommand {
         public senha: string = null
     ) { super();  };
 
-    static convertModelToCommand(usuario: Usuario):UsuarioCommandCreate{
+    static convertFormGroupToCommand(formGroup: FormGroup):UsuarioCommandCreate{
         return new UsuarioCommandCreate(
-            usuario.nome,
-            usuario.eMail,
-            usuario.senha
+            formGroup.get('nome').value,
+            formGroup.get('eMail').value,
+            formGroup.get('senha').value
         )
     }
 }

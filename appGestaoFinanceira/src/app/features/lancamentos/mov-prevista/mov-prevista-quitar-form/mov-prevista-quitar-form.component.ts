@@ -1,4 +1,5 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
@@ -82,7 +83,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         this.observacao = sucess.resolveMovPrev.observacao;
         this.dataVencimento = new Date(sucess.resolveMovPrev.dataVencimento);
         this.valor = sucess.resolveMovPrev.valor;
-        this.descricaoStatus = sucess.resolveMovPrev.statusDescricao;
+        this.descricaoStatus = sucess.resolveMovPrev.movPrevistaStatusDescricao;
         this.descricaoFormaPagamento = sucess.resolveMovPrev.formaPagamento.descricao;
         this.carregarTable();
       }
@@ -116,10 +117,21 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       delete this.clonedMovReal[movRealizada.id];
     }
     
-    this.movRealizadaService.put(movRealizada).subscribe(
-      sucess=>{this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário')},
-      error=>{console.log(error)}
-    )
+    this.movRealizadaService.put(
+        new FormBuilder().group({
+                                  id: [movRealizada.id],
+                                  idItemMovimentacao: [movRealizada.itemMovimentacao.id],
+                                  dataReferencia:[movRealizada.dataReferencia],
+                                  tipoPrioridade:[movRealizada.tipoPrioridade],
+                                  observacao:[movRealizada.observacao],
+                                  dataMovimentacaoRealizada:[movRealizada.dataMovimentacaoRealizada],
+                                  valor:[movRealizada.valor],
+                                  idFormaPagamento:[movRealizada.formaPagamento.id],
+                                  idConta:[movRealizada.conta.id]})
+      ).subscribe(
+              sucess=>{this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário')},
+              error=>{console.log(error)}
+    );
   }
 
   onRowEditCancel(movRealizada: MovimentacaoRealizada, index: number) {
@@ -140,6 +152,4 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         });
     }
   }
-
-
 }

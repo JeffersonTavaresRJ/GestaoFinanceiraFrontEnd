@@ -8,8 +8,9 @@ export class Categoria extends GenericResourceModel{
    ){
      super();
    }
-
+/*
    static fromJson(jsonData: any): Categoria {
     return Object.assign(new Categoria(), jsonData);
   }
+  */
 }

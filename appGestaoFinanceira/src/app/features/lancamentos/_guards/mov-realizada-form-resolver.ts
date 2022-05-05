@@ -12,6 +12,8 @@ export class MovRealizadaFormResolver implements Resolve<MovimentacaoRealizada> 
   }
 
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
+    debugger;
+    //colocar GetId na api com leitura de id da mov realizada,..
     this.idMovReal = activatedRouteSnapshot.params['idMovReal'];
     return this.movRealizadaService.getById(this.idMovReal);
   }

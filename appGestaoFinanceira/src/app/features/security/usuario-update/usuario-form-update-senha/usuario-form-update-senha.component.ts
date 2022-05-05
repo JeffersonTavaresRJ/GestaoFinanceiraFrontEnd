@@ -15,7 +15,7 @@ export class UsuarioFormUpdateSenhaComponent extends GenericResourceFormComponen
   constructor(protected injector: Injector,
     protected usuarioService: UsuarioService,
     private bsUpdateUsuario: BSUpdateUsuario) {
-    super(injector, new UsuarioTrocaSenha, usuarioService, UsuarioTrocaSenha.fromJson, '/login');    
+    super(injector, usuarioService, '/login');    
   }
 
   protected buildResourceForm() {
@@ -24,6 +24,8 @@ export class UsuarioFormUpdateSenhaComponent extends GenericResourceFormComponen
 
     this.resourceForm = this.resourceFormBuilder.group({
       id: this.resourceUsuario.id,
+     /* nome: this.resourceUsuario.nome,
+      eMail:this.resourceUsuario.eMail, */
       senhaAtual: [null],
       senha: [null],
       confirmarSenha: [null]

@@ -13,7 +13,7 @@ export class FormaPagamentoFormComponent extends GenericResourceFormComponent<Fo
   
   constructor(injector: Injector,
               formaPagamentoService: FormaPagamentoService){
-    super(injector, new FormaPagamento(), formaPagamentoService, FormaPagamento.fromJson, '/forma-pagamento');
+    super(injector, formaPagamentoService, '/forma-pagamento');
   }
   
   protected buildResourceForm() {

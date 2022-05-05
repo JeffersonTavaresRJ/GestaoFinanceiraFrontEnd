@@ -1,5 +1,5 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
-import { Categoria } from "../../../_models/categoria-model";
 
 export class CategoriaCommandUpdate extends GenericCommand {
     constructor(
@@ -8,11 +8,11 @@ export class CategoriaCommandUpdate extends GenericCommand {
         public status: boolean = null
     ) { super(); };
 
-    static convertModelToCommand(categoria: Categoria):CategoriaCommandUpdate{
+    static convertFormGroupToCommand(formGroup: FormGroup):CategoriaCommandUpdate{
         return new CategoriaCommandUpdate(
-            categoria.id,
-            categoria.descricao,
-            categoria.status            
+            formGroup.get('id').value,
+            formGroup.get('descricao').value,
+            formGroup.get('status').value            
         )
     }
 }

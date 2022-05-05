@@ -14,9 +14,9 @@ export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevi
 
   constructor(private injector: Injector) {
     super(injector, 'api/MovimentacaoPrevista', 
-          MovimentacaoPrevistaCommandCreate.convertModelToCommand,
-          MovimentacaoPrevistaCommandUpdate.convertModelToCommand,
-          MovimentacaoPrevistaCommandDelete.convertModelToCommand);
+          MovimentacaoPrevistaCommandCreate.convertFormGroupToCommand,
+          MovimentacaoPrevistaCommandUpdate.convertFormGroupToCommand,
+          MovimentacaoPrevistaCommandDelete.convertFormGroupToCommand);
   }
 
   getByKey(idItemMovimentacao: number, dataReferencia: string): Observable<MovimentacaoPrevista> {

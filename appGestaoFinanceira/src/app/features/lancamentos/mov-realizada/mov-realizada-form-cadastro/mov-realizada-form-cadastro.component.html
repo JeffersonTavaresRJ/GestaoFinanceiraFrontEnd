@@ -2,7 +2,7 @@
 <div class="card col-10 offset-1 mt-5">
     <div class="card-body">
         <app-header-page-title [header-title]="resourcePageTitle" header-button-label=">> Voltar"
-            [header-button-link]="['/mov-realizada', dataReferencia | DateFormatToString, dataReferencia | DateFormatToString]">
+            [header-button-link]="['/mov-realizada', dataIni | DateFormatToString, dataFim | DateFormatToString]">
         </app-header-page-title>
         <form [formGroup]="resourceForm" (submit)="resourceSubmmit()">
             <div class="row  mt-3">
@@ -120,7 +120,7 @@
             <div class="row mt-3">
                 <div class="col-12 mt-4" style="text-align: right;">
                     <a class="btn btn-dark me-3"
-                        [routerLink]="['/mov-realizada', dataReferencia | DateFormatToString, dataReferencia | DateFormatToString]">
+                        [routerLink]="['/mov-realizada', dataIni | DateFormatToString, dataFim | DateFormatToString]">
                         Cancelar
                     </a>
                     <app-button-submmit-form [button-disabled]="!resourceForm.valid"

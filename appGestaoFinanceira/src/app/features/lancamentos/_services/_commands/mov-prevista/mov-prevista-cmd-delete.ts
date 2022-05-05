@@ -1,5 +1,5 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
-import { MovimentacaoPrevista } from "../../../_models/mov-prevista-model";
 
 export class MovimentacaoPrevistaCommandDelete extends GenericCommand {
     constructor(
@@ -7,10 +7,10 @@ export class MovimentacaoPrevistaCommandDelete extends GenericCommand {
         public dataReferencia: Date = null
     ) { super(); };
 
-    static convertModelToCommand(movimentacaoPrevista: MovimentacaoPrevista):MovimentacaoPrevistaCommandDelete{
+    static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoPrevistaCommandDelete{
         return new MovimentacaoPrevistaCommandDelete(
-            movimentacaoPrevista.itemMovimentacao.id,
-            movimentacaoPrevista.dataReferencia
-        )
-    }
+             formGroup.get('idItemMovimentacao').value,
+             formGroup.get('dataReferencia').value
+         )
+     }
 }

@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
 import { MovimentacaoPrevista } from "../../../_models/mov-prevista-model";
 
@@ -13,16 +14,16 @@ export class MovimentacaoPrevistaCommandUpdate extends GenericCommand {
         public idFormaPagamento: number = null
     ) { super(); };
 
-    static convertModelToCommand(movimentacaoPrevista: MovimentacaoPrevista):MovimentacaoPrevistaCommandUpdate{
+    static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoPrevistaCommandUpdate{
         return new MovimentacaoPrevistaCommandUpdate(
-            movimentacaoPrevista.itemMovimentacao.id,
-            movimentacaoPrevista.dataReferencia,
-            movimentacaoPrevista.tipoPrioridade,
-            movimentacaoPrevista.observacao,            
-            movimentacaoPrevista.dataVencimento,
-            movimentacaoPrevista.valor,
-            movimentacaoPrevista.status,
-            movimentacaoPrevista.formaPagamento.id
-        )
-    }
+             formGroup.get('idItemMovimentacao').value,
+             formGroup.get('dataReferencia').value,
+             formGroup.get('tipoPrioridade').value,             
+             formGroup.get('observacao').value,
+             formGroup.get('dataVencimento').value,
+             formGroup.get('valor').value,
+             formGroup.get('status').value,
+             formGroup.get('idFormaPagamento').value
+         )
+     }
 }

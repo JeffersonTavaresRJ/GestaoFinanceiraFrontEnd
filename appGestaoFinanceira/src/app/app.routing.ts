@@ -113,11 +113,11 @@ const routes: Routes = [
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
     //=================================================================================================
-    { path: 'mov-realizada/new/:dataReferencia', component: MovRealizadaFormCadastroComponent,
+    { path: 'mov-realizada/new/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard]  },
     //=======rotas com "resolve" devem ficar por último para execução da rota correta==================
-    { path: 'mov-realizada/edit/:idMovReal/:dataReferencia', component: MovRealizadaFormCadastroComponent,
+    { path: 'mov-realizada/edit/:idMovReal/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovReal: MovRealizadaFormResolver}  },
     { path: 'mov-realizada/:dataRealIni/:dataRealFim', component: MovRealizadaListComponent,

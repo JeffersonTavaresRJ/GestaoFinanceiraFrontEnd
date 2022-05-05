@@ -13,7 +13,7 @@ export class UsuarioFormCreateComponent extends GenericResourceFormComponent<Usu
 
   constructor(protected injector: Injector,        
               protected usuarioService: UsuarioService) {
-    super(injector, new Usuario, usuarioService, Usuario.fromJson, '/login');    
+    super(injector, usuarioService,'/login');    
   }
 
   protected buildResourceForm() {

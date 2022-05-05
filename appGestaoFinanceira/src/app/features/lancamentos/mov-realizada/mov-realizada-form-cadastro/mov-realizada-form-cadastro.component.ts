@@ -1,8 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { Categoria } from 'src/app/features/cadastros-basicos/_models/categoria-model';
-import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
-import { ItemMovimentacao } from 'src/app/features/cadastros-basicos/_models/item-movimentacao-model';
+import { Component, Injector } from '@angular/core';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
@@ -14,12 +10,14 @@ import { MovRealizadaService } from '../../_services/mov-realizada-service';
 })
 export class MovRealizadaFormCadastroComponent extends GenericResourceFormComponent<MovimentacaoRealizada> {
 
+  arStDate: string[];
+  dataIni: Date;
+  dataFim: Date;
+  
   constructor(protected injector: Injector,
-    protected movRealizadaService: MovRealizadaService) {
-    super(injector, new MovimentacaoRealizada, movRealizadaService, MovimentacaoRealizada.fromJson, null);
+    protected movimentacaoRealizadaService: MovRealizadaService) {
+    super(injector, movimentacaoRealizadaService, null);
   }
-
-  dataReferencia:Date;
 
   protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({
@@ -32,8 +30,13 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
       observacao:[null],
       dataMovimentacaoRealizada:[null],
       valor:[null]
-    });    
-  }
+    });   
+    
+    this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
+    this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
+    this.arStDate = this.actResourceRoute.snapshot.params.dataRealFim.split('-');
+    this.dataFim = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
+ }
 
   protected resourceCreatePageTitle():string{
     return 'Novo Lançamento';
@@ -42,4 +45,36 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   protected resourceEditPageTitle():string{
     return 'Edição do Lançamento';
   } 
+
+  protected loadResource() {
+    if (this.resourceCurrentAction() == 'edit') {
+      this.actResourceRoute.data.subscribe(
+        (sucess: { resolveMovReal: MovimentacaoRealizada }) => {
+          console.log(sucess);
+          //o resolveMovReal deve ser o mesmo nome na variável resolve da rota.. 
+          this.resourceForm.get('id').setValue(sucess.resolveMovReal.id);
+          this.resourceForm.get('idCategoria').setValue(sucess.resolveMovReal.itemMovimentacao.categoria.id);
+          this.resourceForm.get('idItemMovimentacao').setValue(sucess.resolveMovReal.itemMovimentacao.id);
+          this.resourceForm.get('dataMovimentacaoRealizada').setValue(new Date(sucess.resolveMovReal.dataMovimentacaoRealizada));
+          this.resourceForm.get('tipoPrioridade').setValue(sucess.resolveMovReal.tipoPrioridade);
+          this.resourceForm.get('observacao').setValue(sucess.resolveMovReal.observacao);
+          this.resourceForm.get('valor').setValue(sucess.resolveMovReal.valor);
+          this.resourceForm.get('idConta').setValue(sucess.resolveMovReal.conta.id);
+          this.resourceForm.get('idFormaPagamento').setValue(sucess.resolveMovReal.formaPagamento.id);
+        }
+      );
+    }
+  }
+
+  protected resourceCreate() {
+    //classe colocada entre colchetes para ser considerada como array de 01 elemento..
+    this.movimentacaoRealizadaService.postArray( [this.resourceForm] )
+      .subscribe(
+        sucess => {
+          this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+        },
+        error => { this.resourceActionForError(error) }
+      );
+  }
+
 }

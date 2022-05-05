@@ -1,5 +1,4 @@
-import { FormGroup } from '@angular/forms';
-import { Observable, Observer } from 'rxjs';
+import { Observable} from 'rxjs';
 import {FormaPagamento} from '../../cadastros-basicos/_models/forma-pagamento';
 import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
 import { Movimentacao } from "./movimentacao";
@@ -13,8 +12,8 @@ export class MovimentacaoPrevista extends Movimentacao{
      public idFormaPagamento: number=null,
      public dataVencimento: Date=null,
      public valor: number=null,
-     public status: string=null,
-     public statusDescricao: string=null,
+     public movPrevistaStatus: string=null,
+     public movPrevistaStatusDescricao: string=null,
      public tipoRecorrencia: string=null,
      public nrParcela: number=null,
      public nrParcelaTotal: number=null
@@ -27,19 +26,6 @@ export class MovimentacaoPrevista extends Movimentacao{
     private static movPrev: MovimentacaoPrevista;
     private static arMovimentacoesPrevistas: MovimentacaoPrevista[]=[];
 
-    static fromJson(jsonData: any): MovimentacaoPrevista {
-        return Object.assign(new MovimentacaoPrevista(), jsonData);
-    }
-
-    static formGroupToJson(formGroup: FormGroup): MovimentacaoPrevista {
-        this.movimentacaoPrevista = Object.assign(new MovimentacaoPrevista(), formGroup.value);
-        this.movimentacaoPrevista.itemMovimentacao.id = formGroup.get('idItemMovimentacao').value;
-        this.movimentacaoPrevista.formaPagamento.id = formGroup.get('idFormaPagamento').value;
-        this.movimentacaoPrevista.nrParcela = 1;
-        this.movimentacaoPrevista.nrParcelaTotal = 1; 
-        return this.movimentacaoPrevista;
-    }
-    
     static gerarRecorrencias(movimentacaoPrevista: MovimentacaoPrevista, total: number):Observable<MovimentacaoPrevista[]>{
         //debugger;
         var item = 0;
@@ -66,8 +52,8 @@ export class MovimentacaoPrevista extends Movimentacao{
             this.movPrev.idFormaPagamento = movimentacaoPrevista.formaPagamento.id;
             this.movPrev.itemMovimentacao = movimentacaoPrevista.itemMovimentacao;
             this.movPrev.observacao = movimentacaoPrevista.observacao;
-            this.movPrev.status = movimentacaoPrevista.status;
-            this.movPrev.statusDescricao = movimentacaoPrevista.statusDescricao;
+            this.movPrev.movPrevistaStatus = movimentacaoPrevista.movPrevistaStatus;
+            this.movPrev.movPrevistaStatusDescricao = movimentacaoPrevista.movPrevistaStatusDescricao;
             this.movPrev.tipoPrioridade = movimentacaoPrevista.tipoPrioridade;
             this.movPrev.tipoPrioridadeDescricao = movimentacaoPrevista.tipoPrioridadeDescricao;
             this.movPrev.tipoRecorrencia = movimentacaoPrevista.tipoRecorrencia;            

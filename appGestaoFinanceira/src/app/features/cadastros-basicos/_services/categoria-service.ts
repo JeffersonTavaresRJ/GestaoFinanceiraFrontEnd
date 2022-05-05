@@ -13,9 +13,9 @@ import { CategoriaCommandDelete } from "./commands/categoria/categoria-cmd-delet
 export class CategoriaService extends GenericResourceService<Categoria>{
     constructor(private injector: Injector){
         super(injector, 'api/Categoria',
-        CategoriaCommandCreate.convertModelToCommand,
-        CategoriaCommandUpdate.convertModelToCommand,
-        CategoriaCommandDelete.convertModelToCommand);        
+        CategoriaCommandCreate.convertFormGroupToCommand,
+        CategoriaCommandUpdate.convertFormGroupToCommand,
+        CategoriaCommandDelete.convertFormGroupToCommand);        
     }   
 
     listarTipos(): Observable<any[]>{ 
