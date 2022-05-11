@@ -176,10 +176,13 @@
                         </td>
                         <td>
                             <!--STATUS-->
-                            <a [routerLink]="['/mov-prevista/quitar',movimentacao.itemMovimentacao.id, movimentacao.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
-                               *ngIf="movimentacao.status=='A'" class="btn btn-outline-primary btn-sm">
-                                Quitar
-                            </a>
+                            <button *ngIf="movimentacao.status=='A'" 
+                                    class="btn btn-outline-primary btn-sm" 
+                                    (click)="modalQuitacao(movimentacao)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalQuitar">
+                                    Quitar 
+                            </button>
                             <img *ngIf="movimentacao.status=='Q'" class="logo text-start"
                                 src="assets\icons\task_alt_black_24dp.svg"
                                 title="Status: {{movimentacao.statusDescricao}}" width="55" height="30">
@@ -209,8 +212,14 @@
         </div>
     </div>
 </div>
+
 <app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" 
     [modal-interrogative-title]="'Sr. Usuário'"
     [modal-interrogative-message]="'Deseja realizar a exclusão?'" 
     (modalInterrogativeResponse)="eventDelete($event)">
 </app-modal-interrogative-form>
+
+<app-modal-mov-prevista-quitar-form 
+      [modal-mov-prevista-id]="'modalQuitar'"
+      [modal-mov-prevista]="movimentacaoPrevista">
+</app-modal-mov-prevista-quitar-form>  

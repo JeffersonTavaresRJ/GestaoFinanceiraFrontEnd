@@ -1,6 +1,5 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { ContaService } from 'src/app/features/cadastros-basicos/_services/conta-service';
@@ -12,88 +11,83 @@ import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 
 @Component({
-  selector: 'app-mov-prevista-quitar-form',
+  selector: 'app-modal-mov-prevista-quitar-form',
   templateUrl: './mov-prevista-quitar-form.component.html',
   styleUrls: ['./mov-prevista-quitar-form.component.css']
 })
 
 export class MovPrevistaQuitarFormComponent implements OnInit {
 
-  @ViewChild('dataMovRealizada') dataMovRealizada;
+  @Input('modal-mov-prevista-id') idModal: string;
+  @Input('modal-mov-prevista') movimentacaoPrevista: MovimentacaoPrevista;
 
-  activateRoute: ActivatedRoute;
   movRealizadaService: MovRealizadaService;
   formaPagamentoService: FormaPagamentoService;
   contaService: ContaService;
   alertMessageForm: AlertMessageForm;
 
-  dataIni: Date;
-  dataFim: Date;
   idMovRealizadaDelete: number;
-  arStDate: string[] = [];
+  movimentacaoRealizada: MovimentacaoRealizada;
+
+  nrTotal: number;
+  nrTotalRecorrencias: number;
+  displayError: boolean;
+  displayModal: boolean;
   arMovRealizadas: MovimentacaoRealizada[] = [];
   arFormasPagamento: FormaPagamento[] = [];
   arContas: Conta[] = [];
+  arStDataMovimentacao: string[]=[];
+  arStValor: string[]=[];
+  arvalidationErrors: any[] = [];
   clonedMovReal: { [s: string]: MovimentacaoRealizada } = {};
 
-
-  descricaoCategoria: string;
-  idItemMovimentacao: number;
-  descricaoItemMovimentacao: string;
-  dataReferencia: Date;
-  descricaoTipoPrioridade: string;
-  observacao: string;
-  dataVencimento: Date;
-  valor: number;
-  descricaoStatus: string;
-  descricaoFormaPagamento: string;
-
-  //movRealizada_id:string;
-  dataMovimentacaoRealizada: string;
+  headerDialog: string;
 
   constructor(protected injector: Injector) {
-    this.activateRoute = injector.get(ActivatedRoute);
+    debugger;
     this.movRealizadaService = injector.get(MovRealizadaService);
     this.formaPagamentoService = injector.get(FormaPagamentoService);
     this.contaService = injector.get(ContaService);
     this.alertMessageForm = injector.get(AlertMessageForm);
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    debugger;
+    this.movimentacaoPrevista = changes.movimentacaoPrevista.currentValue;
+    if (this.movimentacaoPrevista != null){
+        this.headerDialog = "Quitar Previsão: " + this.movimentacaoPrevista.itemMovimentacao.descricao;
+        this.carregarTable(); 
+        //tratamento para carregar a lista somente com 1 item caso não exista registros..
+        if(this.arMovRealizadas.length==0){
+          this.movimentacaoRealizada = new MovimentacaoRealizada();
+          this.movimentacaoRealizada.itemMovimentacao = this.movimentacaoPrevista.itemMovimentacao;
+          this.movimentacaoRealizada.dataReferencia = this.movimentacaoPrevista.dataReferencia;
+          this.movimentacaoRealizada.dataMovimentacaoRealizada = new Date();
+          this.movimentacaoRealizada.valor = this.movimentacaoPrevista.valor;
+          this.arMovRealizadas.push(this.movimentacaoRealizada);
+         }
+         this.arMovRealizadas.forEach(element => { this.nrTotal += element.valor });     
+    }     
+  }
+
   ngOnInit(): void {
+    debugger;
     this.formaPagamentoService.getAll().subscribe(result => this.arFormasPagamento = result);
     this.contaService.getAll().subscribe(result => this.arContas = result);
-
-    this.load();
-
-    this.arStDate = this.activateRoute.snapshot.params.dataVencIni.split('-');
-    this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
-    this.arStDate = this.activateRoute.snapshot.params.dataVencFim.split('-');
-    this.dataFim = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
-
   }
 
-  private load() {
-    this.activateRoute.data.subscribe(
-      (sucess: { resolveMovPrev: MovimentacaoPrevista }) => {
-        this.descricaoCategoria = sucess.resolveMovPrev.itemMovimentacao.categoria.descricao;
-        this.idItemMovimentacao = sucess.resolveMovPrev.itemMovimentacao.id;
-        this.descricaoItemMovimentacao = sucess.resolveMovPrev.itemMovimentacao.descricao;
-        this.dataReferencia = new Date(sucess.resolveMovPrev.dataReferencia);
-        this.descricaoTipoPrioridade = sucess.resolveMovPrev.tipoPrioridadeDescricao;
-        this.observacao = sucess.resolveMovPrev.observacao;
-        this.dataVencimento = new Date(sucess.resolveMovPrev.dataVencimento);
-        this.valor = sucess.resolveMovPrev.valor;
-        this.descricaoStatus = sucess.resolveMovPrev.movPrevistaStatusDescricao;
-        this.descricaoFormaPagamento = sucess.resolveMovPrev.formaPagamento.descricao;
-        this.carregarTable();
-      }
-    );
-
-  }
-
-  carregarTable() {
-    this.movRealizadaService.getByDataReferencia(this.idItemMovimentacao,
-      DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-')).subscribe(result => this.arMovRealizadas = result);
+  private carregarTable() {
+    debugger;
+    this.movRealizadaService.getByDataReferencia
+      (this.movimentacaoPrevista.itemMovimentacao.id, 
+       DateConvert.formatDateDDMMYYYY(this.movimentacaoPrevista.dataReferencia, '-')).subscribe( 
+         success=>{
+                   this.arMovRealizadas = success;                   
+                  },
+        error=>{
+          this.actionForError(error)
+        });
+                                                       
   }
 
   onRowEditInit(movRealizada: MovimentacaoRealizada) {
@@ -108,10 +102,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     this.arContas.filter(c => c.id == movRealizada.conta.id).map(c => {
       movRealizada.conta.descricao = c.descricao;
     });
-
-    this.arStDate = this.dataMovRealizada.value.split('/');
-    //console.log(this.dataMovRealizada.value);
-    movRealizada.dataMovimentacaoRealizada = new Date(Number.parseInt(this.arStDate[2]), Number.parseInt(this.arStDate[1]) - 1, Number.parseInt(this.arStDate[0]), 0, 0, 0);
 
     if (movRealizada.valor > 0) {
       delete this.clonedMovReal[movRealizada.id];
@@ -130,7 +120,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
                                   idConta:[movRealizada.conta.id]})
       ).subscribe(
               sucess=>{this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário')},
-              error=>{console.log(error)}
+              error=>{this.actionForError(error)}
     );
   }
 
@@ -151,5 +141,23 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
           this.carregarTable();
         });
     }
+  }
+
+  private actionForError(e) {
+    if (e.status == 400) {
+      //validações da API (BadRequest) 
+      this.arvalidationErrors = e.error;
+      this.displayError = true;
+    }
+  }
+
+  addRow(){
+    this.arMovRealizadas.push(this.movimentacaoRealizada);
+    this.arMovRealizadas.forEach(element => { this.nrTotal += element.valor });
+  }
+
+  clearValidations() {
+    this.arvalidationErrors = [];
+    this.displayError = false;
   }
 }

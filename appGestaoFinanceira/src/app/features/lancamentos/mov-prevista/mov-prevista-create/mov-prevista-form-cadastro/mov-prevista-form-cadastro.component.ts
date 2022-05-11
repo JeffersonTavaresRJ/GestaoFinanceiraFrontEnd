@@ -102,7 +102,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   gerarRecorrencias() {
     if (this.resourceForm.get('tipoRecorrencia').value == "M" ||
       this.resourceForm.get('tipoRecorrencia').value == "P") {
-      //debugger;
+      debugger;
       this.movimentacaoPrevista = new MovimentacaoPrevista();
       this.movimentacaoPrevista.itemMovimentacao = this.itemMovimentacao;
       this.movimentacaoPrevista.formaPagamento = this.formaPagamento;

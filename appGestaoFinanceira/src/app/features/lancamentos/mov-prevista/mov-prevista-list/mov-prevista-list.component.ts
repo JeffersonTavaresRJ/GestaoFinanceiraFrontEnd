@@ -42,6 +42,7 @@ export class MovPrevistaListComponent implements OnInit {
   arItensMovimentacao: ItemMovimentacao[];
   arCategorias: Categoria[];
   arMovPrevistas: MovimentacaoPrevista[];
+  movimentacaoPrevista: MovimentacaoPrevista = new MovimentacaoPrevista();
   
   constructor(protected injector: Injector) { 
     this.actResourceRoute = injector.get(ActivatedRoute);
@@ -58,7 +59,7 @@ export class MovPrevistaListComponent implements OnInit {
   }
 
   private carregaParametros(){
-    //debugger;
+    debugger;
     this.arStDate = this.actResourceRoute.snapshot.params.dataVencIni.split('-');
     this.arDtRangeDataVenc[0]=new Date(this.arStDate[1]+'-'+this.arStDate[2]+'-'+this.arStDate[0]);
     this.arStDate = this.actResourceRoute.snapshot.params.dataVencFim.split('-');
@@ -112,6 +113,11 @@ export class MovPrevistaListComponent implements OnInit {
     modalDeleteMessage(_idItemMovimentacao: number, _dataReferencia: Date) {
       this.idItemMovimentacao = _idItemMovimentacao;
       this.dataReferencia = _dataReferencia;      
+    }
+
+    modalQuitacao(movimentacaoPrevista: MovimentacaoPrevista) {
+      debugger;
+      this.movimentacaoPrevista = movimentacaoPrevista;
     }
     
     eventDelete(event){
