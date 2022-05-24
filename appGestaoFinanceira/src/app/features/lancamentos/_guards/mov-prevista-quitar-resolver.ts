@@ -4,16 +4,17 @@ import { MovimentacaoRealizada } from '../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../_services/mov-realizada-service';
 
 @Injectable()
-export class MovRealizadaListResolver implements Resolve<any[]> {
-
-  private dataRealizadaIni: string;
-  private dataRealizadaFim: string;
+export class MovPrevistaQuitarResolver implements Resolve<MovimentacaoRealizada[]> {  
+  
+  private idItemMovimentacao: number;
+  private dataReferencia: string;
   constructor(private movRealizadaService: MovRealizadaService) {}
 
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
-    this.dataRealizadaIni = activatedRouteSnapshot.params['dataRealIni'];
-    this.dataRealizadaFim = activatedRouteSnapshot.params['dataRealFim'];
+    this.idItemMovimentacao = activatedRouteSnapshot.params['idItemMov'];
+    this.dataReferencia = activatedRouteSnapshot.params['dataRef'];
     debugger;
-    return this.movRealizadaService.GetGroupBySaldoDiario(this.dataRealizadaIni, this.dataRealizadaFim);
+    return this.movRealizadaService.getByDataReferencia(this.idItemMovimentacao, this.dataReferencia);
   }
+
 }

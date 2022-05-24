@@ -12,7 +12,13 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-mov-prevista-form-controles',
   templateUrl: './mov-prevista-form-controles.component.html',
-  styleUrls: ['./mov-prevista-form-controles.component.css']
+  styleUrls: ['./mov-prevista-form-controles.component.css'],
+  styles: [`
+        :host ::ng-deep .p-cell-editing {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+    `]
 })
 export class MovPrevistaFormControlesComponent implements OnInit {
 

@@ -1,9 +1,6 @@
-import { Component, Injector, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
-import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
-import { ContaService } from 'src/app/features/cadastros-basicos/_services/conta-service';
-import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
+import { Component, Injector, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute} from '@angular/router';
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
@@ -13,151 +10,192 @@ import { MovRealizadaService } from '../../_services/mov-realizada-service';
 @Component({
   selector: 'app-modal-mov-prevista-quitar-form',
   templateUrl: './mov-prevista-quitar-form.component.html',
-  styleUrls: ['./mov-prevista-quitar-form.component.css']
+  styleUrls: ['./mov-prevista-quitar-form.component.css'],
+  styles: [`
+        :host ::ng-deep .p-cell-editing {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+    `]
 })
 
 export class MovPrevistaQuitarFormComponent implements OnInit {
 
-  @Input('modal-mov-prevista-id') idModal: string;
-  @Input('modal-mov-prevista') movimentacaoPrevista: MovimentacaoPrevista;
-
   movRealizadaService: MovRealizadaService;
-  formaPagamentoService: FormaPagamentoService;
-  contaService: ContaService;
   alertMessageForm: AlertMessageForm;
+  actResourceRoute: ActivatedRoute;
 
-  idMovRealizadaDelete: number;
+  idMovRealizadaDelete: number;  
   movimentacaoRealizada: MovimentacaoRealizada;
+  movimentacaoPrevista: MovimentacaoPrevista;
+
+  dataVencIni: string;
+  dataVencFim: string;
 
   nrTotal: number;
-  nrTotalRecorrencias: number;
-  displayError: boolean;
-  displayModal: boolean;
-  arMovRealizadas: MovimentacaoRealizada[] = [];
-  arFormasPagamento: FormaPagamento[] = [];
-  arContas: Conta[] = [];
-  arStDataMovimentacao: string[]=[];
-  arStValor: string[]=[];
+  deleteMessage:string;
+
   arvalidationErrors: any[] = [];
-  clonedMovReal: { [s: string]: MovimentacaoRealizada } = {};
+  arForms: FormArray = this.fb.array([]);
 
-  headerDialog: string;
-
-  constructor(protected injector: Injector) {
+  constructor(protected injector: Injector, 
+              private fb: FormBuilder) {
     debugger;
     this.movRealizadaService = injector.get(MovRealizadaService);
-    this.formaPagamentoService = injector.get(FormaPagamentoService);
-    this.contaService = injector.get(ContaService);
     this.alertMessageForm = injector.get(AlertMessageForm);
+    this.actResourceRoute = injector.get(ActivatedRoute);
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    debugger;
-    this.movimentacaoPrevista = changes.movimentacaoPrevista.currentValue;
-    if (this.movimentacaoPrevista != null){
-        this.headerDialog = "Quitar Previsão: " + this.movimentacaoPrevista.itemMovimentacao.descricao;
-        this.carregarTable(); 
-        //tratamento para carregar a lista somente com 1 item caso não exista registros..
-        if(this.arMovRealizadas.length==0){
-          this.movimentacaoRealizada = new MovimentacaoRealizada();
-          this.movimentacaoRealizada.itemMovimentacao = this.movimentacaoPrevista.itemMovimentacao;
-          this.movimentacaoRealizada.dataReferencia = this.movimentacaoPrevista.dataReferencia;
-          this.movimentacaoRealizada.dataMovimentacaoRealizada = new Date();
-          this.movimentacaoRealizada.valor = this.movimentacaoPrevista.valor;
-          this.arMovRealizadas.push(this.movimentacaoRealizada);
-         }
-         this.arMovRealizadas.forEach(element => { this.nrTotal += element.valor });     
-    }     
-  }
+ 
 
   ngOnInit(): void {
     debugger;
-    this.formaPagamentoService.getAll().subscribe(result => this.arFormasPagamento = result);
-    this.contaService.getAll().subscribe(result => this.arContas = result);
-  }
+    this.dataVencIni = this.actResourceRoute.snapshot.params.dataVencIni;
+    this.dataVencFim = this.actResourceRoute.snapshot.params.dataVencFim;
 
-  private carregarTable() {
-    debugger;
-    this.movRealizadaService.getByDataReferencia
-      (this.movimentacaoPrevista.itemMovimentacao.id, 
-       DateConvert.formatDateDDMMYYYY(this.movimentacaoPrevista.dataReferencia, '-')).subscribe( 
-         success=>{
-                   this.arMovRealizadas = success;                   
-                  },
-        error=>{
-          this.actionForError(error)
-        });
-                                                       
-  }
+    //leitura do resolver da Movimentação Prevista..
+    this.actResourceRoute.data.subscribe(
+      (sucess:{resolveMovPrev:MovimentacaoPrevista})=>{
+        debugger;
+        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
+        this.movimentacaoPrevista=sucess.resolveMovPrev;      
+         }
+    ); 
 
-  onRowEditInit(movRealizada: MovimentacaoRealizada) {
-    this.clonedMovReal[movRealizada.id] = { ...movRealizada};
-    }
-
-  onRowEditSave(movRealizada: MovimentacaoRealizada) {
-    this.arFormasPagamento.filter(f => f.id == movRealizada.formaPagamento.id).map(f => {
-      movRealizada.formaPagamento.descricao = f.descricao;
-    });
-
-    this.arContas.filter(c => c.id == movRealizada.conta.id).map(c => {
-      movRealizada.conta.descricao = c.descricao;
-    });
-
-    if (movRealizada.valor > 0) {
-      delete this.clonedMovReal[movRealizada.id];
-    }
-    
-    this.movRealizadaService.put(
-        new FormBuilder().group({
-                                  id: [movRealizada.id],
-                                  idItemMovimentacao: [movRealizada.itemMovimentacao.id],
-                                  dataReferencia:[movRealizada.dataReferencia],
-                                  tipoPrioridade:[movRealizada.tipoPrioridade],
-                                  observacao:[movRealizada.observacao],
-                                  dataMovimentacaoRealizada:[movRealizada.dataMovimentacaoRealizada],
-                                  valor:[movRealizada.valor],
-                                  idFormaPagamento:[movRealizada.formaPagamento.id],
-                                  idConta:[movRealizada.conta.id]})
-      ).subscribe(
-              sucess=>{this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário')},
-              error=>{this.actionForError(error)}
+    //leitura do resolver das Movimentações Realizadas..
+    this.actResourceRoute.data.subscribe(
+      (sucess:{resolveMovReal:MovimentacaoRealizada[]})=>{
+        debugger;
+        //o resolveResources deve ser o mesmo nome na variável resolve da rota..
+        if(sucess.resolveMovReal.length==0){
+          this.addArForms(0, 
+                         this.movimentacaoPrevista.dataVencimento, 
+                         null,
+                         null, 
+                         this.movimentacaoPrevista.valor,
+                         true);
+          this.nrTotal = this.movimentacaoPrevista.valor;
+        }else{
+          sucess.resolveMovReal.forEach((element: MovimentacaoRealizada)=>{
+            this.addArForms(element.id, 
+              element.dataMovimentacaoRealizada, 
+              element.conta.id, 
+              element.formaPagamento.id, 
+              element.valor);
+              this.nrTotal += element.valor
+          })
+        }       
+      }
     );
   }
 
-  onRowEditCancel(movRealizada: MovimentacaoRealizada, index: number) {
-    this.arMovRealizadas[index] = this.clonedMovReal[movRealizada.id];
-    delete this.clonedMovReal[movRealizada.id];
-  }
-
-  modalDeleteMessage(movRealizada: MovimentacaoRealizada) {
-    this.idMovRealizadaDelete = movRealizada.id;
+  modalDeleteMessage(id: number, dataMovimentacao: Date) {
+    this.idMovRealizadaDelete = id;
+    this.deleteMessage = `${'Confirma a exclusão do lançamento referente ao dia '}${DateConvert.formatDateDDMMYYYY(dataMovimentacao, '/').bold()}${'?'}`;;
   }
 
   eventDelete(event) {
     if (event) {
-      this.movRealizadaService.deleteById(this.idMovRealizadaDelete)
-        .subscribe(sucess => {
+      this.movRealizadaService.deleteById(this.idMovRealizadaDelete).subscribe(
+        sucess => {
           this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
           this.carregarTable();
+        },
+        error=>{
+          this.actionForError(error)
         });
     }
   }
+
+  clearValidations() {
+    this.arvalidationErrors = [];
+  }
+
+  addRow(){
+    if(this.arForms.length< 10){
+      this.addArForms(0, 
+       this.movimentacaoPrevista.dataVencimento, 
+        null,
+        null, 
+        this.movimentacaoPrevista.valor, 
+        true);
+    }else{
+      this.alertMessageForm.showError("Ultrapassado o limite máximo de 10 registros.", "Sr. Usuário");
+    }
+    
+  }
+
+  editRow(i:number){
+  }
+
+  deleteRow(i:number){
+    this.arForms.removeAt(i);
+  }
+
+  salvar(fGroup:FormGroup){
+
+    if(fGroup.get('id').value==0){
+      this.movRealizadaService.post(fGroup).subscribe(
+        sucess => {
+          this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
+          this.carregarTable();
+        },
+        error=>{
+          this.actionForError(error)
+        });
+
+    }else{
+      this.movRealizadaService.put(fGroup).subscribe(
+        sucess => {
+          this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
+          this.carregarTable();
+        },
+        error=>{
+          this.actionForError(error)
+        });
+    }    
+  }
+
+  private addArForms(_id: number, 
+                    _dataMovimentacao: Date, 
+                    _idConta: number,
+                    _idFormaPagamento: number,
+                    _valor: number,
+                    _isEdit?: boolean){
+    this.arForms.push(this.fb.group({
+      id:[_id],
+      dataMovimentacaoRealizada:[DateConvert.formatDateDDMMYYYY(_dataMovimentacao, "/"),Validators.required],
+      idConta:[_idConta,Validators.required],
+      idFormaPagamento:[_idFormaPagamento,Validators.required],
+      valor:[_valor,Validators.required],
+      isEdit:[_isEdit]
+    }));
+  }
+
+  private carregarTable(){
+    debugger;
+    this.movRealizadaService.getByDataReferencia
+      (this.movimentacaoPrevista.itemMovimentacao.id, 
+       DateConvert.formatDateDDMMYYYY(this.movimentacaoPrevista.dataReferencia, '/')).subscribe( 
+         success=>{
+                   success.forEach((element:MovimentacaoRealizada)=>{
+                    this.addArForms(element.id, 
+                      element.dataMovimentacaoRealizada, 
+                      element.conta.id, 
+                      element.formaPagamento.id, 
+                      element.valor);
+                   });                                      
+                  },
+         error=>{
+          this.actionForError(error)
+        });
+                                                       
+  } 
 
   private actionForError(e) {
     if (e.status == 400) {
       //validações da API (BadRequest) 
       this.arvalidationErrors = e.error;
-      this.displayError = true;
     }
   }
 
-  addRow(){
-    this.arMovRealizadas.push(this.movimentacaoRealizada);
-    this.arMovRealizadas.forEach(element => { this.nrTotal += element.valor });
-  }
-
-  clearValidations() {
-    this.arvalidationErrors = [];
-    this.displayError = false;
-  }
 }

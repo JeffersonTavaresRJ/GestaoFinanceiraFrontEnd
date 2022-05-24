@@ -1,12 +1,6 @@
-.font-size-small{
-    font-size: small;
-}
-label{
-    padding-right: 5px;
-}
-
 :host ::ng-deep .p-inputtext {
-    font-size: small !important
+    font-size: small !important;
+    text-align: center !important;
 }
 
 
@@ -22,7 +16,52 @@ label{
     font-size: small !important
 }
 
-:host ::ng-deep .p-datepicker-group-container {
-    font-size: small !important
-    
+.grid-table
+{
+	display:table;
+    width: 100%;
+}
+
+.thead
+{
+	display:table-header-group;
+	font-weight:bold;
+    background-color: black;
+    color: white;
+    height: 40px;
+}
+
+.tbody
+{
+	display:table-row-group;
+}
+
+.tr
+{
+	display:table-row;
+    vertical-align: middle;
+    height: 40px;
+}
+
+.th {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 3px;
+    width: 20% !important;
+  }
+
+.td
+{
+	display:table-cell;
+    vertical-align: middle;
+    padding-left: 3px;
+    width: 20%;
+}
+
+.thead div.tr div.td:last-child{
+    background-color: #fff;
+}
+
+i:hover{
+	cursor: pointer;
 }

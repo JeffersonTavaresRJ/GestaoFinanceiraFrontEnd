@@ -1,18 +1,9 @@
-    <p-dropdown [options]="arResourceModel" 
-                [inputId]="inputId"
-                optionLabel="descricao" 
-                optionValue="id" 
-                [formControl]="formControl"
-                placeholder="Selecione a Conta"
-                [virtualScroll]="true" 
-                [itemSize]="5"
-                [showClear]="true" 
-                [filter]="false" 
-                (onChange)="onChange()"
-                emptyMessage="Não encontrado"
-                autoDisplayFirst="true" 
-                [disabled]="isDisabled"
-                autoWidth="false" 
-                [style]="style"
-                [styleClass]="styleClass">
-    </p-dropdown>
+<form [formGroup]="formGroupResource">
+    <select class="form-select" formControlName="idConta" aria-disabled="isDisabled" [style]="style"
+        (onChange)="onChange()">
+        <option value=null disabled selected>Selecione</option>
+        <option *ngFor="let item of arResourceModel" [value]="item.id">
+            {{item.descricao}}
+        </option>        
+    </select>
+</form>

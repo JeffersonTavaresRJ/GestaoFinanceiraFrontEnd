@@ -39,6 +39,7 @@ import { MovPrevistaListResolver } from './features/lancamentos/_guards/mov-prev
 import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prevista-form-resolver';
 import { MovRealizadaListResolver } from './features/lancamentos/_guards/mov-realizada-list-resolver';
 import { MovRealizadaFormResolver } from './features/lancamentos/_guards/mov-realizada-form-resolver';
+import { MovPrevistaQuitarResolver } from './features/lancamentos/_guards/mov-prevista-quitar-resolver';
 
 //criando o mapeamento de rotas dos componentes
 
@@ -109,11 +110,12 @@ const routes: Routes = [
     { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
-    /*
+    
     { path: 'mov-prevista/quitar/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,
-             canActivate:[AuthGuard],             
-             resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
-             */
+             canActivate:[AuthGuard], 
+             //posso ter qts resolvers que eu quiser...            
+             resolve:{resolveMovReal: MovPrevistaQuitarResolver, resolveMovPrev: MovPrevistaFormResolver} },
+             
     //=================================================================================================
     { path: 'mov-realizada/new/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
              canActivate:[AuthGuard],
@@ -147,7 +149,8 @@ const routes: Routes = [
                MovPrevistaListResolver,
                MovPrevistaFormResolver,
                MovRealizadaListResolver,
-               MovRealizadaFormResolver]
+               MovRealizadaFormResolver,
+               MovPrevistaQuitarResolver]
 })
 
 export class AppRoutingModule { }

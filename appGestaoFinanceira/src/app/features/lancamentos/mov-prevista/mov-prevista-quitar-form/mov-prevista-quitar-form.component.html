@@ -1,107 +1,89 @@
-<!--TABELA DE RECORRÊNCIAS-->
-<p-dialog [header]="headerDialog" [(visible)]="displayModal" [modal]="true" [style]="{width: '80vw'}"
-    onHide="closeModal()" [resizable]="false" [maximizable]="true" appendTo="body" [id]="idModal">
-    
-    <p-table [value]="arMovRealizadas" dataKey="id" editMode="row" responsiveLayout="scroll">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Data de Movimentação</th>
-                <th>Conta</th>
-                <th>Forma de Pagamento</th>
-                <th>Valor</th>
-                <th style="width:8rem"></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-movPrevista let-editing="editing" let-ri="rowIndex">
-            <tr [pEditableRow]="movRealizada">
-                <td>
-                    <p-cellEditor>
-                        <ng-template pTemplate="input">
-                            <p-inputMask [(ngModel)]="arStDataMovimentacao[ri]" mask="99/99/9999" slotChar=" ">
-                            </p-inputMask>
-                        </ng-template>
-                        <ng-template pTemplate="output">
-                            {{movRealizada.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}                          
-                        </ng-template>
-                    </p-cellEditor>
-                </td>
-
-                <td>
-                    <p-cellEditor>
-                        <ng-template pTemplate="input">
-                            <p-dropdown [options]="arContas" optionLabel="descricao" optionValue="id"
-                                [(ngModel)]="movRealizada.conta.id" [style]="{'width':'100%'}"
-                                emptyMessage="Conta não encontrada">
-                            </p-dropdown>
-                        </ng-template>
-                        <ng-template pTemplate="output">
-                            {{movRealizada.conta.descricao}}
-                        </ng-template>
-                    </p-cellEditor>
-                </td>
-
-                <td>
-                    <p-cellEditor>
-                        <ng-template pTemplate="input">
-                            <p-dropdown [options]="arFormasPagamento" optionLabel="descricao" optionValue="id"
-                                [(ngModel)]="movRealizada.formaPagamento.id" [style]="{'width':'100%'}"
-                                emptyMessage="Forma de Pagamento não encontrada">
-                            </p-dropdown>
-                        </ng-template>
-                        <ng-template pTemplate="output">
-                            {{movRealizada.formaPagamento.descricao}}
-                        </ng-template>
-                    </p-cellEditor>
-                </td>
-
-                <td>
-                    <p-cellEditor>
-                        <ng-template pTemplate="input">
-                            <p-inputNumber [(ngModel)]="arStValor[ri]" inputId="locale-german" mode="decimal"
-                                locale="de-DE" [minFractionDigits]="2">
-                            </p-inputNumber>
-                        </ng-template>
-                        <ng-template pTemplate="output">
-                            {{movRealizada.valor | currency}}
-                        </ng-template>
-                    </p-cellEditor>
-                </td>
-
-                <td style="text-align:center">
-                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                        (click)="onRowEditInit(movRealizada, ri)" class="p-button-rounded p-button-text"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                        (click)="onRowEditSave(movRealizada, ri)"
-                        class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                        (click)="onRowEditCancel(movRealizada, ri)"
-                        class="p-button-rounded p-button-text p-button-danger"></button>
-                </td>
-            </tr>
-        </ng-template>        
-    </p-table>
-
-    <ng-template pTemplate="footer">
-        <div class="row">
-            <div class="col-2" style="text-align: left;">
-                <strong>Total: {{nrTotal | currency}}</strong>
-            </div>
-            <div class="col-8" style="text-align: center;">
-                <p-inputNumber [(ngModel)]="nrTotalRecorrencias" [showButtons]="true" mode="decimal" [min]="2"
-                       [max]="12" [size]="1" (onInput)="addRow()">
-                </p-inputNumber>
-            </div>
-            <div class="col-2">
-                <button class="btn btn-dark" (click)="post(arMovPrevistas)">
-                    <img src="assets//icons//save-white-18dp.svg" class="v-middle" />
-                    <span class="v-middle">Salvar</span>
-                </button>
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="card mt-1">
+            <div class="card-body">
+                <div class="row">
+                    <app-header-page-title header-title="Quitar Previsão" header-button-label=" Voltar >>"
+                        [header-button-link]="['/mov-prevista', dataVencIni, dataVencFim]">
+                    </app-header-page-title>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <h6 class="text-muted mb-2">Movimentação Prevista</h6>
+                        <h6>{{movimentacaoPrevista.itemMovimentacao.descricao}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="card-title text-muted mb-2">Data de Vencimento</h6>
+                        <h6 class="card-subtitle">{{movimentacaoPrevista.dataVencimento | date: 'dd/MM/yyyy'}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="card-title text-muted mb-2">Forma de Pagamento</h6>
+                        <h6 class="card-subtitle">{{movimentacaoPrevista.formaPagamento.descricao}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="card-title text-muted mb-2">Valor</h6>
+                        <h6 class="card-subtitle">{{movimentacaoPrevista.valor | currency}}</h6>
+                    </div>
+                </div>
             </div>
         </div>
-    </ng-template>
-</p-dialog>
-
-<!--DIALOG DE ERROS-->
+        <div class="grid-table mt-1">
+            <div class="thead">
+                <div class="th" style="text-align:center">Data de Movimentação</div>
+                <div class="th">Conta</div>
+                <div class="th">Forma de Pagamento</div>
+                <div class="th" style="text-align:center">Valor (R$)</div>
+                <div class="th" style="text-align:center;">
+                    <button class="btn btn-outline-light btn-sm" (click)="addRow()">
+                        <strong>+ Novo</strong>
+                    </button>
+                </div>
+            </div>
+            <div class="tbody">
+                <form class="tr" [formGroup]="fGroup"
+                    *ngFor="let fGroup of arForms.controls; let i=index;" (submit)="salvar(fGroup)">
+                    <div class="td" style="text-align:center">
+                        <p-inputMask mask="99/99/9999" formControlName="dataMovimentacaoRealizada" placeholder="99/99/9999" slotChar="dd/mm/yyyy"></p-inputMask>
+                    </div>
+                    <div class="td">                        
+                        <app-dropdown-conta [form-group]="fGroup" style="font-size: 14px;"></app-dropdown-conta>
+                        <app-field-validation-form [form-control]="fGroup.get('idConta')"></app-field-validation-form>
+                    </div>
+                    <div class="td">
+                        <app-dropdown-forma-pagamento [form-group]="fGroup" style="font-size: 14px;"></app-dropdown-forma-pagamento>
+                        <app-field-validation-form [form-control]="fGroup.get('idFormaPagamento')"></app-field-validation-form>
+                    </div>
+                    <div class="td" style="text-align:center">
+                        <p-inputNumber formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE" style="text-align: right;"
+                            [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>
+                    <div class="td" style="text-align: center;">
+                        form: {{fGroup.valid}}
+                        <button type="submit" class="btn btn-outline-dark btn-sm" [disabled]="!fGroup.valid">
+                              <img [src]="(fGroup.get('id').value==0) ? 'assets/icons/save_black_18dp.svg' : 'assets/icons/edit_note_black_18dp.svg'">
+                         </button>
+                         &nbsp;
+                         <button *ngIf="fGroup.get('id').value > 0" class="btn btn-outline-dark btn-sm"
+                               (click)="modalDeleteMessage(fGroup.get('id').value, fGroup.get('dataMovimentacaoRealizada').value)"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalDelete">
+                            <img src="assets/icons/delete_black_18dp.svg">
+                        </button>
+                        <button *ngIf="fGroup.get('id').value == 0" class="btn btn-outline-dark btn-sm" (click)="deleteRow(i)">
+                            <img src="assets/icons/delete_black_18dp.svg">
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" [modal-interrogative-title]="'Sr. Usuário'"
+    [modal-interrogative-message]="deleteMessage" (modalInterrogativeResponse)="eventDelete($event)">
+</app-modal-interrogative-form>
+<!--//DIALOG DE ERROS
 <p-dialog [modal]="true" [(visible)]="displayError" [style]="{width: '50vw'}">
     <ng-template pTemplate="header">
         <div style="text-align: left;">
@@ -120,3 +102,4 @@
         <p-button icon="pi pi-check" (click)="clearValidations()" label="Ok" styleClass="p-button-text"></p-button>
     </ng-template>
 </p-dialog>
+-->

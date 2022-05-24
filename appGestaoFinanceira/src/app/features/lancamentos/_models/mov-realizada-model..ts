@@ -12,10 +12,12 @@ export class MovimentacaoRealizada extends Movimentacao{
     public id: number=null,
     public dataMovimentacaoRealizada: Date=null,
     public tipoPrioridade: string = null,
+    public tipoPrioridadeDescricao: string = null,
     public observacao: string = null,
     public valor: number=null
    ){
      super();
+     this.itemMovimentacao = new ItemMovimentacao();
      this.formaPagamento = new FormaPagamento();
      this.conta = new Conta();
    }
