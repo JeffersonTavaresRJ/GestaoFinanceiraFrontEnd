@@ -27,5 +27,10 @@ export class DateConvert{
     
         return [year, month, day].join(separador);
     }
+
+    static stringToDate(date:string, separador:string):Date{
+      var arrData = date.split(separador);
+      return new Date(arrData[1] + '-' + arrData[0] + '-' + arrData[2]);             
+    }   
    
 }

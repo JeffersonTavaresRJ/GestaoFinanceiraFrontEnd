@@ -32,11 +32,12 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   dataVencIni: string;
   dataVencFim: string;
 
-  nrTotal: number;
+  valorTotalPago: number=0;
   deleteMessage:string;
 
   arvalidationErrors: any[] = [];
   arForms: FormArray = this.fb.array([]);
+  arFormGroup: FormGroup[]=[];
 
   constructor(protected injector: Injector, 
               private fb: FormBuilder) {
@@ -57,7 +58,9 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       (sucess:{resolveMovPrev:MovimentacaoPrevista})=>{
         debugger;
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
-        this.movimentacaoPrevista=sucess.resolveMovPrev;      
+        this.movimentacaoPrevista=sucess.resolveMovPrev; 
+        //tratamento para conversão de string para date..
+        this.movimentacaoPrevista.dataVencimento = new Date(sucess.resolveMovPrev.dataVencimento);     
          }
     ); 
 
@@ -67,30 +70,35 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         debugger;
         //o resolveResources deve ser o mesmo nome na variável resolve da rota..
         if(sucess.resolveMovReal.length==0){
-          this.addArForms(0, 
-                         this.movimentacaoPrevista.dataVencimento, 
-                         null,
-                         null, 
-                         this.movimentacaoPrevista.valor,
-                         true);
-          this.nrTotal = this.movimentacaoPrevista.valor;
+          this.addArForms(
+                        this.movimentacaoPrevista.itemMovimentacao.id,
+                        this.movimentacaoPrevista.tipoPrioridade,
+                        this.movimentacaoPrevista.observacao,
+                        0, this.movimentacaoPrevista.dataVencimento, null, null, this.movimentacaoPrevista.valor, true);
         }else{
           sucess.resolveMovReal.forEach((element: MovimentacaoRealizada)=>{
-            this.addArForms(element.id, 
+            this.addArForms(
+              this.movimentacaoPrevista.itemMovimentacao.id,
+              this.movimentacaoPrevista.tipoPrioridade,
+              this.movimentacaoPrevista.observacao,
+              element.id, 
               element.dataMovimentacaoRealizada, 
               element.conta.id, 
               element.formaPagamento.id, 
-              element.valor);
-              this.nrTotal += element.valor
+              element.valor,
+              false,
+              element.conta.descricao,
+              element.formaPagamento.descricao);
+              this.valorTotalPago += element.valor
           })
         }       
       }
     );
   }
 
-  modalDeleteMessage(id: number, dataMovimentacao: Date) {
+  modalDeleteMessage(id: number, dataMovimentacaoRealizada: string) {
     this.idMovRealizadaDelete = id;
-    this.deleteMessage = `${'Confirma a exclusão do lançamento referente ao dia '}${DateConvert.formatDateDDMMYYYY(dataMovimentacao, '/').bold()}${'?'}`;;
+    this.deleteMessage = `${'Confirma a exclusão do lançamento referente ao dia '}${dataMovimentacaoRealizada.bold()}${'?'}`;;
   }
 
   eventDelete(event) {
@@ -106,38 +114,61 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     }
   }
 
-  clearValidations() {
-    this.arvalidationErrors = [];
-  }
-
   addRow(){
+    var dataMovimentacaoRealizada = this.movimentacaoPrevista.dataVencimento; 
+
+    this.arForms.controls.forEach(element=>{
+/*
+      var dataArray = element.get('dataMovimentacaoRealizada').value;
+      var arrDataExclusao = dataArray.split('/');
+      dataArray = arrDataExclusao[1] + '-' + arrDataExclusao[0] + '-' + arrDataExclusao[2];
+
+      if( new Date(dataArray) > dataMovimentacaoRealizada){
+        dataMovimentacaoRealizada = new Date(dataArray);                
+      }
+      */
+      var dataArray = DateConvert.stringToDate(element.get('dataMovimentacaoRealizada').value, '/');
+      if( dataArray > dataMovimentacaoRealizada){
+        dataMovimentacaoRealizada = dataArray;                
+      }
+
+
+    }); 
+     
+    if(this.arForms.length > 0){
+       dataMovimentacaoRealizada = new Date(dataMovimentacaoRealizada.getFullYear(), 
+        dataMovimentacaoRealizada.getMonth(),
+        dataMovimentacaoRealizada.getDate()+1)
+    }
+   
+    //adicionando o novo form no array..
     if(this.arForms.length< 10){
-      this.addArForms(0, 
-       this.movimentacaoPrevista.dataVencimento, 
-        null,
-        null, 
-        this.movimentacaoPrevista.valor, 
-        true);
+      this.addArForms(
+        this.movimentacaoPrevista.itemMovimentacao.id,
+        this.movimentacaoPrevista.tipoPrioridade,
+        this.movimentacaoPrevista.observacao,
+        0, dataMovimentacaoRealizada, null, null, this.movimentacaoPrevista.valor, true);
     }else{
-      this.alertMessageForm.showError("Ultrapassado o limite máximo de 10 registros.", "Sr. Usuário");
+      this.alertMessageForm.showError("O limite máximo são 10 registros.", "Operação cancelada");
     }
     
   }
 
   editRow(i:number){
+    this.arForms.controls[i].get('isEdit').setValue(true); 
   }
 
   deleteRow(i:number){
-    this.arForms.removeAt(i);
+    this.arForms.removeAt(i); 
   }
 
-  salvar(fGroup:FormGroup){
-
+  salvar(fGroup:FormGroup, i:number){
+    debugger;
     if(fGroup.get('id').value==0){
       this.movRealizadaService.post(fGroup).subscribe(
         sucess => {
           this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
-          this.carregarTable();
+         // this.arForms.controls[i].get('isEdit').setValue(false);           
         },
         error=>{
           this.actionForError(error)
@@ -155,17 +186,32 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     }    
   }
 
-  private addArForms(_id: number, 
+  clearValidations() {
+    this.arvalidationErrors = [];
+  }
+
+  private addArForms(_idItemMovimentacao:number,
+                    _tipoPrioridade:string,
+                    _observacao:string,
+                    _id: number, 
                     _dataMovimentacao: Date, 
-                    _idConta: number,
+                    _idConta: number,                    
                     _idFormaPagamento: number,
                     _valor: number,
-                    _isEdit?: boolean){
+                    _isEdit?: boolean,
+                    _descricaoConta?:string,
+                    _descricaoFormaPagamento?:string
+                    ){
     this.arForms.push(this.fb.group({
+      idItemMovimentacao:[_idItemMovimentacao],
+      tipoPrioridade:[_tipoPrioridade],
+      observacao:[_observacao],
       id:[_id],
       dataMovimentacaoRealizada:[DateConvert.formatDateDDMMYYYY(_dataMovimentacao, "/"),Validators.required],
       idConta:[_idConta,Validators.required],
+      descricaoConta:[_descricaoConta],
       idFormaPagamento:[_idFormaPagamento,Validators.required],
+      descricaoFormaPagamento:[_descricaoFormaPagamento],
       valor:[_valor,Validators.required],
       isEdit:[_isEdit]
     }));
@@ -178,7 +224,11 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
        DateConvert.formatDateDDMMYYYY(this.movimentacaoPrevista.dataReferencia, '/')).subscribe( 
          success=>{
                    success.forEach((element:MovimentacaoRealizada)=>{
-                    this.addArForms(element.id, 
+                    this.addArForms(
+                      this.movimentacaoPrevista.itemMovimentacao.id,
+                      this.movimentacaoPrevista.tipoPrioridade,
+                      this.movimentacaoPrevista.observacao,
+                      element.id, 
                       element.dataMovimentacaoRealizada, 
                       element.conta.id, 
                       element.formaPagamento.id, 

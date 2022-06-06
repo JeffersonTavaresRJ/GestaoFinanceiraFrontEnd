@@ -9,7 +9,7 @@ export class MovimentacaoRealizadaCommandDelete extends GenericCommand {
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandDelete{
         return new MovimentacaoRealizadaCommandDelete(
-            formGroup.get('id').value
+            Number.parseInt(formGroup.get('id').value)
         );
     }
 }

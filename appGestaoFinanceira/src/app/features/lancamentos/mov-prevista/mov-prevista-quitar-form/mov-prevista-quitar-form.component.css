@@ -3,7 +3,6 @@
     text-align: center !important;
 }
 
-
 :host ::ng-deep .p-dropdown {
     font-size: small !important
 }
@@ -14,6 +13,18 @@
 
 :host ::ng-deep .p-dropdown-label {
     font-size: small !important
+}
+
+.ml-3{
+    margin-left: 5% !important;
+}
+
+.col-2 {
+    width: 20% !important;
+}
+
+.col-1 {
+    width: 15% !important;
 }
 
 .grid-table
@@ -31,9 +42,16 @@
     height: 40px;
 }
 
+.scroll{
+    overflow: auto;
+    height: 280px;
+    width: 100%;
+    border: 1px solid black !important;
+}
+
 .tbody
 {
-	display:table-row-group;
+	display:table-row-group;    
 }
 
 .tr
@@ -41,6 +59,7 @@
 	display:table-row;
     vertical-align: middle;
     height: 40px;
+    border: 1px solid black !important;
 }
 
 .th {
@@ -60,8 +79,4 @@
 
 .thead div.tr div.td:last-child{
     background-color: #fff;
-}
-
-i:hover{
-	cursor: pointer;
 }

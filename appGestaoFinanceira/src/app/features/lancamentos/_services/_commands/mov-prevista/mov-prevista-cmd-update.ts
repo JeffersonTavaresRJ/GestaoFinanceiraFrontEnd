@@ -16,14 +16,14 @@ export class MovimentacaoPrevistaCommandUpdate extends GenericCommand {
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoPrevistaCommandUpdate{
         return new MovimentacaoPrevistaCommandUpdate(
-             formGroup.get('idItemMovimentacao').value,
+             Number.parseInt(formGroup.get('idItemMovimentacao').value),
              formGroup.get('dataReferencia').value,
              formGroup.get('tipoPrioridade').value,             
              formGroup.get('observacao').value,
              formGroup.get('dataVencimento').value,
-             formGroup.get('valor').value,
+             Number.parseFloat(formGroup.get('valor').value),
              formGroup.get('status').value,
-             formGroup.get('idFormaPagamento').value
+             Number.parseInt(formGroup.get('idFormaPagamento').value)
          )
      }
 }

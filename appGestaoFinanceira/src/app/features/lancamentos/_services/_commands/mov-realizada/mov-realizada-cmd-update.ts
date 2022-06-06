@@ -18,17 +18,17 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandUpdate{
         return new MovimentacaoRealizadaCommandUpdate(
-            formGroup.get('id').value,
-            formGroup.get('idItemMovimentacao').value,
+            Number.parseInt(formGroup.get('id').value),
+            Number.parseInt(formGroup.get('idItemMovimentacao').value),
             new Date(formGroup.get('dataMovimentacaoRealizada').value.getFullYear(),
                      formGroup.get('dataMovimentacaoRealizada').value.getMonth()+1,
                     0),
             formGroup.get('tipoPrioridade').value,
             formGroup.get('observacao').value,            
             formGroup.get('dataMovimentacaoRealizada').value,
-            formGroup.get('valor').value,
-            formGroup.get('idFormaPagamento').value,
-            formGroup.get('idConta').value
+            Number.parseFloat(formGroup.get('valor').value),
+            Number.parseInt(formGroup.get('idFormaPagamento').value),
+            Number.parseInt(formGroup.get('idConta').value)
         );
     }
 }

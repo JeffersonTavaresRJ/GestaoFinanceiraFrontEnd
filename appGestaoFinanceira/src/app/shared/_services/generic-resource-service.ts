@@ -10,7 +10,7 @@ export abstract class GenericResourceService<T extends Object>{
 
     private apiName: string;
     private apiOption: string='';
-    private arcommandCreate: GenericCommand[]=[];
+    private command: GenericCommand[]=[];
     protected http: HttpClient;
     protected httpHeaders!: HttpHeaders;
     protected idUsuario!: string;
@@ -54,12 +54,12 @@ export abstract class GenericResourceService<T extends Object>{
 
     postArray(formGroup: FormGroup[]): Observable<any> {   
         debugger; 
-        this.arcommandCreate.length = 0;
+        this.command.length = 0;
         formGroup.forEach(element=>{
-            this.arcommandCreate.push(this.convertFormGroupToCmdCreate(element));
+            this.command.push(this.convertFormGroupToCmdCreate(element));
         });
 
-        return this.http.post(this.getUrl(), this.arcommandCreate)
+        return this.http.post(this.getUrl(), this.command)
          .pipe(catchError(this.handlerError)/*, 
                --comentado para ler o retorno da mensagem de sucesso da API..
                map(this.jsonDataToResource.bind(this))*/);
