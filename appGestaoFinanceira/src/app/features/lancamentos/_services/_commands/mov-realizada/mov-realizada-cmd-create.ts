@@ -18,9 +18,8 @@ export class MovimentacaoRealizadaCommandCreate extends GenericCommand {
         var dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '/');
         if (dataMovimentacaoRealizada == null){
             dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '-');
-        }       
-
-
+        }
+        
         return new MovimentacaoRealizadaCommandCreate(
             Number.parseInt(formGroup.get('idItemMovimentacao').value),
             new Date(dataMovimentacaoRealizada.getFullYear(),

@@ -80,3 +80,7 @@
 .thead div.tr div.td:last-child{
     background-color: #fff;
 }
+
+span{
+    font-size: small;
+}

@@ -1,6 +1,6 @@
 <form [formGroup]="formGroupResource">
     <select class="form-select" formControlName="idConta" aria-disabled="isDisabled" [style]="style"
-        (onChange)="onChange()">
+        (change)="onChange()">
         <option value=null disabled selected>Selecione</option>
         <option *ngFor="let item of arResourceModel" [value]="item.id">
             {{item.descricao}}

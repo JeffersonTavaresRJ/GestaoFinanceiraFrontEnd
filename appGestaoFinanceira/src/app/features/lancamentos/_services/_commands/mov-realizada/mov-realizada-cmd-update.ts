@@ -1,7 +1,6 @@
 import { FormGroup } from "@angular/forms";
+import { DateConvert } from "src/app/shared/functions/date-convert";
 import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
-import { MovimentacaoRealizada } from "../../../_models/mov-realizada-model.";
-
 
 export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
     constructor(
@@ -17,15 +16,21 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
     ) { super(); };
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandUpdate{
+
+        var dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '/');
+        if (dataMovimentacaoRealizada == null){
+            dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '-');
+        }   
+        
         return new MovimentacaoRealizadaCommandUpdate(
             Number.parseInt(formGroup.get('id').value),
             Number.parseInt(formGroup.get('idItemMovimentacao').value),
-            new Date(formGroup.get('dataMovimentacaoRealizada').value.getFullYear(),
-                     formGroup.get('dataMovimentacaoRealizada').value.getMonth()+1,
+            new Date(dataMovimentacaoRealizada.getFullYear(),
+                     dataMovimentacaoRealizada.getMonth()+1,
                     0),
             formGroup.get('tipoPrioridade').value,
             formGroup.get('observacao').value,            
-            formGroup.get('dataMovimentacaoRealizada').value,
+            dataMovimentacaoRealizada,
             Number.parseFloat(formGroup.get('valor').value),
             Number.parseInt(formGroup.get('idFormaPagamento').value),
             Number.parseInt(formGroup.get('idConta').value)

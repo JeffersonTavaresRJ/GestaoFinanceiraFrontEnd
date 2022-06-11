@@ -53,33 +53,33 @@
                         <div class="td" style="text-align:center">
                             <p-inputMask *ngIf="fGroup.get('isEdit').value == true" mask="99/99/9999" formControlName="dataMovimentacaoRealizada"
                                 placeholder="99/99/9999" slotChar="dd/mm/yyyy"></p-inputMask>
-                            <span *ngIf="fGroup.get('isEdit').value == false" style="text-align:center">
+                            <span *ngIf="fGroup.get('isEdit').value == false">
                                 {{fGroup.get('dataMovimentacaoRealizada').value}}
                             </span>
                         </div>
 
                         <div class="td">
-                            <app-dropdown-conta *ngIf="fGroup.get('isEdit').value == true" [form-group]="fGroup" style="font-size: 14px;"></app-dropdown-conta>
-                            <app-field-validation-form [form-control]="fGroup.get('idConta')">
-                            </app-field-validation-form>
-                            <span *ngIf="fGroup.get('isEdit').value == false" style="text-align:center">
+                            <app-dropdown-conta *ngIf="fGroup.get('isEdit').value == true" 
+                             [form-group]="fGroup" [form-control]="fGroup.get('idConta')" style="font-size: 14px;"
+                             (OnChange)="getConta($event, i)"></app-dropdown-conta>
+                            <span *ngIf="fGroup.get('isEdit').value == false">
                                 {{fGroup.get('descricaoConta').value}}
                             </span>
                         </div>
                         <div class="td">
-                            <app-dropdown-forma-pagamento *ngIf="fGroup.get('isEdit').value == true" [form-group]="fGroup" style="font-size: 14px;">
+                            <app-dropdown-forma-pagamento *ngIf="fGroup.get('isEdit').value == true" 
+                            [form-group]="fGroup" [form-control]="fGroup.get('idFormaPagamento')" style="font-size: 14px;"
+                            (OnChange)="getFormaPagamento($event, i)">
                             </app-dropdown-forma-pagamento>
-                            <app-field-validation-form [form-control]="fGroup.get('idFormaPagamento')">
-                            </app-field-validation-form>
-                            <span *ngIf="fGroup.get('isEdit').value == false" style="text-align:center">
+                            <span *ngIf="fGroup.get('isEdit').value == false">
                                 {{fGroup.get('descricaoFormaPagamento').value}}
                             </span>
                         </div>
-                        <div class="td" *ngIf="fGroup.get('isEdit').value == true" style="text-align:center">
+                        <div class="td" style="text-align:center">
                             <p-inputNumber *ngIf="fGroup.get('isEdit').value == true" formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
                                 [minFractionDigits]="2">
                             </p-inputNumber>
-                            <span *ngIf="fGroup.get('isEdit').value == false" style="text-align:center">
+                            <span *ngIf="fGroup.get('isEdit').value == false">
                                 {{fGroup.get('valor').value | currency}}
                             </span>
                         </div>
@@ -92,7 +92,7 @@
                             </button>
                             &nbsp;
                             <button *ngIf="fGroup.get('id').value > 0" class="btn btn-outline-dark btn-sm"
-                                (click)="modalDeleteMessage(fGroup.get('id').value, fGroup.get('dataMovimentacaoRealizada').value)"
+                                (click)="modalDeleteMessage(fGroup.get('id').value, fGroup.get('dataMovimentacaoRealizada').value, i)"
                                 data-bs-toggle="modal" data-bs-target="#modalDelete">
                                 <img src="assets/icons/delete_black_18dp.svg">
                             </button>
@@ -107,12 +107,13 @@
         </div>
     </div>
 </div>
+
 <app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" [modal-interrogative-title]="'Sr. Usuário'"
     [modal-interrogative-message]="deleteMessage" (modalInterrogativeResponse)="eventDelete($event)">
 </app-modal-interrogative-form>
 
 
-<p-dialog [modal]="true" (visible)="arvalidationErrors.length>0" [style]="{width: '50vw'}">
+<p-dialog [modal]="true" [(visible)]="displayDialogErrors" [style]="{width: '50vw'}">
     <ng-template pTemplate="header">
         <div style="text-align: left;">
             <img class="logo" src="assets\icons\report_problem_black_24dp.svg" width="55" height="30">
