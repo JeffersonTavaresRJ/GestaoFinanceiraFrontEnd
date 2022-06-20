@@ -16,7 +16,8 @@ export class MovimentacaoPrevista extends Movimentacao{
      public movPrevistaStatusDescricao: string=null,
      public tipoRecorrencia: string=null,
      public nrParcela: number=null,
-     public nrParcelaTotal: number=null
+     public nrParcelaTotal: number=null,
+     public status_: string=null
     ){ 
         super();
         this.itemMovimentacao = new ItemMovimentacao();
@@ -83,8 +84,8 @@ export class MovimentacaoPrevista extends Movimentacao{
     
             item++;
           };
-          //ordenação por YYYYMM numérico..
-          this.arMovimentacoesPrevistas.sort(function(a,b){return (((b.dataReferencia.getFullYear()*100)+b.dataReferencia.getMonth())-
+        //ordenação por YYYYMM numérico..
+        this.arMovimentacoesPrevistas.sort(function(a,b){return (((b.dataReferencia.getFullYear()*100)+b.dataReferencia.getMonth())-
             ((a.dataReferencia.getFullYear()*100)+a.dataReferencia.getMonth()));
         });
         

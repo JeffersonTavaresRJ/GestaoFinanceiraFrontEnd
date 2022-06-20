@@ -15,7 +15,8 @@
 }
 
 :host ::ng-deep .p-inputtext {
-    font-size: small !important
+    font-size: small !important;
+    text-align:center !important;
 }
 
 :host ::ng-deep .p-checkbox-box {
@@ -23,7 +24,12 @@
 }
 
 :host ::ng-deep .p-dropdown {
-    font-size: small !important
+    font-size: small !important;
+    width: 250px !important;
+}
+
+:host ::ng-deep .p-calendar {
+    width: 150px !important;
 }
 
 :host ::ng-deep .p-dropdown-item {
@@ -35,6 +41,23 @@
     
 }
 
-.p-float-label{
-    font-size: small !important
+.table{
+    margin-bottom: 0;
+}
+
+#pesquisar{
+    margin-left: 10px!important;
+}
+
+.table-overflow{
+    max-height:270px;
+    overflow-x:auto;
+}
+
+th{
+    font-size: small;
+}
+
+td{
+    font-size: small;
 }

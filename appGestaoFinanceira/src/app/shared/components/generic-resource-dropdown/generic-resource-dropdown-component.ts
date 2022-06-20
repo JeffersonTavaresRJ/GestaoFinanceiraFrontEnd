@@ -10,8 +10,7 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
   @Input('form-control') formControl: FormControl;
   @Input('disabled') isDisabled: boolean;
   @Input('select-by-status') status: boolean;
-  @Input('style') style:string;
-  @Input('style-class') styleClass:string;
+  @Input('placeholder') placeholder:string;
   @Input('input-id') inputId :string;
   @Output('OnChange') _onChange = new EventEmitter(); 
   

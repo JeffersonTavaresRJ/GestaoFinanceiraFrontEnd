@@ -12,6 +12,7 @@ export class DropDownPrioridadeComponent{
   @Input('form-group') formGroupResource: FormGroup;
   @Input('form-control') formControl: FormControl;
   @Input('disabled') isDisabled: boolean;
+  @Input('placeholder') placeholder: string;
   @Output('OnChange') _onChange = new EventEmitter();
 
   arAny: any[] = [];

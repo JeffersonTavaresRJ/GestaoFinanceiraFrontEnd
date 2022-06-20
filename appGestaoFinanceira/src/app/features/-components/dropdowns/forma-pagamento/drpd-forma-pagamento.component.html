@@ -1,9 +1,27 @@
+<!--
 <form [formGroup]="formGroupResource">
     <select class="form-select" formControlName="idFormaPagamento" aria-disabled="isDisabled" [style]="style"
-        (change)="onChange()">
-        <option value=null disabled selected>Selecione</option>
+        (change)="onChange()" aria-label="Selecione a Forma de Pagamento">
         <option *ngFor="let item of arResourceModel" [value]="item.id">
             {{item.descricao}}
         </option>
     </select>
+</form>
+-->
+
+<form [formGroup]="formGroupResource">
+    <p-dropdown [options]="arResourceModel" 
+                optionLabel="descricao" 
+                optionValue="id" 
+                [formControl]="formControl"
+                [placeholder]="placeholder" 
+                [virtualScroll]="true" 
+                [itemSize]="5"
+                [showClear]="true" 
+                [filter]="false" 
+                (onChange)="onChange()"
+                emptyMessage="Forma de Pagamento não encontrada"
+                autoDisplayFirst="true" 
+                [disabled]="isDisabled">
+    </p-dropdown>
 </form>
