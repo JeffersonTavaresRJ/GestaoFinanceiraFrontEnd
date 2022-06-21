@@ -13,28 +13,28 @@
                         <app-dropdown-categoria [form-group]="formGroup" 
                                                 [form-control]="formGroup.get('idCategoria')" 
                                                 placeholder="Categoria"
-                                                (OnChange)="getCategoria($event)">
+                                                (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-categoria>
                     </div>
                     <div class="col-3">
                         <app-dropdown-item-movimentacao [form-group]="formGroup" 
                                                         [form-control]="formGroup.get('idItemMovimentacao')" 
                                                         placeholder="Item de Movimentação"
-                                                        (OnChange)="getItemMovimentacao($event)">
+                                                        (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-item-movimentacao>
                     </div>
                     <div class="col-3">
                         <app-dropdown-prioridade [form-group]="formGroup" 
                                                  [form-control]="formGroup.get('idPrioridade')" 
                                                  placeholder="Prioridade"
-                                                 (OnChange)="getPrioridade($event)">
+                                                 (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-prioridade>
                     </div>
                     <div class="col-3">
                         <app-dropdown-forma-pagamento [form-group]="formGroup" 
                                                       [form-control]="formGroup.get('idFormaPagamento')" 
                                                       placeholder="Forma de Pagamento"
-                                                      (OnChange)="getFormaPagamento($event)">
+                                                      (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-forma-pagamento>
                     </div>
                 </div>
@@ -46,10 +46,10 @@
                                     optionValue="Key"
                                     placeholder="Status"
                                     [showClear]="true" 
-                                    (onChange)="onChangeStatus()"></p-dropdown>
+                                    (onChange)="filtrarTablePorParametros()"></p-dropdown>
                     </div>
                     <div class="col-6">
-                        <strong class="font-size-small" style="margin-right: 16px;">Período do Vencimento:</strong>
+                        <strong class="font-size-small" style="margin-right: 14px;">Período do Vencimento:</strong>
                         <p-calendar [(ngModel)]="dataIni" view="month" dateFormat="mm/yy" [readonlyInput]="true"
                             inputId="monthpicker"></p-calendar>
                         <strong class="font-size-small" style="margin-right: 5px; margin-left: 5px">a</strong>
@@ -58,12 +58,17 @@
                         <p-button id="pesquisar" icon="pi pi-search" styleClass="p-button-sm p-button-secondary"
                             (click)="filtrarTablePorPeriodo()"></p-button>
                     </div>
-                    <div class="col-3" style="font-size:smaller;">
-                        <strong style="margin-right: 9px;">Receitas:</strong> <strong class="text-success">{{valorTotalReceita | currency}}</strong><br>
-                        <strong style="margin-right: 4px;">Despesas:</strong> <strong class="text-danger" style="margin-right:4px;">{{valorTotalDespesa | currency}}</strong>
-                        <strong style="margin-right: 4px; margin-left: 8px;">Saldo:</strong> 
-                        <strong [class.text-success]="valorTotalReceita > valorTotalDespesa"
-                                [class.text-danger] ="valorTotalReceita < valorTotalDespesa">{{valorTotalReceita-valorTotalDespesa | currency}}</strong>
+                    <div class="col-3" style="font-size:10.5px;">                      
+                        <div class="card">
+                            <div id="dvValorConsolidado" class="card-body">
+                                <strong style="margin-right: 9px;">Receitas:</strong> <strong class="text-success">{{valorTotalReceita | currency}}</strong><br>
+                                <strong style="margin-right: 4px;">Despesas:</strong> <strong class="text-danger" style="margin-right:0.1rem;">{{valorTotalDespesa | currency}}</strong>
+                                <strong style="margin-right: 4px; margin-left: 8px;">Saldo:</strong> 
+                                <strong [class.text-success]="valorTotalReceita > valorTotalDespesa"
+                                        [class.text-danger] ="valorTotalReceita < valorTotalDespesa">{{valorTotalReceita-valorTotalDespesa | currency}}</strong>
+                    
+                            </div>
+                        </div>            
                     </div>
                 </div>
             </div>

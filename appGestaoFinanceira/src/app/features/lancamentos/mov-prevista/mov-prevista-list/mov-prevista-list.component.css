@@ -45,6 +45,10 @@
     margin-bottom: 0;
 }
 
+#dvValorConsolidado{
+    padding: 0.2rem 0.3rem;
+}
+
 #pesquisar{
     margin-left: 10px!important;
 }

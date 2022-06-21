@@ -52,7 +52,7 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
     filtrarPorStatus(status: boolean){
       this.arResourceModel = this.arResourceModelAux;
       if(status){
-        this.arResourceModel = this.arResourceModel.filter(r=>r.status==status);
+       // this.arResourceModel = this.arResourceModel.filter(r=>r.status==status);
       }  
     }
   

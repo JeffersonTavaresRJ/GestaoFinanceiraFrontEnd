@@ -17,7 +17,7 @@ export class MovimentacaoPrevista extends Movimentacao{
      public tipoRecorrencia: string=null,
      public nrParcela: number=null,
      public nrParcelaTotal: number=null,
-     public status_: string=null
+     public status: string=null
     ){ 
         super();
         this.itemMovimentacao = new ItemMovimentacao();
