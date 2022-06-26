@@ -1,14 +1,3 @@
-<!--
-<form [formGroup]="formGroupResource">
-    <select class="form-select" formControlName="idFormaPagamento" aria-disabled="isDisabled" [style]="style"
-        (change)="onChange()" aria-label="Selecione a Forma de Pagamento">
-        <option *ngFor="let item of arResourceModel" [value]="item.id">
-            {{item.descricao}}
-        </option>
-    </select>
-</form>
--->
-
 <form [formGroup]="formGroupResource">
     <p-dropdown [options]="arResourceModel" 
                 optionLabel="descricao" 

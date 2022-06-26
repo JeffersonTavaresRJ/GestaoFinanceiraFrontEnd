@@ -27,21 +27,24 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   alertMessageForm: AlertMessageForm;
   actResourceRoute: ActivatedRoute;
 
-  idMovRealizadaDelete: number;
-  idxDelete: number;
   movimentacaoRealizada: MovimentacaoRealizada;
   movimentacaoPrevista: MovimentacaoPrevista;
 
   dataVencIni: string;
   dataVencFim: string;
+  deleteMessage: string;
 
   valorTotalPago: number = 0;
-  deleteMessage: string;
+  idMovRealizadaDelete: number;
+  idxDelete: number;
+
+  displayDialogErrors: boolean;
 
   arvalidationErrors: any[] = [];
   arForms: FormArray = this.fb.array([]);
   arFormGroup: FormGroup[] = [];
-  displayDialogErrors: boolean;
+  arContas: Conta[]=[];
+  arFormasPagamento: FormaPagamento[]=[];
 
   constructor(protected injector: Injector,
     private fb: FormBuilder) {
@@ -55,6 +58,22 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   ngOnInit(): void {
     this.dataVencIni = this.actResourceRoute.snapshot.params.dataVencIni;
     this.dataVencFim = this.actResourceRoute.snapshot.params.dataVencFim;
+
+    //leitura do resolver do dropdow Contas..
+    this.actResourceRoute.data.subscribe(
+      (sucess: { resolveConta: Conta[] }) => {
+        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
+        this.arContas = sucess.resolveConta;        
+      }
+    );
+
+    //leitura do resolver do dropdow Formas de Pagamento..
+    this.actResourceRoute.data.subscribe(
+      (sucess: { resolveFormPag: FormaPagamento[] }) => {
+        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
+        this.arFormasPagamento = sucess.resolveFormPag;        
+      }
+    );
 
     //leitura do resolver da Movimentação Prevista..
     this.actResourceRoute.data.subscribe(

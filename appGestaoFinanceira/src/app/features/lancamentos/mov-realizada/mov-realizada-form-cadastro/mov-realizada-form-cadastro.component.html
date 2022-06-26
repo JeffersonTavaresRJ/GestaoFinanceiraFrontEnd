@@ -14,7 +14,8 @@
                               [form-control]="resourceForm.get('idCategoria')"
                               [disabled]="resourceCurrentAction()=='edit'"
                               [select-by-status]="resourceCurrentAction()=='new'"
-                              (OnChange)="resourceClearValidations()">
+                              (OnChange)="resourceClearValidations()"
+                              placeholder="Selecione">
                         </app-dropdown-categoria>
                     </div>
                 </div>
@@ -27,7 +28,8 @@
                               [disabled]="resourceCurrentAction()=='edit'"
                               [select-by-status]="resourceCurrentAction()=='new'"
                               [select-by-idCategoria]="resourceForm.get('idCategoria').value"
-                              (OnChange)="resourceClearValidations()">
+                              (OnChange)="resourceClearValidations()"
+                              placeholder="Selecione">
                         </app-dropdown-item-movimentacao>
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idItemMovimentacao')">
@@ -41,7 +43,8 @@
                         <app-dropdown-prioridade 
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('tipoPrioridade')"
-                              (OnChange)="resourceClearValidations()">
+                              (OnChange)="resourceClearValidations()"
+                              placeholder="Selecione">
                         </app-dropdown-prioridade>
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('tipoPrioridade')">
@@ -58,7 +61,8 @@
                         <app-dropdown-forma-pagamento 
                                [form-group]="resourceForm"
                                [form-control]="resourceForm.get('idFormaPagamento')"
-                               (OnChange)="resourceClearValidations()">
+                               (OnChange)="resourceClearValidations()"
+                               placeholder="Selecione">
                         </app-dropdown-forma-pagamento>
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idFormaPagamento')">
@@ -107,7 +111,8 @@
                         <app-dropdown-conta 
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('idConta')"
-                              (OnChange)="resourceClearValidations()">
+                              (OnChange)="resourceClearValidations()"
+                              placeholder="Selecione">
                         </app-dropdown-conta>
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idConta')">
