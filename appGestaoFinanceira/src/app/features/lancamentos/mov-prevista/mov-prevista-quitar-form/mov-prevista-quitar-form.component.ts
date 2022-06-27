@@ -179,7 +179,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       if (fGroup.get('id').value == 0) {
         this.movRealizadaService.post(fGroup).subscribe(
           sucess => {
-            fGroup.get('id').setValue(sucess.id);
+            debugger;
+            fGroup.get('id').setValue( Number.parseFloat(sucess.id));
             fGroup.get('isEdit').setValue(false);
             this.totalizarValorPago();
             this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');            
