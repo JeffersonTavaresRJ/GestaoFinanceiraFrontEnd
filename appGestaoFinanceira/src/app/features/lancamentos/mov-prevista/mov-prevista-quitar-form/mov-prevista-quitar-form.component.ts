@@ -169,6 +169,10 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     this.arForms.controls[i].get('isEdit').setValue(true);
   }
 
+  cancelRow(i:number){
+    this.arForms.controls[i].get('isEdit').setValue(false);
+  }
+
   deleteRow(i: number) {
     this.arForms.removeAt(i);
   }
@@ -208,14 +212,20 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     this.displayDialogErrors = false;
   }
 
-  getConta(conta:Conta, i:number){
-    debugger;
-    this.arForms.controls[i].get('descricaoConta').setValue(conta.descricao);
+  getConta(fGroup: FormGroup, i:number){
+    //debugger;
+    var descricao = this.arContas.filter(c=>c.id==fGroup.get('idConta').value).map(function(item, idx){
+      return item.descricao
+    });
+    this.arForms.controls[i].get('descricaoConta').setValue(descricao[0]);
   }
 
-  getFormaPagamento(formaPagamento:FormaPagamento, i: number){
-    debugger;
-    this.arForms.controls[i].get('descricaoFormaPagamento').setValue(formaPagamento.descricao);
+  getFormaPagamento(fGroup: FormGroup, i: number){
+    //debugger;
+    var descricao = this.arFormasPagamento.filter(c=>c.id==fGroup.get('idFormaPagamento').value).map(function(item, idx){
+      return item.descricao
+    });
+    this.arForms.controls[i].get('descricaoFormaPagamento').setValue(descricao[0]);  
   }
 
   private addArForms(_idItemMovimentacao: number,

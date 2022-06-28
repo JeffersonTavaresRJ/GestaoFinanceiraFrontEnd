@@ -54,7 +54,7 @@
 }
 
 .table-overflow{
-    max-height:270px;
+    height:270px;
     overflow-x:auto;
 }
 
@@ -64,4 +64,14 @@ th{
 
 td{
     font-size: small;
+}
+
+.footer{
+    font-size: small;
+    text-align: center;
+    width: 67.6rem;
+    height: 3rem;
+    margin-left: 1.1rem;
+    padding-top: 0.4rem;
+    color: white;    
 }

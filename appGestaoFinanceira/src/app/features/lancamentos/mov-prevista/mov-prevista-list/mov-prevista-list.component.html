@@ -1,52 +1,41 @@
-<div class="row mt-2">
+<div class="row mt-1">
     <div class="col-12">
-        <div class="card mt-1">
+        <div class="card">
             <div class="card-body">
-                <div class="row">
+                <div class="row" style="border-bottom: 1px solid #DCDCDC; margin-bottom: 7px;">
                     <app-header-page-title header-title="Movimentações Previstas" header-button-label="+ Nova Previsão"
                         [header-button-link]="['/mov-prevista/new',dataIni | DateFormatToString, dataFim | DateFormatToString]">
                     </app-header-page-title>
-                    <hr>
                 </div>
                 <div class="row">
                     <div class="col-3">
-                        <app-dropdown-categoria [form-group]="formGroup" 
-                                                [form-control]="formGroup.get('idCategoria')" 
-                                                placeholder="Categoria"
-                                                (OnChange)="filtrarTablePorParametros($event)">
+                        <app-dropdown-categoria [form-group]="formGroup" [form-control]="formGroup.get('idCategoria')"
+                            placeholder="Categoria" (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-categoria>
                     </div>
                     <div class="col-3">
-                        <app-dropdown-item-movimentacao [form-group]="formGroup" 
-                                                        [form-control]="formGroup.get('idItemMovimentacao')" 
-                                                        placeholder="Item de Movimentação"
-                                                        (OnChange)="filtrarTablePorParametros($event)">
+                        <app-dropdown-item-movimentacao [form-group]="formGroup"
+                            [form-control]="formGroup.get('idItemMovimentacao')" placeholder="Item de Movimentação"
+                            (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-item-movimentacao>
                     </div>
                     <div class="col-3">
-                        <app-dropdown-prioridade [form-group]="formGroup" 
-                                                 [form-control]="formGroup.get('idPrioridade')" 
-                                                 placeholder="Prioridade"
-                                                 (OnChange)="filtrarTablePorParametros($event)">
+                        <app-dropdown-prioridade [form-group]="formGroup" [form-control]="formGroup.get('idPrioridade')"
+                            placeholder="Prioridade" (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-prioridade>
                     </div>
                     <div class="col-3">
-                        <app-dropdown-forma-pagamento [form-group]="formGroup" 
-                                                      [form-control]="formGroup.get('idFormaPagamento')" 
-                                                      placeholder="Forma de Pagamento"
-                                                      (OnChange)="filtrarTablePorParametros($event)">
+                        <app-dropdown-forma-pagamento [form-group]="formGroup"
+                            [form-control]="formGroup.get('idFormaPagamento')" placeholder="Forma de Pagamento"
+                            (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-forma-pagamento>
                     </div>
                 </div>
-                <div class="row mt-2">
+                <div class="row mt-1">
                     <div class="col-3">
-                        <p-dropdown [options]="arEnumStatus" 
-                                    [(ngModel)]="status" 
-                                    optionLabel="Value" 
-                                    optionValue="Key"
-                                    placeholder="Status"
-                                    [showClear]="true" 
-                                    (onChange)="filtrarTablePorParametros()"></p-dropdown>
+                        <p-dropdown [options]="arEnumStatus" [(ngModel)]="status" optionLabel="Value" optionValue="Key"
+                            placeholder="Status" [showClear]="true" (onChange)="filtrarTablePorParametros()">
+                        </p-dropdown>
                     </div>
                     <div class="col-6">
                         <strong class="font-size-small" style="margin-right: 14px;">Período do Vencimento:</strong>
@@ -57,18 +46,6 @@
                             inputId="monthpicker"></p-calendar>
                         <p-button id="pesquisar" icon="pi pi-search" styleClass="p-button-sm p-button-secondary"
                             (click)="filtrarTablePorPeriodo()"></p-button>
-                    </div>
-                    <div class="col-3" style="font-size:10.5px;">                      
-                        <div class="card">
-                            <div id="dvValorConsolidado" class="card-body">
-                                <strong style="margin-right: 9px;">Receitas:</strong> <strong class="text-success">{{valorTotalReceita | currency}}</strong><br>
-                                <strong style="margin-right: 4px;">Despesas:</strong> <strong class="text-danger" style="margin-right:0.1rem;">{{valorTotalDespesa | currency}}</strong>
-                                <strong style="margin-right: 4px; margin-left: 8px;">Saldo:</strong> 
-                                <strong [class.text-success]="valorTotalReceita > valorTotalDespesa"
-                                        [class.text-danger] ="valorTotalReceita < valorTotalDespesa">{{valorTotalReceita-valorTotalDespesa | currency}}</strong>
-                    
-                            </div>
-                        </div>            
                     </div>
                 </div>
             </div>
@@ -110,9 +87,9 @@
                         <td style="text-align:center; width: 14.5%;">
                             {{movimentacaoPrevista.dataVencimento | date:'dd/MM/yyyy'}}
                         </td>
-                        <td style="width: 20.7%;">                            
+                        <td style="width: 20.7%;">
                             <strong>{{movimentacaoPrevista.itemMovimentacao.descricao}}</strong><br>
-                            {{movimentacaoPrevista.itemMovimentacao.categoria.descricao}}                         
+                            {{movimentacaoPrevista.itemMovimentacao.categoria.descricao}}
                         </td>
                         <td style="width: 16.6%;">
                             {{movimentacaoPrevista.formaPagamento.descricao}}
@@ -149,7 +126,23 @@
                     </tr>
                 </tbody>
             </table>
-        </div>      
+        </div>
+        <div class="footer">
+            <div class="row">
+                <div class="col-4" style="background-color:darkgreen">
+                    <strong>Receitas:</strong>&nbsp;
+                    <strong>{{valorTotalReceita | currency}}</strong>
+                </div>
+                <div class="col-4" style="background-color:darkred">
+                    <strong>Despesas:</strong>&nbsp;
+                    <strong>{{valorTotalDespesa | currency}}</strong>
+                </div>
+                <div class="col-4" style="background-color:dimgray">
+                    <strong>Saldo:</strong>&nbsp;
+                    <strong>{{valorTotalReceita-valorTotalDespesa | currency}}</strong>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

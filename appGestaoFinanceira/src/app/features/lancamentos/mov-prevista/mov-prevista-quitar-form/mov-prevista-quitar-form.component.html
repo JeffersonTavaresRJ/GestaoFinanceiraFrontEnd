@@ -59,36 +59,25 @@
                             </span>
                         </div>
                         <div class="td">
-                            <select class="form-select" formControlName="idConta" aria-disabled="isDisabled"
-                                (change)="getConta($event, i)">
+                            <select *ngIf="fGroup.get('isEdit').value == true" class="form-select" formControlName="idConta" aria-disabled="isDisabled"
+                                (change)="getConta(fGroup, i)">
                                 <option value=null disabled selected>Selecione</option>
                                 <option *ngFor="let item of arContas" [value]="item.id">
                                     {{item.descricao}}
                                 </option>
                             </select>
-                            <!--
-                            <app-dropdown-conta *ngIf="fGroup.get('isEdit').value == true" 
-                             [form-group]="fGroup" [form-control]="fGroup.get('idConta')" style="font-size: 14px;"
-                             (OnChange)="getConta($event, i)"></app-dropdown-conta>
-                             -->
                             <span *ngIf="fGroup.get('isEdit').value == false">
                                 {{fGroup.get('descricaoConta').value}}
                             </span>
                         </div>
                         <div class="td">
-                            <select class="form-select" formControlName="idFormaPagamento" aria-disabled="isDisabled"
-                                (change)="getFormaPagamento($event, i)">
+                            <select *ngIf="fGroup.get('isEdit').value == true" class="form-select" formControlName="idFormaPagamento" aria-disabled="isDisabled"
+                                (change)="getFormaPagamento(fGroup, i)">
                                 <option value=null disabled selected>Selecione</option>
                                 <option *ngFor="let item of arFormasPagamento" [value]="item.id">
                                     {{item.descricao}}
                                 </option>
                             </select>
-                            <!--
-                            <app-dropdown-forma-pagamento *ngIf="fGroup.get('isEdit').value == true"
-                                [form-group]="fGroup" [form-control]="fGroup.get('idFormaPagamento')"
-                                style="font-size: 14px;" (OnChange)="getFormaPagamento($event, i)">
-                            </app-dropdown-forma-pagamento>
-                            -->
                             <span *ngIf="fGroup.get('isEdit').value == false">
                                 {{fGroup.get('descricaoFormaPagamento').value}}
                             </span>
@@ -105,6 +94,12 @@
                             <button *ngIf="fGroup.get('isEdit').value == true" type="submit"
                                 class="btn btn-outline-dark btn-sm" [disabled]="!fGroup.valid">
                                 <img src="assets/icons/save_black_18dp.svg">
+                            </button>
+                            &nbsp;
+                            <button *ngIf="fGroup.get('isEdit').value == true"
+                                class="btn btn-outline-dark btn-sm"
+                                (click)="cancelRow(i)">
+                                <img src="assets/icons/cancel_black_18dp.svg">
                             </button>
                             <button *ngIf="fGroup.get('isEdit').value == false" class="btn btn-outline-dark btn-sm"
                                 (click)="editRow(i)">
