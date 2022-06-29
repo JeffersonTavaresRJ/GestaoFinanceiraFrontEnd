@@ -50,12 +50,9 @@
   overflow-x:auto;
 }
 
-.footer{
+#dvMovDiaria{
+  width: 66rem;
   font-size: small;
-  text-align: center;
-  width: 67.6rem;
-  height: 3rem;
-  margin-left: 1.1rem;
-  padding-top: 0.4rem;
-  color: white;    
+  margin-left: 1rem;
+  margin-top: 1rem;
 }

@@ -8,24 +8,21 @@
                     </app-header-page-title>
                 </div>
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-4">
                         <app-dropdown-conta [form-group]="formGroup"
                             [form-control]="formGroup.get('idConta')" placeholder="Conta"
                             (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-conta>
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                         <app-dropdown-item-movimentacao [form-group]="formGroup"
                             [form-control]="formGroup.get('idItemMovimentacao')" placeholder="Item de Movimentação"
                             (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-item-movimentacao>
                     </div>
-                    <div class="col-6">
-                        <strong class="font-size-small" style="margin-right: 14px;">Período do Lançamento:</strong>
+                    <div class="col-4">
+                        <strong class="font-size-small" style="margin-right: 14px;">Mês/Ano:</strong>
                         <p-calendar [(ngModel)]="dataIni" view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                            inputId="monthpicker"></p-calendar>
-                        <strong class="font-size-small" style="margin-right: 5px; margin-left: 5px">a</strong>
-                        <p-calendar [(ngModel)]="dataFim" view="month" dateFormat="mm/yy" [readonlyInput]="true"
                             inputId="monthpicker"></p-calendar>
                         <p-button id="pesquisar" icon="pi pi-search" styleClass="p-button-sm p-button-secondary"
                             (click)="filtrarTablePorPeriodo()"></p-button>
@@ -35,98 +32,61 @@
         </div>
         <div class="table-overflow">
             <div *ngFor="let item of results; let f = first">
-                <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong>
-                
-            </div>
-
-            <div class="card" style="width: 80rem;">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-            <!--
-            <table class="table table-hover">
-                <tbody>
-                    <tr *ngFor="let movimentacaoPrevista of arMovPrevistas; let i=index;">
-                        <td style="text-align:center; width: 10.2%;">
-                            <span *ngIf="movimentacaoPrevista.tipoPrioridade=='A'">
-                                <img class="logo" src="assets\icons\arrow_circle_up_black_24dp.svg"
-                                    title="Prioridade: {{movimentacaoPrevista.tipoPrioridadeDescricao}}" width="49.5"
-                                    height="27">
-                            </span>
-                            <span *ngIf="movimentacaoPrevista.tipoPrioridade=='M'">
-                                <img class="logo" src="assets\icons\remove_circle_outline_black_24dp.svg"
-                                    title="Prioridade: {{movimentacaoPrevista.tipoPrioridadeDescricao}}" width="49.5"
-                                    height="27">
-                            </span>
-                            <span *ngIf="movimentacaoPrevista.tipoPrioridade=='B'">
-                                <img class="logo" src="assets\icons\arrow_circle_down_black_24dp.svg"
-                                    title="Prioridade: {{movimentacaoPrevista.tipoPrioridadeDescricao}}" width="49.5"
-                                    height="27">
-                            </span>
-                        </td>
-                        <td style="text-align:center; width: 14.5%;">
-                            {{movimentacaoPrevista.dataVencimento | date:'dd/MM/yyyy'}}
-                        </td>
-                        <td style="width: 20.7%;">
-                            <strong>{{movimentacaoPrevista.itemMovimentacao.descricao}}</strong><br>
-                            {{movimentacaoPrevista.itemMovimentacao.categoria.descricao}}
-                        </td>
-                        <td style="width: 16.6%;">
-                            {{movimentacaoPrevista.formaPagamento.descricao}}
-                            <p *ngIf="movimentacaoPrevista.parcela!='' ">Parcela: {{movimentacaoPrevista.parcela}}</p>
-                        </td>
-                        <td style="text-align:center; width: 17.6%;">
-                            <strong [class.text-success]="movimentacaoPrevista.itemMovimentacao.tipo=='R'"
-                                [class.text-danger]="movimentacaoPrevista.itemMovimentacao.tipo=='D'">
-                                {{movimentacaoPrevista.valor | currency}}
-                            </strong>
-                        </td>
-                        <td style="text-align:center; width: 5%;">
-                            <a *ngIf="movimentacaoPrevista.status=='A'"
-                                [routerLink]="['/mov-prevista/quitar',movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]"
-                                class="btn btn-outline-primary btn-sm">
-                                Quitar
-                            </a>
-                            <img *ngIf="movimentacaoPrevista.status=='Q'" class="logo text-start"
-                                src="assets\icons\task_alt_black_24dp.svg"
-                                title="Status: {{movimentacaoPrevista.statusDescricao}}" width="49.5" height="27">
-                        </td>
-                        <td style="text-align:center; width: 15.4%;">
-                            <a [routerLink]="['/mov-prevista/edit',movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]"
-                                *ngIf="movimentacaoPrevista.status!='Q'" class="btn btn-outline-info btn-sm me-3">
-                                Editar
-                            </a>
-                            <button *ngIf="movimentacaoPrevista.status!='Q' && movimentacaoPrevista.parcela == ''"
-                                class="btn btn-outline-danger btn-sm"
-                                (click)="modalDeleteMessage(movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia)"
-                                data-bs-toggle="modal" data-bs-target="#modalDelete">
-                                Excluir
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            -->
-        </div>
-        <div class="footer">
-            <div class="row">
-                <div class="col-4" style="background-color:darkgreen">
-                    <strong>Receitas:</strong>&nbsp;
-                    <strong>{{valorTotalReceita | currency}}</strong>
-                </div>
-                <div class="col-4" style="background-color:darkred">
-                    <strong>Despesas:</strong>&nbsp;
-                    <strong>{{valorTotalDespesa | currency}}</strong>
-                </div>
-                <div class="col-4" style="background-color:dimgray">
-                    <strong>Saldo:</strong>&nbsp;
-                    <strong>{{valorTotalReceita-valorTotalDespesa | currency}}</strong>
-                </div>
+                <div class="card" id="dvMovDiaria">
+                    <div class="card-header">
+                        <div class="row" style="margin: 0px 0px;">
+                            <div class="col-6" style="text-align: left;">
+                                <img src="assets\icons\calendar_month_black_24dp.svg" width="32" style="vertical-align: middle" />
+                                <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong>
+                            </div>
+                            <div class="col-6 mt-1" style="text-align: right; padding: 0px 0px;">
+                                <strong *ngIf="f==false">Saldo: {{item.valor | currency}}</strong>
+                                <strong *ngIf="f==true"> Saldo no mês: {{item.valor | currency}}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <ul *ngFor="let movRealizada of item.movimentacoesRealizadas" class="list-group list-group-flush">
+                      <li class="list-group-item" [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
+                        <div class="row">
+                            <div class="col-1">
+                                <span *ngIf="movRealizada.tipoPrioridade=='A'">
+                                    <img class="logo" src="assets\icons\arrow_circle_up_black_24dp.svg"
+                                        title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
+                                </span>
+                                <span *ngIf="movRealizada.tipoPrioridade=='M'">
+                                    <img class="logo" src="assets\icons\remove_circle_outline_black_24dp.svg"
+                                        title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
+                                </span>
+                                <span *ngIf="movRealizada.tipoPrioridade=='B'">
+                                    <img class="logo" src="assets\icons\arrow_circle_down_black_24dp.svg"
+                                        title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
+                                </span>
+                            </div>
+                            <div class="col-4">
+                                {{movRealizada.itemMovimentacao.descricao}}
+                                <p [class.text-muted]="movRealizada.itemMovimentacao.tipo=='D'">{{movRealizada.itemMovimentacao.categoria.descricao}}</p>
+                            </div>
+                            <div class="col-3">
+                                <label *ngIf="movRealizada.itemMovimentacao.tipo=='D'">-</label>{{movRealizada.valor | currency}}
+                            </div>
+                            <div class="col-4">
+                                <div *ngIf="item.status=='A'">                          
+                                    <a  title="Editar" [routerLink]="['/mov-realizada/edit',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
+                                        class="btn btn btn-outline-light me-1 btn-sm">
+                                        <img src="../../../../../assets/icons/edit_note_black_18dp.svg">
+                                    </a>
+                                    <button  title="Excluir" class="btn btn btn-outline-light btn-sm" 
+                                            (click)="modalDeleteMessage(movRealizada.id)"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalDelete">
+                                            <img src="../../../../../assets/icons/delete_black_18dp.svg">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                      </li>                      
+                    </ul>
+                </div>                
             </div>
         </div>
     </div>
@@ -135,118 +95,3 @@
 <app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" [modal-interrogative-title]="'Sr. Usuário'"
     [modal-interrogative-message]="'Deseja realizar a exclusão?'" (modalInterrogativeResponse)="eventDelete($event)">
 </app-modal-interrogative-form>
-<!--
-<div class="card mt-2">
-    <div class="card-header">
-            <div class="row">
-                <div class="col-2">
-                    <h4>Fluxo Diário</h4>
-                </div>                
-                   <div class="field col-4">  
-                        <label><strong>Conta:</strong></label>                        
-                        <app-dropdown-conta                             
-                             [form-group]="formGroup"
-                             [form-control]="formGroup.get('idConta')"
-                             [style]="{'width':'70%'}"
-                             (OnChange)="getConta($event)">
-                        </app-dropdown-conta>                                        
-                    </div>
-                <div class="field col-3" style="text-align: center;">
-                    <label><strong>Mês/Ano:</strong></label>
-                    <p-calendar placeholder="Mês/Ano" [(ngModel)]="dataReferencia" view="month"
-                        dateFormat="M/yy" [readonlyInput]="true" (onSelect)="carregarDados()">
-                    </p-calendar>
-                </div>
-                <div class="col-3" style="text-align: right;">
-                    <a class="btn btn-button bg-dark text-light" [routerLink]="['/mov-realizada/new', dataIni | DateFormatToString, dataFim | DateFormatToString]" >
-                        + Novo Lançamento
-                    </a>
-                </div>
-            </div>
-    </div>
-    <div class="card-body"  class="scroll">
-        <div *ngIf="results.length > 0 else loading">
-                <div>
-                    <table class="table table-sm">
-                        <tbody *ngFor="let item of results; let f = first">
-                            <tr>
-                                <td class="small table-secondary" colspan="3">
-                                    <div class="row" style="margin: 0px 0px;">
-                                        <div class="col-6" style="text-align: left;">
-                                            <img src="assets\icons\calendar_month_black_24dp.svg" width="32" style="vertical-align: middle" />
-                                            <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong>
-                                        </div>
-                                        <div class="col-6 mt-1" style="text-align: right; padding: 0px 0px;">
-                                            <strong *ngIf="f==false">Saldo: {{item.valor | currency}}</strong>
-                                            <strong *ngIf="f==true"> Saldo no mês: {{item.valor | currency}}</strong>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr *ngFor="let movRealizada of item.movimentacoesRealizadas" 
-                                [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
-                                <td class="small" style="width: 3%;">
-
-                                    <span *ngIf="movRealizada.tipoPrioridade=='A'">
-                                        <img class="logo" src="assets\icons\arrow_circle_up_black_24dp.svg"
-                                            title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
-                                    </span>
-                                    <span *ngIf="movRealizada.tipoPrioridade=='M'">
-                                        <img class="logo" src="assets\icons\remove_circle_outline_black_24dp.svg"
-                                            title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
-                                    </span>
-                                    <span *ngIf="movRealizada.tipoPrioridade=='B'">
-                                        <img class="logo" src="assets\icons\arrow_circle_down_black_24dp.svg"
-                                            title="Prioridade: {{movRealizada.tipoPrioridadeDescricao}}" width="55" height="30">
-                                    </span>
-                                </td>
-                                <td class="small">
-             
-                                    <strong>{{movRealizada.itemMovimentacao.descricao}}</strong>
-                                    <p [class.text-muted]="movRealizada.itemMovimentacao.tipo=='D'">{{movRealizada.itemMovimentacao.categoria.descricao}}</p>
-                                </td>
-                                <td class="small pt-3" style="text-align: right;">
-                       
-                                    <label *ngIf="movRealizada.itemMovimentacao.tipo=='D'">-</label>{{movRealizada.valor | currency}}
-                                    <br>
-                                    <div *ngIf="item.status=='A'">
-                          
-                                        <a  title="Editar" [routerLink]="['/mov-realizada/edit',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
-                                            class="btn btn btn-outline-light me-1 btn-sm">
-                                            <img src="../../../../../assets/icons/edit_note_black_18dp.svg">
-                                        </a>
-                                        <button  title="Excluir" class="btn btn btn-outline-light btn-sm" 
-                                                (click)="modalDeleteMessage(movRealizada.id)"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalDelete">
-                                                <img src="../../../../../assets/icons/delete_black_18dp.svg">
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>                           
-                        </tbody>
-                    </table>
-                </div>
-        </div>
-        <ng-template #loading>
-            <div style="text-align: center;">
-                <p><strong>Não existem Lançamentos no mês selecionado</strong></p>
-            </div>
-        </ng-template>
-    </div>
-    <div class="card-footer">
-        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="btnMR" autocomplete="off" checked>
-            <label class="btn btn-outline-dark" for="btnMR">Movimentação Realizada</label>
-          
-            <input type="radio" class="btn-check" name="btnradio" id="btnMP" autocomplete="off">
-            <label class="btn btn-outline-dark" for="btnMP">Movimentação Prevista</label>
-          </div>
-    </div>
-</div>
-<app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" 
-    [modal-interrogative-title]="'Sr. Usuário'"
-    [modal-interrogative-message]="'Deseja realizar a exclusão?'" 
-    (modalInterrogativeResponse)="eventDelete($event)">
-</app-modal-interrogative-form>
--->
