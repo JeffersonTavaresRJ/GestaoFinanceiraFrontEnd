@@ -1,5 +1,5 @@
-#pesquisar{
-  margin-left: 10px!important;
+#pesquisar {
+  margin-left: 10px !important;
 }
 
 :host ::ng-deep .p-multiselect-label {
@@ -16,7 +16,7 @@
 
 :host ::ng-deep .p-inputtext {
   font-size: small !important;
-  text-align:center !important;
+  text-align: center !important;
 }
 
 :host ::ng-deep .p-checkbox-box {
@@ -29,7 +29,7 @@
 }
 
 :host ::ng-deep .p-calendar {
-  width: 150px !important;
+  width: 200px !important;
 }
 
 :host ::ng-deep .p-dropdown-item {
@@ -38,21 +38,23 @@
 
 :host ::ng-deep .p-datepicker-group-container {
   font-size: small !important
-  
 }
 
-.font-size-small{
+.font-size-small {
   font-size: small;
 }
 
-.table-overflow{
-  height:350px;
-  overflow-x:auto;
+.table-overflow {
+  height: 400px;
+  overflow-x: auto;
 }
 
-#dvMovDiaria{
-  width: 66rem;
-  font-size: small;
-  margin-left: 1rem;
-  margin-top: 1rem;
+#loading{
+  text-align: center; 
+  padding-top: 7rem; 
+  height: 16rem;
+}
+
+.card-body {
+  padding: 0.7rem 0.7rem;
 }

@@ -64,7 +64,7 @@
             </thead>
         </table>
         <div class="table-overflow">
-            <table class="table table-hover">
+            <table class="table table-hover" *ngIf="arMovPrevistas.length > 0 else loading">
                 <tbody>
                     <tr *ngFor="let movimentacaoPrevista of arMovPrevistas; let i=index;">
                         <td style="text-align:center; width: 10.2%;">
@@ -126,6 +126,11 @@
                     </tr>
                 </tbody>
             </table>
+            <ng-template #loading>
+                <div style="text-align: center; padding-top: 7rem; height: 16rem;">
+                    <strong>Dados não encontrados</strong>
+                </div>                
+            </ng-template>
         </div>
         <div class="footer">
             <div class="row">

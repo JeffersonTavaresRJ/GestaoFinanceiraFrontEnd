@@ -1,5 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
+import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 
@@ -65,16 +66,4 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
       );
     }
   }
-
-  protected resourceCreate() {
-    //classe colocada entre colchetes para ser considerada como array de 01 elemento..
-    this.movimentacaoRealizadaService.postArray( [this.resourceForm] )
-      .subscribe(
-        sucess => {
-          this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
-        },
-        error => { this.resourceActionForError(error) }
-      );
-  }
-
 }

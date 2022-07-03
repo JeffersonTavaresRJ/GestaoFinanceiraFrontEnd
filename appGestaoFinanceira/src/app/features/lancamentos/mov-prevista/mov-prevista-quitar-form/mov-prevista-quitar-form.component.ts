@@ -116,10 +116,11 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     );
   }
 
-  modalDeleteMessage(id: number, dataMovimentacaoRealizada: string, i:number) {
+  modalDeleteMessage(id: number, dataMovimentacaoRealizada: Date, i:number) {
+    var stDataMovRealizada = DateConvert.formatDateDDMMYYYY(dataMovimentacaoRealizada, '/');
     this.idxDelete = i;
     this.idMovRealizadaDelete = id;
-    this.deleteMessage = `${'Confirma a exclusão do lançamento referente ao dia '}${dataMovimentacaoRealizada.bold()}${'?'}`;;
+    this.deleteMessage = `${'Confirma a exclusão do lançamento referente ao dia '}${stDataMovRealizada.bold()}${'?'}`;;
   }
 
   eventDelete(event) {
@@ -141,7 +142,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     var dataMovimentacaoRealizada = this.movimentacaoPrevista.dataVencimento;
 
     this.arForms.controls.forEach(element => {
-      var dataArray = DateConvert.stringToDate(element.get('dataMovimentacaoRealizada').value, '/');
+      var dataArray = element.get('dataMovimentacaoRealizada').value;
       if (dataArray > dataMovimentacaoRealizada) {
         dataMovimentacaoRealizada = dataArray;
       }
@@ -245,7 +246,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       tipoPrioridade: [_tipoPrioridade],
       observacao: [_observacao],
       id: [_id],
-      dataMovimentacaoRealizada: [DateConvert.formatDateDDMMYYYY(_dataMovimentacao, "/"), Validators.required],
+      dataMovimentacaoRealizada: [_dataMovimentacao, Validators.required],
       idConta: [_idConta, Validators.required],
       descricaoConta: [_descricaoConta],
       idFormaPagamento: [_idFormaPagamento, Validators.required],

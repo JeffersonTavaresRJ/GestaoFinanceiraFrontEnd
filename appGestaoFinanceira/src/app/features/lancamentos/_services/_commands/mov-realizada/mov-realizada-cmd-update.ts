@@ -16,11 +16,11 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
     ) { super(); };
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandUpdate{
-
-        var dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '/');
-        if (dataMovimentacaoRealizada == null){
-            dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '-');
-        }   
+        var dataMovimentacaoRealizada = formGroup.get('dataMovimentacaoRealizada').value;
+        //var dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '/');
+        //if (dataMovimentacaoRealizada == null){
+            //dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '-');
+        //}   
         
         return new MovimentacaoRealizadaCommandUpdate(
             Number.parseInt(formGroup.get('id').value),

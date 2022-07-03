@@ -29,7 +29,6 @@ export class MovRealizadaListComponent implements OnInit {
     protected formBuilder: FormBuilder) {
     this.formGroup = this.formBuilder.group({
       idConta: [1],
-      idItemMovimentacao: [null]
     });
   }
 
@@ -76,19 +75,8 @@ export class MovRealizadaListComponent implements OnInit {
   filtrarTablePorParametros(event?: any) {
     debugger;
     this.results = this.resultsAux;
-    var idItemMovimentacao = this.formGroup.get('idItemMovimentacao').value;
     var idConta = this.formGroup.get('idConta').value;
 
-    if (idItemMovimentacao != null) {
-      this.resultsAux.map(function(item, idx){
-          console.log(item[idx].movimentacoesRealizadas.valor);
-          /*item[idx].movimentacoesRealizadas.foreach(element=>{
-            if(element.itemMovimentacao.id ==idItemMovimentacao){
-              this.results.push(item);
-            }
-          })*/
-      })
-    }
     if (idConta != null) {
       this.results = this.resultsAux.filter(m => m.conta.id == idConta);
     }

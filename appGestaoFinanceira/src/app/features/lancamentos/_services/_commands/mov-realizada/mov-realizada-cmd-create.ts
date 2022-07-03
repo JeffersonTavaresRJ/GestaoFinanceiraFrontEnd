@@ -15,10 +15,11 @@ export class MovimentacaoRealizadaCommandCreate extends GenericCommand {
     ) { super();  };
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandCreate{
-        var dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '/');
-        if (dataMovimentacaoRealizada == null){
-            dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '-');
-        }
+        var dataMovimentacaoRealizada = formGroup.get('dataMovimentacaoRealizada').value;
+        //var dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '/');
+        //if (dataMovimentacaoRealizada == null){
+          //  dataMovimentacaoRealizada = DateConvert.stringToDate(formGroup.get('dataMovimentacaoRealizada').value, '-');
+       // }
         
         return new MovimentacaoRealizadaCommandCreate(
             Number.parseInt(formGroup.get('idItemMovimentacao').value),
