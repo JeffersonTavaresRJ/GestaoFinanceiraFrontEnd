@@ -5,13 +5,17 @@ import { ModalInterrogativeFormComponent } from './components/modals/modal-inter
 import { HeaderComponent } from './components/template/header/header.component';
 import { DateFormatToStringPipe } from './pipes/date/date-format-to-string.pipe';
 import { RouterModule } from '@angular/router';
+import { StringSplitPipe } from './pipes/string/string-split.pipe';
+import { StringSubstrPipe } from './pipes/string/string-substr.pipe';
 
 @NgModule({
   declarations: [
     Error404Component,
     ModalInterrogativeFormComponent,
     HeaderComponent,
-    DateFormatToStringPipe
+    DateFormatToStringPipe,
+    StringSplitPipe,
+    StringSubstrPipe
   ],
   imports: [
     CommonModule,
@@ -21,7 +25,9 @@ import { RouterModule } from '@angular/router';
     HeaderComponent,
     Error404Component,
     ModalInterrogativeFormComponent,
-    DateFormatToStringPipe
+    DateFormatToStringPipe,
+    StringSplitPipe,
+    StringSubstrPipe
   ]
 })
 export class CoreModule { }

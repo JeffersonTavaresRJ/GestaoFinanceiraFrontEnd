@@ -55,6 +55,23 @@
   height: 16rem;
 }
 
+#dvRow{
+  width: 95%;
+}
+
+#dvSaldo{
+  text-align: left; 
+  padding-left: 2rem; 
+  font-size: small;
+}
+
+#dvDetalhe{
+  background-color: #FAF0E6;
+  margin-bottom: 0.6rem;
+  margin-left: 1.9rem;
+  font-size: small;
+}
+
 .card-body {
   padding: 0.7rem 0.7rem;
 }

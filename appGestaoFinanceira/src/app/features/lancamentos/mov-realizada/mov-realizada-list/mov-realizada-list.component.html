@@ -25,15 +25,15 @@
         </div>
         <div class="table-overflow">
             <div *ngFor="let item of results; let f = first">
-                <div class="row" style="margin-top: 2rem;">
-                    <div class="col-12" style="text-align: left; padding-left: 2rem; font-size: small;">
+                <div class="row" id="dvRow" style="margin-top: 2rem;">
+                    <div class="col-12" id="dvSaldo">
                         <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong><br>
                         <span *ngIf="f==false">Saldo: {{item.valor | currency}}</span>
                         <strong *ngIf="f==true"> Saldo no mês: {{item.valor | currency}}</strong>
                     </div>
                 </div>
-                <div class="row" *ngFor="let movRealizada of item.movimentacoesRealizadas">
-                    <div class="card" id="dvMovDiaria" [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
+                <div class="row" id="dvRow" *ngFor="let movRealizada of item.movimentacoesRealizadas">
+                    <div class="col-12 card" id="dvDetalhe" [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-1" style="padding-top: 0.3rem;">
