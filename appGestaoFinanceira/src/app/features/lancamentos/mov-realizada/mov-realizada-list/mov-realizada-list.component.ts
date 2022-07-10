@@ -65,6 +65,7 @@ export class MovRealizadaListComponent implements OnInit {
         (sucess: any[]) => {
           this.results = sucess;
           this.resultsAux = this.results;
+          this.filtrarTablePorParametros();
         });
   }
 

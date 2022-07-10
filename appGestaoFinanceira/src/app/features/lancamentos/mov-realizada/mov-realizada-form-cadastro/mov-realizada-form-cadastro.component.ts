@@ -1,6 +1,5 @@
 import { Component, Injector } from '@angular/core';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
-import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 
@@ -14,6 +13,12 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   arStDate: string[];
   dataIni: Date;
   dataFim: Date;
+
+  descricaoCategoria: string;
+  descricaoItemMovimentacao:string;
+  descricaoPrioridade:string;
+  descricaoFormaPagamento: string;
+  descricaoConta:string;
   
   constructor(protected injector: Injector,
     protected movimentacaoRealizadaService: MovRealizadaService) {
@@ -47,8 +52,12 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     return 'Edição do Lançamento';
   } 
 
+  protected resourceDetalhePageTitle(): string {
+    return 'Detalhe Lançamento';
+  }
+
   protected loadResource() {
-    if (this.resourceCurrentAction() == 'edit') {
+    if (this.resourceCurrentAction() == 'edit' || this.resourceCurrentAction() == 'cons') {
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovReal: MovimentacaoRealizada }) => {
           console.log(sucess);
@@ -62,6 +71,12 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.resourceForm.get('valor').setValue(sucess.resolveMovReal.valor);
           this.resourceForm.get('idConta').setValue(sucess.resolveMovReal.conta.id);
           this.resourceForm.get('idFormaPagamento').setValue(sucess.resolveMovReal.formaPagamento.id);
+
+          this.descricaoCategoria = sucess.resolveMovReal.itemMovimentacao.categoria.descricao;
+          this.descricaoItemMovimentacao = sucess.resolveMovReal.itemMovimentacao.descricao;
+          this.descricaoPrioridade = sucess.resolveMovReal.tipoPrioridadeDescricao;
+          this.descricaoFormaPagamento = sucess.resolveMovReal.formaPagamento.descricao;
+          this.descricaoConta = sucess.resolveMovReal.conta.descricao;
         }
       );
     }

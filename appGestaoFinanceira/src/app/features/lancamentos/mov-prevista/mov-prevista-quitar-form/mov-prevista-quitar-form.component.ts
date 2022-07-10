@@ -167,6 +167,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   editRow(i: number) {
+    debugger;
     this.arForms.controls[i].get('isEdit').setValue(true);
   }
 
@@ -241,12 +242,13 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     _descricaoConta?: string,
     _descricaoFormaPagamento?: string
   ) {
+    debugger;
     this.arForms.push(this.fb.group({
       idItemMovimentacao: [_idItemMovimentacao],
       tipoPrioridade: [_tipoPrioridade],
       observacao: [_observacao],
       id: [_id],
-      dataMovimentacaoRealizada: [_dataMovimentacao, Validators.required],
+      dataMovimentacaoRealizada: [new Date(_dataMovimentacao), Validators.required],
       idConta: [_idConta, Validators.required],
       descricaoConta: [_descricaoConta],
       idFormaPagamento: [_idFormaPagamento, Validators.required],

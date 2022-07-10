@@ -59,11 +59,16 @@
                                     ( {{movRealizada.formaPagamento.descricao}} )                                    
                                 </div>
                                 <div class="col-3" style="padding-top: 0.5rem;">
+                                    <a [routerLink]="['/mov-realizada/cons',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
+                                       *ngIf="item.status=='F'" class="btn btn-outline-dark btn-sm me-3">
+                                        Detalhes
+                                    </a>             
                                     <a  [routerLink]="['/mov-realizada/edit',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
-                                        class="btn btn btn-outline-secondary me-1 btn-sm">
+                                        *ngIf="item.status=='A'" class="btn btn btn-outline-secondary me-1 btn-sm">
                                         Editar
                                     </a>
                                     <button class="btn btn btn-outline-secondary btn-sm" 
+                                            *ngIf="item.status=='A'"
                                             (click)="modalDeleteMessage(movRealizada.id)"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalDelete">

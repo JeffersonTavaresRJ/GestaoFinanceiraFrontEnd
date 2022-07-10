@@ -93,12 +93,7 @@
                         </td>
                         <td style="width: 16.6%;">
                             {{movimentacaoPrevista.formaPagamento.descricao}}
-                            <p *ngIf="movimentacaoPrevista.parcela!='' ">Parcela: {{movimentacaoPrevista.parcela}}</p>
-                            <p>{{movimentacaoPrevista.parcela | StringSplit: '/': 0  |  StringSubstr: 1: 1}}</p> 
-                            <!--
-                                <p>{{movimentacaoPrevista.parcela | StringSubstr: 1: 1}}</p> 
-                            -->
-                            
+                            <p *ngIf="movimentacaoPrevista.parcela!='' ">Parcela: {{movimentacaoPrevista.parcela}}</p>                           
                         </td>
                         <td style="text-align:center; width: 17.6%;">
                             <strong [class.text-success]="movimentacaoPrevista.itemMovimentacao.tipo=='R'"
@@ -115,28 +110,25 @@
                             <img *ngIf="movimentacaoPrevista.status=='Q'" class="logo text-start"
                                 src="assets\icons\task_alt_black_24dp.svg"
                                 title="Status: {{movimentacaoPrevista.statusDescricao}}" width="49.5" height="27">
+                            <img *ngIf="movimentacaoPrevista.status=='N'" class="logo text-start"
+                                src="assets\icons\adjust_black_24dp.svg"
+                                title="Status: {{movimentacaoPrevista.statusDescricao}}" width="49.5" height="27">
                         </td>
                         <td style="text-align:center; width: 15.4%;">
                             <a [routerLink]="['/mov-prevista/edit',movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]"
-                                *ngIf="movimentacaoPrevista.status!='Q'" class="btn btn-outline-info btn-sm me-3">
+                                *ngIf="movimentacaoPrevista.status=='A'" class="btn btn-outline-info btn-sm me-3">
                                 Editar
                             </a>
-                            
-                            <button *ngIf="movimentacaoPrevista.status!='Q' && movimentacaoPrevista.parcela == ''"
-                                class="btn btn-outline-danger btn-sm"
-                                (click)="modalDeleteMessage(movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia)"
-                                data-bs-toggle="modal" data-bs-target="#modalDelete">
+                            <button *ngIf="movimentacaoPrevista.status=='A'"
+                                     class="btn btn-outline-danger btn-sm"
+                                     (click)="modalDeleteMessage(movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia)"
+                                     data-bs-toggle="modal" data-bs-target="#modalDelete">
                                 Excluir
                             </button>
-                            
-                            <!--
-                            <button *ngIf="movimentacaoPrevista.status!='Q' || movimentacaoPrevista.parcela | StringSplit: '/': 0 == '1'"
-                                class="btn btn-outline-danger btn-sm"
-                                (click)="modalDeleteMessage(movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia)"
-                                data-bs-toggle="modal" data-bs-target="#modalDelete">
-                                Excluir
-                            </button>
-                            -->
+                            <a [routerLink]="['/mov-prevista/cons',movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]"
+                                *ngIf="movimentacaoPrevista.status!='A'" class="btn btn-outline-dark btn-sm me-3">
+                                Detalhes
+                            </a>
                         </td>
                     </tr>
                 </tbody>

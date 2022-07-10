@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class StringSubstrPipe implements PipeTransform {
 
-  transform(value: string, start: number, length:number): unknown {
+  transform(value: string, start: number, length:number): string {
     debugger;
     var x = value.substring(start, length);
     return x;

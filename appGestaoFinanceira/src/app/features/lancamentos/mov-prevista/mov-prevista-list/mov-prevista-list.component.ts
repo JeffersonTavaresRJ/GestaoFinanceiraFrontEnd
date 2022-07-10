@@ -59,6 +59,7 @@ export class MovPrevistaListComponent implements OnInit {
       .subscribe(result => {
         this.arMovPrevistas = result;
         this.arMovPrevistasAux = result;
+        this.filtrarTablePorParametros();
         this.calcularSaldo();
       });
   }
