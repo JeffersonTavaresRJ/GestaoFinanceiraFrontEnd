@@ -84,9 +84,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         } else if (this.actResourceRoute.snapshot.url[1].path == 'edit') {
             this.resourcePageTitle = this.resourceEditPageTitle();
             return 'edit'
-        } else if (this.actResourceRoute.snapshot.url[1].path == 'cons') {
-            this.resourcePageTitle = this.resourceDetalhePageTitle();
-            return 'cons'
         } else {
             this.resourcePageTitle = this.resourceDeletePageTitle();
             return 'delete'
@@ -164,10 +161,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected resourceEditPageTitle():string{
         return 'Edição';
-    }
-
-    protected resourceDetalhePageTitle():string{
-        return 'Detalhe';
     }
 
     protected resourceDeletePageTitle():string{

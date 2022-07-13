@@ -40,6 +40,11 @@
   font-size: small !important
 }
 
+:host ::ng-deep .p-dialog .p-dialog-header{
+  background-color: black;
+  color: white;
+}
+
 .font-size-small {
   font-size: small;
 }

@@ -110,10 +110,6 @@ const routes: Routes = [
     { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
-    { path: 'mov-prevista/cons/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
-             canActivate:[AuthGuard],             
-             resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
-    
     { path: 'mov-prevista/quitar/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,
              canActivate:[AuthGuard], 
              //posso ter qts resolvers que eu quiser...            
@@ -128,9 +124,6 @@ const routes: Routes = [
              canDeactivate:[AuthGuard]  },
     //=======rotas com "resolve" devem ficar por último para execução da rota correta==================
     { path: 'mov-realizada/edit/:idMovReal/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
-             canActivate:[AuthGuard],             
-             resolve:{resolveMovReal: MovRealizadaFormResolver}  },
-    { path: 'mov-realizada/cons/:idMovReal/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovReal: MovRealizadaFormResolver}  },
     { path: 'mov-realizada/:dataRealIni/:dataRealFim', component: MovRealizadaListComponent,

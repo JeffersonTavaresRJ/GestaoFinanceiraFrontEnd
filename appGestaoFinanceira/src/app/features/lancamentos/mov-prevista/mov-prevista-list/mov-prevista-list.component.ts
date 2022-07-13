@@ -21,17 +21,21 @@ export class MovPrevistaListComponent implements OnInit {
   formBuilder: FormBuilder;
 
   arStDate: string[];
+  status: string;
   dataIni: Date;
   dataFim: Date;
+  index: number;
   idItemMovimentacao: number;
   valorTotalReceita: number = 0;
   valorTotalDespesa: number = 0;
   dataReferencia: Date;
-  status: string;
+  displayDetalhe: boolean;
+
 
   arEnumStatus: enumModel[];
   arMovPrevistas: MovimentacaoPrevista[];
   arMovPrevistasAux: MovimentacaoPrevista[];
+  detalheMovimentacaoPrevista: MovimentacaoPrevista;
 
   constructor(protected injector: Injector) {
     this.actResourceRoute = injector.get(ActivatedRoute);
@@ -94,6 +98,11 @@ export class MovPrevistaListComponent implements OnInit {
     this.dataReferencia = _dataReferencia;
   }
 
+  modalDetalhe(i: number){
+    this.displayDetalhe = true;
+    this.detalheMovimentacaoPrevista = this.arMovPrevistas[i];
+ }
+
   eventDelete(event) {
     if (event) {
       this.movPrevistaService.delete(this.idItemMovimentacao, DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-'))
@@ -120,6 +129,7 @@ export class MovPrevistaListComponent implements OnInit {
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
         this.arMovPrevistas = sucess.resolveResources;
         this.arMovPrevistasAux = sucess.resolveResources;
+        this.detalheMovimentacaoPrevista = this.arMovPrevistas[0];
         this.calcularSaldo();
       }
     );

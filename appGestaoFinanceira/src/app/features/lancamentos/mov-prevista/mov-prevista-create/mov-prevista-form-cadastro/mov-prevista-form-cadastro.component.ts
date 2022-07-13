@@ -27,11 +27,6 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   itemMovimentacao: ItemMovimentacao;
   formaPagamento: FormaPagamento = new FormaPagamento();
 
-  descricaoCategoria: string;
-  descricaoItemMovimentacao:string;
-  descricaoPrioridade:string;
-  descricaoFormaPagamento: string;
-
   arTiposRecorrencia: enumModel[];
   arMovPrevistas: MovimentacaoPrevista[] = [];
 
@@ -73,13 +68,9 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
     return 'Editar Movimentação Prevista';
   }
 
-  protected resourceDetalhePageTitle():string{
-    return 'Detalhe Movimentação Prevista';
-}
-
   protected loadResource() {
     debugger;
-    if (this.resourceCurrentAction() == 'edit' || this.resourceCurrentAction() == 'cons') {
+    if (this.resourceCurrentAction() == 'edit') {
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovPrev: MovimentacaoPrevista }) => {
           console.log(sucess);
@@ -94,11 +85,6 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
           this.resourceForm.get('valor').setValue(sucess.resolveMovPrev.valor);
           this.resourceForm.get('status').setValue(sucess.resolveMovPrev.status);
           this.resourceForm.get('idFormaPagamento').setValue(sucess.resolveMovPrev.formaPagamento.id);
-
-          this.descricaoCategoria = sucess.resolveMovPrev.itemMovimentacao.categoria.descricao;
-          this.descricaoItemMovimentacao = sucess.resolveMovPrev.itemMovimentacao.descricao;
-          this.descricaoPrioridade = sucess.resolveMovPrev.tipoPrioridadeDescricao;
-          this.descricaoFormaPagamento = sucess.resolveMovPrev.formaPagamento.descricao;
         }
       );
     }

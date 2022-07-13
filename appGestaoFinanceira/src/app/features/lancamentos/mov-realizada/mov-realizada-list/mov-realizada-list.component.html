@@ -32,7 +32,7 @@
                         <strong *ngIf="f==true"> Saldo no mês: {{item.valor | currency}}</strong>
                     </div>
                 </div>
-                <div class="row" id="dvRow" *ngFor="let movRealizada of item.movimentacoesRealizadas">
+                <div class="row" id="dvRow" *ngFor="let movRealizada of item.movimentacoesRealizadas;">
                     <div class="col-12 card" id="dvDetalhe" [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
                         <div class="card-body">
                             <div class="row">
@@ -54,15 +54,17 @@
                                     </span>
                                 </div>
                                 <div class="col-6">
+                                    {{idx}}
                                     {{movRealizada.itemMovimentacao.categoria.descricao}}<br>
                                     <strong>{{movRealizada.itemMovimentacao.descricao}}</strong>
                                     ( {{movRealizada.formaPagamento.descricao}} )                                    
                                 </div>
                                 <div class="col-3" style="padding-top: 0.5rem;">
-                                    <a [routerLink]="['/mov-realizada/cons',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
-                                       *ngIf="item.status=='F'" class="btn btn-outline-dark btn-sm me-3">
-                                        Detalhes
-                                    </a>             
+                                    <button class="btn btn-outline-dark btn-sm me-3" 
+                                            *ngIf="item.status=='F'"
+                                            (click)="modalDetalhe(movRealizada)">
+                                            Detalhe
+                                    </button>
                                     <a  [routerLink]="['/mov-realizada/edit',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
                                         *ngIf="item.status=='A'" class="btn btn btn-outline-secondary me-1 btn-sm">
                                         Editar
@@ -95,3 +97,48 @@
         [modal-interrogative-message]="'Deseja realizar a exclusão?'"
         (modalInterrogativeResponse)="eventDelete($event)">
     </app-modal-interrogative-form>
+
+    <p-dialog header="Detalhe Lançamento" [(visible)]="displayDetalhe" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    
+    <div class="row">
+        <div class="col-4">
+            <label>Categoria:</label>
+            <p><strong>{{movimentacaoRealizadaDetalhe.itemMovimentacao.categoria.descricao}}</strong></p>
+        </div>
+        <div class="col-4">
+            <label>Item de Movimentacao:</label>
+            <p><strong>{{movimentacaoRealizadaDetalhe.itemMovimentacao.descricao}}</strong></p>            
+        </div>
+        <div class="col-4">
+            <label>Prioridade:</label>
+            <p><strong>{{movimentacaoRealizadaDetalhe.tipoPrioridadeDescricao}}</strong></p>            
+        </div>        
+    </div>    
+    <div class="row">        
+        <div class="col-4">
+            <label>Forma de Pagamento:</label>
+            <p><strong>{{movimentacaoRealizadaDetalhe.formaPagamento.descricao}}</strong></p>            
+        </div>
+        <div class="col-4">
+            <label>Data do Pagamento:</label>
+            <p><strong>{{movimentacaoRealizadaDetalhe.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong></p>            
+        </div>        
+        <div class="col-4">
+            <label>Valor:</label>
+            <p><strong>{{movimentacaoRealizadaDetalhe.valor | currency}}</strong></p>            
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                      <h6 class="card-subtitle mb-2 text-muted">Observação:</h6>
+                      <p class="card-text">
+                        <strong>{{movimentacaoRealizadaDetalhe.observacao}}</strong>
+                      </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

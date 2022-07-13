@@ -9,21 +9,20 @@
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Categoria:</label>
-                        <app-dropdown-categoria *ngIf="this.resourceCurrentAction() != 'cons'"
+                        <app-dropdown-categoria
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('idCategoria')"
                               [disabled]="resourceCurrentAction()=='edit'"
                               [select-by-status]="resourceCurrentAction()=='new'"
                               placeholder="Selecione"
                               (OnChange)="getCategoria($event)">
-                        </app-dropdown-categoria>
-                        <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoCategoria}}</strong></p>
+                        </app-dropdown-categoria>                        
                     </div>
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Item Movimentação:</label>
-                        <app-dropdown-item-movimentacao *ngIf="this.resourceCurrentAction() != 'cons'"
+                        <app-dropdown-item-movimentacao
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('idItemMovimentacao')"
                               [disabled]="resourceCurrentAction()=='edit'"
@@ -32,7 +31,6 @@
                               placeholder="Selecione"
                               (OnChange)="getItemMovimentacao($event)">
                         </app-dropdown-item-movimentacao>
-                        <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoItemMovimentacao}}</strong></p>
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idItemMovimentacao')">
                     </app-field-validation-form>
@@ -42,13 +40,12 @@
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Prioridade:</label>
-                        <app-dropdown-prioridade *ngIf="this.resourceCurrentAction() != 'cons'"
+                        <app-dropdown-prioridade
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('tipoPrioridade')"
                               placeholder="Selecione"
                               (OnChange)="clear($event)">
-                        </app-dropdown-prioridade>
-                        <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoPrioridade}}</strong></p>
+                        </app-dropdown-prioridade>                        
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('tipoPrioridade')">
                     </app-field-validation-form>
@@ -61,14 +58,13 @@
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label>Forma de Pagamento:</label>
-                        <app-dropdown-forma-pagamento *ngIf="this.resourceCurrentAction() != 'cons'"
+                        <app-dropdown-forma-pagamento
                                [form-group]="resourceForm"
                                [form-control]="resourceForm.get('idFormaPagamento')"
                                [select-by-status]="resourceCurrentAction()=='new'"
                                placeholder="Selecione"
                                (OnChange)="getFormaPagamento($event)">
-                        </app-dropdown-forma-pagamento>
-                        <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoFormaPagamento}}</strong></p>
+                        </app-dropdown-forma-pagamento>                       
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idFormaPagamento')">
                     </app-field-validation-form>
@@ -77,11 +73,9 @@
                 </div>
                 <div class="form-group col-4">
                     <label for="dataVencimento">Data de Vencimento:</label>
-                    <p-calendar *ngIf="this.resourceCurrentAction() != 'cons'" inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataVencimento"
+                    <p-calendar inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataVencimento"
                         [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
-                    </p-calendar>
-                    <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{resourceForm.get('dataVencimento').value | date:'dd/MM/yyyy' }}</strong></p>
-
+                    </p-calendar> 
                     <app-field-validation-form [form-control]="resourceForm.get('dataVencimento')">
                     </app-field-validation-form>
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('dataVencimento')">
@@ -90,10 +84,9 @@
                 </div>
                 <div class="form-group col-3">
                     <label for="valor">Valor (R$):</label>
-                    <p-inputNumber *ngIf="this.resourceCurrentAction() != 'cons'" formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
+                    <p-inputNumber formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
                         [minFractionDigits]="2">
                     </p-inputNumber>
-                    <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{resourceForm.get('valor').value | currency }}</strong></p>
                     <app-field-validation-form [form-control]="resourceForm.get('valor')"></app-field-validation-form>
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('valor')">
                     </app-field-server-errors-form>
@@ -101,7 +94,7 @@
             </div>
 
             <div class="row mt-4">
-                <div class="col-8" *ngIf="this.resourceCurrentAction() != 'cons'">
+                <div class="col-8">
                     <span class="p-float-label">
                         <textarea formControlName="observacao" id="float-input" rows="2" cols="70"
                             pInputTextarea></textarea>
@@ -109,14 +102,6 @@
                     </span>                    
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('movimentacao.observacao')">
                     </app-field-server-errors-form>
-                </div>
-                <div class="col-12" *ngIf="this.resourceCurrentAction() == 'cons' && resourceForm.get('observacao').value != null">
-                    <div class="card">
-                        <div class="card-body">
-                          <h6 class="card-subtitle mb-2 text-muted">Observação:</h6>
-                          <p class="card-text"><strong>{{resourceForm.get('observacao').value}}</strong></p>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="p-fluid col-4">
@@ -138,7 +123,7 @@
                 </div>
             </div>
 
-            <div class="row mt-3" *ngIf="this.resourceCurrentAction() != 'cons'">
+            <div class="row mt-3">
                 <div class="col-12 mt-4" style="text-align: right;" *ngIf="resourceForm.get('tipoRecorrencia').value=='N'">
                     <a class="btn btn-dark me-3"
                         [routerLink]="['/mov-prevista',dataIni | DateFormatToString, dataFim | DateFormatToString]">

@@ -125,10 +125,11 @@
                                      data-bs-toggle="modal" data-bs-target="#modalDelete">
                                 Excluir
                             </button>
-                            <a [routerLink]="['/mov-prevista/cons',movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]"
-                                *ngIf="movimentacaoPrevista.status!='A'" class="btn btn-outline-dark btn-sm me-3">
-                                Detalhes
-                            </a>
+                            <button *ngIf="movimentacaoPrevista.status!='A'"
+                                     class="btn btn-outline-dark btn-sm me-3"
+                                     (click)="modalDetalhe(i)">
+                                     Detalhes
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -161,3 +162,47 @@
 <app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" [modal-interrogative-title]="'Sr. Usuário'"
     [modal-interrogative-message]="'Deseja realizar a exclusão?'" (modalInterrogativeResponse)="eventDelete($event)">
 </app-modal-interrogative-form>
+
+<p-dialog header="Detalhe Movimentação Prevista" [(visible)]="displayDetalhe" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="row">
+        <div class="col-4">
+            <label>Categoria:</label>
+            <p><strong>{{detalheMovimentacaoPrevista.itemMovimentacao.categoria.descricao}}</strong></p>
+        </div>
+        <div class="col-4">
+            <label>Item de Movimentacao:</label>
+            <p><strong>{{detalheMovimentacaoPrevista.itemMovimentacao.descricao}}</strong></p>            
+        </div>
+        <div class="col-4">
+            <label>Prioridade:</label>
+            <p><strong>{{detalheMovimentacaoPrevista.tipoPrioridadeDescricao}}</strong></p>            
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <label>Forma de Pagamento:</label>
+            <p><strong>{{detalheMovimentacaoPrevista.formaPagamento.descricao}}</strong></p>            
+        </div>
+        <div class="col-4">
+            <label>Data de Vencimento:</label>
+            <p><strong>{{detalheMovimentacaoPrevista.dataVencimento | date: 'dd/MM/yyyy'}}</strong></p>            
+        </div>
+        <div class="col-4">
+            <label>Valor:</label>
+            <p><strong>{{detalheMovimentacaoPrevista.valor | currency}}</strong></p>            
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                      <h6 class="card-subtitle mb-2 text-muted">Observação:</h6>
+                      <p class="card-text">
+                        <strong>{{detalheMovimentacaoPrevista.observacao}}</strong>
+                      </p>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</p-dialog>

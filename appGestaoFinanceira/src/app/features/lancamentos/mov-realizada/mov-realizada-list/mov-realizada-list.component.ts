@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 
 @Component({
@@ -21,7 +22,10 @@ export class MovRealizadaListComponent implements OnInit {
   arStDate: string[];
   dataIni: Date;
   dataFim: Date;
+  displayDetalhe:boolean;
   idMovimentacaoRealizada: number;
+  movimentacaoRealizadaDetalhe: MovimentacaoRealizada = new MovimentacaoRealizada();
+
 
   constructor(private actResourceRoute: ActivatedRoute,
     private movRealizadaService: MovRealizadaService,
@@ -85,6 +89,11 @@ export class MovRealizadaListComponent implements OnInit {
 
   modalDeleteMessage(_idMovimentacaoRealizada: number) {
     this.idMovimentacaoRealizada = _idMovimentacaoRealizada;
+  }
+
+  modalDetalhe(movimentacaoRealizada: MovimentacaoRealizada) {
+   this.displayDetalhe = true;
+   this.movimentacaoRealizadaDetalhe = movimentacaoRealizada;
   }
 
   eventDelete(event) {

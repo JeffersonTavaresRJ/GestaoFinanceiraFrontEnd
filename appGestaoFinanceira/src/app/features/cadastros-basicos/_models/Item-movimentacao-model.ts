@@ -8,7 +8,7 @@ export class ItemMovimentacao extends GenericResourceModel{
         public tipo: string='',
         public status?: boolean,
         public idCategoria: number=null,
-        public categoria?: Categoria
+        public categoria: Categoria = new Categoria()
     ){
         super();
     }
