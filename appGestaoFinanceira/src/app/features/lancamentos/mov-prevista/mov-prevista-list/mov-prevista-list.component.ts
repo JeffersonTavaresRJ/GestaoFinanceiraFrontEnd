@@ -35,7 +35,7 @@ export class MovPrevistaListComponent implements OnInit {
   arEnumStatus: enumModel[];
   arMovPrevistas: MovimentacaoPrevista[];
   arMovPrevistasAux: MovimentacaoPrevista[];
-  detalheMovimentacaoPrevista: MovimentacaoPrevista;
+  detalheMovimentacaoPrevista: MovimentacaoPrevista = new MovimentacaoPrevista();
 
   constructor(protected injector: Injector) {
     this.actResourceRoute = injector.get(ActivatedRoute);
@@ -98,9 +98,9 @@ export class MovPrevistaListComponent implements OnInit {
     this.dataReferencia = _dataReferencia;
   }
 
-  modalDetalhe(i: number){
+  modalDetalhe(movimentacaoPrevista: MovimentacaoPrevista){
     this.displayDetalhe = true;
-    this.detalheMovimentacaoPrevista = this.arMovPrevistas[i];
+    this.detalheMovimentacaoPrevista = movimentacaoPrevista;
  }
 
   eventDelete(event) {
@@ -129,7 +129,6 @@ export class MovPrevistaListComponent implements OnInit {
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
         this.arMovPrevistas = sucess.resolveResources;
         this.arMovPrevistasAux = sucess.resolveResources;
-        this.detalheMovimentacaoPrevista = this.arMovPrevistas[0];
         this.calcularSaldo();
       }
     );

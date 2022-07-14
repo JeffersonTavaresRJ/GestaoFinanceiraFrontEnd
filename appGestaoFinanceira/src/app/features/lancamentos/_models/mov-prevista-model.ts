@@ -1,6 +1,5 @@
 import { Observable} from 'rxjs';
 import {FormaPagamento} from '../../cadastros-basicos/_models/forma-pagamento';
-import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
 import { Movimentacao } from "./movimentacao";
 
 export class MovimentacaoPrevista extends Movimentacao{
@@ -8,7 +7,7 @@ export class MovimentacaoPrevista extends Movimentacao{
     private static movimentacaoPrevista: MovimentacaoPrevista = new MovimentacaoPrevista();
     
     constructor(
-     public formaPagamento: FormaPagamento=null,
+     public formaPagamento: FormaPagamento = new FormaPagamento(),
      public idFormaPagamento: number=null,
      public dataVencimento: Date=null,
      public valor: number=null,
@@ -20,8 +19,7 @@ export class MovimentacaoPrevista extends Movimentacao{
      public status: string=null
     ){ 
         super();
-        this.itemMovimentacao = new ItemMovimentacao();
-        this.formaPagamento = new FormaPagamento();
+
     }
     
     private static movPrev: MovimentacaoPrevista;

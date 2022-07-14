@@ -1,4 +1,5 @@
 import { Component, Injector } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
@@ -29,12 +30,12 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     this.resourceForm = this.resourceFormBuilder.group({
       id: [null],
       idCategoria:[null],
-      idItemMovimentacao:[null],
-      idConta:[null],
-      idFormaPagamento:[null],
-      tipoPrioridade:[null],
+      idItemMovimentacao:[null, Validators.required],
+      idConta:[null, Validators.required],
+      idFormaPagamento:[null, Validators.required],
+      tipoPrioridade:[null, Validators.required],
       observacao:[null],
-      dataMovimentacaoRealizada:[null],
+      dataMovimentacaoRealizada:[null, Validators.required],
       valor:[null]
     });   
     
