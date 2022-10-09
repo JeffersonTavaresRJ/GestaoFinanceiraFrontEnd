@@ -63,7 +63,9 @@ export class MovRealizadaListComponent implements OnInit {
         //Setando a conta default como parâmetro de pesquisa..
         this.contaService.getAll().subscribe(
           sucess=>{
-            this.formGroup.get('idConta').setValue(sucess.filter(x=>x.defaultConta=="S")[0].id);
+            this.contaOld = sucess.filter(x=>x.defaultConta=="S")[0];
+            this.formGroup.get('idConta').setValue(this.contaOld.id);
+            this.filtrarTablePorParametros(this.contaOld.id);            
           }
         )
         
@@ -82,36 +84,35 @@ export class MovRealizadaListComponent implements OnInit {
         (sucess: any[]) => {
           this.results = sucess;
           this.resultsAux = this.results;
-          this.filtrarTablePorParametros();
+          this.filtrarTablePorParametros(this.formGroup.get('idConta').value);
         });
   }
 
-  filtrarTablePorParametros(conta?: Conta) {
-    debugger;
-    this.results = this.resultsAux;
-
-    if (conta != null){
-
-      //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
-      if(this.contaOld != null){
-        this.contaOld.defaultConta = 'N';
-        this.contaService.putConta(this.contaOld).subscribe(
-          sucess=>{
-            this.contaOld = conta;
-          }
-        )
-      }    
-  
-      //alterando a conta atual que está sendo utilizada como filtro para ser o filtro default para pesquisa..
-      conta.defaultConta = 'S';
-      this.contaService.putConta(conta).subscribe(
+  getConta(conta: Conta){
+    //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
+    if(this.contaOld != null){
+      this.contaOld.defaultConta = 'N';
+      this.contaService.putConta(this.contaOld).subscribe(
         sucess=>{
           this.contaOld = conta;
         }
       )
+    }
+    //alterando a conta atual que está sendo utilizada como filtro para ser o filtro default para pesquisa..
+    conta.defaultConta = 'S';
+    this.contaService.putConta(conta).subscribe(
+      sucess=>{
+        this.contaOld = conta;
+        this.filtrarTablePorParametros(conta.id)
+      }
+    )
+  }
 
-      this.results = this.resultsAux.filter(m => m.conta.id == conta.id);
-
+  filtrarTablePorParametros(idConta?: Number) {
+    //debugger;
+    this.results = this.resultsAux;
+    if (idConta != null){
+      this.results = this.resultsAux.filter(m => m.conta.id == idConta);
     }else{
       this.alertMessageForm.showError("A conta deve ser informada", "Sr. Usuário");
     }
