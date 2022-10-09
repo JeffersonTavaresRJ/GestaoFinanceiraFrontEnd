@@ -1,7 +1,10 @@
+import { ThrowStmt } from '@angular/compiler';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
+import { ContaService } from 'src/app/features/cadastros-basicos/_services/conta-service';
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
@@ -25,14 +28,16 @@ export class MovRealizadaListComponent implements OnInit {
   displayDetalhe:boolean;
   idMovimentacaoRealizada: number;
   movimentacaoRealizadaDetalhe: MovimentacaoRealizada = new MovimentacaoRealizada();
+  contaOld: Conta;
 
 
   constructor(private actResourceRoute: ActivatedRoute,
     private movRealizadaService: MovRealizadaService,
+    private contaService : ContaService,
     private alertMessageForm: AlertMessageForm,
-    protected formBuilder: FormBuilder) {
+    protected formBuilder: FormBuilder) {    
     this.formGroup = this.formBuilder.group({
-      idConta: [1],
+      idConta: [null],
     });
   }
 
@@ -54,6 +59,14 @@ export class MovRealizadaListComponent implements OnInit {
       (sucess: { resolveMovReal: any[] }) => {
         this.results = sucess.resolveMovReal;
         this.resultsAux = this.results;
+
+        //Setando a conta default como parâmetro de pesquisa..
+        this.contaService.getAll().subscribe(
+          sucess=>{
+            this.formGroup.get('idConta').setValue(sucess.filter(x=>x.defaultConta=="S")[0].id);
+          }
+        )
+        
       }
     );
   }
@@ -73,17 +86,34 @@ export class MovRealizadaListComponent implements OnInit {
         });
   }
 
-  getConta(_ev: Conta) {
-    this.results = this.resultsAux.filter(x => x.conta.id === this.formGroup.get("idConta").value);
-  }
-
-  filtrarTablePorParametros(event?: any) {
+  filtrarTablePorParametros(conta?: Conta) {
     debugger;
     this.results = this.resultsAux;
-    var idConta = this.formGroup.get('idConta').value;
 
-    if (idConta != null) {
-      this.results = this.resultsAux.filter(m => m.conta.id == idConta);
+    if (conta != null){
+
+      //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
+      if(this.contaOld != null){
+        this.contaOld.defaultConta = 'N';
+        this.contaService.putConta(this.contaOld).subscribe(
+          sucess=>{
+            this.contaOld = conta;
+          }
+        )
+      }    
+  
+      //alterando a conta atual que está sendo utilizada como filtro para ser o filtro default para pesquisa..
+      conta.defaultConta = 'S';
+      this.contaService.putConta(conta).subscribe(
+        sucess=>{
+          this.contaOld = conta;
+        }
+      )
+
+      this.results = this.resultsAux.filter(m => m.conta.id == conta.id);
+
+    }else{
+      this.alertMessageForm.showError("A conta deve ser informada", "Sr. Usuário");
     }
   }
 
