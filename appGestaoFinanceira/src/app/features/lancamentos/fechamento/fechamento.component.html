@@ -1,0 +1,57 @@
+
+<div class="card col-10 offset-1 mt-2">
+    <div class="card-body">
+        <app-header-page-title [header-title]=title>        
+        </app-header-page-title>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5>Previsão consolidada:</h5>
+                <table class="table">
+                    <thead class="bg-dark text-light">
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Em Aberto</th>
+                        <th scope="col">Quitado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Despesas</td>
+                        <td>10,00</td>
+                        <td>50,00</td>
+                      </tr>
+                      <tr>
+                        <td>Receitas</td>
+                        <td>20,00</td>
+                        <td>60,00</td>
+                      </tr>                      
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5>Últimos Lançamentos por Conta:</h5>
+                <table class="table">
+                    <thead>
+                        <tr class="bg-dark text-light">
+                            <th>Conta</th>
+                            <th style="text-align: center;">Último Lançamento</th>
+                            <th style="text-align: right;">Saldo Atual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let movRealizada of arMovRealizadas | paginate: { itemsPerPage: 5, currentPage: paginaAtual }; let i = index">
+                            <td>{{movRealizada.conta.descricao}}</td>
+                            <td style="text-align: center;">{{movRealizada.dataSaldo | date:'dd/MM/yyyy' }}</td>
+                            <td style="text-align: right;">{{movRealizada.valor | currency}}</td>
+                        </tr>
+                    </tbody>
+                    <pagination-controls (pageChange)="paginaAtual = $event" previousLabel="Anterior" nextLabel="Próximo"></pagination-controls>
+                </table> 
+            </div>
+        </div>
+    </div>
+</div>

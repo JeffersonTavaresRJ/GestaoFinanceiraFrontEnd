@@ -13,6 +13,7 @@ import { PanelModule } from 'primeng/panel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputMaskModule } from 'primeng/inputmask';
+import{ NgxPaginationModule } from 'ngx-pagination';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CoreModule } from 'src/app/core/core.module';
@@ -23,6 +24,7 @@ import { MovPrevistaQuitarFormComponent } from './mov-prevista/mov-prevista-quit
 import { MovPrevistaFormControlesComponent } from './mov-prevista/mov-prevista-create/mov-prevista-form-controles/mov-prevista-form-controles.component';
 import { MovRealizadaFormCadastroComponent } from './mov-realizada/mov-realizada-form-cadastro/mov-realizada-form-cadastro.component';
 import { MovRealizadaListComponent } from './mov-realizada/mov-realizada-list/mov-realizada-list.component';
+import { FechamentoComponent } from './fechamento/fechamento.component';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { MovRealizadaListComponent } from './mov-realizada/mov-realizada-list/mo
     MovPrevistaQuitarFormComponent,
     MovPrevistaFormControlesComponent,
     MovRealizadaFormCadastroComponent,
-    MovRealizadaListComponent
+    MovRealizadaListComponent,
+    FechamentoComponent
   ],
   imports: [
     CommonModule,
@@ -51,6 +54,7 @@ import { MovRealizadaListComponent } from './mov-realizada/mov-realizada-list/mo
     InputNumberModule,
     InputTextareaModule,
     InputMaskModule,
+    NgxPaginationModule,
     DialogModule,
     ConfirmDialogModule,
     ComponentsModule

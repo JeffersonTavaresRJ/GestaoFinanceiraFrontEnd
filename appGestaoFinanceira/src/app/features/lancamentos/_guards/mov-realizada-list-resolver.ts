@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { MovimentacaoRealizada } from '../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../_services/mov-realizada-service';
 
 @Injectable()
