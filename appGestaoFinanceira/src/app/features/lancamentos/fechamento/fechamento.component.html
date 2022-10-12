@@ -1,4 +1,86 @@
+<app-header-page-title [header-title]=title>        
+</app-header-page-title>
+<mat-vertical-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Previsão Consolidada</ng-template>
+      <table class="table">
+        <thead class="bg-dark text-light">
+          <tr>
+            <th scope="col" style="width:25%;"></th>
+            <th scope="col" style="text-align: right; width:25%;">Em Aberto</th>
+            <th scope="col" style="text-align: right; width:25%;">Quitado</th>
+            <th scope="col" style="width:25%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="width:25%;">Despesas</td>
+            <td style="text-align: right; width:25%;">R$10,00</td>
+            <td style="text-align: right; width:25%;">R$50,00</td>
+            <td style="text-align: center; width:25%;">
+              <input class="form-check-input" type="checkbox" value="" formControlName="firstDespesa" required>              
+            </td>
+          </tr>
+          <tr>
+            <td style="width:25%;">Receitas</td>
+            <td style="text-align: right; width:25%;">R$20,00</td>
+            <td style="text-align: right; width:25%;">R$60,00</td>
+            <td style="text-align: center; width:25%;">
+              <input class="form-check-input" type="checkbox" value="" formControlName="firstReceita" required>              
+            </td>
+          </tr>                      
+        </tbody>
+    </table>
+      <div>
+        <button type="button" class="btn btn-dark"  matStepperNext>Próximo</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Últimos Lançamentos</ng-template>
+      <div class="grid-table">
+        <div class="thead">
+            <div class="th">Conta</div>
+            <div class="th">Último Lançamento</div>
+            <div class="th">Saldo Atual</div>
+            <div class="th"></div>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="grid-table">
+            <div class="tbody">
+              <form class="tr" [formGroup]="fGroup" *ngFor="let fGroup of arForms.controls; let i=index;">
+                <div class="td">{{fGroup.get('conta').value}}</div>
+                <div class="td" style="text-align: center;">{{fGroup.get('dataSaldo').value | date:'dd/MM/yyyy' }}</div>
+                <div class="td" style="text-align: right;">{{fGroup.get('valor').value | currency}}</div>
+                <div class="td">
+                  <input class="form-check-input" type="checkbox" formControlName="isChecked" required>
+                </div>
+              </form> 
+            </div>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-dark mr-1"  matStepperPrevious>Voltar</button>
+        <button type="button" class="btn btn-dark" (mousemove)="next()"  matStepperNext>Próximo</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Fechar sistema</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>
 
+
+
+<!--
 <div class="card col-10 offset-1 mt-2">
     <div class="card-body">
         <app-header-page-title [header-title]=title>        
@@ -27,7 +109,7 @@
                         <td>60,00</td>
                       </tr>                      
                     </tbody>
-                  </table>
+                </table>
             </div>
         </div>
 
@@ -55,3 +137,4 @@
         </div>
     </div>
 </div>
+-->
