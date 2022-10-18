@@ -17,6 +17,7 @@ import{ NgxPaginationModule } from 'ngx-pagination';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import {MatStepperModule} from '@angular/material/stepper';
+import { OrderModule } from 'ngx-order-pipe';
 import { CoreModule } from 'src/app/core/core.module';
 import { ComponentsModule } from '../-components/-components.module';
 import { MovPrevistaListComponent } from './mov-prevista/mov-prevista-list/mov-prevista-list.component';
@@ -57,6 +58,7 @@ import { FechamentoComponent } from './fechamento/fechamento.component';
     InputMaskModule,
     NgxPaginationModule,
     MatStepperModule,
+    OrderModule,
     DialogModule,
     ConfirmDialogModule,
     ComponentsModule
