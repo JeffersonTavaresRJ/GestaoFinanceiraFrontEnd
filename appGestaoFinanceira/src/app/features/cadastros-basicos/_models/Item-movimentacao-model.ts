@@ -6,6 +6,7 @@ export class ItemMovimentacao extends GenericResourceModel{
         id?: number,
         public descricao: string='',
         public tipo: string='',
+        public tipoDescricao: string='',
         public status?: boolean,
         public idCategoria: number=null,
         public categoria: Categoria = new Categoria()

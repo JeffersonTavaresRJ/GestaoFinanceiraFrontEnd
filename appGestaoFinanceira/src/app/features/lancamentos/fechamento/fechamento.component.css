@@ -1,0 +1,53 @@
+.scroll{
+    overflow: auto;
+    height: 200px;
+    width: 100%;
+    border: 1px solid black !important;
+}
+
+.grid-table
+{
+	display:table;
+    width: 100%;
+}
+
+.thead
+{
+	display:table-header-group;
+	font-weight:bold;
+    background-color: black;
+    color: white;
+    height: 40px;
+}
+
+.tbody
+{
+	display:table-row-group;    
+}
+
+.tr
+{
+	display:table-row;
+    vertical-align: middle;
+    height: 40px;
+    border: 1px solid black !important;
+}
+
+.th {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 3px;
+    width: 25% !important;
+  }
+
+.td
+{
+	display:table-cell;
+    vertical-align: middle;
+    padding-left: 3px;
+    width: 25% !important;
+}
+
+.thead div.tr div.td:last-child{
+    background-color: #fff;
+}

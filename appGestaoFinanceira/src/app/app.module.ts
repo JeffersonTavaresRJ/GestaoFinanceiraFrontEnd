@@ -22,6 +22,7 @@ import { LancamentosModule } from './features/lancamentos/lancamentos.module';
 //
 
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
@@ -39,7 +40,8 @@ const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
     SecurityModule,
     LancamentosModule,
     DashboardsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [
     RxJS_Services,
