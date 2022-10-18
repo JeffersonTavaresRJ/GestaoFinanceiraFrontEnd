@@ -14,8 +14,8 @@ export class MovPrevistaListResolver implements Resolve<MovimentacaoPrevista[]> 
 
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
     debugger;
-    this.dataVencIni = activatedRouteSnapshot.params['dataVencIni'];
-    this.dataVencFim = activatedRouteSnapshot.params['dataVencFim'];
+    this.dataVencIni = activatedRouteSnapshot.params['dataIni'];
+    this.dataVencFim = activatedRouteSnapshot.params['dataFim'];
     return this.movPrevistaService.getByDataVencimento(this.dataVencIni, this.dataVencFim);
   }
 

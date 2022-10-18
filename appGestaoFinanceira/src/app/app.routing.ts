@@ -26,6 +26,7 @@ import { MovPrevistaFormControlesComponent } from './features/lancamentos/mov-pr
 import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-prevista/mov-prevista-quitar-form/mov-prevista-quitar-form.component';
 import { MovRealizadaListComponent } from './features/lancamentos/mov-realizada/mov-realizada-list/mov-realizada-list.component';
 import { MovRealizadaFormCadastroComponent } from './features/lancamentos/mov-realizada/mov-realizada-form-cadastro/mov-realizada-form-cadastro.component';
+import { FechamentoComponent} from './features/lancamentos/fechamento/fechamento.component';
 
 import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
@@ -40,6 +41,8 @@ import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prev
 import { MovRealizadaListResolver } from './features/lancamentos/_guards/mov-realizada-list-resolver';
 import { MovRealizadaFormResolver } from './features/lancamentos/_guards/mov-realizada-form-resolver';
 import { MovPrevistaQuitarResolver } from './features/lancamentos/_guards/mov-prevista-quitar-resolver';
+import { MovRealizadaGroupByContaResolver } from './features/lancamentos/_guards/mov-realizada-gb-conta-resolver';
+
 
 //criando o mapeamento de rotas dos componentes
 
@@ -98,7 +101,7 @@ const routes: Routes = [
              canDeactivate:[AuthGuard],
              resolve: {resolveResource: ItemMovimentacaoFormResolver} },
     //=================================================================================================
-    { path: 'mov-prevista/:dataVencIni/:dataVencFim', component: MovPrevistaListComponent,
+    { path: 'mov-prevista/:dataIni/:dataFim', component: MovPrevistaListComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveResources: MovPrevistaListResolver}  },               
     { path: 'mov-prevista/new/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
@@ -129,7 +132,14 @@ const routes: Routes = [
     { path: 'mov-realizada/:dataRealIni/:dataRealFim', component: MovRealizadaListComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovReal: MovRealizadaListResolver}  },
-     //================================================================================================
+
+    //================================================================================================
+     { path: 'fechamento/:dataIni/:dataFim', component: FechamentoComponent,
+     canActivate:[AuthGuard],             
+     resolve:{resolveFechamentoMovPrev: MovPrevistaListResolver,
+              resolveFechamentoMovReal: MovRealizadaGroupByContaResolver}  },
+
+    //================================================================================================
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
             /* canActivate:[AuthGuard] */},
     //=================================================================================================
@@ -152,7 +162,8 @@ const routes: Routes = [
                MovPrevistaFormResolver,
                MovRealizadaListResolver,
                MovRealizadaFormResolver,
-               MovPrevistaQuitarResolver]
+               MovPrevistaQuitarResolver,
+               MovRealizadaGroupByContaResolver]
 })
 
 export class AppRoutingModule { }

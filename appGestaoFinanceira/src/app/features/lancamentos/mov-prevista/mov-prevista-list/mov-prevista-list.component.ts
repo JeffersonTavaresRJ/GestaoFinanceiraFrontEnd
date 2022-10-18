@@ -157,9 +157,9 @@ export class MovPrevistaListComponent implements OnInit {
 
   private carregaParametros() {
     debugger;
-    this.arStDate = this.actResourceRoute.snapshot.params.dataVencIni.split('-');
+    this.arStDate = this.actResourceRoute.snapshot.params.dataIni.split('-');
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
-    this.arStDate = this.actResourceRoute.snapshot.params.dataVencFim.split('-');
+    this.arStDate = this.actResourceRoute.snapshot.params.dataFim.split('-');
     this.dataFim = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
 
     this.movPrevistaService.GetAllStatus().subscribe(

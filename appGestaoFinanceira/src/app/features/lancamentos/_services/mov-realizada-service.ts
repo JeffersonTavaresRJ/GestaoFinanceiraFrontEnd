@@ -28,4 +28,9 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     this.setApiOption('/GetGroupBySaldoDiario'); 
     return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${dataMovRealIni}/${dataMovRealFim}`);
   }
+
+  GetMaxGroupBySaldoConta(dataReferencia: string): Observable<any[]> {
+    this.setApiOption('/GetMaxGroupBySaldoConta'); 
+    return this.http.get<any[]>(`${this.getUrl()}/${dataReferencia}`);
+  }
 }
