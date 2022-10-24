@@ -1,0 +1,12 @@
+    <p-dropdown [options]="arFechamentosMensais" 
+                optionLabel="mesAno" 
+                optionValue="dataReferencia" 
+                [(ngModel)]="selectedMesAno"
+                [virtualScroll]="true" 
+                [itemSize]="3"
+                [showClear]="false" 
+                [filter]="false"
+                (onChange)="onChange()"
+                emptyMessage="Não encontrado"
+                autoDisplayFirst="true">
+    </p-dropdown>

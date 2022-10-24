@@ -134,10 +134,8 @@ const routes: Routes = [
              resolve:{resolveMovReal: MovRealizadaListResolver}  },
 
     //================================================================================================
-     { path: 'fechamento/:dataIni/:dataFim', component: FechamentoComponent,
-     canActivate:[AuthGuard],             
-     resolve:{resolveFechamentoMovPrev: MovPrevistaListResolver,
-              resolveFechamentoMovReal: MovRealizadaGroupByContaResolver}  },
+     { path: 'fechamento', component: FechamentoComponent,
+     canActivate:[AuthGuard] },
 
     //================================================================================================
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,

@@ -7,6 +7,7 @@ import { DropDownItemMovimentacaoComponent } from './dropdowns/item-movimentacao
 import { DropDownFormaPagamentoComponent } from './dropdowns/forma-pagamento/drpd-forma-pagamento.component';
 import { DropDownPrioridadeComponent } from './dropdowns/prioridade/drpd-prioridade.component';
 import { DropDownContaComponent } from './dropdowns/conta/drpd-conta.component';
+import { DropDownFechamentoMensalComponent } from './dropdowns/fechamento-mensal/drpd-fechamento-mensal.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { DropDownContaComponent } from './dropdowns/conta/drpd-conta.component';
     DropDownItemMovimentacaoComponent,
     DropDownFormaPagamentoComponent,
     DropDownPrioridadeComponent,
-    DropDownContaComponent
+    DropDownContaComponent,
+    DropDownFechamentoMensalComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +29,7 @@ import { DropDownContaComponent } from './dropdowns/conta/drpd-conta.component';
     DropDownItemMovimentacaoComponent,
     DropDownFormaPagamentoComponent,
     DropDownPrioridadeComponent,
-    DropDownContaComponent]
+    DropDownContaComponent,
+    DropDownFechamentoMensalComponent]
 })
 export class ComponentsModule { }

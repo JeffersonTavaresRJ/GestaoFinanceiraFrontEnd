@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { FechamentoModel } from '../_models/fechamento-model';
+import { MovRealizadaService } from '../_services/mov-realizada-service';
+import { MovPrevistaService } from '../_services/mov-prevista-service';
+import { MatStepper } from '@angular/material/stepper';
+import { FechamentoService } from '../_services/fechamento-service';
+
 
 @Component({
   selector: 'app-fechamento',
@@ -12,12 +17,15 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class FechamentoComponent implements OnInit {
 
-  title:string;
+  status:string;
+  descricaoStatus:string;
   labelButton:string;
-  paginaAtual:number=1;
+  dataReferencia: Date;
   arMovReal: any[];
   arFormsReal: FormArray = this.formBuilder.array([]);
   arFormsPrev: FormArray = this.formBuilder.array([]);
+
+  @ViewChild('stepper') private myStepper: MatStepper;
 
 
   firstFormGroup = this.formBuilder.group({
@@ -28,15 +36,14 @@ export class FechamentoComponent implements OnInit {
    
   });
 
-  constructor(protected activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) { }
+  constructor(protected activatedRoute: ActivatedRoute, 
+              private formBuilder: FormBuilder,
+              protected movRealizadaService: MovRealizadaService,
+              protected movPrevistaService: MovPrevistaService,
+              protected fechamentoService: FechamentoService) { }
 
 
   ngOnInit(): void {
-    debugger;
-    var dataFim = this.activatedRoute.snapshot.params.dataFim;
-    this.title = "Fechamento Mensal: " + DateConvert.formatDateMMYYYY(dataFim, '/');
-    this.movPrevistaList();
-    this.movRealizadaGroupByConta();
   }
 
   firstNext(){
@@ -71,22 +78,48 @@ export class FechamentoComponent implements OnInit {
     }
   }
 
-  resetChecks(){
+
+  setValueChecks(valor: string){
     this.arFormsPrev.controls.forEach(element => {
-      element.get('isChecked').setValue('');      
+      element.get('isChecked').setValue(valor);      
     });
     this.arFormsReal.controls.forEach(element => {
-      element.get('isChecked').setValue(''); 
+      element.get('isChecked').setValue(valor); 
     });
   }
 
-  private movPrevistaList() {
-    this.activatedRoute.data.subscribe(
-      (sucess: { resolveFechamentoMovPrev: MovimentacaoPrevista[] }) => {
-        //this.arMovPrev =sucess.resolveFechamentoMovPrev;
-        this.movPrevistaGroupBy(sucess.resolveFechamentoMovPrev);
+  getFechamento(ev: FechamentoModel){
+    debugger;
+    this.status = ev.status;
+    this.descricaoStatus = ev.descricaoStatus;   
+    this.dataReferencia  = ev.dataReferencia;
+    this.labelButton = ev.status=="A"? "Fechar": "Reabrir";
+    this.myStepper.linear = ev.status=="A"? true: false;
+    this.myStepper.selectedIndex=ev.status=="F"? 2: 0;
+    this.populaTela(new Date(this.dataReferencia));
     }
-    );
+
+    execute(){
+       this.fechamentoService.putBody({dataReferencia:DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-'), 
+                                       status:this.status=="A"? "F":"A"}).subscribe(
+                                        sucess=>{
+                                          this.populaTela(new Date(this.dataReferencia));
+                                        });
+    }
+
+  private populaTela(dataReferencia: Date){
+
+    var dataIni = DateConvert.formatDateYYYYMMDD(
+                    new Date(dataReferencia.getFullYear(), dataReferencia.getMonth(), 1), '-');
+    var dataFim = DateConvert.formatDateYYYYMMDD(dataReferencia, '-');
+
+    this.movPrevistaService.getByDataVencimento(dataIni, dataFim).subscribe(
+      sucess=>{this.movPrevistaGroupBy(sucess);
+               this.movRealizadaService.GetMaxGroupBySaldoConta(dataFim).subscribe(
+                       sucess=>{this.arMovReal=sucess;
+                      this.addArrayFormReal();
+          });
+      });    
   }
 
   private movPrevistaGroupBy(arr: MovimentacaoPrevista[]){
@@ -104,11 +137,11 @@ export class FechamentoComponent implements OnInit {
       }
       return acumulador;
     }, []);
-    console.log(result);
     this.addArrayFormPrev(result);
   }
 
   private addArrayFormPrev(arr: any[]){
+    this.arFormsPrev.clear();
     arr.forEach((e,i)=>{
       debugger;
       this.arFormsPrev.push(this.formBuilder.group({
@@ -120,25 +153,10 @@ export class FechamentoComponent implements OnInit {
     })
   }
 
-  private movRealizadaGroupByConta() {
-    this.activatedRoute.data.subscribe(
-      (sucess: { resolveFechamentoMovReal: any[] }) => {
-        debugger;
-        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
-        this.arMovReal = sucess.resolveFechamentoMovReal;
-        this.addArrayFormReal();
-      }
-    );
-  }
-
   private addArrayFormReal(){
+    this.arFormsReal.clear();
     this.arMovReal.forEach((e,i)=>{
       debugger;
-      if (e.status=="A"){
-        this.labelButton = "Fechar"
-      }else{
-        this.labelButton = "Reabrir"
-      }
       this.arFormsReal.push(this.formBuilder.group({
         conta:[e.conta.descricao],
         dataSaldo:[e.dataSaldo],

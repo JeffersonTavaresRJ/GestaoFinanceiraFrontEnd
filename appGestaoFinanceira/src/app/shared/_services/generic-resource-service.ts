@@ -18,9 +18,9 @@ export abstract class GenericResourceService<T extends Object>{
     constructor(injector: Injector, 
                 apiName:string,
                 //passando método como parâmetro..
-                protected  convertFormGroupToCmdCreate: (formControl: FormGroup)=>GenericCommand,
-                protected  convertFormGroupToCmdUpdate: (formControl: FormGroup)=>GenericCommand,
-                protected  convertFormGroupToCmdDelete: (formControl: FormGroup)=>GenericCommand) 
+                protected  convertFormGroupToCmdCreate?: (formControl: FormGroup)=>GenericCommand,
+                protected  convertFormGroupToCmdUpdate?: (formControl: FormGroup)=>GenericCommand,
+                protected  convertFormGroupToCmdDelete?: (formControl: FormGroup)=>GenericCommand) 
     {
         this.http = injector.get(HttpClient);
         this.apiName = apiName;
@@ -72,6 +72,27 @@ export abstract class GenericResourceService<T extends Object>{
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
               map(()=>resource)*/);
+    }
+
+    postBody(data={}): Observable<any> {
+        return this.http.post(this.getUrl(), data)
+          .pipe(catchError(this.handlerError)/*,
+                --comentado para ler o retorno da mensagem de sucesso da API..
+                map(()=>resource)*/);
+    }
+
+    putBody(data={}): Observable<any> {
+        return this.http.put(this.getUrl(), data)
+          .pipe(catchError(this.handlerError)/*,
+                --comentado para ler o retorno da mensagem de sucesso da API..
+                map(()=>resource)*/);
+    }
+
+    deleteBody(data={}): Observable<any> {
+        return this.http.delete(this.getUrl(), data)
+          .pipe(catchError(this.handlerError)/*,
+                --comentado para ler o retorno da mensagem de sucesso da API..
+                map(()=>resource)*/);
     }
 
     deleteByKey(formGroup: FormGroup): Observable<any> {
