@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
@@ -9,24 +9,27 @@ import { MovPrevistaService } from '../_services/mov-prevista-service';
 import { MatStepper } from '@angular/material/stepper';
 import { FechamentoService } from '../_services/fechamento-service';
 
-
 @Component({
   selector: 'app-fechamento',
   templateUrl: './fechamento.component.html',
   styleUrls: ['./fechamento.component.css']
+  
 })
 export class FechamentoComponent implements OnInit {
 
-  status:string;
+  count:number=0;
+  status: string;
   descricaoStatus:string;
   labelButton:string;
-  dataReferencia: Date;
+  fechamentoModel: FechamentoModel;
+  selectedMesAno: string; 
+  arFechamentosMensais:FechamentoModel[];
   arMovReal: any[];
+  arMovPrev: any[];
   arFormsReal: FormArray = this.formBuilder.array([]);
   arFormsPrev: FormArray = this.formBuilder.array([]);
 
   @ViewChild('stepper') private myStepper: MatStepper;
-
 
   firstFormGroup = this.formBuilder.group({
     firstFormChecked: ['', Validators.required]
@@ -37,13 +40,31 @@ export class FechamentoComponent implements OnInit {
   });
 
   constructor(protected activatedRoute: ActivatedRoute, 
+              protected router: Router,
               private formBuilder: FormBuilder,
-              protected movRealizadaService: MovRealizadaService,
+              protected fechamentoService: FechamentoService,
               protected movPrevistaService: MovPrevistaService,
-              protected fechamentoService: FechamentoService) { }
+              protected movRealizadaService: MovRealizadaService) { 
+              }
 
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe(
+      (sucess: { resolveFechamento: any[] }) => {
+        this.arFechamentosMensais = sucess.resolveFechamento;
+      });
+
+      this.activatedRoute.data.subscribe(
+        (sucess: { resolveMovPrev: any[] }) => {
+          this.movPrevistaGroupBy(sucess.resolveMovPrev);
+      });
+
+      this.activatedRoute.data.subscribe(
+        (sucess: { resolveMovReal: any[] }) => {
+          this.arMovReal=sucess.resolveMovReal;
+          this.addArrayFormReal();
+          this.alteraLayout(10);       
+      });
   }
 
   firstNext(){
@@ -88,36 +109,67 @@ export class FechamentoComponent implements OnInit {
     });
   }
 
-  getFechamento(ev: FechamentoModel){
-    debugger;
-    this.status = ev.status;
-    this.descricaoStatus = ev.descricaoStatus;   
-    this.dataReferencia  = ev.dataReferencia;
-    this.labelButton = ev.status=="A"? "Fechar": "Reabrir";
-    this.myStepper.linear = ev.status=="A"? true: false;
-    this.myStepper.selectedIndex=ev.status=="F"? 2: 0;
-    this.populaTela(new Date(this.dataReferencia));
-    }
+  onChange(seconds){
+    this.alteraLayout(seconds);
+    this.populaTela(new Date(this.fechamentoModel.dataReferencia)); 
+  }
 
-    execute(){
-       this.fechamentoService.putBody({dataReferencia:DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-'), 
-                                       status:this.status=="A"? "F":"A"}).subscribe(
-                                        sucess=>{
-                                          this.populaTela(new Date(this.dataReferencia));
-                                        });
+
+  execute(){
+       this.fechamentoService.putBody({dataReferencia:DateConvert.formatDateYYYYMMDD(this.fechamentoModel.dataReferencia, '-'), 
+                                       status:this.fechamentoModel.status=="A"? "F":"A"}).subscribe(
+                                          sucess=>{
+                                            debugger;
+                                            this.fechamentoService.getAll().subscribe(
+                                              sucess=> {
+                                                this.arFechamentosMensais = sucess;
+                                                this.selectedMesAno =null;
+                                                this.alteraLayout(10);
+                                              }
+                                            );                                            
+                                          });
+  }
+
+
+  private alteraLayout(seconds){
+    var interval = setInterval(()=>{
+      debugger;
+      this.fechamentoModel = this.getFechamentoModel(this.selectedMesAno);
+      if (this.fechamentoModel != null){
+        this.labelButton = this.fechamentoModel.status=="A"? "Fechar": "Reabrir";
+        this.status = this.fechamentoModel.status;
+        this.descricaoStatus = this.fechamentoModel.descricaoStatus;
+        this.setValueChecks(this.fechamentoModel.status=="A"? "": "TRUE");
+        this.myStepper.linear = this.fechamentoModel.status=="A"? true: false;
+        this.myStepper.selectedIndex=this.fechamentoModel.status=="F"? 2: 0;
+      }
+      
+      //só pára de executar o getFechamentoModel() quando o mês/ano estiver selecionado no dropdown..
+      if(this.selectedMesAno!=null){clearInterval(interval)}},seconds);
+  }
+
+  private getFechamentoModel(mesAno):FechamentoModel{
+    var f = null;
+    if (mesAno!=null){
+        f = this.arFechamentosMensais.filter(x=>DateConvert.formatDateYYYYMMDD(x.dataReferencia, '-')==DateConvert.formatDateYYYYMMDD(mesAno, '-'))[0];
     }
+    return f;
+  }    
 
   private populaTela(dataReferencia: Date){
-
+    debugger;
     var dataIni = DateConvert.formatDateYYYYMMDD(
                     new Date(dataReferencia.getFullYear(), dataReferencia.getMonth(), 1), '-');
     var dataFim = DateConvert.formatDateYYYYMMDD(dataReferencia, '-');
 
     this.movPrevistaService.getByDataVencimento(dataIni, dataFim).subscribe(
-      sucess=>{this.movPrevistaGroupBy(sucess);
+      sucess=>{this.arMovPrev = sucess;
+               this.movPrevistaGroupBy(this.arMovPrev);
                this.movRealizadaService.GetMaxGroupBySaldoConta(dataFim).subscribe(
-                       sucess=>{this.arMovReal=sucess;
-                      this.addArrayFormReal();
+                       sucess=>{this.arMovReal=sucess;  
+                                console.log("movreal: " || dataFim);
+                                console.log(this.arMovReal);                       
+                                this.addArrayFormReal();
           });
       });    
   }
@@ -125,6 +177,8 @@ export class FechamentoComponent implements OnInit {
   private movPrevistaGroupBy(arr: MovimentacaoPrevista[]){
     //agrupando itens de despesas e receitas..
     var result = [];
+    console.log("movprev:");
+    console.log(arr);
     arr.reduce(function(acumulador, obj){
       if (!acumulador[obj.itemMovimentacao.tipo]){
           acumulador[obj.itemMovimentacao.tipo] = {Tipo: obj.itemMovimentacao.tipoDescricao, ValorEmAberto: 0, ValorQuitado: 0};

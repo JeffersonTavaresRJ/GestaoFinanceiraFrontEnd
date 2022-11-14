@@ -42,6 +42,7 @@ import { MovRealizadaListResolver } from './features/lancamentos/_guards/mov-rea
 import { MovRealizadaFormResolver } from './features/lancamentos/_guards/mov-realizada-form-resolver';
 import { MovPrevistaQuitarResolver } from './features/lancamentos/_guards/mov-prevista-quitar-resolver';
 import { MovRealizadaGroupByContaResolver } from './features/lancamentos/_guards/mov-realizada-gb-conta-resolver';
+import { FechamentoListResolver } from './features/lancamentos/_guards/fechamento-list-resolver';
 
 
 //criando o mapeamento de rotas dos componentes
@@ -134,8 +135,11 @@ const routes: Routes = [
              resolve:{resolveMovReal: MovRealizadaListResolver}  },
 
     //================================================================================================
-     { path: 'fechamento', component: FechamentoComponent,
-     canActivate:[AuthGuard] },
+     { path: 'fechamento/:dataIni/:dataFim', component: FechamentoComponent,
+     canActivate:[AuthGuard],
+     resolve: {resolveFechamento: FechamentoListResolver,
+               resolveMovPrev: MovPrevistaListResolver,
+               resolveMovReal: MovRealizadaGroupByContaResolver}},
 
     //================================================================================================
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
@@ -161,6 +165,7 @@ const routes: Routes = [
                MovRealizadaListResolver,
                MovRealizadaFormResolver,
                MovPrevistaQuitarResolver,
+               FechamentoListResolver,
                MovRealizadaGroupByContaResolver]
 })
 

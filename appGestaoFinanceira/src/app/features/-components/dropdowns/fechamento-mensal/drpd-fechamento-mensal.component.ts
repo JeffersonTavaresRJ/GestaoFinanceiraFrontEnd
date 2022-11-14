@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FechamentoModel } from 'src/app/features/lancamentos/_models/fechamento-model';
 import { FechamentoService } from 'src/app/features/lancamentos/_services/fechamento-service';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
@@ -12,14 +12,22 @@ export class DropDownFechamentoMensalComponent {
 
   arFechamentosMensais:FechamentoModel[];
   fechamentoModel: FechamentoModel;
-  selectedMesAno: string;
+  selectedMesAno: string;  
+  @Input('OnPopulate') onPopulate: boolean;
   @Output('OnChange') _onChange = new EventEmitter(); 
 
-  constructor(protected fechamentoService: FechamentoService) { 
+  constructor(protected fechamentoService: FechamentoService) {  
+    if (this.onPopulate){
+      this.populate();
+    }      
+  }
+
+  populate(){
     this.fechamentoService.getAll().subscribe(
       sucess=>{
-        debugger;
+       // debugger;
         this.arFechamentosMensais = sucess;
+        console.log("populate dropdwon");
         this.getFechamento();
       }
     );
@@ -28,11 +36,12 @@ export class DropDownFechamentoMensalComponent {
   getFechamento(){
     var interval = setInterval(()=>{
       this.onChange();
+      //só pára de executar o onChange() quando o mês/ano estiver selecionado no dropdown..
       if(this.selectedMesAno!=null){clearInterval(interval)}},10);
   }
 
   onChange(){
-    debugger;
+  //  debugger;
     //enviando o objeto para o componente pai..
     if (this.selectedMesAno!=null){
       this.fechamentoModel = this.arFechamentosMensais

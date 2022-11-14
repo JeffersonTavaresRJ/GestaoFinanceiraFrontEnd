@@ -3,7 +3,8 @@ import { BSAutenticarUsuario } from 'src/app/core/services/bs-autenticar-usuario
 import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { environment } from 'src/environments/environment';
 import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FechamentoService } from 'src/app/features/lancamentos/_services/fechamento-service';
 
 
 @Component({
@@ -17,9 +18,11 @@ export class HeaderComponent implements OnInit {
   dataFim!: Date;
 
   constructor(
+    protected activatedRoute: ActivatedRoute,
     private bsAutenticarUsuario: BSAutenticarUsuario,
     private bsUpdateUsuario: BSUpdateUsuario,
-    private router: Router) { }
+    private router: Router) {
+     }
 
   usuarioAutenticado: boolean = false;
   user!: Usuario;
@@ -30,19 +33,11 @@ export class HeaderComponent implements OnInit {
     if (!this.usuarioAutenticado){
       this.resetUser();
     }
-    this.setDataParamMovimentacoes();
+    debugger;
+    var dataAtual = new Date();
+    this.dataIni = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
+    this.dataFim = new Date(dataAtual.getFullYear(), dataAtual.getMonth()+1, 0);
     this.bsUpdateUsuario.getEMail().subscribe(valor => this.user_name = valor);
-  }
-
-  setDataParamMovimentacoes(){
-    /*parâmetros da lista de Movimentações (Previstas e Realizadas)
-     data inicial e final dentro do mês corrente..
-    */
-    const dataAtual = new Date();
-    var mes = dataAtual.getMonth();
-    var ano = dataAtual.getFullYear();
-    this.dataIni = new Date(ano, mes, 1);
-    this.dataFim = new Date(ano, mes + 1, 0);
   }
 
   resultEvent(event: any) {
@@ -52,7 +47,7 @@ export class HeaderComponent implements OnInit {
       }
     }
 
-    resetUser(){
+  resetUser(){
       this.usuarioAutenticado=false;
       window.localStorage.removeItem(environment.keyUser);
     }

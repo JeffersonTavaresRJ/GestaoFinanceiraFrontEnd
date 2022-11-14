@@ -3,9 +3,18 @@
     <h3>Fechamento Mensal</h3>
   </div>
   <div class="col-3">
-    <app-dropdown-fechamento-mensal
-     (OnChange)="getFechamento($event)">
-    </app-dropdown-fechamento-mensal>
+    <p-dropdown [options]="arFechamentosMensais" 
+                optionLabel="mesAno" 
+                optionValue="dataReferencia" 
+                [(ngModel)]="selectedMesAno"
+                [virtualScroll]="true" 
+                [itemSize]="3"
+                [showClear]="false" 
+                [filter]="false"
+                (onChange)="onChange(0)"
+                emptyMessage="Não encontrado"
+                autoDisplayFirst="true">
+    </p-dropdown>
   </div>
   <div class="col-6" style="text-align: right;">
     <div [class.alert-success]="status=='A'" [class.alert-danger]="status=='F'" role="alert">
