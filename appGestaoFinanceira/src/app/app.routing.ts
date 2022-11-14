@@ -135,7 +135,7 @@ const routes: Routes = [
              resolve:{resolveMovReal: MovRealizadaListResolver}  },
 
     //================================================================================================
-     { path: 'fechamento/:dataIni/:dataFim', component: FechamentoComponent,
+     { path: 'fechamento', component: FechamentoComponent,
      canActivate:[AuthGuard],
      resolve: {resolveFechamento: FechamentoListResolver,
                resolveMovPrev: MovPrevistaListResolver,
