@@ -49,9 +49,10 @@ export class FechamentoComponent implements OnInit {
 
 
   ngOnInit(): void {
+  
     this.activatedRoute.data.subscribe(
       (sucess: { resolveFechamento: any[] }) => {
-        this.arFechamentosMensais = sucess.resolveFechamento;
+        this.arFechamentosMensais = sucess.resolveFechamento;        
       });
 
       this.activatedRoute.data.subscribe(
@@ -65,6 +66,8 @@ export class FechamentoComponent implements OnInit {
           this.addArrayFormReal();
           this.alteraLayout(10);       
       });
+
+
   }
 
   firstNext(){

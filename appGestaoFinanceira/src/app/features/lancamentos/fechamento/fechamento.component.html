@@ -16,9 +16,12 @@
                 autoDisplayFirst="true">
     </p-dropdown>
   </div>
-  <div class="col-6" style="text-align: right;">
-    <div [class.alert-success]="status=='A'" [class.alert-danger]="status=='F'" role="alert">
-        <strong>{{descricaoStatus}}</strong>
+  <div class="col-3">
+    <div *ngIf="status=='A'" class="alert alert-success" role="alert">
+      <strong>{{descricaoStatus}}</strong>
+    </div>
+    <div *ngIf="status=='F'" class="alert alert-danger" role="alert">
+      <strong>{{descricaoStatus}}</strong>
     </div>
   </div>
 </div>

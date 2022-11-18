@@ -130,7 +130,7 @@ const routes: Routes = [
     { path: 'mov-realizada/edit/:idMovReal/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovReal: MovRealizadaFormResolver}  },
-    { path: 'mov-realizada/:dataRealIni/:dataRealFim', component: MovRealizadaListComponent,
+    { path: 'mov-realizada/:dataIni/:dataFim', component: MovRealizadaListComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovReal: MovRealizadaListResolver}  },
 
@@ -138,8 +138,10 @@ const routes: Routes = [
      { path: 'fechamento', component: FechamentoComponent,
      canActivate:[AuthGuard],
      resolve: {resolveFechamento: FechamentoListResolver,
-               resolveMovPrev: MovPrevistaListResolver,
-               resolveMovReal: MovRealizadaGroupByContaResolver}},
+              resolveMovPrev: MovPrevistaListResolver,
+              resolveMovReal: MovRealizadaGroupByContaResolver
+            }
+        },
 
     //================================================================================================
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,

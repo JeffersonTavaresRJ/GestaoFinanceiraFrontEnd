@@ -17,11 +17,15 @@ export class HeaderComponent implements OnInit {
   dataIni!: Date;
   dataFim!: Date;
 
+  dataFechamentoIni!:Date;
+  dataFechamentoFim!:Date;
+
   constructor(
     protected activatedRoute: ActivatedRoute,
     private bsAutenticarUsuario: BSAutenticarUsuario,
     private bsUpdateUsuario: BSUpdateUsuario,
-    private router: Router) {
+    private router: Router,
+    private fechamentoService: FechamentoService) {
      }
 
   usuarioAutenticado: boolean = false;

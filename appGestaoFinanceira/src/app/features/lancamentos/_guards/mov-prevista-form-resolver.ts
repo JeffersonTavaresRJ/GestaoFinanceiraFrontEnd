@@ -15,7 +15,6 @@ export class MovPrevistaFormResolver implements Resolve<MovimentacaoPrevista> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
     this.idItemMovimentacao = activatedRouteSnapshot.params['idItemMov'];
     this.dataReferencia = activatedRouteSnapshot.params['dataRef'];
-    debugger;
     return this.movPrevistaService.getByKey(this.idItemMovimentacao, this.dataReferencia);
   }
 

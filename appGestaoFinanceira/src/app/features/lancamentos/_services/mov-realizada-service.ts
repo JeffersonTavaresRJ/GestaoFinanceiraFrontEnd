@@ -20,7 +20,6 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
 
   getByDataReferencia(idItemMovimentacao: number, dataReferencia: string): Observable<MovimentacaoRealizada[]> {
     this.setApiOption('/GetByDataReferencia');
-    debugger;
     return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`);
   }
 
@@ -29,8 +28,9 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${dataMovRealIni}/${dataMovRealFim}`);
   }
 
-  GetMaxGroupBySaldoConta(dataReferencia: string): Observable<any[]> {
+  GetMaxGroupBySaldoConta(dataReferencia: string=null): Observable<any[]> {
     this.setApiOption('/GetMaxGroupBySaldoConta'); 
-    return this.http.get<any[]>(`${this.getUrl()}/${dataReferencia}`);
+    var _dataReferencia = dataReferencia!=null || dataReferencia != undefined ? dataReferencia.toString() : ' ';
+    return this.http.get<any[]>(`${this.getUrl()}/${_dataReferencia}`);
   }
 }

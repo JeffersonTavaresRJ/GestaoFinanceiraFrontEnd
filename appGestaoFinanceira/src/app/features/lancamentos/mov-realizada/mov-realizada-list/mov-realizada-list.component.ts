@@ -45,12 +45,12 @@ export class MovRealizadaListComponent implements OnInit {
 
   private movRealizadaList() {
     debugger;
-    this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
+    this.arStDate = this.actResourceRoute.snapshot.params.dataIni.split('-');
 
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
     this.dataReferencia = this.dataIni;
 
-    this.arStDate = this.actResourceRoute.snapshot.params.dataRealFim.split('-');
+    this.arStDate = this.actResourceRoute.snapshot.params.dataFim.split('-');
     this.dataFim = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
 
     this.actResourceRoute.data.subscribe(
