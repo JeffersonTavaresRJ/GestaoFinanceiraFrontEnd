@@ -4,7 +4,7 @@ import { CategoriaFormComponent } from './categoria/categoria-form/categoria-for
 import { CategoriaListComponent } from './categoria/categoria-list/categoria-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoreModule } from 'src/app/core/core.module';
-import{ NgxPaginationModule } from 'ngx-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { OrderModule } from 'ngx-order-pipe';
 import { ContaFormComponent } from './conta/conta-form/conta-form.component';
 import { ContaListComponent } from './conta/conta-list/conta-list.component';

@@ -9,8 +9,7 @@ export class MovRealizadaGroupByContaResolver implements Resolve<any[]> {
   constructor( private movRealizadaService: MovRealizadaService) {}
 
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
-    debugger;
-    this.dataReferencia = activatedRouteSnapshot.params['dataFim'];
-    return this.movRealizadaService.GetMaxGroupBySaldoConta(this.dataReferencia);
+    this.dataReferencia = activatedRouteSnapshot.params['dataFim'];   
+    return this.movRealizadaService.GetMaxGroupBySaldoConta(this.dataReferencia); 
   }
 }

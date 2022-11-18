@@ -1,24 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { FechamentoModel } from '../_models/fechamento-model';
+import { MovRealizadaService } from '../_services/mov-realizada-service';
+import { MovPrevistaService } from '../_services/mov-prevista-service';
+import { MatStepper } from '@angular/material/stepper';
+import { FechamentoService } from '../_services/fechamento-service';
 
 @Component({
   selector: 'app-fechamento',
   templateUrl: './fechamento.component.html',
   styleUrls: ['./fechamento.component.css']
+  
 })
 export class FechamentoComponent implements OnInit {
 
-  title:string;
+  count:number=0;
+  status: string;
+  descricaoStatus:string;
   labelButton:string;
-  paginaAtual:number=1;
+  fechamentoModel: FechamentoModel;
+  selectedMesAno: string; 
+  arFechamentosMensais:FechamentoModel[];
   arMovReal: any[];
+  arMovPrev: any[];
   arFormsReal: FormArray = this.formBuilder.array([]);
   arFormsPrev: FormArray = this.formBuilder.array([]);
 
+  @ViewChild('stepper') private myStepper: MatStepper;
 
   firstFormGroup = this.formBuilder.group({
     firstFormChecked: ['', Validators.required]
@@ -28,15 +39,35 @@ export class FechamentoComponent implements OnInit {
    
   });
 
-  constructor(protected activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) { }
+  constructor(protected activatedRoute: ActivatedRoute, 
+              protected router: Router,
+              private formBuilder: FormBuilder,
+              protected fechamentoService: FechamentoService,
+              protected movPrevistaService: MovPrevistaService,
+              protected movRealizadaService: MovRealizadaService) { 
+              }
 
 
   ngOnInit(): void {
-    debugger;
-    var dataFim = this.activatedRoute.snapshot.params.dataFim;
-    this.title = "Fechamento Mensal: " + DateConvert.formatDateMMYYYY(dataFim, '/');
-    this.movPrevistaList();
-    this.movRealizadaGroupByConta();
+  
+    this.activatedRoute.data.subscribe(
+      (sucess: { resolveFechamento: any[] }) => {
+        this.arFechamentosMensais = sucess.resolveFechamento;        
+      });
+
+      this.activatedRoute.data.subscribe(
+        (sucess: { resolveMovPrev: any[] }) => {
+          this.movPrevistaGroupBy(sucess.resolveMovPrev);
+      });
+
+      this.activatedRoute.data.subscribe(
+        (sucess: { resolveMovReal: any[] }) => {
+          this.arMovReal=sucess.resolveMovReal;
+          this.addArrayFormReal();
+          this.alteraLayout(10);       
+      });
+
+
   }
 
   firstNext(){
@@ -71,27 +102,86 @@ export class FechamentoComponent implements OnInit {
     }
   }
 
-  resetChecks(){
+
+  setValueChecks(valor: string){
     this.arFormsPrev.controls.forEach(element => {
-      element.get('isChecked').setValue('');      
+      element.get('isChecked').setValue(valor);      
     });
     this.arFormsReal.controls.forEach(element => {
-      element.get('isChecked').setValue(''); 
+      element.get('isChecked').setValue(valor); 
     });
   }
 
-  private movPrevistaList() {
-    this.activatedRoute.data.subscribe(
-      (sucess: { resolveFechamentoMovPrev: MovimentacaoPrevista[] }) => {
-        //this.arMovPrev =sucess.resolveFechamentoMovPrev;
-        this.movPrevistaGroupBy(sucess.resolveFechamentoMovPrev);
+  onChange(seconds){
+    this.alteraLayout(seconds);
+    this.populaTela(new Date(this.fechamentoModel.dataReferencia)); 
+  }
+
+
+  execute(){
+       this.fechamentoService.putBody({dataReferencia:DateConvert.formatDateYYYYMMDD(this.fechamentoModel.dataReferencia, '-'), 
+                                       status:this.fechamentoModel.status=="A"? "F":"A"}).subscribe(
+                                          sucess=>{
+                                            debugger;
+                                            this.fechamentoService.getAll().subscribe(
+                                              sucess=> {
+                                                this.arFechamentosMensais = sucess;
+                                                this.selectedMesAno =null;
+                                                this.alteraLayout(10);
+                                              }
+                                            );                                            
+                                          });
+  }
+
+
+  private alteraLayout(seconds){
+    var interval = setInterval(()=>{
+      debugger;
+      this.fechamentoModel = this.getFechamentoModel(this.selectedMesAno);
+      if (this.fechamentoModel != null){
+        this.labelButton = this.fechamentoModel.status=="A"? "Fechar": "Reabrir";
+        this.status = this.fechamentoModel.status;
+        this.descricaoStatus = this.fechamentoModel.descricaoStatus;
+        this.setValueChecks(this.fechamentoModel.status=="A"? "": "TRUE");
+        this.myStepper.linear = this.fechamentoModel.status=="A"? true: false;
+        this.myStepper.selectedIndex=this.fechamentoModel.status=="F"? 2: 0;
+      }
+      
+      //só pára de executar o getFechamentoModel() quando o mês/ano estiver selecionado no dropdown..
+      if(this.selectedMesAno!=null){clearInterval(interval)}},seconds);
+  }
+
+  private getFechamentoModel(mesAno):FechamentoModel{
+    var f = null;
+    if (mesAno!=null){
+        f = this.arFechamentosMensais.filter(x=>DateConvert.formatDateYYYYMMDD(x.dataReferencia, '-')==DateConvert.formatDateYYYYMMDD(mesAno, '-'))[0];
     }
-    );
+    return f;
+  }    
+
+  private populaTela(dataReferencia: Date){
+    debugger;
+    var dataIni = DateConvert.formatDateYYYYMMDD(
+                    new Date(dataReferencia.getFullYear(), dataReferencia.getMonth(), 1), '-');
+    var dataFim = DateConvert.formatDateYYYYMMDD(dataReferencia, '-');
+
+    this.movPrevistaService.getByDataVencimento(dataIni, dataFim).subscribe(
+      sucess=>{this.arMovPrev = sucess;
+               this.movPrevistaGroupBy(this.arMovPrev);
+               this.movRealizadaService.GetMaxGroupBySaldoConta(dataFim).subscribe(
+                       sucess=>{this.arMovReal=sucess;  
+                                console.log("movreal: " || dataFim);
+                                console.log(this.arMovReal);                       
+                                this.addArrayFormReal();
+          });
+      });    
   }
 
   private movPrevistaGroupBy(arr: MovimentacaoPrevista[]){
     //agrupando itens de despesas e receitas..
     var result = [];
+    console.log("movprev:");
+    console.log(arr);
     arr.reduce(function(acumulador, obj){
       if (!acumulador[obj.itemMovimentacao.tipo]){
           acumulador[obj.itemMovimentacao.tipo] = {Tipo: obj.itemMovimentacao.tipoDescricao, ValorEmAberto: 0, ValorQuitado: 0};
@@ -104,11 +194,11 @@ export class FechamentoComponent implements OnInit {
       }
       return acumulador;
     }, []);
-    console.log(result);
     this.addArrayFormPrev(result);
   }
 
   private addArrayFormPrev(arr: any[]){
+    this.arFormsPrev.clear();
     arr.forEach((e,i)=>{
       debugger;
       this.arFormsPrev.push(this.formBuilder.group({
@@ -120,25 +210,10 @@ export class FechamentoComponent implements OnInit {
     })
   }
 
-  private movRealizadaGroupByConta() {
-    this.activatedRoute.data.subscribe(
-      (sucess: { resolveFechamentoMovReal: any[] }) => {
-        debugger;
-        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
-        this.arMovReal = sucess.resolveFechamentoMovReal;
-        this.addArrayFormReal();
-      }
-    );
-  }
-
   private addArrayFormReal(){
+    this.arFormsReal.clear();
     this.arMovReal.forEach((e,i)=>{
       debugger;
-      if (e.status=="A"){
-        this.labelButton = "Fechar"
-      }else{
-        this.labelButton = "Reabrir"
-      }
       this.arFormsReal.push(this.formBuilder.group({
         conta:[e.conta.descricao],
         dataSaldo:[e.dataSaldo],

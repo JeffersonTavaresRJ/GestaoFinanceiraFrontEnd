@@ -1,6 +1,32 @@
-<app-header-page-title [header-title]=title>        
-</app-header-page-title>
-<mat-vertical-stepper [linear]="true" #stepper>
+<div class="row">
+  <div class="col-3">
+    <h3>Fechamento Mensal</h3>
+  </div>
+  <div class="col-3">
+    <p-dropdown [options]="arFechamentosMensais" 
+                optionLabel="mesAno" 
+                optionValue="dataReferencia" 
+                [(ngModel)]="selectedMesAno"
+                [virtualScroll]="true" 
+                [itemSize]="3"
+                [showClear]="false" 
+                [filter]="false"
+                (onChange)="onChange(0)"
+                emptyMessage="Não encontrado"
+                autoDisplayFirst="true">
+    </p-dropdown>
+  </div>
+  <div class="col-3">
+    <div *ngIf="status=='A'" class="alert alert-success" role="alert">
+      <strong>{{descricaoStatus}}</strong>
+    </div>
+    <div *ngIf="status=='F'" class="alert alert-danger" role="alert">
+      <strong>{{descricaoStatus}}</strong>
+    </div>
+  </div>
+</div>
+<hr>
+<mat-vertical-stepper #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Previsão Consolidada</ng-template>
@@ -19,13 +45,13 @@
               <div class="td" style="text-align: right;">{{fGroupPrev.get('valorEmAberto').value | currency }}</div>
               <div class="td" style="text-align: right;">{{fGroupPrev.get('valorQuitado').value  | currency}}</div>
               <div class="td" style="text-align: center;">
-                <input class="form-check-input" type="checkbox" formControlName="isChecked" required>
+                <input *ngIf="status=='A'" class="form-check-input" type="checkbox" formControlName="isChecked" required>
               </div>
             </form> 
           </div>
       </div>
       <div class="mt-2">
-        <button type="button" class="btn btn-dark" (mousemove)="firstNext()" matStepperNext>Próximo</button>
+        <button id="buttonFirst" type="button" class="btn btn-dark" (mousemove)="firstNext()" matStepperNext>Próximo</button>
       </div>
     </form>
   </mat-step>
@@ -48,23 +74,23 @@
                 <div class="td" style="text-align: center;">{{fGroupReal.get('dataSaldo').value | date:'dd/MM/yyyy' }}</div>
                 <div class="td" style="text-align: right;">{{fGroupReal.get('valor').value | currency}}</div>
                 <div class="td" style="text-align: center;">
-                  <input class="form-check-input" type="checkbox" formControlName="isChecked" required>
+                  <input *ngIf="status=='A'" class="form-check-input" type="checkbox" formControlName="isChecked" required>
                 </div>
               </form> 
             </div>
         </div>
       </div>
       <div class="mt-2">
-        <button type="button" class="btn btn-dark" matStepperPrevious style="margin-right: 10px;">Voltar</button>
+        <button id="buttonSecond"  type="button" class="btn btn-dark" matStepperPrevious style="margin-right: 10px;">Voltar</button>
         <button type="button" class="btn btn-dark" (mousemove)="secondNext()"  matStepperNext>Próximo</button>
       </div>
     </form>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Fechar sistema</ng-template>
+    <ng-template matStepLabel>{{labelButton}} sistema</ng-template>
     <div class="mt-2">
-      <button type="button" class="btn btn-dark" style="margin-right: 10px;">{{labelButton}}</button>
-      <button type="button" class="btn btn-dark" (click)="resetChecks();stepper.reset();">Reset</button>
+      <button type="button" class="btn btn-dark" style="margin-right: 10px;" (click)="execute()">{{labelButton}}</button>
+      <button *ngIf="status=='A'" type="button" class="btn btn-dark" (click)="setValueChecks('');stepper.reset();">Reset</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>
