@@ -1,33 +1,33 @@
-<div class="row">
-  <div class="col-3">
-    <h3>Fechamento Mensal</h3>
-  </div>
-  <div class="col-3">
-    <p-dropdown [options]="arFechamentosMensais" 
-                optionLabel="mesAno" 
-                optionValue="dataReferencia" 
-                [(ngModel)]="selectedMesAno"
-                [virtualScroll]="true" 
-                [itemSize]="3"
-                [showClear]="false" 
-                [filter]="false"
-                (onChange)="onChange(0)"
-                emptyMessage="Não encontrado"
-                autoDisplayFirst="true">
-    </p-dropdown>
-  </div>
-  <div class="col-3">
-    <div *ngIf="status=='A'" class="alert alert-success" role="alert">
-      <strong>{{descricaoStatus}}</strong>
-    </div>
-    <div *ngIf="status=='F'" class="alert alert-danger" role="alert">
-      <strong>{{descricaoStatus}}</strong>
-    </div>
-  </div>
+<div class="d-flex justify-content-between  align-items-center">
+      <div class="d-flex justify-content-start">
+        <h3 style="padding-right: 20px; padding-top:4px">Fechamento Mensal</h3>
+        <div class="col-3">
+          <p-dropdown [options]="arFechamentosMensais" 
+                      optionLabel="mesAno" 
+                      optionValue="dataReferencia" 
+                      [(ngModel)]="selectedMesAno"
+                      [virtualScroll]="true" 
+                      [itemSize]="3"
+                      [showClear]="false" 
+                      [filter]="false"
+                      (onChange)="onChange(0)"
+                      emptyMessage="Não encontrado"
+                      autoDisplayFirst="true">
+          </p-dropdown>
+        </div>      
+      </div>
+      <div class="col-2" style="text-align: center; padding-top:10px;">
+         <div *ngIf="status=='A'" class="alert alert-success" style="height:50px;padding-top:7%;" role="alert">
+            <strong>{{descricaoStatus}}</strong>
+         </div>
+         <div *ngIf="status=='F'" class="alert alert-danger" style="height:50px;padding-top:7%;" role="alert">
+           <strong>{{descricaoStatus}}</strong>
+         </div>
+      </div>
 </div>
 <hr>
 <mat-vertical-stepper #stepper>
-  <mat-step [stepControl]="firstFormGroup">
+  <mat-step [stepControl]="firstFormGroup" state="phone">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Previsão Consolidada</ng-template>
       <div class="grid-table">
@@ -55,7 +55,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
+  <mat-step [stepControl]="secondFormGroup" state="phone">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Últimos Lançamentos</ng-template>
       <div class="grid-table">
@@ -86,11 +86,18 @@
       </div>
     </form>
   </mat-step>
-  <mat-step>
+  <mat-step state="phone">
     <ng-template matStepLabel>{{labelButton}} sistema</ng-template>
     <div class="mt-2">
       <button type="button" class="btn btn-dark" style="margin-right: 10px;" (click)="execute()">{{labelButton}}</button>
       <button *ngIf="status=='A'" type="button" class="btn btn-dark" (click)="setValueChecks('');stepper.reset();">Reset</button>
     </div>
   </mat-step>
+
+  <ng-template matStepperIcon="phone">
+    <mat-icon>call_end</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="chat">
+    <mat-icon>forum</mat-icon>
+  </ng-template>
 </mat-vertical-stepper>
