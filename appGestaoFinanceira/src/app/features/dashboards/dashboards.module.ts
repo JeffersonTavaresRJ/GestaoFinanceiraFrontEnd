@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReceitasDespesasDashboardComponent } from './receitas-despesas-dashboard/receitas-despesas-dashboard.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 
 
@@ -9,7 +10,8 @@ import { ReceitasDespesasDashboardComponent } from './receitas-despesas-dashboar
     ReceitasDespesasDashboardComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NgApexchartsModule
   ]
 })
 export class DashboardsModule { }
