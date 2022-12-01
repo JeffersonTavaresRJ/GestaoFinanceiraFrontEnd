@@ -1,8 +1,19 @@
 <div style="text-align:center">
+  <!--
     <apx-chart
       [series]="chartOptions.series"
       [chart]="chartOptions.chart"
       [xaxis]="chartOptions.xaxis"
       [title]="chartOptions.title"
+      [labels]="labels"
     ></apx-chart>
-  </div>
+    -->
+    <apx-chart
+    [series]="series"
+    [chart]="chartOptions.chart"
+    [plotOptions] = "plotOptions"
+    [labels]="labels"
+    [legend]="legend"
+    [tooltip]="tooltip"
+  ></apx-chart>
+ </div>

@@ -1,5 +1,6 @@
+import { formatCurrency } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {ChartComponent,ApexAxisChartSeries,ApexChart,ApexXAxis,ApexTitleSubtitle} from "ng-apexcharts";
+import {ChartComponent,ApexAxisChartSeries,ApexChart,ApexXAxis,ApexTitleSubtitle, ApexPlotOptions, ApexLegend} from "ng-apexcharts";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -17,9 +18,16 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+  public plotOptions: Partial<ApexPlotOptions>;
+  public legend: Partial<ApexLegend>;
+  public tooltip: Partial<any>;
+  public labels: string[];
+  public series: number[];
   
   constructor() { 
 
+    /*grafico em barras*/
+    /*
     this.chartOptions = {
       series: [
         {
@@ -38,27 +46,52 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
         categories: ["Jan", "Feb",  "Mar",  "Apr",  "May",  "Jun",  "Jul",  "Aug", "Sep"]
       }
     };
+    */
+   /**grafico em pizza*/
+   this.labels = ['Alimentação', 'Energia Elétrica', 'Água', 'Estudos'];
+   this.series = [1050.36,224.56,180,98.94];
 
+   this.legend={
+    show:false
+   };
+
+   this.tooltip={
+    enabled: false
+   }
+   this.chartOptions = {
+    chart: {
+      type: 'donut',
+      width:"50%",
+      height:380
+    }
+};
+
+  this.plotOptions = {
+    pie: {      
+      donut: {
+        size: '65%',
+        labels:{
+          show:true,
+          total:{
+            show:true,
+            color:"#000000",
+            formatter: function (w) {
+              return formatCurrency(w.globals.seriesTotals.reduce((a, b) => {
+                return a+b
+              }, 0), "PT-BR", "R$");
+            }
+          },
+          value:{
+             formatter(val) {
+              return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
+            },
+          }
+        }
+      }
+    }    
   }
+}
 
   ngOnInit(): void {
-    /*
-    new Chart(this.chartDespesas.nativeElement, {
-      data: {
-        datasets: [{
-            type: 'bar',
-            label: 'Bar Dataset',
-            data: [10, 20, 30, 40]
-        }, 
-        {
-            type: 'line',
-            label: 'Line Dataset',
-            data: [50, 50, 50, 50],
-        }],
-        labels: ['January', 'February', 'March', 'April']
-       }
-    });
-  }
-  */
   }
 }
