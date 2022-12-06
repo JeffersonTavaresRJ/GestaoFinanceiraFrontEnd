@@ -1,12 +1,27 @@
-import { formatCurrency } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import {ChartComponent,ApexAxisChartSeries,ApexChart,ApexXAxis,ApexTitleSubtitle, ApexPlotOptions, ApexLegend} from "ng-apexcharts";
+import { formatCurrency, formatPercent } from '@angular/common';
+import { ChartComponent } from "ng-apexcharts";
+import { Component, 
+         OnInit, 
+         ViewChild } from '@angular/core';
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+  ApexFill,
+  ApexDataLabels,
+  ApexLegend
+} from "ng-apexcharts";
+import * as ApexCharts from 'apexcharts';
+
 
 export type ChartOptions = {
-  series: ApexAxisChartSeries;
+  series: ApexNonAxisChartSeries;
   chart: ApexChart;
-  xaxis: ApexXAxis;
-  title: ApexTitleSubtitle;
+  responsive: ApexResponsive[];
+  labels: any;
+  fill: ApexFill;
+  legend: ApexLegend;
+  dataLabels: ApexDataLabels;
 };
 
 @Component({
@@ -15,83 +30,109 @@ export type ChartOptions = {
   styleUrls: ['./receitas-despesas-dashboard.component.css']
 })
 export class ReceitasDespesasDashboardComponent implements OnInit {
+  series:Number[];
+  labels:string[];
+  constructor() {
 
-  @ViewChild("chart") chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-  public plotOptions: Partial<ApexPlotOptions>;
-  public legend: Partial<ApexLegend>;
-  public tooltip: Partial<any>;
-  public labels: string[];
-  public series: number[];
-  
-  constructor() { 
-
-    /*grafico em barras*/
-    /*
-    this.chartOptions = {
-      series: [
-        {
-          name: "My-series",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-        }
-      ],
-      chart: {
-        height: 350,
-        type: "bar"
-      },
-      title: {
-        text: "Meu primeiro Angular Chart"
-      },
-      xaxis: {
-        categories: ["Jan", "Feb",  "Mar",  "Apr",  "May",  "Jun",  "Jul",  "Aug", "Sep"]
-      }
-    };
-    */
-   /**grafico em pizza*/
-   this.labels = ['Alimentação', 'Energia Elétrica', 'Água', 'Estudos'];
-   this.series = [1050.36,224.56,180,98.94];
-
-   this.legend={
-    show:false
-   };
-
-   this.tooltip={
-    enabled: false
-   }
-   this.chartOptions = {
-    chart: {
-      type: 'donut',
-      width:"50%",
-      height:380
-    }
-};
-
-  this.plotOptions = {
-    pie: {      
-      donut: {
-        size: '65%',
-        labels:{
-          show:true,
-          total:{
-            show:true,
-            color:"#000000",
-            formatter: function (w) {
-              return formatCurrency(w.globals.seriesTotals.reduce((a, b) => {
-                return a+b
-              }, 0), "PT-BR", "R$");
-            }
-          },
-          value:{
-             formatter(val) {
-              return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
-            },
-          }
-        }
-      }
-    }    
   }
-}
 
   ngOnInit(): void {
+    this.series = [44.56,56.89,98.25,76.74,98.45,25.25];
+    this.labels = ["Alimentação", 
+                   "Energia Elétrica", 
+                   "Água", 
+                   "Manutenção Predial", 
+                   "Eletrodomésticos", 
+                   "Cursos"];
+    var options = this.Options(this.series, this.labels);
+    var chart = new ApexCharts(document.querySelector("#chart-despesa"), options);
+    chart.render();
+
+    this.series = [5600.85,986.39,1589.41];
+    this.labels = ["Salário", 
+                   "Juros", 
+                   "PLR"];
+    var options = this.Options(this.series, this.labels);
+    var chart = new ApexCharts(document.querySelector("#chart-receita"), options);
+    chart.render();
+
+  }
+
+
+  Options(series:Number[], labels:string[]):any{
+    return {
+      chart: {
+        width: "100%",
+        height: 200,
+        type: "donut"
+      },
+      fill: {
+        type: "gradient"
+      },
+      dataLabels: {
+        enabled: false,
+        style: {
+          fontSize: '12px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 'bold'
+      },
+      },
+      series:series,
+      labels:labels,
+      legend:{
+        position:'right',
+        horizontalAlign:'left'
+      },
+      tooltip: {
+        y: {
+          formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+            return "Teste: " + formatCurrency(Number.parseFloat(value), "PT-BR", "R$")
+          }
+        },
+        /*
+        custom: function({series, seriesIndex, dataPointIndex, w}) {
+          return ('<div class="arrow_box">' +
+                   w.globals.labels[seriesIndex] + ': '+ 
+                  '<span>' + formatCurrency(Number.parseFloat(series[seriesIndex]), "PT-BR", "R$") + 
+                  '</span>' +
+                  '<p>' + 'Percentual: '+ formatPercent(series[seriesIndex]/w.globals.seriesTotals.reduce((a, b) => {
+                    return a+b}, 0), "PT-BR", "1.2-2") +'</p>'+
+                  '</div>');
+              }
+              */
+        
+      },
+      plotOptions: {
+        pie: {   
+          customScale:1,   
+          donut: {
+            size: '50%',
+            labels:{
+              show:true,
+              total:{
+                show:true,
+                showAlways:true,
+                color:"#000000",
+                fontSize: '12px',
+                fontWeight:'bold',
+                formatter: function (w) {
+                  return formatCurrency(w.globals.seriesTotals.reduce((a, b) => {
+                    return a+b
+                  }, 0), "PT-BR", "R$");
+                }
+              },
+              value:{
+                fontSize: '12px',
+                fontWeight:'bold',
+                offsetY: 4,
+                 formatter(val) {
+                  return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
+                },
+              }
+            }
+          }
+        }    
+      }      
+    }
   }
 }

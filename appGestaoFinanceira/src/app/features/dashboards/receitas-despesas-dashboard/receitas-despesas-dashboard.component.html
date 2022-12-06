@@ -1,19 +1,18 @@
-<div style="text-align:center">
-  <!--
-    <apx-chart
-      [series]="chartOptions.series"
-      [chart]="chartOptions.chart"
-      [xaxis]="chartOptions.xaxis"
-      [title]="chartOptions.title"
-      [labels]="labels"
-    ></apx-chart>
-    -->
-    <apx-chart
-    [series]="series"
-    [chart]="chartOptions.chart"
-    [plotOptions] = "plotOptions"
-    [labels]="labels"
-    [legend]="legend"
-    [tooltip]="tooltip"
-  ></apx-chart>
- </div>
+<div class="row justify-content-around">
+    <div class="card col-5">
+      <div class="card-body">
+        <h5 class="card-title">Receitas</h5>
+        <div id="chart">
+          <div id="chart-receita"></div>
+        </div>    
+      </div>
+    </div>
+    <div class="card col-5">
+      <div class="card-body">
+        <h5 class="card-title">Despesas</h5>
+        <div id="chart">
+          <div id="chart-despesa"></div>
+        </div>       
+      </div>
+    </div>
+</div>
