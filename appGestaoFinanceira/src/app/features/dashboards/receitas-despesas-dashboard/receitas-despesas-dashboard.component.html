@@ -1,4 +1,21 @@
-<div class="row justify-content-around">
+<div class="row mb-3">  
+  <div class="col-3" style="padding-left:4.2%;">
+    <p-dropdown [options]="arFechamentosMensais" 
+                      optionLabel="mesAno" 
+                      optionValue="dataReferencia" 
+                      [virtualScroll]="true" 
+                      [(ngModel)]="selectedMesAno"
+                      [itemSize]="3"
+                      [showClear]="false" 
+                      [filter]="false"
+                      (onChange)="onChange(0)"
+                      emptyMessage="Não encontrado"
+                      autoDisplayFirst="true">
+    </p-dropdown>
+  </div>
+</div>
+
+<div class="row justify-content-around">  
     <div class="card col-5">
       <div class="card-body">
         <h5 class="card-title">Receitas</h5>

@@ -12,6 +12,11 @@ import {
   ApexLegend
 } from "ng-apexcharts";
 import * as ApexCharts from 'apexcharts';
+import { FechamentoModel } from '../../lancamentos/_models/fechamento-model';
+import { FechamentoService } from '../../lancamentos/_services/fechamento-service';
+import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
+import { ActivatedRoute } from '@angular/router';
+import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
 
 
 export type ChartOptions = {
@@ -32,11 +37,26 @@ export type ChartOptions = {
 export class ReceitasDespesasDashboardComponent implements OnInit {
   series:Number[];
   labels:string[];
-  constructor() {
+  arMovReal: MovimentacaoRealizada[];
+  arFechamentosMensais:FechamentoModel[];
+  selectedMesAno: string=""; 
+  constructor(protected activatedRoute: ActivatedRoute,
+              protected fechamentoService: FechamentoService,
+              protected movRealizadaService: MovRealizadaService) {
 
   }
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe(
+      (sucess: { resolveFechamento: any[] }) => {
+        this.arFechamentosMensais = sucess.resolveFechamento;        
+      });
+      this.activatedRoute.data.subscribe(
+        (sucess: { resolveMovReal: any[] }) => {
+          this.arMovReal=sucess.resolveMovReal;
+          
+      });
+
     this.series = [44.56,56.89,98.25,76.74,98.45,25.25];
     this.labels = ["Alimentação", 
                    "Energia Elétrica", 
@@ -56,6 +76,11 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     var chart = new ApexCharts(document.querySelector("#chart-receita"), options);
     chart.render();
 
+  }
+
+  onChange(seconds){
+    //this.alteraLayout(seconds);
+    //this.populaTela(new Date(this.fechamentoModel.dataReferencia)); 
   }
 
 
