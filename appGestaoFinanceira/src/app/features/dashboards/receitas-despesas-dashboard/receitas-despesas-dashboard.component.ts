@@ -15,7 +15,6 @@ import * as ApexCharts from 'apexcharts';
 import { FechamentoModel } from '../../lancamentos/_models/fechamento-model';
 import { FechamentoService } from '../../lancamentos/_services/fechamento-service';
 import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
-import { ActivatedRoute } from '@angular/router';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
 
 
@@ -35,47 +34,66 @@ export type ChartOptions = {
   styleUrls: ['./receitas-despesas-dashboard.component.css']
 })
 export class ReceitasDespesasDashboardComponent implements OnInit {
-  series:Number[];
-  labels:string[];
-  arMovReal: MovimentacaoRealizada[];
+  series:Number[] = [];
+  labels:string[] = [];
+  arMovReal: any[];
+  arMovRealReceita: any[];
+  arMovRealDespesa: any[];
   arFechamentosMensais:FechamentoModel[];
   selectedMesAno: string=""; 
-  constructor(protected activatedRoute: ActivatedRoute,
-              protected fechamentoService: FechamentoService,
+  chart: ApexCharts;
+  constructor(protected fechamentoService: FechamentoService,
               protected movRealizadaService: MovRealizadaService) {
+
+    this.fechamentoService.getAll().subscribe(
+      sucess=>{
+          this.arFechamentosMensais = sucess; 
+          this.movRealizadaService.getByDataReferencia().subscribe(
+             sucess=>{
+                         this.arMovReal = this.movRealizadaGroupBy(sucess);
+                         this.renderizarChart(this.arMovReal, "#chart-despesa", "D" ); 
+                         this.renderizarChart(this.arMovReal, "#chart-receita", "R" );          
+                      }
+                    )
+                  }
+                )
 
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(
-      (sucess: { resolveFechamento: any[] }) => {
-        this.arFechamentosMensais = sucess.resolveFechamento;        
-      });
-      this.activatedRoute.data.subscribe(
-        (sucess: { resolveMovReal: any[] }) => {
-          this.arMovReal=sucess.resolveMovReal;
-          
-      });
 
-    this.series = [44.56,56.89,98.25,76.74,98.45,25.25];
-    this.labels = ["Alimentação", 
-                   "Energia Elétrica", 
-                   "Água", 
-                   "Manutenção Predial", 
-                   "Eletrodomésticos", 
-                   "Cursos"];
+  
+  }
+
+  private movRealizadaGroupBy(arr: MovimentacaoRealizada[]):any[]{
+    //agrupando por item de movimentacao..
+    var result = [];
+    arr.reduce(function(acumulador, obj){
+      if (!acumulador[obj.itemMovimentacao.id]){
+          acumulador[obj.itemMovimentacao.id] = {Descricao: obj.itemMovimentacao.descricao, Tipo: obj.itemMovimentacao.tipo, Valor: 0};
+          result.push(acumulador[obj.itemMovimentacao.id]);
+      }
+      acumulador[obj.itemMovimentacao.id].Valor+=obj.valor;      
+      return acumulador;
+    }, []);
+    return result;
+  }
+
+  private renderizarChart(arr:any[], idChart:string, tipo: string){
+    //filtrando por Despesas ou Receitas..
+    var arr_ = arr.filter(x=>x.Tipo==tipo);
+
+    //preenchendo as Series e Labels do chart..
+    debugger;
+    this.labels.length=0;
+    this.series.length=0;
+    arr_.map(x=>{
+      this.labels.push(x.Descricao);
+      this.series.push(x.Valor);
+    });
     var options = this.Options(this.series, this.labels);
-    var chart = new ApexCharts(document.querySelector("#chart-despesa"), options);
+    var chart = new ApexCharts(document.querySelector(idChart), options);
     chart.render();
-
-    this.series = [5600.85,986.39,1589.41];
-    this.labels = ["Salário", 
-                   "Juros", 
-                   "PLR"];
-    var options = this.Options(this.series, this.labels);
-    var chart = new ApexCharts(document.querySelector("#chart-receita"), options);
-    chart.render();
-
   }
 
   onChange(seconds){
@@ -111,21 +129,9 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
       tooltip: {
         y: {
           formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-            return "Teste: " + formatCurrency(Number.parseFloat(value), "PT-BR", "R$")
+            return formatCurrency(Number.parseFloat(value), "PT-BR", "R$")
           }
-        },
-        /*
-        custom: function({series, seriesIndex, dataPointIndex, w}) {
-          return ('<div class="arrow_box">' +
-                   w.globals.labels[seriesIndex] + ': '+ 
-                  '<span>' + formatCurrency(Number.parseFloat(series[seriesIndex]), "PT-BR", "R$") + 
-                  '</span>' +
-                  '<p>' + 'Percentual: '+ formatPercent(series[seriesIndex]/w.globals.seriesTotals.reduce((a, b) => {
-                    return a+b}, 0), "PT-BR", "1.2-2") +'</p>'+
-                  '</div>');
-              }
-              */
-        
+        }        
       },
       plotOptions: {
         pie: {   
