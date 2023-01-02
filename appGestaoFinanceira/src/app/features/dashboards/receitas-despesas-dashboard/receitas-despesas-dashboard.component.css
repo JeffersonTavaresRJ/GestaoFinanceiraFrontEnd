@@ -42,4 +42,8 @@
   #chart .apexcharts-tooltip span {
     padding: 5px 5px;
     display: inline-block;
-  }  
+  } 
+  
+  .chart{
+    width: 48%;
+  }

@@ -1,8 +1,5 @@
-import { formatCurrency, formatPercent } from '@angular/common';
-import { ChartComponent } from "ng-apexcharts";
-import { Component, 
-         OnInit, 
-         ViewChild } from '@angular/core';
+import { formatCurrency} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
   ApexNonAxisChartSeries,
   ApexResponsive,
@@ -34,14 +31,19 @@ export type ChartOptions = {
   styleUrls: ['./receitas-despesas-dashboard.component.css']
 })
 export class ReceitasDespesasDashboardComponent implements OnInit {
-  series:Number[] = [];
-  labels:string[] = [];
-  arMovReal: any[];
+  seriesTipo:Number[] = [];
+  labelsTipo:string[] = [];
+  seriesItem:Number[] = [];
+  labelsItem:string[] = [];
+  arMovReal: MovimentacaoRealizada[]=[];
+  arMovRealTipo: any[]=[];
+  arMovRealItem: any[]=[];
   arMovRealReceita: any[];
   arMovRealDespesa: any[];
   arFechamentosMensais:FechamentoModel[];
-  selectedMesAno: string=""; 
-  chart: ApexCharts;
+  selectedMesAno: string="";   
+  chartTipo: ApexCharts;
+  chartItem: ApexCharts;
   constructor(protected fechamentoService: FechamentoService,
               protected movRealizadaService: MovRealizadaService) {
 
@@ -50,9 +52,9 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
           this.arFechamentosMensais = sucess; 
           this.movRealizadaService.getByDataReferencia().subscribe(
              sucess=>{
-                         this.arMovReal = this.movRealizadaGroupBy(sucess);
-                         this.renderizarChart(this.arMovReal, "#chart-despesa", "D" ); 
-                         this.renderizarChart(this.arMovReal, "#chart-receita", "R" );          
+                         this.arMovReal = sucess;
+                         this.arMovRealTipo = this.movRealPorTipo(this.arMovReal);
+                         this.renderizarChartTipo(this.arMovRealTipo);         
                       }
                     )
                   }
@@ -60,12 +62,23 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
-  
+  private movRealPorTipo(arr: MovimentacaoRealizada[]):any[]{
+    //agrupando por item de movimentacao..
+    var result = [];
+    arr.reduce(function(acumulador, obj){
+      if (!acumulador[obj.itemMovimentacao.tipo]){
+          acumulador[obj.itemMovimentacao.tipo] = {Descricao: obj.itemMovimentacao.tipoDescricao, Tipo: obj.itemMovimentacao.tipo, Valor: 0};
+          result.push(acumulador[obj.itemMovimentacao.tipo]);
+      }
+      acumulador[obj.itemMovimentacao.tipo].Valor+=obj.valor;      
+      return acumulador;
+    }, []);
+    return result;
   }
 
-  private movRealizadaGroupBy(arr: MovimentacaoRealizada[]):any[]{
+  movRealPorItem(arr: MovimentacaoRealizada[]):any[]{
     //agrupando por item de movimentacao..
     var result = [];
     arr.reduce(function(acumulador, obj){
@@ -79,21 +92,47 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     return result;
   }
 
-  private renderizarChart(arr:any[], idChart:string, tipo: string){
-    //filtrando por Despesas ou Receitas..
-    var arr_ = arr.filter(x=>x.Tipo==tipo);
+ 
+  private renderizarChartTipo(arr:any[]){
+    this.labelsTipo.length=0;
+    this.seriesTipo.length=0;    
+    var saldo=null;
 
     //preenchendo as Series e Labels do chart..
-    debugger;
-    this.labels.length=0;
-    this.series.length=0;
-    arr_.map(x=>{
-      this.labels.push(x.Descricao);
-      this.series.push(x.Valor);
+    arr.map(x=>{
+      this.labelsTipo.push(x.Descricao);
+      this.seriesTipo.push(x.Valor);
+      saldo+= x.Tipo=="D"? x.Valor*-1 : x.Valor;
     });
-    var options = this.Options(this.series, this.labels);
-    var chart = new ApexCharts(document.querySelector(idChart), options);
-    chart.render();
+
+    var options = this.options(this.seriesTipo, this.labelsTipo,"chart-tipo", saldo);
+    this.chartTipo = new ApexCharts(document.querySelector("#chart-tipo"), options);
+    this.chartTipo.render();
+  }
+
+  
+
+  private renderizarChartItem(arr:any[], tipo: string){
+    this.labelsItem.length=0;
+    this.seriesItem.length=0;
+
+    arr = arr.filter(x=>x.Tipo==tipo); 
+    
+    //preenchendo as Series e Labels do chart..
+    arr.map(x=>{
+      this.labelsItem.push(x.Descricao);
+      this.seriesItem.push(x.Valor);
+    });
+
+    var options = this.options(this.seriesItem, this.labelsItem, "chart-item");
+
+    if(this.chartItem==null){
+      this.chartItem = new ApexCharts(document.querySelector("#chart-item"), options);
+      this.chartItem.render();   
+    }else{
+      this.chartItem.updateOptions(options); 
+    }
+    
   }
 
   onChange(seconds){
@@ -102,23 +141,40 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   }
 
 
-  Options(series:Number[], labels:string[]):any{
+  options(series:Number[], labels:string[], idChart:string, saldo?:number):any{
     return {
       chart: {
         width: "100%",
         height: 200,
-        type: "donut"
+        type: "donut",
+        id: idChart,
+        events: {
+          //utilizando a referência de uma function "()=>{} para invocar funcitons externos do ApexCharts.."
+          dataPointSelection: (event:any, chartContext:any, config:any) => {            
+            debugger;
+            if (config.w.config.chart.id=="chart-tipo"){
+              //pegando o item (receita==R ou despesa==D) selecionada e criando novo chart...              
+              var tipo = config.w.config.labels[config.dataPointIndex];              
+              this.arMovRealItem = this.movRealPorItem(this.arMovReal);
+              this.renderizarChartItem(this.arMovRealItem, tipo.substring(0,1));
+            }
+          }
+        }
       },
+      colors: idChart =="chart-tipo"? ['#1C86EE', '#A52A2A'] : undefined,
       fill: {
-        type: "gradient"
+        type: 'solid'
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
+        formatter: function (val, opts) {
+          //return Math.round((val+ Number.EPSILON) * 100) / 100 +"%";
+          return Number.parseFloat(val).toFixed(2) +"%";
+        },
         style: {
           fontSize: '12px',
-          fontFamily: 'Helvetica, Arial, sans-serif',
-          fontWeight: 'bold'
-      },
+          fontFamily: 'Arial',
+          fontWeight: 100}
       },
       series:series,
       labels:labels,
@@ -142,14 +198,15 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
               show:true,
               total:{
                 show:true,
+                label:saldo!=null?"Saldo":"Total",
                 showAlways:true,
                 color:"#000000",
                 fontSize: '12px',
                 fontWeight:'bold',
                 formatter: function (w) {
-                  return formatCurrency(w.globals.seriesTotals.reduce((a, b) => {
-                    return a+b
-                  }, 0), "PT-BR", "R$");
+                  var value = saldo!=null? saldo : 
+                              w.globals.seriesTotals.reduce((a, b) => {return a+b},0);
+                  return formatCurrency(value, "PT-BR", "R$");
                 }
               },
               value:{
@@ -163,7 +220,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
             }
           }
         }    
-      }      
+      }   
     }
   }
 }
