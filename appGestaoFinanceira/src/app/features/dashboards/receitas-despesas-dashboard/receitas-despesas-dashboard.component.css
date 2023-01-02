@@ -42,8 +42,14 @@
   #chart .apexcharts-tooltip span {
     padding: 5px 5px;
     display: inline-block;
-  } 
+  }
   
   .chart{
-    width: 48%;
+    width: 50%;
   }
+  
+  .hideChart{
+    position:absolute;
+    left:-1px;
+  };
+  

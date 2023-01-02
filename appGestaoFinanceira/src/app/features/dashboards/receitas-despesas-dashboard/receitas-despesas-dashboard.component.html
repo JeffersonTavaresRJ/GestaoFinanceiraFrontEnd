@@ -1,5 +1,8 @@
-<div class="row mb-3">  
-  <div class="col-3" style="padding-left:4.2%;">
+<div class="row mb-1"> 
+  <div class="col-1" style="padding-top: 1%;">
+    <h6>Mês/Ano:</h6>
+  </div> 
+  <div class="col-3">
     <p-dropdown [options]="arFechamentosMensais" 
                       optionLabel="mesAno" 
                       optionValue="dataReferencia" 
@@ -13,9 +16,27 @@
                       autoDisplayFirst="true">
     </p-dropdown>
   </div>
+  <div class="col-1" style="padding-top: 1%;">
+    <h6>Conta:</h6>
+  </div> 
+  <div class="col-3">
+    <p-dropdown [options]="arContas" 
+                      optionLabel="descricao" 
+                      optionValue="id" 
+                      [virtualScroll]="true" 
+                      [(ngModel)]="idConta"
+                      [itemSize]="3"
+                      [showClear]="true" 
+                      [filter]="false"
+                      (onChange)="onChangeConta()"
+                      emptyMessage="Não encontrado"
+                      placeholder="Todas"
+                      autoDisplayFirst="false">
+    </p-dropdown>
+  </div>
 </div>
-
-<div id="charts" class="row justify-content-around"> 
-  <div id="chart-tipo" class="chart" style="position: relative; z-index: 2;"></div>
-  <div id="chart-item" class="chart" style="position: relative; z-index: 1;"></div>
+<hr>
+<div id="charts" class="row justify-content-around">
+  <div id="chart-tipo" style="width: 50%;"></div>
+  <div id="chart-item" style="width: 50%;" class="hideChart"></div>
 </div>

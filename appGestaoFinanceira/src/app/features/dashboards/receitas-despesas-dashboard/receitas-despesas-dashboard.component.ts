@@ -13,6 +13,9 @@ import { FechamentoModel } from '../../lancamentos/_models/fechamento-model';
 import { FechamentoService } from '../../lancamentos/_services/fechamento-service';
 import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
+import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
+import { Conta } from '../../cadastros-basicos/_models/conta-model';
+import { ContaService } from '../../cadastros-basicos/_services/conta-service';
 
 
 export type ChartOptions = {
@@ -35,21 +38,27 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   labelsTipo:string[] = [];
   seriesItem:Number[] = [];
   labelsItem:string[] = [];
+  arFechamentosMensais:FechamentoModel[];
   arMovReal: MovimentacaoRealizada[]=[];
+  arContas:Conta[]=[];
   arMovRealTipo: any[]=[];
   arMovRealItem: any[]=[];
-  arMovRealReceita: any[];
-  arMovRealDespesa: any[];
-  arFechamentosMensais:FechamentoModel[];
-  selectedMesAno: string="";   
+  selectedMesAno: string=""; 
+  idConta: number;  
   chartTipo: ApexCharts;
   chartItem: ApexCharts;
   constructor(protected fechamentoService: FechamentoService,
-              protected movRealizadaService: MovRealizadaService) {
+              protected movRealizadaService: MovRealizadaService,
+              protected contaService: ContaService) {
 
-    this.fechamentoService.getAll().subscribe(
+      this.fechamentoService.getAll().subscribe(
       sucess=>{
-          this.arFechamentosMensais = sucess; 
+          this.arFechamentosMensais = sucess;
+
+          this.contaService.getAll().subscribe(
+            sucess=> {this.arContas = sucess}
+          );
+
           this.movRealizadaService.getByDataReferencia().subscribe(
              sucess=>{
                          this.arMovReal = sucess;
@@ -64,9 +73,29 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  private movRealPorTipo(arr: MovimentacaoRealizada[]):any[]{
+  onChange(seconds){
+    //this.alteraLayout(seconds);
+    //this.populaTela(new Date(this.fechamentoModel.dataReferencia)); 
+  }
+
+  onChangeConta(){
+    this.visibleChartItem(false);
+    if(this.chartItem!=null){
+      this.chartItem.destroy();
+    }
+    this.arMovRealTipo = this.movRealPorTipo(this.arMovReal, this.idConta);
+    this.renderizarChartTipo(this.arMovRealTipo);
+  }
+
+
+  private movRealPorTipo(arr: MovimentacaoRealizada[], idConta?:number):any[]{
     //agrupando por item de movimentacao..
     var result = [];
+
+    if(idConta>0){
+      arr = arr.filter(x=>x.conta.id==idConta)
+    }
+
     arr.reduce(function(acumulador, obj){
       if (!acumulador[obj.itemMovimentacao.tipo]){
           acumulador[obj.itemMovimentacao.tipo] = {Descricao: obj.itemMovimentacao.tipoDescricao, Tipo: obj.itemMovimentacao.tipo, Valor: 0};
@@ -77,10 +106,16 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     }, []);
     return result;
   }
+  
 
-  movRealPorItem(arr: MovimentacaoRealizada[]):any[]{
+  private movRealPorItem(arr: MovimentacaoRealizada[], idConta?:number):any[]{
     //agrupando por item de movimentacao..
     var result = [];
+
+    if(idConta>0){
+      arr = arr.filter(x=>x.conta.id==idConta)
+    }
+
     arr.reduce(function(acumulador, obj){
       if (!acumulador[obj.itemMovimentacao.id]){
           acumulador[obj.itemMovimentacao.id] = {Descricao: obj.itemMovimentacao.descricao, Tipo: obj.itemMovimentacao.tipo, Valor: 0};
@@ -105,14 +140,15 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
       saldo+= x.Tipo=="D"? x.Valor*-1 : x.Valor;
     });
 
-    var options = this.options(this.seriesTipo, this.labelsTipo,"chart-tipo", saldo);
+    var options = this.options(this.seriesTipo, this.labelsTipo,"chart-tipo", "Geral", saldo);
     this.chartTipo = new ApexCharts(document.querySelector("#chart-tipo"), options);
     this.chartTipo.render();
+    this.chartTipo.updateOptions(options);
   }
 
   
 
-  private renderizarChartItem(arr:any[], tipo: string){
+  private renderizarChartItem(arr:any[], tipo: string, descricaoTipo:string){
     this.labelsItem.length=0;
     this.seriesItem.length=0;
 
@@ -124,39 +160,41 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
       this.seriesItem.push(x.Valor);
     });
 
-    var options = this.options(this.seriesItem, this.labelsItem, "chart-item");
+    this.visibleChartItem(true);
 
-    if(this.chartItem==null){
-      this.chartItem = new ApexCharts(document.querySelector("#chart-item"), options);
-      this.chartItem.render();   
-    }else{
-      this.chartItem.updateOptions(options); 
+    var options = this.options(this.seriesItem, this.labelsItem, "chart-item", descricaoTipo);
+
+    if(this.chartItem!=null){
+      this.chartItem.destroy();
     }
+    this.chartItem = new ApexCharts(document.querySelector("#chart-item"), options);
+    this.chartItem.render();   
     
   }
 
-  onChange(seconds){
-    //this.alteraLayout(seconds);
-    //this.populaTela(new Date(this.fechamentoModel.dataReferencia)); 
+  private visibleChartItem(status:boolean){
+    var divItem = document.querySelector('#chart-item');
+    divItem.removeAttribute("class");
+    if(!status){
+      divItem.classList.add("hideChart");
+    }
   }
 
-
-  options(series:Number[], labels:string[], idChart:string, saldo?:number):any{
+  private options(series:Number[], labels:string[], idChart:string, titulo:string, saldo?:number):any{
     return {
       chart: {
         width: "100%",
-        height: 200,
+        height:"300",
         type: "donut",
         id: idChart,
         events: {
-          //utilizando a referência de uma function "()=>{} para invocar funcitons externos do ApexCharts.."
+          //utilizando a referência de uma function "()=>{} para invocar functions externos.."
           dataPointSelection: (event:any, chartContext:any, config:any) => {            
             debugger;
-            if (config.w.config.chart.id=="chart-tipo"){
-              //pegando o item (receita==R ou despesa==D) selecionada e criando novo chart...              
+            if (config.w.config.chart.id=="chart-tipo"){                           
               var tipo = config.w.config.labels[config.dataPointIndex];              
-              this.arMovRealItem = this.movRealPorItem(this.arMovReal);
-              this.renderizarChartItem(this.arMovRealItem, tipo.substring(0,1));
+              this.arMovRealItem = this.movRealPorItem(this.arMovReal, this.idConta);
+              this.renderizarChartItem(this.arMovRealItem, tipo.substring(0,1), tipo);
             }
           }
         }
@@ -198,7 +236,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
               show:true,
               total:{
                 show:true,
-                label:saldo!=null?"Saldo":"Total",
+                label:saldo!=null?"Saldo Geral":"Total "+titulo,
                 showAlways:true,
                 color:"#000000",
                 fontSize: '12px',
