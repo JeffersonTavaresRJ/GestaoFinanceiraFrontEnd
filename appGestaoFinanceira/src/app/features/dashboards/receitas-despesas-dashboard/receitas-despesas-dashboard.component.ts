@@ -13,7 +13,6 @@ import { FechamentoModel } from '../../lancamentos/_models/fechamento-model';
 import { FechamentoService } from '../../lancamentos/_services/fechamento-service';
 import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
-import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { ContaService } from '../../cadastros-basicos/_services/conta-service';
 
@@ -44,7 +43,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   arMovRealTipo: any[]=[];
   arMovRealItem: any[]=[];
   selectedMesAno: string=""; 
-  idConta: number;  
+  idConta: number;
   chartTipo: ApexCharts;
   chartItem: ApexCharts;
   constructor(protected fechamentoService: FechamentoService,
@@ -54,7 +53,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
       this.fechamentoService.getAll().subscribe(
       sucess=>{
           this.arFechamentosMensais = sucess;
-
+          
           this.contaService.getAll().subscribe(
             sucess=> {this.arContas = sucess}
           );
@@ -73,9 +72,21 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onChange(seconds){
-    //this.alteraLayout(seconds);
-    //this.populaTela(new Date(this.fechamentoModel.dataReferencia)); 
+  onChangeFechamento(){    
+    this.movRealizadaService.getByDataReferencia(null, this.selectedMesAno).subscribe(
+      success=>{
+        this.arMovReal = success;
+
+        this.visibleChartItem(false);
+        if(this.chartItem!=null){
+             this.chartItem.destroy();
+        }
+        
+        this.arMovRealTipo = this.movRealPorTipo(this.arMovReal, this.idConta);
+        this.renderizarChartTipo(this.arMovRealTipo);
+      }
+    )
+    
   }
 
   onChangeConta(){
@@ -86,7 +97,6 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     this.arMovRealTipo = this.movRealPorTipo(this.arMovReal, this.idConta);
     this.renderizarChartTipo(this.arMovRealTipo);
   }
-
 
   private movRealPorTipo(arr: MovimentacaoRealizada[], idConta?:number):any[]{
     //agrupando por item de movimentacao..
@@ -107,7 +117,6 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     return result;
   }
   
-
   private movRealPorItem(arr: MovimentacaoRealizada[], idConta?:number):any[]{
     //agrupando por item de movimentacao..
     var result = [];
@@ -126,7 +135,6 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     }, []);
     return result;
   }
-
  
   private renderizarChartTipo(arr:any[]){
     this.labelsTipo.length=0;
@@ -140,13 +148,11 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
       saldo+= x.Tipo=="D"? x.Valor*-1 : x.Valor;
     });
 
-    var options = this.options(this.seriesTipo, this.labelsTipo,"chart-tipo", "Geral", saldo);
+    var options = this.options(this.seriesTipo, this.labelsTipo,"chart-tipo", " da Conta", saldo);
     this.chartTipo = new ApexCharts(document.querySelector("#chart-tipo"), options);
     this.chartTipo.render();
     this.chartTipo.updateOptions(options);
   }
-
-  
 
   private renderizarChartItem(arr:any[], tipo: string, descricaoTipo:string){
     this.labelsItem.length=0;
@@ -236,7 +242,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
               show:true,
               total:{
                 show:true,
-                label:saldo!=null?"Saldo Geral":"Total "+titulo,
+                label:saldo!=null?"Saldo "+titulo:"Total "+titulo,
                 showAlways:true,
                 color:"#000000",
                 fontSize: '12px',

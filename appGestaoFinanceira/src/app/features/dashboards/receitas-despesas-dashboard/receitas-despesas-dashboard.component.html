@@ -6,12 +6,11 @@
     <p-dropdown [options]="arFechamentosMensais" 
                       optionLabel="mesAno" 
                       optionValue="dataReferencia" 
-                      [virtualScroll]="true" 
+                      [virtualScroll]="arFechamentosMensais.length >=5" 
                       [(ngModel)]="selectedMesAno"
-                      [itemSize]="3"
                       [showClear]="false" 
                       [filter]="false"
-                      (onChange)="onChange(0)"
+                      (onChange)="onChangeFechamento()"
                       emptyMessage="Não encontrado"
                       autoDisplayFirst="true">
     </p-dropdown>
@@ -19,13 +18,13 @@
   <div class="col-1" style="padding-top: 1%;">
     <h6>Conta:</h6>
   </div> 
-  <div class="col-3">
-    <p-dropdown [options]="arContas" 
+  <div class="p-fluid col-3">
+    <p-dropdown       [options]="arContas" 
+                      inputId="drpdConta"
                       optionLabel="descricao" 
                       optionValue="id" 
-                      [virtualScroll]="true" 
+                      [virtualScroll]="arContas.length >=5" 
                       [(ngModel)]="idConta"
-                      [itemSize]="3"
                       [showClear]="true" 
                       [filter]="false"
                       (onChange)="onChangeConta()"
@@ -39,4 +38,7 @@
 <div id="charts" class="row justify-content-around">
   <div id="chart-tipo" style="width: 50%;"></div>
   <div id="chart-item" style="width: 50%;" class="hideChart"></div>
+  <div *ngIf="arMovReal.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">
+        <strong>Dados não encontrados</strong>
+  </div>                
 </div>

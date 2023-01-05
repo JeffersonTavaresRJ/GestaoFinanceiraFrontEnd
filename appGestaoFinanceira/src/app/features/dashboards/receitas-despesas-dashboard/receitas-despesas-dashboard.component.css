@@ -1,3 +1,8 @@
+.hideChart{
+  position:absolute;
+  left:-1px;
+}
+/*
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 
 * {
@@ -32,6 +37,7 @@
     border-width: 13px;
     margin-top: -13px;
   }
+
   #chart .apexcharts-tooltip {
     color: #fff;
     transform: translateX(10px) translateY(10px);
@@ -43,13 +49,5 @@
     padding: 5px 5px;
     display: inline-block;
   }
-  
-  .chart{
-    width: 50%;
-  }
-  
-  .hideChart{
-    position:absolute;
-    left:-1px;
-  };
+  */ 
   
