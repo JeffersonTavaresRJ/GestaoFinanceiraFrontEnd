@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BSHttpLoading } from './core/services/bs-http-loading';
 import { PrimeNGConfig } from 'primeng/api';
@@ -15,16 +15,16 @@ export class AppComponent{
   constructor(private bsHttpLoading: BSHttpLoading,
     private spinner: NgxSpinnerService,
     private config: PrimeNGConfig) {
-
-    this.bsHttpLoading.getLoading().subscribe(
+    this.bsHttpLoading.getLoading().subscribe(      
       value => {
         if (value) {
           this.spinner.show();
         } else {
-          setTimeout(() => {
-            /** spinner ends after 1 seconds */
+          this.spinner.hide();
+          /*setTimeout(() => {
+            spinner ends after 1 seconds 
             this.spinner.hide();
-          }, 200);
+          }, 100);*/
         }
       }
     );

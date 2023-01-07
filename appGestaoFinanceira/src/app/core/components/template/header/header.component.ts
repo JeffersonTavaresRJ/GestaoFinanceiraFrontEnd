@@ -24,8 +24,7 @@ export class HeaderComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private bsAutenticarUsuario: BSAutenticarUsuario,
     private bsUpdateUsuario: BSUpdateUsuario,
-    private router: Router,
-    private fechamentoService: FechamentoService) {
+    private router: Router) {
      }
 
   usuarioAutenticado: boolean = false;

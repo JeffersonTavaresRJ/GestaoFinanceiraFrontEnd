@@ -29,7 +29,7 @@
                     <div class="col-12" id="dvSaldo">
                         <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong><br>
                         <span *ngIf="f==false">Saldo: {{item.valor | currency}}</span>
-                        <strong *ngIf="f==true"> Saldo no mês: {{item.valor | currency}}</strong>
+                        <strong *ngIf="f==true"> Saldo mensal de movimentações: {{item.valor | currency}}</strong>
                     </div>
                 </div>
                 <div class="row" id="dvRow" *ngFor="let movRealizada of item.movimentacoesRealizadas;">

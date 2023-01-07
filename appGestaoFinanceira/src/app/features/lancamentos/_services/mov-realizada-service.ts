@@ -18,9 +18,11 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     MovimentacaoRealizadaCommandDelete.convertFormGroupToCommand); 
   }
 
-  getByDataReferencia(idItemMovimentacao: number, dataReferencia: string): Observable<MovimentacaoRealizada[]> {
+  getByDataReferencia(idItemMovimentacao?: number, dataReferencia?: string): Observable<MovimentacaoRealizada[]> {
     this.setApiOption('/GetByDataReferencia');
-    return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`);
+    var _idItemMovimentacao = idItemMovimentacao!=null || idItemMovimentacao != undefined ? idItemMovimentacao.toString() : ' ';
+    var _dataReferencia = dataReferencia!=null || dataReferencia != undefined ? dataReferencia.toString() : ' ';
+    return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${_idItemMovimentacao}/${_dataReferencia}`);
   }
 
   GetGroupBySaldoDiario(dataMovRealIni: string, dataMovRealFim: string): Observable<any[]> {
