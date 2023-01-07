@@ -10,11 +10,10 @@ import {
 } from "ng-apexcharts";
 import * as ApexCharts from 'apexcharts';
 import { FechamentoModel } from '../../lancamentos/_models/fechamento-model';
-import { FechamentoService } from '../../lancamentos/_services/fechamento-service';
 import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
-import { ContaService } from '../../cadastros-basicos/_services/conta-service';
+import { ActivatedRoute } from '@angular/router';
 
 
 export type ChartOptions = {
@@ -46,31 +45,35 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   idConta: number;
   chartTipo: ApexCharts;
   chartItem: ApexCharts;
-  constructor(protected fechamentoService: FechamentoService,
-              protected movRealizadaService: MovRealizadaService,
-              protected contaService: ContaService) {
+  constructor(private actResourceRoute: ActivatedRoute,
+              protected movRealizadaService: MovRealizadaService
+              ) {
 
-      this.fechamentoService.getAll().subscribe(
-      sucess=>{
-          this.arFechamentosMensais = sucess;
-          
-          this.contaService.getAll().subscribe(
-            sucess=> {this.arContas = sucess}
-          );
-
-          this.movRealizadaService.getByDataReferencia().subscribe(
-             sucess=>{
-                         this.arMovReal = sucess;
-                         this.arMovRealTipo = this.movRealPorTipo(this.arMovReal);
-                         this.renderizarChartTipo(this.arMovRealTipo);         
-                      }
-                    )
+                this.actResourceRoute.data.subscribe(
+                  (sucess: { resolveFechamento: FechamentoModel[] }) => {
+                             this.arFechamentosMensais = sucess.resolveFechamento;  
                   }
-                )
+                );
+            
+                this.actResourceRoute.data.subscribe(
+                  (sucess: { resolveConta: Conta[] }) => {
+                             this.arContas = sucess.resolveConta;  
+                  }
+                );
+            
+                this.actResourceRoute.data.subscribe(
+                  (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
+                             this.arMovReal = sucess.resolveMovReal;
+                             this.arMovRealTipo = this.movRealPorTipo(this.arMovReal);
+                                    
+                  }
+                );
 
+              }
+
+  ngOnInit(): void {
+    this.renderizarChartTipo(this.arMovRealTipo); 
   }
-
-  ngOnInit(): void {}
 
   onChangeFechamento(){    
     this.movRealizadaService.getByDataReferencia(null, this.selectedMesAno).subscribe(
@@ -242,7 +245,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
               show:true,
               total:{
                 show:true,
-                label:saldo!=null?"Saldo "+titulo:"Total "+titulo,
+                label: saldo!=null? "Saldo Balanço Mensal":"Total "+titulo,
                 showAlways:true,
                 color:"#000000",
                 fontSize: '12px',
@@ -256,6 +259,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
               value:{
                 fontSize: '12px',
                 fontWeight:'bold',
+                color: saldo<0 ? '#FF0000': '#000000',
                 offsetY: 4,
                  formatter(val) {
                   return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
