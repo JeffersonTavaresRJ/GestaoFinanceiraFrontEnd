@@ -35,10 +35,10 @@
   </div>
 </div>
 <hr>
+<div *ngIf="arMovRealTipo.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">
+  <strong>Dados não encontrados</strong>
+</div>                
 <div id="charts" class="row justify-content-around">
   <div id="chart-tipo" style="width: 50%;"></div>
-  <div id="chart-item" style="width: 50%;" class="hideChart"></div>
-  <div *ngIf="arMovReal.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">
-        <strong>Dados não encontrados</strong>
-  </div>                
+  <div id="chart-item" style="width: 50%;" class="hideChart"></div>  
 </div>
