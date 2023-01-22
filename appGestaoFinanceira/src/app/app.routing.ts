@@ -44,6 +44,8 @@ import { MovPrevistaQuitarResolver } from './features/lancamentos/_guards/mov-pr
 import { MovRealizadaGroupByContaResolver } from './features/lancamentos/_guards/mov-realizada-gb-conta-resolver';
 import { FechamentoListResolver } from './features/lancamentos/_guards/fechamento-list-resolver';
 import { MovRealizadaListDataRefResolver } from './features/lancamentos/_guards/mov-realizada-list-data-ref-resolver';
+import { ReceitasDespesasAnualDashboardComponent } from './features/dashboards/receitas-despesas-anual-dashboard/receitas-despesas-anual-dashboard.component';
+import { MovRealizadaListAnualResolver } from './features/dashboards/_guards/mov-realizada-list-anual-resolver';
 
 //criando o mapeamento de rotas dos componentes
 
@@ -150,6 +152,13 @@ const routes: Routes = [
               resolveConta: ContaListResolver,
               resolveMovReal: MovRealizadaListDataRefResolver}
     },
+
+    //================================================================================================
+    { path: 'receitas-despesas-anual-dashboard/:dataIni/:dataFim', component: ReceitasDespesasAnualDashboardComponent,
+     canActivate:[AuthGuard],
+     resolve:{resolveMovPrev: MovPrevistaListResolver,
+              resolveMovReal: MovRealizadaListAnualResolver}
+    },
     //=================================================================================================
     { path: '**', component: Error404Component}
 ];
@@ -173,7 +182,8 @@ const routes: Routes = [
                MovPrevistaQuitarResolver,
                FechamentoListResolver,
                MovRealizadaGroupByContaResolver,
-               MovRealizadaListDataRefResolver]
+               MovRealizadaListDataRefResolver,
+               MovRealizadaListAnualResolver]
 })
 
 export class AppRoutingModule { }

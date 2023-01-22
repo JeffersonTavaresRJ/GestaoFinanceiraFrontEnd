@@ -4,11 +4,13 @@ import { ReceitasDespesasDashboardComponent } from './receitas-despesas-dashboar
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReceitasDespesasAnualDashboardComponent } from './receitas-despesas-anual-dashboard/receitas-despesas-anual-dashboard.component';
 
 
 @NgModule({
   declarations: [
-    ReceitasDespesasDashboardComponent
+    ReceitasDespesasDashboardComponent,
+    ReceitasDespesasAnualDashboardComponent
   ],
   imports: [
     CommonModule,
