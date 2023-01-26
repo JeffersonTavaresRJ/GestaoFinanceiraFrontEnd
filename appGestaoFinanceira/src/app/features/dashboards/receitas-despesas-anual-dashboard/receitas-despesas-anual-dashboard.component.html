@@ -1,12 +1,17 @@
-<div class="row mb-1"> 
-    <div class="col-12" style="padding-top: 1%;">
-      <h6>Movimentações dos últimos 12 meses</h6>
+<div class="row justify-content-around mb-1"> 
+    <div class="col-4" style="padding-top: 1%;">
+      <h6>Movimentações Previstas x Realizadas</h6>
     </div> 
+    <div class="field col-3">
+        <label for="monthpicker" style="margin-right:5px;">Mês/Ano:</label>
+        <p-calendar [(ngModel)]="mesAno" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" (onSelect)="onSelected()"></p-calendar>
+    </div>
 </div>
 <hr>
 <div *ngIf="arMovPrev.length==0 && arMovReal.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">
     <strong>Dados não encontrados</strong>
 </div>                
-<div id="charts" class="row justify-content-around">
-    <div id="chart-anual" style="width: 100%;"></div>
+<div class="row justify-content-around">
+    <div id="chart" style="width: 100%;" class="hideChart"></div>    
 </div>
+{{arMovPrev.length}},  {{arMovReal.length}}

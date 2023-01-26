@@ -5,6 +5,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReceitasDespesasAnualDashboardComponent } from './receitas-despesas-anual-dashboard/receitas-despesas-anual-dashboard.component';
+import { CalendarModule } from 'primeng/calendar';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { ReceitasDespesasAnualDashboardComponent } from './receitas-despesas-anu
     NgApexchartsModule,
     DropdownModule,
     FormsModule,
+    CalendarModule,
     ReactiveFormsModule
   ]
 })

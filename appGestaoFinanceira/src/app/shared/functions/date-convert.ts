@@ -45,7 +45,7 @@ export class DateConvert{
 
     static stringToDate(date:string, separador:string):Date{
       var arrData = date.split(separador);
-      return new Date(arrData[1] + '-' + arrData[0] + '-' + arrData[2]);             
+      return new Date(arrData[0] + '-' + arrData[1] + '-' + arrData[2]);             
     }   
    
 }

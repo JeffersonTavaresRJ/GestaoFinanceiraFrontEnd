@@ -1,9 +1,11 @@
-<div class="row mb-1"> 
-  <div class="col-1" style="padding-top: 1%;">
-    <h6>Mês/Ano:</h6>
+<div class="row justify-content-around mb-1"> 
+  <div class="col-4" style="padding-top: 1%;">
+    <h6>Despesas x Receitas</h6>
   </div> 
-  <div class="col-3">
-    <p-dropdown [options]="arFechamentosMensais" 
+  <div class="field col-4">
+      <label for="drpdMesAno">Mês/Ano:</label>
+      <p-dropdown [options]="arFechamentosMensais" 
+                      inputId="drpdMesAno"
                       optionLabel="mesAno" 
                       optionValue="dataReferencia" 
                       [virtualScroll]="arFechamentosMensais.length >=5" 
@@ -13,12 +15,10 @@
                       (onChange)="onChangeFechamento()"
                       emptyMessage="Não encontrado"
                       autoDisplayFirst="true">
-    </p-dropdown>
+       </p-dropdown>
   </div>
-  <div class="col-1" style="padding-top: 1%;">
-    <h6>Conta:</h6>
-  </div> 
-  <div class="p-fluid col-3">
+  <div class="field col-4">
+    <label for="drpdConta">Conta:</label>
     <p-dropdown       [options]="arContas" 
                       inputId="drpdConta"
                       optionLabel="descricao" 
@@ -30,9 +30,10 @@
                       (onChange)="onChangeConta()"
                       emptyMessage="Não encontrado"
                       placeholder="Todas"
+                      styleClass="p-conta"
                       autoDisplayFirst="false">
     </p-dropdown>
-  </div>
+  </div> 
 </div>
 <hr>
 <div *ngIf="arMovRealTipo.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">
