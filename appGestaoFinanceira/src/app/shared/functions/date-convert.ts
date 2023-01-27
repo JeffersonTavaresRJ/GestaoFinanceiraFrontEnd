@@ -29,7 +29,7 @@ export class DateConvert{
     }
 
     static formatDateMMYYYY(date, separador):string {
-        debugger;
+        //debugger;
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
@@ -43,9 +43,10 @@ export class DateConvert{
         return [month, year].join(separador);
     }
 
-    static stringToDate(date:string, separador:string):Date{
+    static stringToDate(date:string, separador:string):Date{    
       var arrData = date.split(separador);
-      return new Date(arrData[0] + '-' + arrData[1] + '-' + arrData[2]);             
+      //console.log('montagem data: '+arrData[0] + '-' + arrData[1] + '-' + arrData[2]);
+      return new Date(Number.parseInt(arrData[0]), Number.parseInt(arrData[1])-1, Number.parseInt(arrData[2]));             
     }   
    
 }

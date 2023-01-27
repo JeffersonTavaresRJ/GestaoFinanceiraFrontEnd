@@ -4,7 +4,7 @@
     </div> 
     <div class="field col-3">
         <label for="monthpicker" style="margin-right:5px;">Mês/Ano:</label>
-        <p-calendar [(ngModel)]="mesAno" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" (onSelect)="onSelected()"></p-calendar>
+        <p-calendar [(ngModel)]="dataFim" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" (onSelect)="populate()"></p-calendar>
     </div>
 </div>
 <hr>
@@ -14,4 +14,3 @@
 <div class="row justify-content-around">
     <div id="chart" style="width: 100%;" class="hideChart"></div>    
 </div>
-{{arMovPrev.length}},  {{arMovReal.length}}
