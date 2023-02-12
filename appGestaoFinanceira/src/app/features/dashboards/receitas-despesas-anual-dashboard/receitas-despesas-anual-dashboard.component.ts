@@ -24,6 +24,7 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
   dataIni:Date;
   dataFim:Date;
   mesAno:string;
+  isRenderChart: boolean;
   chart:ApexCharts;
   arDadosChart:DadosChartSintet[]=[];
   arEstimativa:Number[]=[];
@@ -54,14 +55,13 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
     this.montarArrayPeriodo(this.dataFim);
-    this.renderizarChart(this.arMovPrev, this.arMovReal);    
+    this.renderizarChart(this.arMovPrev, this.arMovReal);
   }
-
  
   populate(){
-    debugger;
     this.arMovPrev.length=0;
-    this.arMovReal.length=0;   
+    this.arMovReal.length=0;    
+  
 
     this.montarArrayPeriodo(new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()+1, 0));
 
@@ -70,7 +70,7 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
 
     this.movPrevistaService.getByDataVencimento(dataIni, dataFim).subscribe(
       (success:MovimentacaoPrevista[])=>{
-        this.arMovPrev = success;
+        this.arMovPrev = success;        
 
         this.movRealizadaService.GetByDataMovimentacaoRealizada(dataIni, dataFim).subscribe(
           (success:MovimentacaoRealizada[])=>{
@@ -90,81 +90,38 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
          var dados: DadosChartSintet={Data:DateConvert.formatDateMMYYYY(data,'/'), Estimativa:0, Receita:0, Despesa:0};
          this.arDadosChart.push(dados);
     }
-  }
-
-  private agruparPorMes(arr:Movimentacao[], tipo:string):DadosChartAnalit[]{
-    //debugger;
-    var result:DadosChartAnalit[]=[];
-
-    arr.reduce(function(acumulador, obj){
-      if (!acumulador[DateConvert.formatDateYYYYMMDD(obj.dataReferencia, '-')] && tipo == obj.itemMovimentacao.tipo){
-          
-        var row:DadosChartAnalit = {Data: DateConvert.formatDateMMYYYY(obj.dataReferencia,'/'), Tipo: obj.itemMovimentacao.tipo, TipoDescricao: obj.itemMovimentacao.tipoDescricao, Valor: 0}
-        acumulador[DateConvert.formatDateYYYYMMDD(obj.dataReferencia, '-')]=row;
-
-        result.push(acumulador[DateConvert.formatDateYYYYMMDD(obj.dataReferencia, '-')]);
-
-      }
-
-      if(tipo == obj.itemMovimentacao.tipo){
-         acumulador[DateConvert.formatDateYYYYMMDD(obj.dataReferencia, '-')].Valor+=obj.valor;      
-      }
-      
-      return acumulador;
-    }, []);
-    return result;
-  }
-
-  private visibleChartItem(status:boolean){
-    var divItem = document.querySelector('#chart');
-    divItem.removeAttribute("class");
-    if(!status){
-      divItem.classList.add("hideChart");
-    }
-  }
+  }  
 
   private renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
-    debugger;
+    //debugger;
 
-    if(this.chart!=null){
-      this.chart.destroy();
+    if(this.chart!=null){      
+      this.chart.destroy();   
     }
 
-    this.visibleChartItem(false);
-
-    if(arMovPrevista.length==0 || arMovRealizada.length==0 ){      
+    if(arMovPrevista.length==0 || arMovRealizada.length==0 ){ 
+      this.isRenderChart =false;     
       return false;
     }
 
+    this.isRenderChart =true;
     this.arMesAno.length=0;
     this.arEstimativa.length=0;
     this.arDespesas.length=0;
     this.arReceitas.length=0;
 
-    //estimativa..
-    var array = this.agruparPorMes(arMovPrevista, "D");
-    array.forEach(e=>{
-      this.arDadosChart.forEach(d=>{
-        d.Estimativa = d.Data==e.Data? e.Valor:0        
-      })
-    });
+    var arMovPrev = this.agruparPorMes(arMovPrevista);
+    var arMovReal = this.agruparPorMes(arMovRealizada);
 
-    //despesas..
-    array.length=0;
-    array = this.agruparPorMes(arMovRealizada, "D");
-    array.forEach(e=>{
-      this.arDadosChart.forEach(d=>{
-        d.Despesa = d.Data==e.Data? e.Valor:0 
-      })
-    });
-
-    //receitas..
-    array.length=0;
-    array = this.agruparPorMes(arMovRealizada, "R");
-    array.forEach(e=>{
-      this.arDadosChart.forEach(d=>{
-          d.Receita = d.Data==e.Data? e.Valor:0 
-      })
+    this.arDadosChart = this.arDadosChart.map((e)=>{
+       arMovPrev.forEach(p=>{
+          e.Estimativa = e.Data == p.Data && p.Tipo=="D"? p.Valor:e.Estimativa;                 
+       })
+       arMovReal.forEach(p=>{
+          e.Despesa = e.Data == p.Data && p.Tipo=="D"? p.Valor:e.Despesa;
+          e.Receita = e.Data == p.Data && p.Tipo=="R"? p.Valor:e.Receita;        
+       })
+       return e;
     });
 
     this.arDadosChart.forEach(d=>{
@@ -244,9 +201,39 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
     };  
 
     this.visibleChartItem(true);    
-    
     this.chart = new ApexCharts(document.querySelector("#chart"), options);
     this.chart.render();
+  }
+
+  private agruparPorMes(arr:Movimentacao[]):DadosChartAnalit[]{
+    //debugger;
+    var result:DadosChartAnalit[]=[];
+    
+    arr.reduce(function(acumulador, obj){
+      //a chave do array do acumulador é a dataReferencia + tipo..
+      var idx = DateConvert.formatDateYYYYMMDD(obj.dataReferencia, '-')+' - '+obj.itemMovimentacao.tipo;
+
+      if (!acumulador[idx]){          
+        var row:DadosChartAnalit = {Data: DateConvert.formatDateMMYYYY(obj.dataReferencia,'/'), 
+                                    Tipo: obj.itemMovimentacao.tipo, 
+                                    TipoDescricao: obj.itemMovimentacao.tipoDescricao, 
+                                    Valor: 0}
+        acumulador[idx]=row;
+        result.push(acumulador[idx]);
+      }
+      acumulador[idx].Valor+=obj.valor;
+      
+      return acumulador;
+    }, []);
+    return result;
+  }
+
+  private visibleChartItem(status:boolean){
+    var divItem = document.querySelector('#chart');
+    divItem.removeAttribute("class");
+    if(!status){
+      divItem.classList.add("hideChart");
+    }
   }
 
 }
