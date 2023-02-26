@@ -48,3 +48,6 @@ Package                         Version
 @schematics/angular             12.2.17
 rxjs                            6.6.7
 typescript                      4.3.5
+
+##Criação de components:
+ng g c features/dashboards/receitas-despesas-anual-dashboard

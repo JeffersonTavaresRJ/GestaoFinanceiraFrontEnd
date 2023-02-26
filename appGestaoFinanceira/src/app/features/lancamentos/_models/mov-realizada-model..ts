@@ -12,7 +12,6 @@ export class MovimentacaoRealizada extends Movimentacao{
     public tipoPrioridade: string = null,
     public tipoPrioridadeDescricao: string = null,
     public observacao: string = null,
-    public valor: number=null
    ){
      super();     
    }

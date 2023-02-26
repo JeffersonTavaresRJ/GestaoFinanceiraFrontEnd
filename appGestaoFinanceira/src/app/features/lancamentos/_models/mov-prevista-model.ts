@@ -10,7 +10,6 @@ export class MovimentacaoPrevista extends Movimentacao{
      public formaPagamento: FormaPagamento = new FormaPagamento(),
      public idFormaPagamento: number=null,
      public dataVencimento: Date=null,
-     public valor: number=null,
      public movPrevistaStatus: string=null,
      public movPrevistaStatusDescricao: string=null,
      public tipoRecorrencia: string=null,

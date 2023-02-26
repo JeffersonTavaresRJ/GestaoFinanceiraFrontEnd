@@ -1,0 +1,22 @@
+:host ::ng-deep .p-calendar {
+    width: 150px !important;
+}
+
+:host ::ng-deep .p-inputtext {
+    font-size: small !important;
+    text-align:center !important;
+}
+
+:host ::ng-deep .p-datepicker .p-datepicker-header {
+    font-size: small;
+}
+
+:host ::ng-deep .p-datepicker-group-container {
+    font-size: small !important
+    
+}
+
+.hideChart{
+    position:absolute;
+    left:-1px;
+  }

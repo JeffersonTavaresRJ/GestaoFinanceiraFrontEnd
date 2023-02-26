@@ -46,6 +46,17 @@
             <li><a class="dropdown-item" routerLink="fechamento">Fechamento Mensal</a></li>             
           </ul>
         </li>
+        <li class="nav-item dropdown" [hidden]="!usuarioAutenticado">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Dashboards
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" routerLink="receitas-despesas-dashboard">Receitas x Despesas</a></li>
+            <li><a class="dropdown-item" [routerLink]="['receitas-despesas-anual-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
+              Movimentações Previstas x Realizadas</a></li>
+          </ul>
+        </li>
       </ul>
 
       <ul class="my-1">
@@ -66,6 +77,7 @@
     </div>
   </div>
 </nav>
+
 
 <app-modal-interrogative-form 
   [modal-interrogative-id]="'modalLogout'"

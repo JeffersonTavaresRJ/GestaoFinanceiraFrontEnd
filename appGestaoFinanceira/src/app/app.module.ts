@@ -26,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
 
+
 const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
 
 @NgModule({
