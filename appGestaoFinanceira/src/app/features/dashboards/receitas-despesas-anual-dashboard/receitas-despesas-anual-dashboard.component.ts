@@ -1,3 +1,4 @@
+import { formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
@@ -24,6 +25,7 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
   dataIni:Date;
   dataFim:Date;
   mesAno:string;
+  tipoEstimativa:string="D";
   isRenderChart: boolean;
   chart:ApexCharts;
   arDadosChart:DadosChartSintet[]=[];
@@ -92,8 +94,8 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
     }
   }  
 
-  private renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
-    //debugger;
+  renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
+    debugger;
 
     if(this.chart!=null){      
       this.chart.destroy();   
@@ -115,7 +117,7 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
 
     this.arDadosChart = this.arDadosChart.map((e)=>{
        arMovPrev.forEach(p=>{
-          e.Estimativa = e.Data == p.Data && p.Tipo=="D"? p.Valor:e.Estimativa;                 
+          e.Estimativa = e.Data == p.Data && p.Tipo==this.tipoEstimativa? p.Valor:e.Estimativa;                 
        })
        arMovReal.forEach(p=>{
           e.Despesa = e.Data == p.Data && p.Tipo=="D"? p.Valor:e.Despesa;
@@ -173,6 +175,7 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
       }
     },
     labels: this.arMesAno,
+    colors: ['#A52A2A', '#1C86EE', '#DEB887'],
     markers: {
       size: 0
     },
@@ -181,7 +184,10 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
     },
     yaxis: {
       title: {
-        text: 'Valor (R$)',
+        text: 'Valor',
+      },
+      labels: {
+        formatter: (value) => { return formatCurrency(Number.parseFloat(value), "PT-BR", "R$") }
       },
       min: 0
     },
@@ -189,14 +195,10 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
       shared: true,
       intersect: false,
       y: {
-        formatter: function (y) {
-          if (typeof y !== "undefined") {
-            return y.toFixed(0) + " R$";
-          }
-          return y;
-    
+        formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+          return formatCurrency(Number.parseFloat(value), "PT-BR", "R$")
         }
-      }
+      }      
     }
     };  
 
