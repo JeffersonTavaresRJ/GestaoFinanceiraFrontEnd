@@ -1,0 +1,49 @@
+<div class="row justify-content-around mb-1"> 
+    <div class="col-2" style="padding-top: 1%;">
+      <h6>Planejado x Realizado</h6>
+    </div> 
+    <div class="field col-3">
+      <label for="monthpicker" style="margin-right:5px;">Mês/Ano:</label>
+      <p-calendar [(ngModel)]="dataFim" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" (onSelect)="populate()"></p-calendar>
+    </div>
+    <div class="field col-4">
+      <label for="drpdConta">Conta:</label>
+      <p-dropdown       [options]="arContas" 
+                        inputId="drpdConta"
+                        optionLabel="descricao" 
+                        optionValue="id" 
+                        [virtualScroll]="arContas.length >=5" 
+                        [(ngModel)]="idConta"
+                        [showClear]="true" 
+                        [filter]="false"
+                        (onChange)="populate()"
+                        emptyMessage="Não encontrado"
+                        placeholder="Todas"
+                        styleClass="p-conta"
+                        autoDisplayFirst="false">
+      </p-dropdown>
+    </div> 
+    <div class="col-3">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioEstimativa" 
+                   [(ngModel)]="rdbTipo" value="D" (change)="renderizarChart(arMovPrev, arMovReal)" checked>
+            <label class="form-check-label">
+              Planejamento por Despesa
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioEstimativa" 
+                  [(ngModel)]="rdbTipo" value="R" (change)="renderizarChart(arMovPrev, arMovReal)">
+            <label class="form-check-label">
+              Planejamento por Receita
+            </label>
+          </div>
+    </div>    
+</div>
+<hr>
+<div *ngIf="isRenderChart==false" style="text-align: center; padding-top: 7rem; height: 16rem;">
+    <strong>Dados não encontrados</strong>
+</div>                
+<div class="row justify-content-around">
+    <div id="chart" style="width: 100%;" class="hideChart"></div>    
+</div>
