@@ -15,6 +15,8 @@ import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-s
 export class RealPrevAnualDashboardComponent implements OnInit {
   arMovPrev: MovimentacaoPrevista[];
   arMovReal: MovimentacaoRealizada[];
+  arMovPrevAux: MovimentacaoPrevista[];
+  arMovRealAux: MovimentacaoRealizada[];
   arContas: Conta[];
   dataIni: Date;
   dataFim: Date;
@@ -47,19 +49,28 @@ export class RealPrevAnualDashboardComponent implements OnInit {
 
   ngOnInit(): void {
 
+    debugger;
+
+    this.dataIni = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataIni, '-');
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
     this.montarArrayPeriodo(this.dataFim);
 
-    var dataIniAux = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()+6, this.dataFim.getDay());
-    var dataFimAux = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()-6, this.dataFim.getDay());
+    var dataIniAux = new Date(this.dataIni.getFullYear(), this.dataIni.getMonth()+6, 1);
+    var dataFimAux = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()-5, 0);
     
     //filtra os últimos 6 meses da movimentação prevista..
-    this.arMovPrev = this.arMovPrev.filter(x=>x.dataReferencia >= dataIniAux &&
-                                              x.dataReferencia <= this.dataFim);
+    this.arMovPrevAux = this.arMovPrev.filter((x:MovimentacaoPrevista)=>
+                                                 {return x.dataVencimento >= dataIniAux &&
+                                                         x.dataVencimento <= this.dataFim});
+
+    this.arMovPrevAux.forEach(x=>{console.log(x.dataReferencia)});
 
     //filtra os primeiros 6 meses da movimentação realizada..
-    this.arMovReal = this.arMovReal.filter(x=>x.dataMovimentacaoRealizada >= this.dataIni &&
-                                              x.dataMovimentacaoRealizada <= dataFimAux);
+    this.arMovRealAux = this.arMovReal.filter((x:MovimentacaoRealizada)=>
+                                                 {return x.dataMovimentacaoRealizada >= this.dataIni &&
+                                                         x.dataMovimentacaoRealizada <= dataFimAux});
+
+    this.arMovRealAux.forEach(x=>{console.log(x.dataReferencia)});
 
 
     this.renderizarChart(this.arMovPrev, this.arMovReal);
