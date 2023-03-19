@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { Conta } from '../../cadastros-basicos/_models/conta-model';
+import { MovimentacaoPrevista } from '../../lancamentos/_models/mov-prevista-model';
+import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
+import { MovPrevistaService } from '../../lancamentos/_services/mov-prevista-service';
+import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 
 @Component({
   selector: 'app-real-prev-anual-dashboard',
@@ -6,10 +13,56 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./real-prev-anual-dashboard.component.css']
 })
 export class RealPrevAnualDashboardComponent implements OnInit {
+  arMovPrev: MovimentacaoPrevista[];
+  arMovReal: MovimentacaoRealizada[];
+  arContas: Conta[];
+  dataIni: Date;
+  dataFim: Date;
 
-  constructor() { }
+  constructor(private actResourceRoute: ActivatedRoute,
+    private movPrevistaService: MovPrevistaService,
+    private movRealizadaService: MovRealizadaService) {
+
+      this.actResourceRoute.data.subscribe(
+        (sucess: { resolveMovPrev: MovimentacaoPrevista[] }) => {
+                   this.arMovPrev = sucess.resolveMovPrev;
+                          
+        }
+      );
+  
+      this.actResourceRoute.data.subscribe(
+        (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
+                   this.arMovReal = sucess.resolveMovReal;
+                          
+        }
+      );
+      
+      this.actResourceRoute.data.subscribe(
+        (sucess: { resolveConta: Conta[] }) => {
+                   this.arContas = sucess.resolveConta;  
+        }
+      );
+
+     }
 
   ngOnInit(): void {
+
+    this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
+    this.montarArrayPeriodo(this.dataFim);
+
+    var dataIniAux = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()+6, this.dataFim.getDay());
+    var dataFimAux = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()-6, this.dataFim.getDay());
+    
+    //filtra os últimos 6 meses da movimentação prevista..
+    this.arMovPrev = this.arMovPrev.filter(x=>x.dataReferencia >= dataIniAux &&
+                                              x.dataReferencia <= this.dataFim);
+
+    //filtra os primeiros 6 meses da movimentação realizada..
+    this.arMovReal = this.arMovReal.filter(x=>x.dataMovimentacaoRealizada >= this.dataIni &&
+                                              x.dataMovimentacaoRealizada <= dataFimAux);
+
+
+    this.renderizarChart(this.arMovPrev, this.arMovReal);
 
     var options = {
       series: [{
@@ -66,6 +119,12 @@ export class RealPrevAnualDashboardComponent implements OnInit {
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 
+  }
+  renderizarChart(arMovPrev: MovimentacaoPrevista[], arMovReal: MovimentacaoRealizada[]) {
+    //throw new Error('Method not implemented.');
+  }
+  montarArrayPeriodo(dataFim: any) {
+    //throw new Error('Method not implemented.');
   }
 
 }

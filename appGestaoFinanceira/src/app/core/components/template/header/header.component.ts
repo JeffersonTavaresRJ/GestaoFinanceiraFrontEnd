@@ -19,6 +19,9 @@ export class HeaderComponent implements OnInit {
 
   dataIniMenos12Meses!: Date;
 
+  dataIniMenos06Meses!: Date;
+  dataFimMenos06Meses!: Date;
+
   dataFechamentoIni!:Date;
   dataFechamentoFim!:Date;
 
@@ -44,6 +47,12 @@ export class HeaderComponent implements OnInit {
     this.dataFim = new Date(dataAtual.getFullYear(), dataAtual.getMonth()+1, 0);
 
     this.dataIniMenos12Meses = new Date(dataAtual.getFullYear()-1, dataAtual.getMonth(), 1);
+
+    this.dataIniMenos06Meses = new Date(this.dataIniMenos12Meses.getFullYear(),
+                                        this.dataIniMenos12Meses.getMonth()+7, 1);
+
+    this.dataFimMenos06Meses = new Date(this.dataIniMenos06Meses.getFullYear(),
+                                        this.dataIniMenos06Meses.getMonth()+12, 0);
 
     this.bsUpdateUsuario.getEMail().subscribe(valor => this.user_name = valor);
   }

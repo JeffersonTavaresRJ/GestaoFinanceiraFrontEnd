@@ -55,7 +55,7 @@
             <li><a class="dropdown-item" routerLink="receitas-despesas-dashboard">Receita x Despesa</a></li>
             <li><a class="dropdown-item" [routerLink]="['plan-real-anual-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
               Planejado x Realizado</a></li>
-            <li><a class="dropdown-item" [routerLink]="['real-prev-anual-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
+            <li><a class="dropdown-item" [routerLink]="['real-prev-anual-dashboard', dataIniMenos06Meses | DateFormatToString, dataFimMenos06Meses | DateFormatToString]">
               Realizado e Previsto</a></li>
           </ul>
         </li>
