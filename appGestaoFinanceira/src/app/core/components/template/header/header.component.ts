@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
     if (!this.usuarioAutenticado){
       this.resetUser();
     }
-    debugger;
+    //debugger;
     var dataAtual = new Date();
     this.dataIni = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
     this.dataFim = new Date(dataAtual.getFullYear(), dataAtual.getMonth()+1, 0);

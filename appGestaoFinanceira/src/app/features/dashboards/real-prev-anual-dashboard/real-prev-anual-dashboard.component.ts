@@ -9,7 +9,7 @@ import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-s
 import { Movimentacao } from '../../lancamentos/_models/movimentacao';
 import { DadosChartAnalitico } from '../_models/DadosChartAnalitico';
 
-interface DadosChart{Data:string; Valor:Number};
+interface DadosChart{Data:string; Valor?:Number};
 
 @Component({
   selector: 'app-real-prev-anual-dashboard',
@@ -22,6 +22,8 @@ export class RealPrevAnualDashboardComponent implements OnInit {
   arMovPrevAux: MovimentacaoPrevista[];
   arMovRealAux: MovimentacaoRealizada[];
   arDadosChart:DadosChart[]=[];
+  arDadosChartReal:DadosChart[]=[];
+  arDadosChartPrev:DadosChart[]=[];
   arContas: Conta[];
   dataIni: Date;
   dataFim: Date;
@@ -54,19 +56,26 @@ export class RealPrevAnualDashboardComponent implements OnInit {
 
   ngOnInit(): void {
 
-    debugger;
+    //debugger;
 
     this.dataIni = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataIni, '-');
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
     this.montarArrayPeriodo(this.dataFim);
  
-    var dataIniAux = new Date(this.dataIni.getFullYear(), this.dataIni.getMonth()+6, 1);
-    var dataFimAux = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()-5, 0);
+
+    var dataIniPrev = this.arMovReal.sort(function(a,b)
+                                            {return(((Date.parse(b.dataMovimentacaoRealizada.toString()) - 
+                                                      Date.parse(a.dataMovimentacaoRealizada.toString()))));
+                                            })[0].dataReferencia;
+
+
+    //var dataIniPrev = new Date(this.dataIni.getFullYear(), this.dataIni.getMonth()+6, 1);
+    var dataFimReal = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()-5, 0);
     
-    //filtra os ÚLTIMOS 6 meses da movimentação prevista..
+    //filtra os ÚLTIMOS meses da movimentação prevista APÓS a última MOVIMENTAÇÃO REALIZADA..
     this.arMovPrevAux = this.arMovPrev.filter((x:MovimentacaoPrevista)=>
                                                  {return Date.parse(x.dataVencimento.toString()) 
-                                                           >= Date.parse(dataIniAux.toString()) &&
+                                                           > Date.parse(dataIniPrev.toString()) &&
                                                          Date.parse(x.dataVencimento.toString()) 
                                                            <= Date.parse(this.dataFim.toString())});
 
@@ -75,10 +84,11 @@ export class RealPrevAnualDashboardComponent implements OnInit {
                                                  {return Date.parse(x.dataMovimentacaoRealizada.toString())  
                                                              >= Date.parse(this.dataIni.toString()) &&
                                                          Date.parse(x.dataMovimentacaoRealizada.toString())  
-                                                             <= Date.parse(dataFimAux.toString())});
+                                                             <= Date.parse(dataFimReal.toString())});
 
-                                                
-                                        
+    this.arDadosChartPrev = this.agruparPorMes(this.arMovPrevAux);
+    this.arDadosChartReal = this.agruparPorMes(this.arMovRealAux);                                             
+    //falta filtrar os arrays acima por despesa (default)..                                    
 
     this.renderizarChart(this.arMovPrev, this.arMovReal);
 
@@ -146,10 +156,10 @@ export class RealPrevAnualDashboardComponent implements OnInit {
     var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()+2, 0);
     this.arDadosChart.length=0;
     for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {
-         var dados: DadosChart={Data:DateConvert.formatDateMMYYYY(data,'/'), Valor:0};
+         var dados: DadosChart={Data:DateConvert.formatDateDDMMYYYY(data,'/'), Valor:0};
          this.arDadosChart.push(dados);
     }
-    this.arDadosChart.forEach(x=>{console.log(x.Data ||" || "||x.Valor)});
+    this.arDadosChart.forEach(x=>{console.log(x.Data ||" , "||x.Valor)});
   }
 
   private agruparPorMes(arr:Movimentacao[]):DadosChart[]{
@@ -169,7 +179,7 @@ export class RealPrevAnualDashboardComponent implements OnInit {
         acumulador[idx]=row;
         result.push(acumulador[idx]);
       }
-      acumulador[idx].Valor+=obj.valor;
+      acumulador[idx].valor+=obj.valor;
       
       return acumulador;
     }, []);
