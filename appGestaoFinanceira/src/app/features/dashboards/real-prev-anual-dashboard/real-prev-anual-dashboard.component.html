@@ -17,11 +17,11 @@
     </div>
     <div class="field col-3">
       <label for="drpdCategoria">Categoria:</label>
-      <p-dropdown       [options]="arCategorias" 
+      <p-dropdown       [options]="arCategoriasAux" 
                         inputId="drpdCategoria"
                         optionLabel="descricao" 
                         optionValue="id" 
-                        [virtualScroll]="arCategorias.length >=5" 
+                        [virtualScroll]="arCategoriasAux.length >=5" 
                         [(ngModel)]="idCategoria"
                         [showClear]="true" 
                         [filter]="false"
@@ -34,15 +34,16 @@
     </div>
     <div class="field col-3">
       <label for="drpdItemMov">Item Movimentação:</label>
-      <p-dropdown       [options]="arItensMovimentacao" 
+      <p-dropdown       [options]="arItensMovAux" 
                         inputId="drpdItemMov"
                         optionLabel="descricao" 
                         optionValue="id" 
-                        [virtualScroll]="arItensMovimentacao.length >=5" 
+                        [virtualScroll]="arItensMovAux.length >=5" 
                         [(ngModel)]="idItemMovimentacao"
                         [showClear]="true" 
                         [filter]="false"
                         (onChange)="renderizarChart(arMovPrev, arMovReal)"
+                        (onClear)="idItemMovimentacao=null"
                         emptyMessage="Não encontrado"
                         placeholder="Todas"
                         styleClass="p-dropdown-class"

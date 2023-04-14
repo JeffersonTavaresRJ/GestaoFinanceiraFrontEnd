@@ -4,13 +4,12 @@ import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { MovimentacaoPrevista } from '../../lancamentos/_models/mov-prevista-model';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
-import { MovPrevistaService } from '../../lancamentos/_services/mov-prevista-service';
-import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 import { Movimentacao } from '../../lancamentos/_models/movimentacao';
 import { DadosChartAnalitico } from '../_models/DadosChartAnalitico';
 import { formatCurrency } from '@angular/common';
 import { Categoria } from '../../cadastros-basicos/_models/categoria-model';
 import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
+import { DateCalculo } from 'src/app/shared/functions/date-calculo';
 
 interface DadosChart{data:string; valor?:Number};
 
@@ -30,20 +29,21 @@ export class RealPrevAnualDashboardComponent implements OnInit {
   arDadosChartValues: Number[]=[];
   arDadosChartDates: string[]=[];
   arContas: Conta[]=[];
-  arCategorias: Categoria[]=[];
-  arItensMovimentacao: ItemMovimentacao[]=[];
-  idConta:Number;
-  idCategoria:Number;
-  idItemMovimentacao:Number;
+  arContasAux: Conta[]=[];
+  arCategoriasAux: Categoria[]=[];
+  arItensMov: ItemMovimentacao[]=[];
+  arItensMovAux: ItemMovimentacao[]=[];
+  idConta:Number=null;
+  idCategoria:Number=null;
+  idItemMovimentacao:Number=null;
   dataIni: Date;
   dataFim: Date;
+  dataIniPrev: Date;
   rdbTipo: string="D";
   isRenderChart:boolean;
   chart:ApexCharts;
 
-  constructor(private actResourceRoute: ActivatedRoute,
-    private movPrevistaService: MovPrevistaService,
-    private movRealizadaService: MovRealizadaService) {
+  constructor(private actResourceRoute: ActivatedRoute) {
 
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovPrev: MovimentacaoPrevista[] }) => {
@@ -54,32 +54,27 @@ export class RealPrevAnualDashboardComponent implements OnInit {
   
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
-                   this.arMovReal = sucess.resolveMovReal; 
-                   
-                   this.arMovReal.map((e)=>{
-                    this.arItensMovimentacao.push(e.itemMovimentacao);
-                    this.arCategorias.push(e.itemMovimentacao.categoria);
-                    this.arContas.push(e.conta);                    
-                   });
-
-                   let uniqueItemMovimentacao = [
-                    ...new Map(this.arItensMovimentacao.map((item) => [item["id"], item])).values(),
-                  ];
-
-                  let uniqueCategoria = [
-                    ...new Map(this.arCategorias.map((item) => [item["id"], item])).values(),
-                  ];
-
-                  let uniqueConta = [
-                    ...new Map(this.arContas.map((item) => [item["id"], item])).values(),
-                  ];
-                  this.arItensMovimentacao = uniqueItemMovimentacao;
-                  this.arCategorias = uniqueCategoria;
-                  this.arContas = uniqueConta;
+                   this.arMovReal = sucess.resolveMovReal;                 
                           
         }
       );
-     }
+
+      this.actResourceRoute.data.subscribe(
+        (sucess: { resolveItemMov: ItemMovimentacao[] }) => {
+                   this.arItensMov = sucess.resolveItemMov;
+                   this.arItensMovAux = this.arItensMov;                
+                          
+        }
+      );
+
+      this.actResourceRoute.data.subscribe(
+        (sucess: { resolveConta: Conta[] }) => {
+                   this.arContas = sucess.resolveConta;
+                   this.arContasAux = this.arContas;                 
+                          
+        }
+      );
+  }
 
   ngOnInit(): void {
     this.dataIni = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataIni, '-');
@@ -87,19 +82,28 @@ export class RealPrevAnualDashboardComponent implements OnInit {
     this.renderizarChart(this.arMovPrev, this.arMovReal);
   }
 
-
   renderizarChart(arpMovPrev: MovimentacaoPrevista[], arpMovReal: MovimentacaoRealizada[]) {
 
-    this.arMovPrevAux = arpMovPrev.filter(x=>x.itemMovimentacao.tipo== this.rdbTipo);
-    this.arMovRealAux = arpMovReal.filter(x=>x.itemMovimentacao.tipo== this.rdbTipo);
+    this.popularDropdowns();
+
+    this.arMovPrevAux = arpMovPrev.filter(x=>x.itemMovimentacao.tipo== this.rdbTipo)
+                                  .filter(x=>x.itemMovimentacao.categoria.id == this.idCategoria || this.idCategoria==null)
+                                  .filter(x=>x.itemMovimentacao.id == this.idItemMovimentacao || this.idItemMovimentacao==null);
+
+    this.arMovRealAux = arpMovReal.filter(x=>x.itemMovimentacao.tipo== this.rdbTipo)
+                                  .filter(x=>x.itemMovimentacao.categoria.id == this.idCategoria || this.idCategoria==null)
+                                  .filter(x=>x.itemMovimentacao.id == this.idItemMovimentacao || this.idItemMovimentacao==null)
+                                  .filter(x=>x.conta.id==this.idConta || this.idConta ==null);
 
     this.isRenderChart = this.arMovPrevAux.length > 0 || this.arMovRealAux.length > 0;
 
+    if(this.chart!=null){      
+      this.chart.destroy();   
+    }
+
     if (this.isRenderChart){
-        if(this.chart!=null){      
-           this.chart.destroy();   
-         }
-          var dataIniPrev = arpMovReal.sort(function(a,b)
+        
+          this.dataIniPrev = arpMovReal.sort(function(a,b)
                                             {return(((Date.parse(b.dataMovimentacaoRealizada.toString()) - 
                                                       Date.parse(a.dataMovimentacaoRealizada.toString()))));
                                             })[0].dataReferencia;
@@ -110,9 +114,11 @@ export class RealPrevAnualDashboardComponent implements OnInit {
           //filtra os ÚLTIMOS meses da movimentação prevista APÓS a última MOVIMENTAÇÃO REALIZADA..
           this.arMovPrevAux = this.arMovPrevAux.filter((x:MovimentacaoPrevista)=>
                                                      {return Date.parse(x.dataVencimento.toString()) 
-                                                           > Date.parse(dataIniPrev.toString()) &&
+                                                           > Date.parse(this.dataIniPrev.toString()) &&
                                                              Date.parse(x.dataVencimento.toString()) 
                                                            <= Date.parse(this.dataFim.toString())});
+
+
 
           //filtra os PRIMEIROS 6 meses da movimentação realizada..
           this.arMovRealAux = this.arMovRealAux.filter((x:MovimentacaoRealizada)=>
@@ -149,6 +155,8 @@ export class RealPrevAnualDashboardComponent implements OnInit {
           this.chart.render();
     }    
   }
+  
+  
 
   private montarArrayPeriodo(dataFim: any) {
     var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()+2, 0);
@@ -193,7 +201,7 @@ export class RealPrevAnualDashboardComponent implements OnInit {
       type: 'line',
     },
     forecastDataPoints: {
-      count: 12 - this.arDadosChartReal.length /*qts serão pontilhados*/
+      count: DateCalculo.totalMeses(new Date(this.dataIniPrev.toString()), this.dataFim) /*qts serão pontilhados*/
     },
     stroke: {
       width: 5,
@@ -234,6 +242,55 @@ export class RealPrevAnualDashboardComponent implements OnInit {
       },
     }
     }
+  }
+
+  private popularDropdowns(){
+    this.arContasAux = this.arContas; 
+
+    this.arCategoriasAux = this.arItensMov.filter(x=>x.tipo==this.rdbTipo).map((e)=>{
+                            return e.categoria});
+
+    let uniqueCategoria = [...new Map(this.arCategoriasAux.map((item) => [item["id"], item])).values(),
+                            ];
+    
+    this.arCategoriasAux = uniqueCategoria;
+
+    this.arItensMovAux = this.arItensMov.filter(x=>x.tipo==this.rdbTipo);
+
+    if(this.idCategoria != null){
+      this.arItensMovAux = this.arItensMovAux.filter(x=>x.categoria.id ==this.idCategoria);
+    }
+
+    if(this.idItemMovimentacao != null){
+      this.arCategoriasAux = this.arItensMovAux.filter(x=>x.id ==this.idItemMovimentacao).map((e)=>{
+                             return e.categoria});
+    }
+
+    this.idCategoria        = this.idCategoria==null && this.arCategoriasAux.length==1?this.arCategoriasAux[0].id:this.idCategoria;
+    this.idItemMovimentacao = this.idCategoria!=null && this.arItensMovAux.length==1?this.arItensMovAux[0].id:this.idItemMovimentacao;
+
+    /*
+                      this.arMovReal.map((e)=>{
+                        this.arItensMovimentacao.push(e.itemMovimentacao);
+                        this.arCategorias.push(e.itemMovimentacao.categoria);
+                        this.arContas.push(e.conta);                    
+                      }); 
+                      
+                      let uniqueItemMovimentacao = [
+                        ...new Map(this.arItensMovimentacao.map((item) => [item["id"], item])).values(),
+                      ];
+                
+                      let uniqueCategoria = [
+                        ...new Map(this.arCategorias.map((item) => [item["id"], item])).values(),
+                      ];
+                
+                      let uniqueConta = [
+                        ...new Map(this.arContas.map((item) => [item["id"], item])).values(),
+                      ];
+                      this.arItensMovimentacao = uniqueItemMovimentacao;
+                      this.arCategorias = uniqueCategoria;
+                      this.arContas = uniqueConta;
+                      */
   }
 
 }
