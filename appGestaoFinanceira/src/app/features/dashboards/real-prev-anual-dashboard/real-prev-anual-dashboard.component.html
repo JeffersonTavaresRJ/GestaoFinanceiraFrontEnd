@@ -26,6 +26,7 @@
                         [showClear]="true" 
                         [filter]="false"
                         (onChange)="renderizarChart(arMovPrev, arMovReal)"
+                        (onClear)="idCategoria=null"
                         emptyMessage="Não encontrado"
                         placeholder="Todas"
                         styleClass="p-dropdown-class"
@@ -52,11 +53,11 @@
     </div>
     <div class="field col-3">
       <label for="drpdConta">Conta: &nbsp;&nbsp;&nbsp;&nbsp;</label>
-      <p-dropdown       [options]="arContas" 
+      <p-dropdown       [options]="arContasAux" 
                         inputId="drpdConta"
                         optionLabel="descricao" 
                         optionValue="id" 
-                        [virtualScroll]="arContas.length >=5" 
+                        [virtualScroll]="arContasAux.length >=5" 
                         [(ngModel)]="idConta"
                         [showClear]="true" 
                         [filter]="false"
