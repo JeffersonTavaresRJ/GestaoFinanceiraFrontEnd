@@ -1,19 +1,14 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable, throwError } from "rxjs";
+import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { environment } from 'src/environments/environment';
 import { GenericCommand } from './commands/generic-cmd';
+import { GenericReaderResourceService } from './generic-reader-resource-service';
 
-export abstract class GenericResourceService<T extends Object>{
+export abstract class GenericResourceService<T extends Object> extends GenericReaderResourceService<T>{
 
-    private apiName: string;
-    private apiOption: string='';
+
     private command: GenericCommand[]=[];
-    protected http: HttpClient;
-    protected httpHeaders!: HttpHeaders;
-    protected idUsuario!: string;
 
     constructor(injector: Injector, 
                 apiName:string,
@@ -22,25 +17,7 @@ export abstract class GenericResourceService<T extends Object>{
                 protected  convertFormGroupToCmdUpdate?: (formControl: FormGroup)=>GenericCommand,
                 protected  convertFormGroupToCmdDelete?: (formControl: FormGroup)=>GenericCommand) 
     {
-        this.http = injector.get(HttpClient);
-        this.apiName = apiName;
-
-        if(window.localStorage.getItem(environment.keyUser)!=null){
-            var user = window.localStorage.getItem(environment.keyUser)||'';
-            if (user != ''){
-                this.idUsuario = JSON.parse(user).id;
-            }            
-        }        
-    }
-
-    protected getUrl(): string {
-        var url = `${environment.apiUrl}${this.apiName}${this.apiOption}`;
-        this.apiOption = '';
-        return url;
-    }
-
-    setApiOption(apiOption: string) {
-        this.apiOption = apiOption;
+        super(injector, apiName);         
     }
 
     post(formGroup: FormGroup): Observable<any> {   
@@ -111,28 +88,6 @@ export abstract class GenericResourceService<T extends Object>{
                 --comentado para ler o retorno da mensagem de sucesso da API..
                 map(()=>null)*/);
     }
-  
-    getById(id: number): Observable<T> {
-         this.setApiOption('/GetId');
-         return this.http.get<T>(`${this.getUrl()}/${id.toString()}`);
-      }
-/*
-    getAll(): Observable<T[]> {
-        var user = window.localStorage.getItem(environment.keyUser)||'';
-        if (user != ''){
-            this.idUsuario = JSON.parse(user).id;
-        } 
-        return this.http.get<T[]>(`${this.getUrl()}/${this.idUsuario}`);
-    }
-    */
-
-    getAll(): Observable<T[]> {
-        return this.http.get<T[]>(`${this.getUrl()}`);
-    }
-
-    get(): Observable<any> {
-        return this.http.get<any>(this.getUrl());
-     }
 
     jsonDataToResources(jsonData: any[]): T[] {
         const resourses: T[] = [];
@@ -142,10 +97,6 @@ export abstract class GenericResourceService<T extends Object>{
 
     jsonDataToResource(jsonData: any): T {
         return jsonData as T;
-    }    
-
-    protected handlerError(error: any): Observable<any> {
-        console.error("ERRO NA REQUISIÇÃO =>" || error);
-        return throwError(error);
     }
+    
 }

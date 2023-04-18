@@ -39,15 +39,5 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     this.setApiOption('/GetMaxGroupBySaldoConta'); 
     var _dataReferencia = dataReferencia!=null || dataReferencia != undefined ? dataReferencia.toString() : ' ';
     return this.http.get<any[]>(`${this.getUrl()}/${_dataReferencia}`);
-  }
-
-  GetSaldoAnualPorConta(ano: number): Observable<any[]> {
-    this.setApiOption('/GetSaldoAnualPorConta'); 
-    return this.http.get<any[]>(`${this.getUrl()}/${ano}`);
-  }
-
-  GetSaldoAnualPorPeriodo(anoInicial: number, anoFinal: number): Observable<any[]> {
-    this.setApiOption('/GetSaldoAnualPorPeriodo'); 
-    return this.http.get<any[]>(`${this.getUrl()}/${anoInicial}/${anoFinal}`);
-  }
+  }  
 }
