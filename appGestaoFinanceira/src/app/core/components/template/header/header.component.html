@@ -49,12 +49,14 @@
         <li class="nav-item dropdown" [hidden]="!usuarioAutenticado">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            Dashboards
+            Gráficos
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="receitas-despesas-dashboard">Receitas x Despesas</a></li>
-            <li><a class="dropdown-item" [routerLink]="['receitas-despesas-anual-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
-              Movimentações Previstas x Realizadas</a></li>
+            <li><a class="dropdown-item" routerLink="receitas-despesas-dashboard">Receitas x Despesas Mensais</a></li>
+            <li><a class="dropdown-item" [routerLink]="['plan-real-anual-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
+              Movimentação Anual: Planejada x Realizada</a></li>
+            <li><a class="dropdown-item" [routerLink]="['real-prev-anual-dashboard', dataIniMenos06Meses | DateFormatToString, dataFimMenos06Meses | DateFormatToString]">
+              Movimentação Anual: Realizada e Prevista</a></li>
           </ul>
         </li>
       </ul>

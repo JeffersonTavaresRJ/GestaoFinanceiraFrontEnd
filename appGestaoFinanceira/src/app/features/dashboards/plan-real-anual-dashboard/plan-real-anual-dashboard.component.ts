@@ -2,34 +2,37 @@ import { formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { MovimentacaoPrevista } from '../../lancamentos/_models/mov-prevista-model';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
 import { Movimentacao } from '../../lancamentos/_models/movimentacao';
 import { MovPrevistaService } from '../../lancamentos/_services/mov-prevista-service';
 import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 
-interface DadosChartSintet{ Data?: string; Estimativa?: Number; Receita?: Number; Despesa?:Number };
+interface DadosChartSintet{ Data?: string; Planejado?: Number; Receita?: Number; Despesa?:Number };
 interface DadosChartAnalit{ Data?: string; Tipo?: string; TipoDescricao?: string; Valor?:Number };
 
 @Component({
-  selector: 'app-receitas-despesas-anual-dashboard',
-  templateUrl: './receitas-despesas-anual-dashboard.component.html',
-  styleUrls: ['./receitas-despesas-anual-dashboard.component.css']
+  selector: 'app-plan-real-anual-dashboard',
+  templateUrl: './plan-real-anual-dashboard.component.html',
+  styleUrls: ['./plan-real-anual-dashboard.component.css']
 })
 
 
-export class ReceitasDespesasAnualDashboardComponent implements OnInit {
+export class PlanRealAnualDashboardComponent implements OnInit {
 
   arMovPrev: MovimentacaoPrevista[]=[];
   arMovReal: MovimentacaoRealizada[]=[];
   dataIni:Date;
   dataFim:Date;
   mesAno:string;
-  tipoEstimativa:string="D";
+  idConta:number;
+  rdbTipo:string="D";
   isRenderChart: boolean;
   chart:ApexCharts;
+  arContas:Conta[]=[];
   arDadosChart:DadosChartSintet[]=[];
-  arEstimativa:Number[]=[];
+  arPlanejado:Number[]=[];
   arDespesas:Number[]=[];
   arReceitas:Number[]=[];
   arMesAno:string[]=[];
@@ -50,7 +53,13 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
                  this.arMovReal = sucess.resolveMovReal;
                         
       }
-    );   
+    );
+    
+    this.actResourceRoute.data.subscribe(
+      (sucess: { resolveConta: Conta[] }) => {
+                 this.arContas = sucess.resolveConta;  
+      }
+    );
     
    }
 
@@ -85,15 +94,6 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
 
   }
 
-  private montarArrayPeriodo(dataFim: Date){
-    var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()+1, 0);
-    this.arDadosChart.length=0;
-    for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {
-         var dados: DadosChartSintet={Data:DateConvert.formatDateMMYYYY(data,'/'), Estimativa:0, Receita:0, Despesa:0};
-         this.arDadosChart.push(dados);
-    }
-  }  
-
   renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
     debugger;
 
@@ -106,29 +106,60 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
       return false;
     }
 
+    //tratamento para não alterar os valores dos arrays carregados pela execução da API..
+    var arrMovPrev = new Array();
+    arrMovPrev = arMovPrevista;
+
+    var arrMovReal = new Array();
+    arrMovReal = arMovRealizada;
+
+    //filtro por conta..
+    if(this.idConta!=null && this.idConta >0){
+       var arr        = new Array();
+
+       //filtrando os itens de movimentação associados à conta informada..
+       arrMovReal = arrMovReal.filter(m=>m.conta.id==this.idConta)
+                                      .sort((a,b)=>{return a.itemMovimentacao.id - b.itemMovimentacao.id});
+
+       //filtrando movimentação prevista por item de movimentação da conta selecionada.. 
+       var idItemMovAux = -1;
+       arrMovReal.forEach(r=>{
+          if(idItemMovAux != r.itemMovimentacao.id){
+            arrMovPrev.filter(p=>p.itemMovimentacao.id==r.itemMovimentacao.id)
+                         .forEach( obj=>{arr.push(obj)});
+            idItemMovAux = r.itemMovimentacao.id;
+          }
+       });
+       arrMovPrev = arr;
+    }
+
     this.isRenderChart =true;
     this.arMesAno.length=0;
-    this.arEstimativa.length=0;
+    this.arPlanejado.length=0;
     this.arDespesas.length=0;
     this.arReceitas.length=0;
 
-    var arMovPrev = this.agruparPorMes(arMovPrevista);
-    var arMovReal = this.agruparPorMes(arMovRealizada);
+    var arMovPrevGroup = this.agruparPorMes(arrMovPrev);
+    var arMovRealGroup = this.agruparPorMes(arrMovReal);
+
+    //limpeza dos valores: planejado, receita e despesa..
+    this.montarArrayPeriodo(this.dataFim);
 
     this.arDadosChart = this.arDadosChart.map((e)=>{
-       arMovPrev.forEach(p=>{
-          e.Estimativa = e.Data == p.Data && p.Tipo==this.tipoEstimativa? p.Valor:e.Estimativa;                 
+      arMovPrevGroup.forEach(p=>{
+          e.Planejado = e.Data == p.Data && p.Tipo==this.rdbTipo? p.Valor:e.Planejado;                 
        })
-       arMovReal.forEach(p=>{
-          e.Despesa = e.Data == p.Data && p.Tipo=="D"? p.Valor:e.Despesa;
-          e.Receita = e.Data == p.Data && p.Tipo=="R"? p.Valor:e.Receita;        
+
+       arMovRealGroup.forEach(r=>{
+          e.Despesa = e.Data == r.Data && r.Tipo=="D"? r.Valor:e.Despesa;
+          e.Receita = e.Data == r.Data && r.Tipo=="R"? r.Valor:e.Receita;        
        })
        return e;
     });
 
     this.arDadosChart.forEach(d=>{
       this.arMesAno.push(d.Data);
-      this.arEstimativa.push(d.Estimativa);
+      this.arPlanejado.push(d.Planejado);
       this.arDespesas.push(d.Despesa);
       this.arReceitas.push(d.Receita);
     })
@@ -144,9 +175,9 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
       type: 'area',
       data: this.arReceitas
     }, {
-      name: 'Estimativa',
+      name: 'Planejado',
       type: 'line',
-      data: this.arEstimativa
+      data: this.arPlanejado
     }],
       chart: {
       height: 350,
@@ -162,7 +193,14 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
         columnWidth: '50%'
       }
     },
-    
+    title: {
+      text: 'Movimentação Anual: Planejada x Realizada',
+      align: 'left',
+      style: {
+        fontSize: "16px",
+        color: '#666'
+      }
+    },
     fill: {
       opacity: [0.85, 0.25, 1],
       gradient: {
@@ -203,8 +241,17 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
     };  
 
     this.visibleChartItem(true);    
-    this.chart = new ApexCharts(document.querySelector("#chart"), options);
+    this.chart = new ApexCharts(document.querySelector("#chart-plan-real"), options);
     this.chart.render();
+  }
+
+  private montarArrayPeriodo(dataFim: Date){
+    var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()+1, 0);
+    this.arDadosChart.length=0;
+    for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {
+         var dados: DadosChartSintet={Data:DateConvert.formatDateMMYYYY(data,'/'), Planejado:0, Receita:0, Despesa:0};
+         this.arDadosChart.push(dados);
+    }
   }
 
   private agruparPorMes(arr:Movimentacao[]):DadosChartAnalit[]{
@@ -231,7 +278,7 @@ export class ReceitasDespesasAnualDashboardComponent implements OnInit {
   }
 
   private visibleChartItem(status:boolean){
-    var divItem = document.querySelector('#chart');
+    var divItem = document.querySelector('#chart-plan-real');
     divItem.removeAttribute("class");
     if(!status){
       divItem.classList.add("hideChart");
