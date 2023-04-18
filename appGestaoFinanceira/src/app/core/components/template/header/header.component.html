@@ -52,11 +52,11 @@
             Gráficos
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="receitas-despesas-dashboard">Receita x Despesa</a></li>
+            <li><a class="dropdown-item" routerLink="receitas-despesas-dashboard">Receitas x Despesas Mensais</a></li>
             <li><a class="dropdown-item" [routerLink]="['plan-real-anual-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
-              Planejado x Realizado</a></li>
-            <li><a class="dropdown-item" [routerLink]="['real-prev-anual-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
-              Realizado e Previsto</a></li>
+              Movimentação Anual: Planejada x Realizada</a></li>
+            <li><a class="dropdown-item" [routerLink]="['real-prev-anual-dashboard', dataIniMenos06Meses | DateFormatToString, dataFimMenos06Meses | DateFormatToString]">
+              Movimentação Anual: Realizada e Prevista</a></li>
           </ul>
         </li>
       </ul>

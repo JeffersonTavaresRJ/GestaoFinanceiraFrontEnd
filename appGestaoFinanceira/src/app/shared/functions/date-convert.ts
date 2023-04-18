@@ -10,7 +10,7 @@ export class DateConvert{
             month = '0' + month;
         if (day.length < 2) 
             day = '0' + day;
-    
+  
         return [day, month, year].join(separador);
     }
 

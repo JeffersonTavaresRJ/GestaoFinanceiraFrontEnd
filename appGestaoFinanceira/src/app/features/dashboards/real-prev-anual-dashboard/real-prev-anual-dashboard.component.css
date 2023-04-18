@@ -1,0 +1,17 @@
+:host ::ng-deep .p-inputtext {
+    font-size: small !important;
+    text-align:center !important;
+}
+
+:host ::ng-deep .p-dropdown{
+    font-size: small;
+    /*margin-left: 10px;*/
+}
+  
+:host ::ng-deep .p-dropdown-item{
+    font-size: small;
+}
+
+:host ::ng-deep .p-dropdown-class{
+    width: 215px!important;
+}

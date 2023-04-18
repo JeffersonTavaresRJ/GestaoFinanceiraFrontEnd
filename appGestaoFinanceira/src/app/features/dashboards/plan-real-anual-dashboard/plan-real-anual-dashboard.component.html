@@ -1,7 +1,4 @@
 <div class="row justify-content-around mb-1"> 
-    <div class="col-2" style="padding-top: 1%;">
-      <h6>Planejado x Realizado</h6>
-    </div> 
     <div class="field col-3">
       <label for="monthpicker" style="margin-right:5px;">Mês/Ano:</label>
       <p-calendar [(ngModel)]="dataFim" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" (onSelect)="populate()"></p-calendar>
@@ -45,5 +42,5 @@
     <strong>Dados não encontrados</strong>
 </div>                
 <div class="row justify-content-around">
-    <div id="chart" style="width: 100%;" class="hideChart"></div>    
+    <div id="chart-plan-real" style="width: 100%;" class="hideChart"></div>    
 </div>

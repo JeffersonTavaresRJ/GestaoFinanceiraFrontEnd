@@ -193,7 +193,14 @@ export class PlanRealAnualDashboardComponent implements OnInit {
         columnWidth: '50%'
       }
     },
-    
+    title: {
+      text: 'Movimentação Anual: Planejada x Realizada',
+      align: 'left',
+      style: {
+        fontSize: "16px",
+        color: '#666'
+      }
+    },
     fill: {
       opacity: [0.85, 0.25, 1],
       gradient: {
@@ -234,7 +241,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
     };  
 
     this.visibleChartItem(true);    
-    this.chart = new ApexCharts(document.querySelector("#chart"), options);
+    this.chart = new ApexCharts(document.querySelector("#chart-plan-real"), options);
     this.chart.render();
   }
 
@@ -271,7 +278,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
   }
 
   private visibleChartItem(status:boolean){
-    var divItem = document.querySelector('#chart');
+    var divItem = document.querySelector('#chart-plan-real');
     divItem.removeAttribute("class");
     if(!status){
       divItem.classList.add("hideChart");

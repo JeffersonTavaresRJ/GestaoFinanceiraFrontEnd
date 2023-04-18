@@ -165,7 +165,9 @@ const routes: Routes = [
      { path: 'real-prev-anual-dashboard/:dataIni/:dataFim', component: RealPrevAnualDashboardComponent,
      canActivate:[AuthGuard],
      resolve:{resolveMovPrev: MovPrevistaListResolver,
-              resolveMovReal: MovRealizadaListAnualResolver}
+              resolveMovReal: MovRealizadaListAnualResolver,
+              resolveItemMov: ItemMovimentacaoListResolver,
+              resolveConta: ContaListResolver}
     },
     //=================================================================================================
     { path: '**', component: Error404Component}
