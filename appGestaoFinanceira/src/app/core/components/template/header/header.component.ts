@@ -35,6 +35,8 @@ export class HeaderComponent implements OnInit {
   usuarioAutenticado: boolean = false;
   user!: Usuario;
   user_name!: string;
+  anoInicial:number;
+  anoFinal:number;
 
   ngOnInit(): void {
     this.bsAutenticarUsuario.get().subscribe(valor => this.usuarioAutenticado = valor);
@@ -43,6 +45,9 @@ export class HeaderComponent implements OnInit {
     }
     //debugger;
     var dataAtual = new Date();
+    this.anoFinal = dataAtual.getFullYear();
+    this.anoFinal = 2022;
+    this.anoInicial = this.anoFinal-5;
     this.dataIni = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
     this.dataFim = new Date(dataAtual.getFullYear(), dataAtual.getMonth()+1, 0);
 
