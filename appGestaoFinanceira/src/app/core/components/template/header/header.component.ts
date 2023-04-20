@@ -4,8 +4,6 @@ import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { environment } from 'src/environments/environment';
 import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FechamentoService } from 'src/app/features/lancamentos/_services/fechamento-service';
-
 
 @Component({
   selector: 'app-header',

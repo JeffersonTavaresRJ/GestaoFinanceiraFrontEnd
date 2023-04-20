@@ -1,1 +1,21 @@
-<p>conta-anual-dashboard works!</p>
+<div class="row">
+    <div class="col-3">
+        <p-multiSelect [options]="arContas" 
+                       [(ngModel)]="arSelectedContas"
+                       defaultLabel="Todas as Contas" 
+                       optionValue="id"
+                       optionLabel="descricao"
+                       displaySelectedLabel="true"
+                       [maxSelectedLabels]="1" 
+                       [selectedItemsLabel]="'{0} Contas selecionadas'"
+                       [showHeader]="true"
+                       [panelStyle]="{'width':'100px'}"
+                       [filter]="false"
+                       (onChange)="onChangeConta()">
+        </p-multiSelect>
+    </div>    
+</div>
+<hr>
+<div class="row justify-content-around">
+    <div id="chart-conta-anual" style="width: 100%;" class="hideChart"></div>    
+</div>

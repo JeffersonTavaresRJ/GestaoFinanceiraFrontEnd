@@ -1,0 +1,28 @@
+:host ::ng-deep .p-multiselect-label {
+    font-size: small !important
+}
+
+:host ::ng-deep .p-multiselect-item {
+    font-size: small !important
+}
+
+:host ::ng-deep .p-multiselect-empty-message {
+    font-size: small !important
+}
+
+:host ::ng-deep .p-inputtext {
+    font-size: small !important;
+    text-align:center !important;
+}
+
+:host ::ng-deep .p-checkbox-box {
+    font-size: small !important
+}
+
+:host ::ng-deep .p-multiselect {
+    width: 200px;
+}
+
+:host ::ng-deep .multiselect-custom-virtual-scroll .p-multiselect {
+    width: 200px;
+}

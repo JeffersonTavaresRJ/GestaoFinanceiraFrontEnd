@@ -9,7 +9,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { RealPrevAnualDashboardComponent } from './real-prev-anual-dashboard/real-prev-anual-dashboard.component';
 import { ContaAnualDashboardComponent } from './conta-anual-dashboard/conta-anual-dashboard.component';
 import { ContaPeriodoAnualDashboardComponent } from './conta-periodo-anual-dashboard/conta-periodo-anual-dashboard.component';
-
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,8 @@ import { ContaPeriodoAnualDashboardComponent } from './conta-periodo-anual-dashb
     DropdownModule,
     FormsModule,
     CalendarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MultiSelectModule
   ]
 })
 export class DashboardsModule { }
