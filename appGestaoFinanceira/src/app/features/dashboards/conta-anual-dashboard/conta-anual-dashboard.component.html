@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <p-multiSelect [options]="arContas" 
                        [(ngModel)]="arSelectedContas"
                        defaultLabel="Todas as Contas" 
@@ -7,12 +7,15 @@
                        optionLabel="descricao"
                        displaySelectedLabel="true"
                        [maxSelectedLabels]="1" 
-                       [selectedItemsLabel]="'{0} Contas selecionadas'"
+                       [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
                        [showHeader]="true"
                        [panelStyle]="{'width':'100px'}"
                        [filter]="false"
                        (onChange)="onChangeConta()">
         </p-multiSelect>
+    </div>
+    <div class="col-3">
+
     </div>    
 </div>
 <hr>

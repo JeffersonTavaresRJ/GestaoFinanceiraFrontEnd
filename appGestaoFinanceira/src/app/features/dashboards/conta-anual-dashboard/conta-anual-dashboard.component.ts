@@ -15,7 +15,7 @@ export class ContaAnualDashboardComponent implements OnInit {
   arSaldos: any[];
   arSaldosAux: any[];
   arContas: Conta[]; 
-  arSelectedContas:any[]; 
+  arSelectedContas:any[]=[]; 
   arSeries: ContaAnual[]=[];
   ano: string;
   chart: ApexCharts;
@@ -24,9 +24,9 @@ export class ContaAnualDashboardComponent implements OnInit {
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveSaldoConta: any[] }) => {
                  this.arSaldos = sucess.resolveSaldoConta;
-                 this.arSaldosAux = this.arSaldos;
-                 this.populate(this.arSaldosAux);             
-                        
+                 this.arSaldos.forEach(x=>{
+                      this.arSelectedContas.push(x.idConta);
+                 });                 
       }
     );
     
@@ -39,13 +39,14 @@ export class ContaAnualDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.renderizarChart();
+    this.onChangeConta();
   }
   
   onChangeConta(){
     this.arSaldosAux = this.arSaldos;
-    this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
-    this.populate(this.arSaldosAux); 
+    this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
+    //this.populate(this.arSaldosAux); 
+    this.totalizar(this.arSaldosAux); 
     this.renderizarChart();
   }
 
@@ -91,6 +92,68 @@ export class ContaAnualDashboardComponent implements OnInit {
                                              e.percDezembro)};                  
       this.arSeries.push(dados);
      });
+  }
+
+  private totalizar(arSaldos:any[]){
+    this.arSeries.length=0;
+    var totDea=0;
+    var totJan=0;
+    var totFev=0;
+    var totMar=0;
+    var totAbr=0;
+    var totMai=0;
+    var totJun=0;
+    var totJul=0;
+    var totAgo=0;
+    var totSet=0;
+    var totOut=0;
+    var totNov=0;
+    var totDez=0;
+    arSaldos.forEach(e=>{
+      totDea+=e.dezembroAnterior;
+      totJan+=e.janeiro;
+      totFev+=e.fevereiro;
+      totMar+=e.marco;
+      totAbr+=e.abril;
+      totMai+=e.maio;
+      totJun+=e.junho;
+      totJul+=e.julho;
+      totAgo+=e.agosto;
+      totSet+=e.setembro;
+      totOut+=e.outubro;
+      totNov+=e.novembro;
+      totDez+=e.dezembro;      
+     });
+    var dados: ContaAnual={ name: arSaldos.length + " Conta(s) selecionada(s)",
+                            valor: new Array(totJan, 
+                                             totFev, 
+                                             totMar,
+                                             totAbr,
+                                             totMai,
+                                             totJun,
+                                             totJul,
+                                             totAgo,
+                                             totSet,
+                                             totOut,
+                                             totNov,
+                                             totDez),
+                             data: new Array(this.calcularPercentual(totJan,totDea), 
+                                             this.calcularPercentual(totFev,totJan), 
+                                             this.calcularPercentual(totMar,totFev),
+                                             this.calcularPercentual(totAbr,totMar),
+                                             this.calcularPercentual(totMai,totAbr),
+                                             this.calcularPercentual(totJun,totMai),
+                                             this.calcularPercentual(totJul,totJun),
+                                             this.calcularPercentual(totAgo,totJul),
+                                             this.calcularPercentual(totSet,totAgo),
+                                             this.calcularPercentual(totOut,totSet),
+                                             this.calcularPercentual(totNov,totOut),
+                                             this.calcularPercentual(totDez,totNov))};                  
+      this.arSeries.push(dados);
+  }
+
+  private calcularPercentual(ValorAtual: number, ValorAnterior: number): number{
+    return (ValorAtual-ValorAnterior) / (ValorAnterior==0 ? (ValorAtual==0 ? 1 : ValorAtual) : ValorAnterior);
   }
 
   private options(arSeries: ContaAnual[], ano: string):any{
