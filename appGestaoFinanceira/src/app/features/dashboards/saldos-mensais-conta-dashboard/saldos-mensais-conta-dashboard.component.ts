@@ -7,17 +7,18 @@ import { formatCurrency, formatPercent } from '@angular/common';
 interface ContaAnual{name: string, valor: number[], data: number[]};
 
 @Component({
-  selector: 'app-conta-anual-dashboard',
-  templateUrl: './conta-anual-dashboard.component.html',
-  styleUrls: ['./conta-anual-dashboard.component.css']
+  selector: 'app-saldos-mensais-conta-dashboard',
+  templateUrl: './saldos-mensais-conta-dashboard.component.html',
+  styleUrls: ['./saldos-mensais-conta-dashboard.component.css']
 })
-export class ContaAnualDashboardComponent implements OnInit {
+export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   arSaldos: any[];
   arSaldosAux: any[];
   arContas: Conta[]; 
   arSelectedContas:any[]=[]; 
   arSeries: ContaAnual[]=[];
   ano: string;
+  chbxAgrupar: boolean;
   chart: ApexCharts;
 
   constructor(private actResourceRoute: ActivatedRoute) { 
@@ -39,14 +40,17 @@ export class ContaAnualDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.onChangeConta();
+    this.filtrarDados();
   }
   
-  onChangeConta(){
+  filtrarDados(){
     this.arSaldosAux = this.arSaldos;
     this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
-    //this.populate(this.arSaldosAux); 
-    this.totalizar(this.arSaldosAux); 
+    if(this.chbxAgrupar){
+      this.populateAgrupado(this.arSaldosAux); 
+    }else{
+      this.populateDetalhado(this.arSaldosAux); 
+    }
     this.renderizarChart();
   }
 
@@ -62,7 +66,7 @@ export class ContaAnualDashboardComponent implements OnInit {
     this.chart.render();
   }
 
-  private populate(arSaldos:any[]){
+  private populateDetalhado(arSaldos:any[]){
     this.arSeries.length=0;
     arSaldos.forEach(e=>{
       var dados: ContaAnual={name:e.descricaoConta,
@@ -94,7 +98,7 @@ export class ContaAnualDashboardComponent implements OnInit {
      });
   }
 
-  private totalizar(arSaldos:any[]){
+  private populateAgrupado(arSaldos:any[]){
     this.arSeries.length=0;
     var totDea=0;
     var totJan=0;
@@ -173,7 +177,7 @@ export class ContaAnualDashboardComponent implements OnInit {
       curve: 'smooth'
     },
     title: {
-      text: 'Saldo Anual por Conta: Ano '+ano,
+      text: 'Saldos Mensais por Conta: Ano '+ano,
       align: 'left',
       style: {
         fontSize: "16px",

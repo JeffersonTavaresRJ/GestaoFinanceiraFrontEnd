@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-4">
+    <div class="col-3">
         <p-multiSelect [options]="arContas" 
                        [(ngModel)]="arSelectedContas"
                        defaultLabel="Todas as Contas" 
@@ -11,12 +11,15 @@
                        [showHeader]="true"
                        [panelStyle]="{'width':'100px'}"
                        [filter]="false"
-                       (onChange)="onChangeConta()">
+                       (onChange)="filtrarDados()">
         </p-multiSelect>
     </div>
-    <div class="col-3">
-
-    </div>    
+    <div class="col-3 mt-2 form-check">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="chbxAgrupar" id="chbxAgrupar" (change)="filtrarDados()">
+        <label class="form-check-label" for="flexCheckDefault">
+            Agrupar por contas selecionadas
+        </label>
+    </div>
 </div>
 <hr>
 <div class="row justify-content-around">

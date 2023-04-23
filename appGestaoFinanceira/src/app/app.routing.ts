@@ -49,8 +49,8 @@ import { MovRealizadaListAnualResolver } from './features/dashboards/_guards/mov
 import { RealPrevAnualDashboardComponent } from './features/dashboards/real-prev-anual-dashboard/real-prev-anual-dashboard.component';
 import { SaldoAnualPeriodoListResolver } from './features/dashboards/_guards/saldo-anual-periodo-list-resolver';
 import { SaldoAnualPorContaListResolver } from './features/dashboards/_guards/saldo-anual-por-conta-list-resolver';
-import { ContaAnualDashboardComponent } from './features/dashboards/conta-anual-dashboard/conta-anual-dashboard.component';
-import { ContaPeriodoAnualDashboardComponent } from './features/dashboards/conta-periodo-anual-dashboard/conta-periodo-anual-dashboard.component';
+import { SaldosMensaisPorContaDashboardComponent } from './features/dashboards/saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
+import { SaldosAnuaisPorContaDashBoardComponent } from './features/dashboards/saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
 
 //criando o mapeamento de rotas dos componentes
 
@@ -174,13 +174,13 @@ const routes: Routes = [
               resolveConta: ContaListResolver}
     },
     //=================================================================================================
-    {path: 'conta-anual-dashboard/:ano', component: ContaAnualDashboardComponent,
+    {path: 'saldos-mensais-conta-dashboard/:ano', component: SaldosMensaisPorContaDashboardComponent,
      canActivate:[AuthGuard],
      resolve:{resolveSaldoConta: SaldoAnualPorContaListResolver,
               resolveConta: ContaListResolver}
     },
     //=================================================================================================
-    {path: 'conta-periodo-anual-dashboard/:anoInicial/:anoFinal', component: ContaPeriodoAnualDashboardComponent,
+    {path: 'saldos-anuais-conta-dashboard/:anoInicial/:anoFinal', component: SaldosAnuaisPorContaDashBoardComponent,
      canActivate:[AuthGuard],
      resolve:{resolveSaldoPeriodoConta: SaldoAnualPeriodoListResolver,
               resolveConta: ContaListResolver}

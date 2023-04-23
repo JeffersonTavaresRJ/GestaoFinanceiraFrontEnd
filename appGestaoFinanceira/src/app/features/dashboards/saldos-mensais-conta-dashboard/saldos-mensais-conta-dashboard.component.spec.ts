@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContaAnualDashboardComponent } from './conta-anual-dashboard.component';
+import { ContaAnualDashboardComponent } from './saldos-mensais-conta-dashboard.component';
 
 describe('ContaAnualDashboardComponent', () => {
   let component: ContaAnualDashboardComponent;

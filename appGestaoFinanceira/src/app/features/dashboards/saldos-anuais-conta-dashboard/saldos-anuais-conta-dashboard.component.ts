@@ -3,11 +3,11 @@ import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-conta-periodo-anual-dashboard',
-  templateUrl: './conta-periodo-anual-dashboard.component.html',
-  styleUrls: ['./conta-periodo-anual-dashboard.component.css']
+  selector: 'app-saldos-anuais-conta-dashboard',
+  templateUrl: './saldos-anuais-conta-dashboard.component.html',
+  styleUrls: ['./saldos-anuais-conta-dashboard.component.css']
 })
-export class ContaPeriodoAnualDashboardComponent implements OnInit {
+export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   arSaldos: any[];
   arContas: Conta[];
 
