@@ -4,7 +4,7 @@ import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { formatCurrency, formatPercent } from '@angular/common';
 
 
-interface ContaAnual{name: string, valor: number[], data: number[]};
+interface ContaMensal{name: string, valor: number[], data: number[]};
 
 @Component({
   selector: 'app-saldos-mensais-conta-dashboard',
@@ -16,7 +16,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   arSaldosAux: any[];
   arContas: Conta[]; 
   arSelectedContas:any[]=[]; 
-  arSeries: ContaAnual[]=[];
+  arSeries: ContaMensal[]=[];
   ano: string;
   chbxAgrupar: boolean;
   chart: ApexCharts;
@@ -62,14 +62,14 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
       this.chart.destroy();   
     }
 
-    this.chart = new ApexCharts(document.querySelector("#chart-conta-anual"), options);
+    this.chart = new ApexCharts(document.querySelector("#chart-saldos-mensais-conta"), options);
     this.chart.render();
   }
 
   private populateDetalhado(arSaldos:any[]){
     this.arSeries.length=0;
     arSaldos.forEach(e=>{
-      var dados: ContaAnual={name:e.descricaoConta,
+      var dados: ContaMensal={name:e.descricaoConta,
                              valor: new Array(e.janeiro, 
                               e.fevereiro, 
                               e.marco,
@@ -128,7 +128,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
       totNov+=e.novembro;
       totDez+=e.dezembro;      
      });
-    var dados: ContaAnual={ name: arSaldos.length + " Conta(s) selecionada(s)",
+    var dados: ContaMensal={ name: arSaldos.length + " Conta(s) selecionada(s)",
                             valor: new Array(totJan, 
                                              totFev, 
                                              totMar,
@@ -160,7 +160,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
     return (ValorAtual-ValorAnterior) / (ValorAnterior==0 ? (ValorAtual==0 ? 1 : ValorAtual) : ValorAnterior);
   }
 
-  private options(arSeries: ContaAnual[], ano: string):any{
+  private options(arSeries: ContaMensal[], ano: string):any{
     return {
       series: arSeries,
       chart: {

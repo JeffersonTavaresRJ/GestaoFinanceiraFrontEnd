@@ -14,6 +14,12 @@
                         </app-dropdown-conta>
                     </div>
                     <div class="col-4">
+                        <app-dropdown-forma-pagamento [form-group]="formGroup" [form-control]="formGroup.get('idFormaPagamento')"
+                            placeholder="Forma de Pagamento" 
+                            (OnChange)="getFormaPagamento()">
+                        </app-dropdown-forma-pagamento>
+                    </div>
+                    <div class="col-4">
                         <strong class="font-size-small" style="margin-right: 14px;">Mês/Ano:</strong>
                         <p-calendar [(ngModel)]="dataIni" view="month" dateFormat="mm/yy" [readonlyInput]="true"
                             inputId="monthpicker"></p-calendar>
