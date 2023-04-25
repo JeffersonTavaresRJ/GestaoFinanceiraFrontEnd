@@ -39,5 +39,5 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     this.setApiOption('/GetMaxGroupBySaldoConta'); 
     var _dataReferencia = dataReferencia!=null || dataReferencia != undefined ? dataReferencia.toString() : ' ';
     return this.http.get<any[]>(`${this.getUrl()}/${_dataReferencia}`);
-  }
+  }  
 }

@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-3">
+        <p-multiSelect [options]="arContas" 
+                       [(ngModel)]="arSelectedContas"
+                       defaultLabel="Todas as Contas" 
+                       optionValue="id"
+                       optionLabel="descricao"
+                       displaySelectedLabel="true"
+                       [maxSelectedLabels]="1" 
+                       [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
+                       [showHeader]="true"
+                       [panelStyle]="{'width':'100px'}"
+                       [filter]="false"
+                       (onChange)="filtrarDados(arSaldos, anoIni, anoFim)">
+        </p-multiSelect>
+    </div>
+    <div class="col-3 mt-2 form-check">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="chbxAgrupar" id="chbxAgrupar" (change)="filtrarDados(arSaldos, anoIni, anoFim)">
+        <label class="form-check-label" for="flexCheckDefault">
+            Agrupar por contas selecionadas
+        </label>
+    </div>
+</div>
+<hr>
+<div class="row justify-content-around">
+    <div id="chart-saldos-anuais-conta" style="width: 100%;" class="hideChart"></div>    
+</div>
+

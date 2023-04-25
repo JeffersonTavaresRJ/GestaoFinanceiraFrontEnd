@@ -41,7 +41,7 @@
                     <label for="tipo">Tipo:</label>
 
                     <select class="form-control mt-1" formControlName="tipo" (keyup)="resourceClearValidations()">
-                        <option *ngFor="let tipo of tipos" [value]="tipo.Key">{{tipo.Value}}</option>
+                        <option *ngFor="let tipo of tipos" [value]="tipo.key">{{tipo.value}}</option>
                     </select>
 
                     <app-field-validation-form [form-control]="resourceForm.get('tipo')"></app-field-validation-form>

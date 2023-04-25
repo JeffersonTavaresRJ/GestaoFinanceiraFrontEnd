@@ -4,8 +4,6 @@ import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { environment } from 'src/environments/environment';
 import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FechamentoService } from 'src/app/features/lancamentos/_services/fechamento-service';
-
 
 @Component({
   selector: 'app-header',
@@ -35,6 +33,8 @@ export class HeaderComponent implements OnInit {
   usuarioAutenticado: boolean = false;
   user!: Usuario;
   user_name!: string;
+  anoInicial:number;
+  anoFinal:number;
 
   ngOnInit(): void {
     this.bsAutenticarUsuario.get().subscribe(valor => this.usuarioAutenticado = valor);
@@ -43,6 +43,9 @@ export class HeaderComponent implements OnInit {
     }
     //debugger;
     var dataAtual = new Date();
+    this.anoFinal = dataAtual.getFullYear();
+    this.anoFinal = 2022;
+    this.anoInicial = this.anoFinal-5;
     this.dataIni = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
     this.dataFim = new Date(dataAtual.getFullYear(), dataAtual.getMonth()+1, 0);
 
