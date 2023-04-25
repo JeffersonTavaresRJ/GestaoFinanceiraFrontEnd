@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { formatCurrency, formatPercent } from '@angular/common';
+import { PercentCalculo } from 'src/app/shared/functions/percent-calculo';
 
 
 interface ContaMensal{name: string, valor: number[], data: number[]};
@@ -141,23 +142,20 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
                                              totOut,
                                              totNov,
                                              totDez),
-                             data: new Array(this.calcularPercentual(totJan,totDea), 
-                                             this.calcularPercentual(totFev,totJan), 
-                                             this.calcularPercentual(totMar,totFev),
-                                             this.calcularPercentual(totAbr,totMar),
-                                             this.calcularPercentual(totMai,totAbr),
-                                             this.calcularPercentual(totJun,totMai),
-                                             this.calcularPercentual(totJul,totJun),
-                                             this.calcularPercentual(totAgo,totJul),
-                                             this.calcularPercentual(totSet,totAgo),
-                                             this.calcularPercentual(totOut,totSet),
-                                             this.calcularPercentual(totNov,totOut),
-                                             this.calcularPercentual(totDez,totNov))};                  
+                             data: new Array(
+                             PercentCalculo.calcularPercentual(totJan,totDea), 
+                             PercentCalculo.calcularPercentual(totFev,totJan), 
+                             PercentCalculo.calcularPercentual(totMar,totFev),
+                             PercentCalculo.calcularPercentual(totAbr,totMar),
+                             PercentCalculo.calcularPercentual(totMai,totAbr),
+                             PercentCalculo.calcularPercentual(totJun,totMai),
+                             PercentCalculo.calcularPercentual(totJul,totJun),
+                             PercentCalculo.calcularPercentual(totAgo,totJul),
+                             PercentCalculo.calcularPercentual(totSet,totAgo),
+                             PercentCalculo.calcularPercentual(totOut,totSet),
+                             PercentCalculo.calcularPercentual(totNov,totOut),
+                             PercentCalculo.calcularPercentual(totDez,totNov))};                  
       this.arSeries.push(dados);
-  }
-
-  private calcularPercentual(ValorAtual: number, ValorAnterior: number): number{
-    return (ValorAtual-ValorAnterior) / (ValorAnterior==0 ? (ValorAtual==0 ? 1 : ValorAtual) : ValorAnterior);
   }
 
   private options(arSeries: ContaMensal[], ano: string):any{
@@ -196,7 +194,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
       },
       labels: {
         formatter: (value) => { 
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.1-2") 
+          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") 
         }
       },
       min: 0
@@ -207,7 +205,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
     tooltip: {
       y: {
         formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.1-2") + 
+          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") + 
           ' (' + formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$") +')'
         }
       }        
