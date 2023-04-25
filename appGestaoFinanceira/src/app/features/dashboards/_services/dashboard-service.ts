@@ -10,12 +10,12 @@ export class DashboardService extends GenericReaderResourceService<any>{
     }
 
     GetSaldoAnualPorConta(ano: number): Observable<any[]> {
-        this.setApiOption('/GetSaldoAnualPorConta'); 
+        this.setApiOption('/GetSaldoMensalPorConta'); 
         return this.http.get<any[]>(`${this.getUrl()}/${ano}`);
       }
     
       GetSaldoAnualPorPeriodo(anoInicial: number, anoFinal: number): Observable<any[]> {
-        this.setApiOption('/GetSaldoAnualPorPeriodo'); 
+        this.setApiOption('/GetSaldoAnualPorConta'); 
         return this.http.get<any[]>(`${this.getUrl()}/${anoInicial}/${anoFinal}`);
       }
 
