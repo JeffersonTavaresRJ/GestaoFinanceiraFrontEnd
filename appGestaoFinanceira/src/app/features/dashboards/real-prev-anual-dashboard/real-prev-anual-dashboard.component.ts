@@ -5,7 +5,7 @@ import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { MovimentacaoPrevista } from '../../lancamentos/_models/mov-prevista-model';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
 import { Movimentacao } from '../../lancamentos/_models/movimentacao';
-import { DadosChartAnalitico } from '../_models/DadosChartAnalitico';
+import { DadosChartAnalitico } from '../_models/dados-chart-analitico';
 import { formatCurrency } from '@angular/common';
 import { Categoria } from '../../cadastros-basicos/_models/categoria-model';
 import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';

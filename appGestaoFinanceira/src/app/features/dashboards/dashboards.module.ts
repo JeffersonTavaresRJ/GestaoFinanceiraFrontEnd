@@ -7,13 +7,17 @@ import { ReceitasDespesasDashboardComponent } from './receitas-despesas-dashboar
 import { PlanRealAnualDashboardComponent } from './plan-real-anual-dashboard/plan-real-anual-dashboard.component';
 import { CalendarModule } from 'primeng/calendar';
 import { RealPrevAnualDashboardComponent } from './real-prev-anual-dashboard/real-prev-anual-dashboard.component';
-
+import { SaldosMensaisPorContaDashboardComponent } from './saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
+import { SaldosAnuaisPorContaDashBoardComponent } from './saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
     ReceitasDespesasDashboardComponent,
     PlanRealAnualDashboardComponent,
-    RealPrevAnualDashboardComponent
+    RealPrevAnualDashboardComponent,
+    SaldosMensaisPorContaDashboardComponent,
+    SaldosAnuaisPorContaDashBoardComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +25,8 @@ import { RealPrevAnualDashboardComponent } from './real-prev-anual-dashboard/rea
     DropdownModule,
     FormsModule,
     CalendarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MultiSelectModule
   ]
 })
 export class DashboardsModule { }

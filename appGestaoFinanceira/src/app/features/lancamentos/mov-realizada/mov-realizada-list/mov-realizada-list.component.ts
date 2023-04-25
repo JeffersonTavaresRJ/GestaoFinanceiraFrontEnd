@@ -36,11 +36,87 @@ export class MovRealizadaListComponent implements OnInit {
     protected formBuilder: FormBuilder) {    
     this.formGroup = this.formBuilder.group({
       idConta: [null],
+      idFormaPagamento: [null]
     });
   }
 
   ngOnInit(): void {
     this.movRealizadaList();
+  }
+
+  filtrarTablePorPeriodo() {
+    debugger;
+    this.dataFim = new Date(this.dataIni.getFullYear(),
+      this.dataIni.getMonth() + 1,
+      0);
+
+    this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(this.dataIni.toString(), '-'),
+      DateConvert.formatDateYYYYMMDD(this.dataFim.toString(), '-')).subscribe(
+        (sucess: any[]) => {
+          this.results = sucess;
+          this.resultsAux = this.results;
+          this.filtrarTablePorParametros(this.formGroup.get('idConta').value, this.formGroup.get('idFormaPagamento').value);
+        });
+  }
+
+  getConta(conta: Conta){
+    //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
+    if(this.contaOld != null){
+      this.contaOld.defaultConta = 'N';
+      this.contaService.putConta(this.contaOld).subscribe(
+        sucess=>{
+          this.contaOld = conta;
+        }
+      )
+    }
+    //alterando a conta atual que está sendo utilizada como filtro para ser o filtro default para pesquisa..
+    conta.defaultConta = 'S';
+    this.contaService.putConta(conta).subscribe(
+      sucess=>{
+        this.contaOld = conta;
+        this.filtrarTablePorParametros(conta.id, this.formGroup.get('idFormaPagamento').value);
+      }
+    )
+  }
+
+  getFormaPagamento(){
+    this.filtrarTablePorParametros(this.formGroup.get('idConta').value, this.formGroup.get('idFormaPagamento').value);
+  }
+
+  modalDeleteMessage(_idMovimentacaoRealizada: number) {
+    this.idMovimentacaoRealizada = _idMovimentacaoRealizada;
+  }
+
+  modalDetalhe(movimentacaoRealizada: MovimentacaoRealizada) {
+   this.displayDetalhe = true;
+   this.movimentacaoRealizadaDetalhe = movimentacaoRealizada;
+  }
+
+  eventDelete(event) {
+    if (event) {
+      this.movRealizadaService.deleteById(this.idMovimentacaoRealizada)
+        .subscribe(sucess => {
+          this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
+          this.filtrarTablePorPeriodo()
+        });
+    }
+  }
+
+  private filtrarTablePorParametros(idConta?: Number, idFormaPagamento?: Number) {
+    debugger;
+    this.results = this.resultsAux;
+    if (idConta != null){
+      this.results = this.resultsAux.filter(m => m.conta.id == idConta);
+    }else{
+      this.alertMessageForm.showError("A conta deve ser informada", "Sr. Usuário");
+    }
+
+    if(idFormaPagamento != null){
+      this.results = this.resultsAux
+                         .filter(m => m.movimentacoesRealizadas
+                                      .filter(x=>x.formaPagamento.id== idFormaPagamento)
+                                      .map((e)=>{return e.idConta}).includes(m.idConta));
+    }
   }
 
   private movRealizadaList() {
@@ -63,7 +139,7 @@ export class MovRealizadaListComponent implements OnInit {
           sucess=>{
             this.contaOld = sucess.filter(x=>x.defaultConta=="S")[0];
             this.formGroup.get('idConta').setValue(this.contaOld.id);
-            this.filtrarTablePorParametros(this.contaOld.id);            
+            this.filtrarTablePorParametros(this.contaOld.id, this.formGroup.get('idFormaPagamento').value);            
           }
         )
         
@@ -71,67 +147,5 @@ export class MovRealizadaListComponent implements OnInit {
     );
   }
 
-  filtrarTablePorPeriodo() {
-    debugger;
-    this.dataFim = new Date(this.dataIni.getFullYear(),
-      this.dataIni.getMonth() + 1,
-      0);
 
-    this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(this.dataIni.toString(), '-'),
-      DateConvert.formatDateYYYYMMDD(this.dataFim.toString(), '-')).subscribe(
-        (sucess: any[]) => {
-          this.results = sucess;
-          this.resultsAux = this.results;
-          this.filtrarTablePorParametros(this.formGroup.get('idConta').value);
-        });
-  }
-
-  getConta(conta: Conta){
-    //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
-    if(this.contaOld != null){
-      this.contaOld.defaultConta = 'N';
-      this.contaService.putConta(this.contaOld).subscribe(
-        sucess=>{
-          this.contaOld = conta;
-        }
-      )
-    }
-    //alterando a conta atual que está sendo utilizada como filtro para ser o filtro default para pesquisa..
-    conta.defaultConta = 'S';
-    this.contaService.putConta(conta).subscribe(
-      sucess=>{
-        this.contaOld = conta;
-        this.filtrarTablePorParametros(conta.id)
-      }
-    )
-  }
-
-  filtrarTablePorParametros(idConta?: Number) {
-    //debugger;
-    this.results = this.resultsAux;
-    if (idConta != null){
-      this.results = this.resultsAux.filter(m => m.conta.id == idConta);
-    }else{
-      this.alertMessageForm.showError("A conta deve ser informada", "Sr. Usuário");
-    }
-  }
-
-  modalDeleteMessage(_idMovimentacaoRealizada: number) {
-    this.idMovimentacaoRealizada = _idMovimentacaoRealizada;
-  }
-
-  modalDetalhe(movimentacaoRealizada: MovimentacaoRealizada) {
-   this.displayDetalhe = true;
-   this.movimentacaoRealizadaDetalhe = movimentacaoRealizada;
-  }
-
-  eventDelete(event) {
-    if (event) {
-      this.movRealizadaService.deleteById(this.idMovimentacaoRealizada)
-        .subscribe(sucess => {
-          this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
-          this.filtrarTablePorPeriodo()
-        });
-    }
-  }
 }

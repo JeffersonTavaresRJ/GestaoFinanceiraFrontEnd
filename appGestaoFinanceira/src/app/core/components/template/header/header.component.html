@@ -57,6 +57,10 @@
               Movimentação Anual: Planejada x Realizada</a></li>
             <li><a class="dropdown-item" [routerLink]="['real-prev-anual-dashboard', dataIniMenos06Meses | DateFormatToString, dataFimMenos06Meses | DateFormatToString]">
               Movimentação Anual: Realizada e Prevista</a></li>
+            <li><a class="dropdown-item" [routerLink]="['saldos-mensais-conta-dashboard', anoFinal]">
+              Saldos Mensais por Conta</a></li>
+            <li><a class="dropdown-item" [routerLink]="['saldos-anuais-conta-dashboard', anoInicial, anoFinal]">
+              Saldos Anuais por Conta</a></li>
           </ul>
         </li>
       </ul>
