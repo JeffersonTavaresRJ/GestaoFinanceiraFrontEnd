@@ -9,15 +9,18 @@ export class DashboardService extends GenericReaderResourceService<any>{
         super(injector, 'api/MovimentacaoRealizada')
     }
 
-    GetSaldoAnualPorConta(ano: number): Observable<any[]> {
+    GetSaldoMensalPorConta(ano: number): Observable<any[]> {
         this.setApiOption('/GetSaldoMensalPorConta'); 
         return this.http.get<any[]>(`${this.getUrl()}/${ano}`);
-      }
+    }
     
-      GetSaldoAnualPorPeriodo(anoInicial: number, anoFinal: number): Observable<any[]> {
+    GetSaldoAnualPorConta(anoInicial: number, anoFinal: number): Observable<any[]> {
         this.setApiOption('/GetSaldoAnualPorConta'); 
         return this.http.get<any[]>(`${this.getUrl()}/${anoInicial}/${anoFinal}`);
-      }
-
+    } 
     
+    GetItemMovimentacaoMensal(dataIni: string, dataFim: string): Observable<any[]> {
+      this.setApiOption('/GetItemMovimentacaoMensal'); 
+      return this.http.get<any[]>(`${this.getUrl()}/${dataIni}/${dataFim}`);
+  }    
 }

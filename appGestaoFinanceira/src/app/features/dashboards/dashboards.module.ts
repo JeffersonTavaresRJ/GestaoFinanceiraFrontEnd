@@ -10,6 +10,7 @@ import { RealPrevAnualDashboardComponent } from './real-prev-anual-dashboard/rea
 import { SaldosMensaisPorContaDashboardComponent } from './saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
 import { SaldosAnuaisPorContaDashBoardComponent } from './saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ItemMovimentacaoMensalComponent } from './item-movimentacao-mensal/item-movimentacao-mensal.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     PlanRealAnualDashboardComponent,
     RealPrevAnualDashboardComponent,
     SaldosMensaisPorContaDashboardComponent,
-    SaldosAnuaisPorContaDashBoardComponent
+    SaldosAnuaisPorContaDashBoardComponent,
+    ItemMovimentacaoMensalComponent
   ],
   imports: [
     CommonModule,

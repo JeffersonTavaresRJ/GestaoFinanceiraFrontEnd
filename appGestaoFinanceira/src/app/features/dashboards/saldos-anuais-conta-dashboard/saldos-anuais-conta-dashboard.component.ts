@@ -27,8 +27,10 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   constructor(private actResourceRoute: ActivatedRoute) { 
     
     this.actResourceRoute.data.subscribe(
-      (sucess: { resolveSaldoPeriodoConta: any[] }) => {
-                 this.arSaldos = sucess.resolveSaldoPeriodoConta.sort((a,b)=>{return a.ano-b.ano});
+      (sucess: { resolveSaldoAnualConta: any[] }) => {
+                 //ordenar por ano..
+                 this.arSaldos = sucess.resolveSaldoAnualConta.sort((a,b)=>{return a.ano-b.ano});
+                 
                  this.arContasDadosChart = this.arSaldos.map((e)=>{return new Conta(e.idConta, e.descricaoConta)})
                                                 .filter((value, index, array)=>{
                                                   return array.indexOf(value) === index;
