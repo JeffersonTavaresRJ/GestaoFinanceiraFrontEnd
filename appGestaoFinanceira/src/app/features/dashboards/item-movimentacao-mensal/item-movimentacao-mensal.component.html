@@ -1,1 +1,32 @@
-<p>item-movimentacao-mensal works!</p>
+<div class="row justify-content-around">
+    <div class="col-3">
+        <p-dropdown [options]="arTipos" 
+                    inputId="drpdTipo"
+                    optionLabel="Value" 
+                    optionValue="Key" 
+                    [showClear]="true" 
+                    [filter]="false" 
+                    (onChange)="onChange()"
+                    placeholder="Tipo"
+                    emptyMessage="Tipo não encontrado"
+                    autoDisplayFirst="false">
+        </p-dropdown>
+    </div>
+    <div class="col-3">
+        <app-dropdown-categoria [form-group]="formGroup" [form-control]="formGroup.get('idCategoria')"
+            placeholder="Categoria" (OnChange)="onChange()">
+        </app-dropdown-categoria>
+    </div>
+    <div class="col-3">
+        <app-dropdown-item-movimentacao [form-group]="formGroup"
+            [form-control]="formGroup.get('idItemMovimentacao')" placeholder="Item de Movimentação"
+            [select-by-idCategoria]="formGroup.get('idCategoria').value"
+            (OnChange)="onChange()">
+        </app-dropdown-item-movimentacao>
+    </div>
+</div>
+<hr>
+<div class="row justify-content-around">
+    <div id="chart-itemmov-mensais" style="width: 100%;"></div>    
+</div>
+

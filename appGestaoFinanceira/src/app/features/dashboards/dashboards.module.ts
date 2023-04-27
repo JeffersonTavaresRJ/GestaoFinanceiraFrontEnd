@@ -11,6 +11,7 @@ import { SaldosMensaisPorContaDashboardComponent } from './saldos-mensais-conta-
 import { SaldosAnuaisPorContaDashBoardComponent } from './saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ItemMovimentacaoMensalComponent } from './item-movimentacao-mensal/item-movimentacao-mensal.component';
+import { ComponentsModule } from '../-components/-components.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ItemMovimentacaoMensalComponent } from './item-movimentacao-mensal/item
     FormsModule,
     CalendarModule,
     ReactiveFormsModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ComponentsModule
   ]
 })
 export class DashboardsModule { }
