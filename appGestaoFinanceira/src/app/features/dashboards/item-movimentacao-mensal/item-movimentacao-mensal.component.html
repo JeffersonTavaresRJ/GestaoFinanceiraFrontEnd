@@ -1,32 +1,41 @@
 <div class="row justify-content-around">
     <div class="col-3">
         <p-dropdown [options]="arTipos" 
-                    inputId="drpdTipo"
+                    [(ngModel)]="idTipo"
                     optionLabel="Value" 
                     optionValue="Key" 
-                    [showClear]="true" 
-                    [filter]="false" 
-                    (onChange)="onChange()"
-                    placeholder="Tipo"
+                    [showClear]="false" 
+                    [filter]="false"
+                    (onChange)="consultarDados()"
+                    (onClear)="consultarDados()"
                     emptyMessage="Tipo não encontrado"
-                    autoDisplayFirst="false">
+                    autoDisplayFirst="true"
+                     >
         </p-dropdown>
     </div>
     <div class="col-3">
-        <app-dropdown-categoria [form-group]="formGroup" [form-control]="formGroup.get('idCategoria')"
-            placeholder="Categoria" (OnChange)="onChange()">
+        <app-dropdown-categoria [form-group]="formGroup" 
+                                [form-control]="formGroup.get('idCategoria')"
+                                placeholder="Categoria"
+                                (OnChange)="consultarDados()"
+                                (OnClear)="consultarDados()">
         </app-dropdown-categoria>
     </div>
     <div class="col-3">
         <app-dropdown-item-movimentacao [form-group]="formGroup"
-            [form-control]="formGroup.get('idItemMovimentacao')" placeholder="Item de Movimentação"
-            [select-by-idCategoria]="formGroup.get('idCategoria').value"
-            (OnChange)="onChange()">
+                                         [form-control]="formGroup.get('idItemMovimentacao')" 
+                                         placeholder="Item de Movimentação"
+                                         [select-by-idCategoria]="formGroup.get('idCategoria').value"
+                                         [select-by-tipo-item-mov]="idTipo"
+                                         (OnChange)="consultarDados()"
+                                         (OnClear)="consultarDados()">
         </app-dropdown-item-movimentacao>
     </div>
 </div>
 <hr>
-<div class="row justify-content-around">
+<div *ngIf="isRenderChart==false" style="text-align: center; padding-top: 7rem; height: 16rem;">
+    <strong>Dados não encontrados</strong>
+</div> 
+<div class="row justify-content-around">  
     <div id="chart-itemmov-mensais" style="width: 100%;"></div>    
 </div>
-

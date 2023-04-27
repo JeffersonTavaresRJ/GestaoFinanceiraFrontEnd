@@ -13,7 +13,8 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
   @Input('placeholder') placeholder:string;
   @Input('input-id') inputId :string;
   @Output('OnChange') _onChange = new EventEmitter(); 
-  
+  @Output('OnClear') _onClear = new EventEmitter(); 
+    
 
   arResourceModel: T[] = []; 
   arResourceModelAux: T[] = [];
@@ -24,7 +25,7 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
 
         this.resourceService.getAll().subscribe(
         sucess=>{
-          debugger;
+          //debugger;
           this.arResourceModel = sucess;
           this.arResourceModelAux = sucess;
           this.filtrarPorStatus(this.status); 
@@ -33,7 +34,7 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
     }
 
     onChange(){
-      debugger;
+      //debugger;
       this.parseToNumber(this.formControl.value);
       //enviando o objeto para o componente pai..
       var _id = this.formControl.value;
@@ -62,5 +63,9 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
         this._id = Number(this.formControl.value);
       }
       this.formControl.setValue(this._id);
+    }
+
+    onClear(){
+      this._onClear.emit();
     }
 }
