@@ -8,13 +8,20 @@ import { GenericResourceDropDownComponent } from 'src/app/shared/components/gene
   templateUrl: './drpd-item-movimentacao.component.html',
   styleUrls: ['./drpd-item-movimentacao.component.css']
 })
-export class DropDownItemMovimentacaoComponent extends GenericResourceDropDownComponent<ItemMovimentacao> {
+export class DropDownItemMovimentacaoComponent 
+  extends GenericResourceDropDownComponent<ItemMovimentacao>{
 
   @Input('select-by-idCategoria') idCategoria: boolean;
   @Input('select-by-tipo-item-mov') idTipoItemMov: string;
 
   constructor(protected itemMovimentacaoService: ItemMovimentacaoService) { 
-    super(itemMovimentacaoService);
+    super(itemMovimentacaoService);    
+  }
+  
+  filtroOnInit(){
+    if(this.idTipoItemMov != null){
+      this.filtrarPorTipoItemMov(this.idTipoItemMov);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges){
@@ -23,7 +30,7 @@ export class DropDownItemMovimentacaoComponent extends GenericResourceDropDownCo
         this.filtrarPorStatus(changes.selectByStatus.currentValue);
       }
       if(changes.idTipoItemMov){
-        this.filtrarPorItemMovimentacao(changes.idTipoItemMov.currentValue);
+        this.filtrarPorTipoItemMov(changes.idTipoItemMov.currentValue);
       } 
       if(changes.idCategoria){
         this.filtrarPorCategoria(changes.idCategoria.currentValue);
@@ -48,7 +55,7 @@ export class DropDownItemMovimentacaoComponent extends GenericResourceDropDownCo
     }    
   } 
 
-  private filtrarPorItemMovimentacao(idTipoItemMov: string){   
+  private filtrarPorTipoItemMov(idTipoItemMov: string){   
     this.arResourceModel = this.arResourceModelAux;    
     if(idTipoItemMov != null ){
       this.arResourceModel = this.arResourceModel.filter(i=>i.tipo==idTipoItemMov);

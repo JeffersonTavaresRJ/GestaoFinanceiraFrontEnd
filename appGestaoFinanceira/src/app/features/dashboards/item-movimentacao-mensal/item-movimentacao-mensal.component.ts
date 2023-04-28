@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ItemMovimentacaoService } from '../../cadastros-basicos/_services/item-movimentacao-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { formatCurrency, formatPercent } from '@angular/common';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
-import { Dropdown, DropdownItem } from 'primeng/dropdown';
 
 
 interface ItemMovimentacaoMensal{name: string, data: number[], valor: number[]};
@@ -21,8 +20,12 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   arTipos:any[];
   arDadosChart:ItemMovimentacaoMensal[]=[];
   arDadosChartDates:Date[]=[];
+  arTiposGrafico =[{Key:"T", Value: "Por Tipo"}, 
+                   {Key:"C", Value: "Por Categoria"}, 
+                   {Key:"I", Value: "Por Item Movimentação"}];
   isRenderChart:boolean;
-  idTipo:string;
+  idTipoGrafico: string="T";
+  idTipo:string="D";
   dataIni: Date;
   dataFim: Date;
   formGroup: FormGroup;
@@ -46,8 +49,6 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
 
   ngOnInit(): void {
     this.builderForm();
-    this.idTipo="R";
-    this.idTipo="D";
     this.dataIni = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataIni, '-');
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
     this.consultarDados();
