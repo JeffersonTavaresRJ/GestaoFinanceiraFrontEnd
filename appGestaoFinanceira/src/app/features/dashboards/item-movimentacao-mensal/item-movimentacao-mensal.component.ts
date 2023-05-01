@@ -4,9 +4,11 @@ import { ItemMovimentacaoService } from '../../cadastros-basicos/_services/item-
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { formatCurrency, formatPercent } from '@angular/common';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { PercentCalculo } from 'src/app/shared/functions/percent-calculo';
+import { DateCalculo } from 'src/app/shared/functions/date-calculo';
 
 
-interface ItemMovimentacaoMensal{name: string, data: number[], valor: number[]};
+interface DadosChart{name: string, data: number[], valor: number[]};
 
 @Component({
   selector: 'app-item-movimentacao-mensal',
@@ -18,7 +20,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   arItemMovMensal: any[];
   arItemMovMensalAux: any[];
   arTipos:any[];
-  arDadosChart:ItemMovimentacaoMensal[]=[];
+  arDadosChart:DadosChart[]=[];
   arDadosChartDates:Date[]=[];
   arTiposGrafico =[{Key:"T", Value: "Por Tipo"}, 
                    {Key:"C", Value: "Por Categoria"}, 
@@ -56,17 +58,18 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
 
 
   consultarDados():void{
+    //debugger;       
     var idCategoria = this.formGroup.get('idCategoria').value;
     var idItemMov = this.formGroup.get('idItemMovimentacao').value;
     this.arItemMovMensalAux = this.arItemMovMensal
-                                  .filter(x=>x.tipoItemMovimentcao==this.idTipo || this.idTipo ==null)
+                                  .filter(x=>x.tipoItemMovimentcao==this.idTipo || this.idTipoGrafico=="T")
                                   .filter(x=>x.idCategoria==idCategoria || idCategoria ==null)
                                   .filter(x=>x.idItemMovimentacao==idItemMov || idItemMov ==null);
-
+    //debugger;
     this.isRenderChart=this.arItemMovMensalAux.length >0;
 
     if(this.isRenderChart){
-      this.montarArrayPeriodo(this.dataIni, this.dataFim);
+      this.montarArrayPeriodo(this.idTipoGrafico, this.dataIni, this.dataFim);
       this.renderizarChart(this.arDadosChart);
     }else{
       if(this.chart!=null){      
@@ -82,29 +85,59 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     });
   }
 
-  private montarArrayPeriodo(dataIni: Date, dataFim: Date) {
+  private montarArrayPeriodo(tipoGrafico: string, dataIni: Date, dataFim: Date) {
     this.arDadosChart.length=0;
-    var dat: number[]=[];
-    var val: number[]=[];
+    this.arDadosChartDates.length=0;    
 
-    for(let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)){
-      dat.push(0);
-      val.push(0);
-      this.arDadosChartDates.push(data);         
+    for(let data = DateCalculo.lastDay(dataIni); data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)){
+       this.arDadosChartDates.push(data);         
     }
-    var array = this.arItemMovMensalAux
-        .map(x=>{return x.descricaoItemMovimentacao})
-        .filter((value, index, array)=>{
-          return array.indexOf(value) === index;
-        });
+    debugger;
+    var arParam = this.parametrosGrafico(this.arItemMovMensalAux, this.idTipoGrafico);
+   
+    arParam.forEach(z=>{
+      var name = z;
+      var valorAnterior = 0;
+      var arDatas: number[]=[];
+      var arValues: number[]=[];
+      this.arDadosChartDates.forEach(dataRef=>{
+        
+        var valor =  tipoGrafico=="T"? this.arItemMovMensalAux.filter(x=>x.descricaoTipoItemMovimentcao == name &&
+                                                                        Date.parse(x.dataReferencia.toString()) == 
+                                                                        Date.parse(dataRef.toString()))
+                                                              .reduce((acum, item)=>{return acum+item},0):
+                     tipoGrafico=="C"? this.arItemMovMensalAux.filter(x=>x.descricaoCategoria == name &&
+                                                                        Date.parse(x.dataReferencia.toString()) == 
+                                                                        Date.parse(dataRef.toString()))
+                                                              .reduce((acum, item)=>{return acum+item},0):
+                                       this.arItemMovMensalAux.filter(x=>x.descricaoItemMovimentacao == name &&
+                                                                        Date.parse(x.dataReferencia.toString()) == 
+                                                                        Date.parse(dataRef.toString()))
+                                                              .reduce((acum, item)=>{return acum+item},0);
 
-    array.forEach(z=>{
-      var dados: ItemMovimentacaoMensal={name: z, data: dat, valor: val};
+        var data = PercentCalculo.calcularPercentual(valor, valorAnterior);        
+
+        arValues.push(valor);
+        arDatas.push(data);
+
+        valorAnterior = valor;  
+      })
+      var dados: DadosChart={name: z, data: arDatas, valor: arValues};
       this.arDadosChart.push(dados);  
-    });    
+    }); 
   }
 
-  private renderizarChart(arDadosChart: ItemMovimentacaoMensal[]){   
+  private parametrosGrafico(array:any[],tipoVisualizacao:string):string[]{
+    return array.map(x=>{ return tipoVisualizacao=='T'? x.descricaoTipoItemMovimentcao :
+                                 tipoVisualizacao=='C'? x.descricaoCategoria :
+                                 x.descricaoItemMovimentacao;                
+                      })
+    .filter((value, index, array)=>{
+      return array.indexOf(value) === index;
+    });
+  }
+
+  private renderizarChart(arDadosChart: DadosChart[]){   
     var options = this.options(arDadosChart);
 
     if(this.chart!=null){      
@@ -115,7 +148,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     this.chart.render();
   }
 
-  private options(arSeries: ItemMovimentacaoMensal[]):any{
+  private options(arSeries: DadosChart[]):any{
     return {
       series: arSeries,
       chart: {
