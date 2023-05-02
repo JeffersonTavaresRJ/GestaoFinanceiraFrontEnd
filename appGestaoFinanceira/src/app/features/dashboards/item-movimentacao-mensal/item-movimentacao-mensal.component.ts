@@ -105,15 +105,15 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
         var valor =  tipoGrafico=="T"? this.arItemMovMensalAux.filter(x=>x.descricaoTipoItemMovimentcao == name &&
                                                                         Date.parse(x.dataReferencia.toString()) == 
                                                                         Date.parse(dataRef.toString()))
-                                                              .reduce((acum, item)=>{return acum+item},0):
+                                                              .reduce((acum, item)=>{return acum+item.valorMensal},0):
                      tipoGrafico=="C"? this.arItemMovMensalAux.filter(x=>x.descricaoCategoria == name &&
                                                                         Date.parse(x.dataReferencia.toString()) == 
                                                                         Date.parse(dataRef.toString()))
-                                                              .reduce((acum, item)=>{return acum+item},0):
+                                                              .reduce((acum, item)=>{return acum+item.valorMensal},0):
                                        this.arItemMovMensalAux.filter(x=>x.descricaoItemMovimentacao == name &&
                                                                         Date.parse(x.dataReferencia.toString()) == 
                                                                         Date.parse(dataRef.toString()))
-                                                              .reduce((acum, item)=>{return acum+item},0);
+                                                              .reduce((acum, item)=>{return acum+item.valorMensal},0);
 
         var data = PercentCalculo.calcularPercentual(valor, valorAnterior);        
 
