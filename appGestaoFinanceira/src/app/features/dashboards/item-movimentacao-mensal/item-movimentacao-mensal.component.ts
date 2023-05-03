@@ -8,7 +8,7 @@ import { PercentCalculo } from 'src/app/shared/functions/percent-calculo';
 import { DateCalculo } from 'src/app/shared/functions/date-calculo';
 
 
-interface DadosChart{name: string, data: number[], valor: number[]};
+interface DadosChart{name: string, data: number[], percent: number[]};
 
 @Component({
   selector: 'app-item-movimentacao-mensal',
@@ -98,8 +98,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     arParam.forEach(z=>{
       var name = z;
       var valorAnterior = 0;
-      var arDatas: number[]=[];
-      var arValues: number[]=[];
+      var arData: number[]=[];
+      var arPercent: number[]=[];
       this.arDadosChartDates.forEach(dataRef=>{
         
         var valor =  tipoGrafico=="T"? this.arItemMovMensalAux.filter(x=>x.descricaoTipoItemMovimentcao == name &&
@@ -115,14 +115,14 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
                                                                         Date.parse(dataRef.toString()))
                                                               .reduce((acum, item)=>{return acum+item.valorMensal},0);
 
-        var data = PercentCalculo.calcularPercentual(valor, valorAnterior);        
+        var percent = PercentCalculo.calcularPercentual(valor, valorAnterior);        
 
-        arValues.push(valor);
-        arDatas.push(data);
+        arPercent.push(percent);
+        arData.push(valor);
 
         valorAnterior = valor;  
       })
-      var dados: DadosChart={name: z, data: arDatas, valor: arValues};
+      var dados: DadosChart={name: z, data: arData, percent: arPercent};
       this.arDadosChart.push(dados);  
     }); 
   }
@@ -184,7 +184,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       },
       labels: {
         formatter: (value) => { 
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") 
+          return formatCurrency(Number.parseFloat(value), "PT-BR", "R$")
         }
       },
       min: 0
@@ -200,8 +200,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     tooltip: {
       y: {
         formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") + 
-          ' (' + formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$") +')'
+          return formatCurrency(Number.parseFloat(value),  "PT-BR", "R$") + 
+          ' (' + formatPercent(Number.parseFloat(w.globals.initialSeries[seriesIndex].percent[dataPointIndex]), "PT-BR", "2.0-2") +')'
         }
       }        
     },
