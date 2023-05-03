@@ -4,11 +4,11 @@
                 optionValue="id" 
                 [formControl]="formControl"
                 [placeholder]="placeholder" 
-                [virtualScroll]="true" 
-                [itemSize]="5"
+                [virtualScroll]="arResourceModel.length > 5" 
                 [showClear]="true" 
                 [filter]="false" 
                 (onChange)="onChange()"
+                (onClear)="onClear()"
                 emptyMessage="Categoria não encontrada"
                 autoDisplayFirst="true" 
                 [disabled]="isDisabled">

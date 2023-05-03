@@ -47,10 +47,12 @@ import { MovRealizadaListDataRefResolver } from './features/lancamentos/_guards/
 import { PlanRealAnualDashboardComponent } from './features/dashboards/plan-real-anual-dashboard/plan-real-anual-dashboard.component';
 import { MovRealizadaListAnualResolver } from './features/dashboards/_guards/mov-realizada-list-anual-resolver';
 import { RealPrevAnualDashboardComponent } from './features/dashboards/real-prev-anual-dashboard/real-prev-anual-dashboard.component';
-import { SaldoAnualPeriodoListResolver } from './features/dashboards/_guards/saldo-anual-periodo-list-resolver';
 import { SaldoAnualPorContaListResolver } from './features/dashboards/_guards/saldo-anual-por-conta-list-resolver';
+import { SaldoMensalPorContaListResolver } from './features/dashboards/_guards/saldo-mensal-por-conta-list-resolver';
 import { SaldosMensaisPorContaDashboardComponent } from './features/dashboards/saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
 import { SaldosAnuaisPorContaDashBoardComponent } from './features/dashboards/saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
+import { ItemMovimentacaoMensalListResolver } from './features/dashboards/_guards/item-movimentacao-mensal-list-resolver';
+import { ItemMovimentacaoMensalComponent } from './features/dashboards/item-movimentacao-mensal/item-movimentacao-mensal.component';
 
 //criando o mapeamento de rotas dos componentes
 
@@ -176,14 +178,19 @@ const routes: Routes = [
     //=================================================================================================
     {path: 'saldos-mensais-conta-dashboard/:ano', component: SaldosMensaisPorContaDashboardComponent,
      canActivate:[AuthGuard],
-     resolve:{resolveSaldoConta: SaldoAnualPorContaListResolver,
+     resolve:{resolveSaldoMensalConta: SaldoMensalPorContaListResolver,
               resolveConta: ContaListResolver}
     },
     //=================================================================================================
     {path: 'saldos-anuais-conta-dashboard/:anoInicial/:anoFinal', component: SaldosAnuaisPorContaDashBoardComponent,
      canActivate:[AuthGuard],
-     resolve:{resolveSaldoPeriodoConta: SaldoAnualPeriodoListResolver,
+     resolve:{resolveSaldoAnualConta: SaldoAnualPorContaListResolver,
               resolveConta: ContaListResolver}
+    },
+    //=================================================================================================
+    {path: 'item-movimentacao-mensal-dashboard/:dataIni/:dataFim', component: ItemMovimentacaoMensalComponent,
+     canActivate:[AuthGuard],
+     resolve:{resolveItemMovMensal: ItemMovimentacaoMensalListResolver}
     },
     //=================================================================================================
     { path: '**', component: Error404Component}
@@ -210,8 +217,9 @@ const routes: Routes = [
                MovRealizadaGroupByContaResolver,
                MovRealizadaListDataRefResolver,
                MovRealizadaListAnualResolver,
-               SaldoAnualPeriodoListResolver,
-               SaldoAnualPorContaListResolver]
+               SaldoAnualPorContaListResolver,
+               SaldoMensalPorContaListResolver,
+               ItemMovimentacaoMensalListResolver]
 })
 
 export class AppRoutingModule { }

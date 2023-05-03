@@ -1,10 +1,11 @@
-import { Directive, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Directive, EventEmitter, Input, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GenericResourceModel } from "../../_models/generic-resource-model";
 import { GenericResourceService } from "../../_services/generic-resource-service";
+import { Observable } from "rxjs";
 
 @Directive()
-export abstract class GenericResourceDropDownComponent<T extends GenericResourceModel> {
+export abstract class GenericResourceDropDownComponent<T extends GenericResourceModel> implements OnInit {
     
   @Input('form-group') formGroupResource: FormGroup;
   @Input('form-control') formControl: FormControl;
@@ -13,7 +14,8 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
   @Input('placeholder') placeholder:string;
   @Input('input-id') inputId :string;
   @Output('OnChange') _onChange = new EventEmitter(); 
-  
+  @Output('OnClear') _onClear = new EventEmitter(); 
+    
 
   arResourceModel: T[] = []; 
   arResourceModelAux: T[] = [];
@@ -21,19 +23,23 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
   _id: number;
 
     constructor(protected resourceService: GenericResourceService<T>) {
+        
+    }
 
-        this.resourceService.getAll().subscribe(
+    ngOnInit(): void {
+      this.resourceService.getAll().subscribe(
         sucess=>{
-          debugger;
+          //debugger;
           this.arResourceModel = sucess;
           this.arResourceModelAux = sucess;
-          this.filtrarPorStatus(this.status); 
-        }
+          this.filtrarPorStatus(this.status);
+          this.filtroOnInit();
+        } 
       );
     }
 
     onChange(){
-      debugger;
+      //debugger;
       this.parseToNumber(this.formControl.value);
       //enviando o objeto para o componente pai..
       var _id = this.formControl.value;
@@ -55,12 +61,18 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
        // this.arResourceModel = this.arResourceModel.filter(r=>r.status==status);
       }  
     }
-  
+
+    filtroOnInit(){};
+
     parseToNumber(propertyName: string) {
       this._id = null;
       if(this.formControl.value != null){
         this._id = Number(this.formControl.value);
       }
       this.formControl.setValue(this._id);
+    }
+
+    onClear(){
+      this._onClear.emit();
     }
 }

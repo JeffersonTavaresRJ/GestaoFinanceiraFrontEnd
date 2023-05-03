@@ -1,0 +1,59 @@
+<div class="row justify-content-around">
+    <div class="col-3">
+        <label>Visualização:</label>
+        <p-dropdown [options]="arTiposGrafico" 
+                    [(ngModel)]="idTipoGrafico"
+                    optionLabel="Value" 
+                    optionValue="Key" 
+                    [showClear]="false" 
+                    [filter]="false"
+                    autoDisplayFirst="true"
+                    (onChange)="consultarDados()"
+                     >
+        </p-dropdown>
+    </div>
+    <div class="col-3">
+        <label *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'" style="margin-right:10px">Tipo:</label>
+        <p-dropdown [options]="arTipos" 
+                    [(ngModel)]="idTipo"
+                    optionLabel="Value" 
+                    optionValue="Key" 
+                    [showClear]="false" 
+                    [filter]="false"
+                    (onChange)="consultarDados()"
+                    (onClear)="consultarDados()"
+                    emptyMessage="Tipo não encontrado"
+                    autoDisplayFirst="true"
+                    *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'" >
+        </p-dropdown>
+    </div>
+    <div class="col-3">
+        <label *ngIf="idTipoGrafico=='C'">Categoria:</label>
+        <app-dropdown-categoria [form-group]="formGroup" 
+                                [form-control]="formGroup.get('idCategoria')"
+                                placeholder="Todas"
+                                [select-by-tipo-item-mov]="idTipo"
+                                (OnChange)="consultarDados()"
+                                (OnClear)="consultarDados()"
+                                *ngIf="idTipoGrafico=='C'" >
+        </app-dropdown-categoria>
+
+        <label *ngIf="idTipoGrafico=='I'">Item Movimentação:</label>
+        <app-dropdown-item-movimentacao [form-group]="formGroup"
+                                         [form-control]="formGroup.get('idItemMovimentacao')" 
+                                         placeholder="Todas"
+                                         [select-by-idCategoria]="formGroup.get('idCategoria').value"
+                                         [select-by-tipo-item-mov]="idTipo"
+                                         (OnChange)="consultarDados()"
+                                         (OnClear)="consultarDados()"
+                                         *ngIf="idTipoGrafico=='I'" >
+        </app-dropdown-item-movimentacao>
+    </div>
+</div>
+<hr>
+<div *ngIf="isRenderChart==false" style="text-align: center; padding-top: 7rem; height: 16rem;">
+    <strong>Dados não encontrados</strong>
+</div> 
+<div class="row justify-content-around">  
+    <div id="chart-itemmov-mensais" style="width: 100%;"></div>    
+</div>

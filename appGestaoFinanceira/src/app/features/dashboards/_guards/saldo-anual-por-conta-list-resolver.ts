@@ -5,11 +5,13 @@ import { DashboardService } from '../_services/dashboard-service';
 @Injectable()
 export class SaldoAnualPorContaListResolver implements Resolve<any[]> {
 
-  private ano: number;
+  private anoInicial: number;
+  private anoFinal: number;
   constructor(private dashboardService: DashboardService) {}
 
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
-    this.ano = Number.parseInt(activatedRouteSnapshot.params['ano']);
-    return this.dashboardService.GetSaldoAnualPorConta(this.ano);
+    this.anoInicial = Number.parseInt(activatedRouteSnapshot.params['anoInicial']);
+    this.anoFinal = Number.parseInt(activatedRouteSnapshot.params['anoFinal']);
+    return this.dashboardService.GetSaldoAnualPorConta(this.anoInicial, this.anoFinal);
   }
 }

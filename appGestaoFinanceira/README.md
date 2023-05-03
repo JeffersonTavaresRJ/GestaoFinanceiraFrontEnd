@@ -51,3 +51,8 @@ typescript                      4.3.5
 
 ##Criação de components:
 ng g c features/dashboards/receitas-despesas-anual-dashboard
+
+##Configuração postman TEST no Authenticate:
+var response =JSON.parse(pm.response.text());
+var token = response.user.accessToken;
+pm.environment.set('token', token);
