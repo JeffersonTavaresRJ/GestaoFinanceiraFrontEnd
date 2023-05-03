@@ -5,4 +5,8 @@ export class DateCalculo{
         var month = dateFim.getMonth() - dateIni.getMonth();
         return year+month; 
     }
+
+    static lastDay(date: Date){
+        return new Date(date.getFullYear(), date.getMonth()+1, 0);
+    }
 }

@@ -24,8 +24,8 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
 
   constructor(private actResourceRoute: ActivatedRoute) { 
     this.actResourceRoute.data.subscribe(
-      (sucess: { resolveSaldoConta: any[] }) => {
-                 this.arSaldos = sucess.resolveSaldoConta;
+      (sucess: { resolveSaldoMensalConta: any[] }) => {
+                 this.arSaldos = sucess.resolveSaldoMensalConta;
                  this.arSaldos.forEach(x=>{
                       this.arSelectedContas.push(x.idConta);
                  });                 
