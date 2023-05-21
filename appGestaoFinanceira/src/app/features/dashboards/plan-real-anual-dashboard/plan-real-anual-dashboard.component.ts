@@ -164,7 +164,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
       this.arReceitas.push(d.Receita);
     })
 
-
+    var tipo=this.rdbTipo=="D" ? "Despesa" : "Receita";
     var options = {
       series: [{
       name: 'Despesas',
@@ -175,7 +175,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
       type: 'area',
       data: this.arReceitas
     }, {
-      name: 'Planejado',
+      name: "Planejado por " + tipo,
       type: 'line',
       data: this.arPlanejado
     }],
