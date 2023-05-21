@@ -71,7 +71,6 @@ export class FechamentoComponent implements OnInit {
   }
 
   firstNext(){
-    debugger;
     var count=0;
     this.firstFormGroup.get('firstFormChecked').setValue("");
 
@@ -87,7 +86,6 @@ export class FechamentoComponent implements OnInit {
   }
 
   secondNext(){
-    debugger;
     var count=0;
     this.secondFormGroup.get('secondFormChecked').setValue("");
 
@@ -114,7 +112,7 @@ export class FechamentoComponent implements OnInit {
 
   onChange(seconds){
     this.alteraLayout(seconds);
-    this.populaTela(new Date(this.fechamentoModel.dataReferencia)); 
+    this.populaTela(new Date(this.selectedMesAno)); 
   }
 
 
@@ -122,8 +120,7 @@ export class FechamentoComponent implements OnInit {
        this.fechamentoService.putBody({dataReferencia:DateConvert.formatDateYYYYMMDD(this.fechamentoModel.dataReferencia, '-'), 
                                        status:this.fechamentoModel.status=="A"? "F":"A"}).subscribe(
                                           sucess=>{
-                                            debugger;
-                                            this.fechamentoService.getAll().subscribe(
+                                                this.fechamentoService.getAll().subscribe(
                                               sucess=> {
                                                 this.arFechamentosMensais = sucess;
                                                 this.selectedMesAno =null;
@@ -136,7 +133,6 @@ export class FechamentoComponent implements OnInit {
 
   private alteraLayout(seconds){
     var interval = setInterval(()=>{
-      debugger;
       this.fechamentoModel = this.getFechamentoModel(this.selectedMesAno);
       if (this.fechamentoModel != null){
         this.labelButton = this.fechamentoModel.status=="A"? "Fechar": "Reabrir";
@@ -160,7 +156,6 @@ export class FechamentoComponent implements OnInit {
   }    
 
   private populaTela(dataReferencia: Date){
-    debugger;
     var dataIni = DateConvert.formatDateYYYYMMDD(
                     new Date(dataReferencia.getFullYear(), dataReferencia.getMonth(), 1), '-');
     var dataFim = DateConvert.formatDateYYYYMMDD(dataReferencia, '-');
@@ -170,8 +165,6 @@ export class FechamentoComponent implements OnInit {
                this.movPrevistaGroupBy(this.arMovPrev);
                this.movRealizadaService.GetMaxGroupBySaldoConta(dataFim).subscribe(
                        sucess=>{this.arMovReal=sucess;  
-                                console.log("movreal: " || dataFim);
-                                console.log(this.arMovReal);                       
                                 this.addArrayFormReal();
           });
       });    
@@ -180,8 +173,6 @@ export class FechamentoComponent implements OnInit {
   private movPrevistaGroupBy(arr: MovimentacaoPrevista[]){
     //agrupando itens de despesas e receitas..
     var result = [];
-    console.log("movprev:");
-    console.log(arr);
     arr.reduce(function(acumulador, obj){
       if (!acumulador[obj.itemMovimentacao.tipo]){
           acumulador[obj.itemMovimentacao.tipo] = {Tipo: obj.itemMovimentacao.tipoDescricao, ValorEmAberto: 0, ValorQuitado: 0};
@@ -200,7 +191,6 @@ export class FechamentoComponent implements OnInit {
   private addArrayFormPrev(arr: any[]){
     this.arFormsPrev.clear();
     arr.forEach((e,i)=>{
-      debugger;
       this.arFormsPrev.push(this.formBuilder.group({
         tipo:[e.Tipo],
         valorEmAberto:[e.ValorEmAberto],
@@ -213,7 +203,6 @@ export class FechamentoComponent implements OnInit {
   private addArrayFormReal(){
     this.arFormsReal.clear();
     this.arMovReal.forEach((e,i)=>{
-      debugger;
       this.arFormsReal.push(this.formBuilder.group({
         conta:[e.conta.descricao],
         dataSaldo:[e.dataSaldo],
