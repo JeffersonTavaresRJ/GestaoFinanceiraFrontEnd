@@ -14,6 +14,8 @@ import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-s
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogListComponent } from '../dialog-list/dialog-list.component';
 
 
 export type ChartOptions = {
@@ -45,8 +47,10 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   idConta: number;
   chartTipo: ApexCharts;
   chartItem: ApexCharts;
+  headerTitle: String;
   constructor(private actResourceRoute: ActivatedRoute,
-              protected movRealizadaService: MovRealizadaService
+              protected movRealizadaService: MovRealizadaService,
+              protected dialog : MatDialog
               ) {
 
                 this.actResourceRoute.data.subscribe(
@@ -80,7 +84,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
       success=>{
         this.arMovReal = success;
 
-        this.visibleChartItem(false);
+        this.visibleChartPrioridade(false);
         if(this.chartItem!=null){
              this.chartItem.destroy();
         }
@@ -93,12 +97,23 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   }
 
   onChangeConta(){
-    this.visibleChartItem(false);
+    this.visibleChartPrioridade(false);
     if(this.chartItem!=null){
       this.chartItem.destroy();
     }
     this.arMovRealTipo = this.movRealPorTipo(this.arMovReal, this.idConta);
     this.renderizarChartTipo(this.arMovRealTipo);
+  }
+
+  private openDialog(titulo:string) {
+    this.dialog.open(DialogListComponent, 
+      {   data: { header: "Total "+titulo, 
+                  dataItems:[
+                  {descricao: 'gás', valor:100, percentual:0.25 },
+                  {descricao: 'telefone', valor:150, percentual:0.14 },
+                  {descricao: 'energia elétrica', valor:300, percentual:0.35 }
+                ]},
+      }, );
   }
 
   private movRealPorTipo(arr: MovimentacaoRealizada[], idConta?:number):any[]{
@@ -120,20 +135,22 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     return result;
   }
   
-  private movRealPorItem(arr: MovimentacaoRealizada[], idConta?:number):any[]{
+  private movRealPorItem(arr: MovimentacaoRealizada[], tipo: String, idConta?:number):any[]{
     //agrupando por item de movimentacao..
     var result = [];
+
+    arr = arr.filter(x=>x.itemMovimentacao.tipo==tipo);
 
     if(idConta>0){
       arr = arr.filter(x=>x.conta.id==idConta)
     }
 
     arr.reduce(function(acumulador, obj){
-      if (!acumulador[obj.itemMovimentacao.id]){
-          acumulador[obj.itemMovimentacao.id] = {Descricao: obj.itemMovimentacao.descricao, Tipo: obj.itemMovimentacao.tipo, Valor: 0};
-          result.push(acumulador[obj.itemMovimentacao.id]);
+      if (!acumulador[obj.tipoPrioridade]){
+          acumulador[obj.tipoPrioridade] = {Tipo: tipo, Descricao: obj.tipoPrioridadeDescricao, Valor: 0};
+          result.push(acumulador[obj.tipoPrioridade]);
       }
-      acumulador[obj.itemMovimentacao.id].Valor+=obj.valor;      
+      acumulador[obj.tipoPrioridade].Valor+=obj.valor;      
       return acumulador;
     }, []);
     return result;
@@ -157,19 +174,17 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     this.chartTipo.updateOptions(options);
   }
 
-  private renderizarChartItem(arr:any[], tipo: string, descricaoTipo:string){
+  private renderizarChartItem(arr:any[], descricaoTipo:string){
     this.labelsItem.length=0;
     this.seriesItem.length=0;
 
-    arr = arr.filter(x=>x.Tipo==tipo); 
-    
-    //preenchendo as Series e Labels do chart..
+   //preenchendo as Series e Labels do chart..
     arr.map(x=>{
       this.labelsItem.push(x.Descricao);
       this.seriesItem.push(x.Valor);
     });
 
-    this.visibleChartItem(true);
+    this.visibleChartPrioridade(true);
 
     var options = this.options(this.seriesItem, this.labelsItem, "chart-item", descricaoTipo);
 
@@ -181,7 +196,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     
   }
 
-  private visibleChartItem(status:boolean){
+  private visibleChartPrioridade(status:boolean){
     var divItem = document.querySelector('#chart-item');
     divItem.removeAttribute("class");
     if(!status){
@@ -199,11 +214,12 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
         events: {
           //utilizando a referência de uma function "()=>{} para invocar functions externos.."
           dataPointSelection: (event:any, chartContext:any, config:any) => {            
-            debugger;
             if (config.w.config.chart.id=="chart-tipo"){                           
               var tipo = config.w.config.labels[config.dataPointIndex];              
-              this.arMovRealItem = this.movRealPorItem(this.arMovReal, this.idConta);
-              this.renderizarChartItem(this.arMovRealItem, tipo.substring(0,1), tipo);
+              this.arMovRealItem = this.movRealPorItem(this.arMovReal, tipo.substring(0,1), this.idConta);
+              this.renderizarChartItem(this.arMovRealItem, tipo);
+            }else{
+              this.openDialog(titulo);
             }
           }
         }

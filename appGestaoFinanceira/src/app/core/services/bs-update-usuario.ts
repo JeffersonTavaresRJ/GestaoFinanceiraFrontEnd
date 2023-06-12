@@ -13,7 +13,6 @@ export class BSUpdateUsuario {
     private eMail = new BehaviorSubject<string>("");
     
     constructor(){
-       // debugger;
         var user = window.localStorage.getItem(environment.keyUser)||'';
         if (user != ''){
             this.usuario =  JSON.parse(user);

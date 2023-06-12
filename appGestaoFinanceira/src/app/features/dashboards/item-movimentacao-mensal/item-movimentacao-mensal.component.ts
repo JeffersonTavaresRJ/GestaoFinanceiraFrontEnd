@@ -58,24 +58,37 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
 
 
   consultarDados():void{
-    //debugger;       
-    var idCategoria = this.formGroup.get('idCategoria').value;
-    var idItemMov = this.formGroup.get('idItemMovimentacao').value;
-    this.arItemMovMensalAux = this.arItemMovMensal
+
+    if(this.chart!=null){      
+      this.chart.destroy();   
+    }
+
+    var idCategoria = null;
+    var idItemMov = null;
+
+    if (this.idTipoGrafico!="T"){
+      idCategoria = this.formGroup.get('idCategoria').value;
+      idItemMov = this.formGroup.get('idItemMovimentacao').value;
+    }
+    
+
+    if ((idCategoria != null && this.idTipoGrafico=="C") || 
+        (idItemMov != null && this.idTipoGrafico=="I") ||
+        this.idTipoGrafico=="T"){
+
+      this.arItemMovMensalAux = this.arItemMovMensal
                                   .filter(x=>x.tipoItemMovimentcao==this.idTipo || this.idTipoGrafico=="T")
                                   .filter(x=>x.idCategoria==idCategoria || idCategoria ==null)
                                   .filter(x=>x.idItemMovimentacao==idItemMov || idItemMov ==null);
-    //debugger;
-    this.isRenderChart=this.arItemMovMensalAux.length >0;
 
-    if(this.isRenderChart){
-      this.montarArrayPeriodo(this.idTipoGrafico, this.dataIni, this.dataFim);
-      this.renderizarChart(this.arDadosChart);
-    }else{
-      if(this.chart!=null){      
-        this.chart.destroy();   
-      }
-    }
+      this.isRenderChart=this.arItemMovMensalAux.length >0;
+
+      if(this.isRenderChart){
+         this.montarArrayPeriodo(this.idTipoGrafico, this.dataIni, this.dataFim);
+         var title = this.idTipoGrafico=="T"? "Receitas x Despesas ": this.arDadosChart[0].name;
+         this.renderizarChart(this.arDadosChart, title.toString());      
+      }    
+    }    
   }
 
   private builderForm() {
@@ -92,7 +105,6 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     for(let data = DateCalculo.lastDay(dataIni); data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)){
        this.arDadosChartDates.push(data);         
     }
-    debugger;
     var arParam = this.parametrosGrafico(this.arItemMovMensalAux, this.idTipoGrafico);
    
     arParam.forEach(z=>{
@@ -137,8 +149,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     });
   }
 
-  private renderizarChart(arDadosChart: DadosChart[]){   
-    var options = this.options(arDadosChart);
+  private renderizarChart(arDadosChart: DadosChart[], title: string){   
+    var options = this.options(arDadosChart, title);
 
     if(this.chart!=null){      
       this.chart.destroy();   
@@ -148,7 +160,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     this.chart.render();
   }
 
-  private options(arSeries: DadosChart[]):any{
+  private options(arSeries: DadosChart[], title):any{
     return {
       series: arSeries,
       chart: {
@@ -165,7 +177,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       curve: 'smooth'
     },
     title: {
-      text: 'Itens de Movimentação Mensal',
+      text: title,
       align: 'left',
       style: {
         fontSize: "16px",

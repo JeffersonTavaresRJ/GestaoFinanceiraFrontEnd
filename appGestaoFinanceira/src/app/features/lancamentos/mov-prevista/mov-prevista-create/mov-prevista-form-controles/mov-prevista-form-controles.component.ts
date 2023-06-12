@@ -64,7 +64,6 @@ export class MovPrevistaFormControlesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    debugger;
     this.movimentacaoPrevista = changes.movimentacaoPrevista.currentValue;
 
     if (this.movimentacaoPrevista != null &&
@@ -97,7 +96,6 @@ export class MovPrevistaFormControlesComponent implements OnInit {
   }
 
   onRowEditSave(movPrevista: MovimentacaoPrevista, ri: number) {
-    debugger;
     //crítica do valor..
     if (!(Number.parseFloat(this.arStValor[ri]) > 0)) {
       this.alertMessageForm.showError("Valor Inválido", "Sr. Usuário");

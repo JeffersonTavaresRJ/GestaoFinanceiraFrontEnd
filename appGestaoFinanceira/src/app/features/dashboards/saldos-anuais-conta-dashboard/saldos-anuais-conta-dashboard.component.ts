@@ -30,12 +30,6 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
       (sucess: { resolveSaldoAnualConta: any[] }) => {
                  //ordenar por ano..
                  this.arSaldos = sucess.resolveSaldoAnualConta.sort((a,b)=>{return a.ano-b.ano});
-                 
-                 this.arContasDadosChart = this.arSaldos.map((e)=>{return new Conta(e.idConta, e.descricaoConta)})
-                                                .filter((value, index, array)=>{
-                                                  return array.indexOf(value) === index;
-                                                });
-                 this.arSelectedContas = this.arContasDadosChart.map((e)=>{return e.id});                 
       }
     );
     
@@ -49,6 +43,9 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
 
   ngOnInit(): void {
 
+    var arIdContas = this.arContas.filter(c=>this.arSaldos.map((e)=>{return e.idConta}).includes(c.id));
+    this.arSelectedContas = arIdContas.map((e)=>{return e.id}); 
+
     this.anoIni = Number.parseInt(this.actResourceRoute.snapshot.params.anoInicial);
     this.anoFim = Number.parseInt(this.actResourceRoute.snapshot.params.anoFinal); 
 
@@ -58,18 +55,14 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     }  
 
     this.filtrarDados(this.arSaldos, this.anoIni, this.anoFim);
-
-    
   }
 
-  filtrarDados(arSaldos: any[], anoIni:number, anoFim: number){    
-
-    var arSaldosAux = arSaldos.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
+  filtrarDados(arSaldos: any[], anoIni:number, anoFim: number){ 
     
-    this.arContasDadosChart = arSaldosAux.map((e)=>{return new Conta(e.idConta, e.descricaoConta)})
-                                         .filter((value, index, array)=>{
-                                                  return array.indexOf(value) === index;
-                                                });
+    var arSaldosAux         = arSaldos.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta)); 
+    this.arContasDadosChart = this.arContas.filter(c=>arSaldosAux.map((s)=>{return s.idConta}).includes(c.id));
+    
+
     if(this.chbxAgrupar){
       this.montarArrayPeriodo(anoIni, anoFim);
       this.populateAgrupado(arSaldosAux, anoIni, anoFim); 
@@ -150,7 +143,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           
           valorAtual = valorAtual == undefined ? 0 : valorAtual;
           valorAnter = valorAnter == undefined ? 0 : valorAnter;
-          
+
           x.data[b]  = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
           x.valor[b] = valorAtual;
           b++;

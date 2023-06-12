@@ -25,7 +25,6 @@ export class MovimentacaoPrevista extends Movimentacao{
     private static arMovimentacoesPrevistas: MovimentacaoPrevista[]=[];
 
     static gerarRecorrencias(movimentacaoPrevista: MovimentacaoPrevista, total: number):Observable<MovimentacaoPrevista[]>{
-        //debugger;
         var item = 0;
         var valorSum=0;
         this.arMovimentacoesPrevistas.length=0;
@@ -62,7 +61,6 @@ export class MovimentacaoPrevista extends Movimentacao{
                 this.movPrev.nrParcelaTotal = total;
 
                 if(this.movPrev.nrParcela == this.movPrev.nrParcelaTotal){
-                    debugger;
                     //a última parcela será a diferença do valor total..                    
                     this.movPrev.valor= Number((movimentacaoPrevista.valor - valorSum).toFixed(2));                    
                 }else{

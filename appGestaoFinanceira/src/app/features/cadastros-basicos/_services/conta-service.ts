@@ -18,7 +18,6 @@ export class ContaService extends GenericResourceService<Conta>{
     }
 
     putConta(conta: Conta): Observable<any> {
-        debugger;  
         var command = ContaCommandUpdate.convertModelToCommand(conta);
         return this.http.put(this.getUrl(), command)
           .pipe(catchError(this.handlerError)/*,

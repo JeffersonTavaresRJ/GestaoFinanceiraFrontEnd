@@ -29,7 +29,6 @@ export class DateConvert{
     }
 
     static formatDateMMYYYY(date, separador):string {
-        //debugger;
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),

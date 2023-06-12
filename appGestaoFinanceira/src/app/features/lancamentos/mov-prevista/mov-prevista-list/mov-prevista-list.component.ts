@@ -125,7 +125,6 @@ export class MovPrevistaListComponent implements OnInit {
   private movPrevistaList() {
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveResources: MovimentacaoPrevista[] }) => {
-        debugger;
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
         this.arMovPrevistas = sucess.resolveResources;
         this.arMovPrevistasAux = sucess.resolveResources;
@@ -156,7 +155,6 @@ export class MovPrevistaListComponent implements OnInit {
   }
 
   private carregaParametros() {
-    debugger;
     this.arStDate = this.actResourceRoute.snapshot.params.dataIni.split('-');
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
     this.arStDate = this.actResourceRoute.snapshot.params.dataFim.split('-');

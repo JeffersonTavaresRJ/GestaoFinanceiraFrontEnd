@@ -29,7 +29,6 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
     ngOnInit(): void {
       this.resourceService.getAll().subscribe(
         sucess=>{
-          //debugger;
           this.arResourceModel = sucess;
           this.arResourceModelAux = sucess;
           this.filtrarPorStatus(this.status);
@@ -39,7 +38,6 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
     }
 
     onChange(){
-      //debugger;
       this.parseToNumber(this.formControl.value);
       //enviando o objeto para o componente pai..
       var _id = this.formControl.value;
