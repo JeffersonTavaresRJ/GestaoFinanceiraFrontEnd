@@ -1,0 +1,15 @@
+
+th, td {
+    font-size: small;
+    padding: 2px 5px;
+}
+
+.header{
+    text-align: center;
+    padding-bottom: 10px;
+    font-size: medium;
+}
+
+.right{
+    text-align: right;
+}

@@ -16,6 +16,7 @@ import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogListComponent } from '../dialog-list/dialog-list.component';
+import { DataItems, DialogData } from '../_models/dialog-data';
 
 
 export type ChartOptions = {
@@ -36,17 +37,18 @@ export type ChartOptions = {
 export class ReceitasDespesasDashboardComponent implements OnInit {
   seriesTipo:Number[] = [];
   labelsTipo:string[] = [];
-  seriesItem:Number[] = [];
-  labelsItem:string[] = [];
+  seriesPrioridade:Number[] = [];
+  labelsPrioridade:string[] = [];
   arFechamentosMensais:FechamentoModel[];
   arMovReal: MovimentacaoRealizada[]=[];
   arContas:Conta[]=[];
   arMovRealTipo: any[]=[];
-  arMovRealItem: any[]=[];
+  arMovRealPrioridade: any[]=[];
+  dialogData: DialogData;
   selectedMesAno: string=""; 
   idConta: number;
   chartTipo: ApexCharts;
-  chartItem: ApexCharts;
+  chartPrioridade: ApexCharts;
   headerTitle: String;
   constructor(private actResourceRoute: ActivatedRoute,
               protected movRealizadaService: MovRealizadaService,
@@ -85,8 +87,8 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
         this.arMovReal = success;
 
         this.visibleChartPrioridade(false);
-        if(this.chartItem!=null){
-             this.chartItem.destroy();
+        if(this.chartPrioridade!=null){
+             this.chartPrioridade.destroy();
         }
         
         this.arMovRealTipo = this.movRealPorTipo(this.arMovReal, this.idConta);
@@ -98,22 +100,26 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
   onChangeConta(){
     this.visibleChartPrioridade(false);
-    if(this.chartItem!=null){
-      this.chartItem.destroy();
+    if(this.chartPrioridade!=null){
+      this.chartPrioridade.destroy();
     }
     this.arMovRealTipo = this.movRealPorTipo(this.arMovReal, this.idConta);
     this.renderizarChartTipo(this.arMovRealTipo);
   }
 
-  private openDialog(titulo:string) {
-    this.dialog.open(DialogListComponent, 
-      {   data: { header: "Total "+titulo, 
-                  dataItems:[
-                  {descricao: 'gás', valor:100, percentual:0.25 },
-                  {descricao: 'telefone', valor:150, percentual:0.14 },
-                  {descricao: 'energia elétrica', valor:300, percentual:0.35 }
-                ]},
-      }, );
+  private openDialog(titulo:string, prioridade: string, tipo: string, backgroundColor : string) {
+
+    var arMovRealFilter = this.arMovReal.filter(f=>f.itemMovimentacao.tipo==tipo &&
+                                                   f.tipoPrioridade==prioridade.substring(0,1));
+    var total = arMovRealFilter.reduce((acum,item)=>{return acum+item.valor;},0);
+
+    this.dialogData = new DialogData();
+    this.dialogData.header = "Total "+titulo+ ": ("+prioridade+" Prioridade)";
+    this.dialogData.backgroundColor = backgroundColor;
+    arMovRealFilter.map(m=>{this.dialogData.dataItems.push(new DataItems(m.itemMovimentacao.descricao,m.valor, m.valor/total))});
+
+    this.dialog.open(DialogListComponent, {data: this.dialogData});
+
   }
 
   private movRealPorTipo(arr: MovimentacaoRealizada[], idConta?:number):any[]{
@@ -135,7 +141,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     return result;
   }
   
-  private movRealPorItem(arr: MovimentacaoRealizada[], tipo: String, idConta?:number):any[]{
+  private movRealPorPrioridade(arr: MovimentacaoRealizada[], tipo: String, idConta?:number):any[]{
     //agrupando por item de movimentacao..
     var result = [];
 
@@ -174,25 +180,25 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     this.chartTipo.updateOptions(options);
   }
 
-  private renderizarChartItem(arr:any[], descricaoTipo:string){
-    this.labelsItem.length=0;
-    this.seriesItem.length=0;
+  private renderizarChartPrioridade(arr:any[], descricaoTipo:string){
+    this.labelsPrioridade.length=0;
+    this.seriesPrioridade.length=0;
 
    //preenchendo as Series e Labels do chart..
     arr.map(x=>{
-      this.labelsItem.push(x.Descricao);
-      this.seriesItem.push(x.Valor);
+      this.labelsPrioridade.push(x.Descricao);
+      this.seriesPrioridade.push(x.Valor);
     });
 
     this.visibleChartPrioridade(true);
 
-    var options = this.options(this.seriesItem, this.labelsItem, "chart-item", descricaoTipo);
+    var options = this.options(this.seriesPrioridade, this.labelsPrioridade, "chart-item", descricaoTipo);
 
-    if(this.chartItem!=null){
-      this.chartItem.destroy();
+    if(this.chartPrioridade!=null){
+      this.chartPrioridade.destroy();
     }
-    this.chartItem = new ApexCharts(document.querySelector("#chart-item"), options);
-    this.chartItem.render();   
+    this.chartPrioridade = new ApexCharts(document.querySelector("#chart-item"), options);
+    this.chartPrioridade.render();   
     
   }
 
@@ -216,10 +222,13 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
           dataPointSelection: (event:any, chartContext:any, config:any) => {            
             if (config.w.config.chart.id=="chart-tipo"){                           
               var tipo = config.w.config.labels[config.dataPointIndex];              
-              this.arMovRealItem = this.movRealPorItem(this.arMovReal, tipo.substring(0,1), this.idConta);
-              this.renderizarChartItem(this.arMovRealItem, tipo);
+              this.arMovRealPrioridade = this.movRealPorPrioridade(this.arMovReal, tipo.substring(0,1), this.idConta);
+              this.renderizarChartPrioridade(this.arMovRealPrioridade, tipo);
             }else{
-              this.openDialog(titulo);
+              var prioridade = config.w.config.labels[config.dataPointIndex];
+              var color = config.w.globals.colors[config.dataPointIndex];
+              var tipo = this.arMovRealPrioridade.filter(x=>x.Descricao= prioridade)[0].Tipo;
+              this.openDialog(titulo, prioridade, tipo, color);
             }
           }
         }

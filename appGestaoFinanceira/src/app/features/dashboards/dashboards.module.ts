@@ -14,6 +14,7 @@ import { ItemMovimentacaoMensalComponent } from './item-movimentacao-mensal/item
 import { ComponentsModule } from '../-components/-components.module';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DialogListComponent } from './dialog-list/dialog-list.component';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { DialogListComponent } from './dialog-list/dialog-list.component';
     ReactiveFormsModule,
     MultiSelectModule,
     ComponentsModule,
-    MatDialogModule
+    MatDialogModule,
+    OrderModule
   ]
 })
 export class DashboardsModule { }
