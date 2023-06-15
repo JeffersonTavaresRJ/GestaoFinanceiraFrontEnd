@@ -1,0 +1,17 @@
+  <div id="dialog" mat-dialog-content>  
+    <table>
+      <tbody>
+          <tr>
+            <td colspan="3" class="header">
+                 {{data.header}}  
+                 <hr>               
+            </td>
+          </tr>
+          <tr *ngFor="let item of data.dataItems | orderBy: 'percentual': 'desc'">
+              <td>{{item.descricao}}</td>
+              <td class="right">{{item.valor | currency}}</td>
+              <td class="right">{{item.percentual | percent}}</td>
+          </tr>
+      </tbody>
+    </table>  
+  </div>

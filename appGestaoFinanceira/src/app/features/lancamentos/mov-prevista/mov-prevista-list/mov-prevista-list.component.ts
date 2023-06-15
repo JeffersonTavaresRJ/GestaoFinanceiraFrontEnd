@@ -6,6 +6,16 @@ import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { enumModel } from 'src/app/shared/_models/generic-enum-model';
 import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
 import { MovPrevistaService } from '../../_services/mov-prevista-service';
+import { environment } from 'src/environments/environment';
+
+interface ParamListMovPre{
+  idCategoria?: number, 
+  idItemMovimentacao?: number, 
+  idFormaPagamento?: number,
+  idPrioridade?: string,
+  status?: string,
+  dataIni: string,
+  dataFim: string};
 
 @Component({
   selector: 'app-mov-prevista-list',
@@ -21,7 +31,7 @@ export class MovPrevistaListComponent implements OnInit {
   formBuilder: FormBuilder;
 
   arStDate: string[];
-  status: string;
+  status?: string;
   dataIni: Date;
   dataFim: Date;
   index: number;
@@ -30,6 +40,7 @@ export class MovPrevistaListComponent implements OnInit {
   valorTotalDespesa: number = 0;
   dataReferencia: Date;
   displayDetalhe: boolean;
+  paramListMovPre: ParamListMovPre;
 
 
   arEnumStatus: enumModel[];
@@ -46,8 +57,8 @@ export class MovPrevistaListComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregaParametros();
-    this.movPrevistaList();
     this.builderForm();
+    this.movPrevistaList();
   }
 
   filtrarTablePorPeriodo() {
@@ -74,6 +85,18 @@ export class MovPrevistaListComponent implements OnInit {
     var idItemMovimentacao = this.formGroup.get('idItemMovimentacao').value;
     var idFormaPagamento = this.formGroup.get('idFormaPagamento').value;
     var idPrioridade = this.formGroup.get('idPrioridade').value;
+    
+    //armazenando parâmetros da última consulta..
+    var param : ParamListMovPre={
+       idCategoria: idCategoria, 
+       idItemMovimentacao: idItemMovimentacao, 
+       idFormaPagamento: idFormaPagamento,
+       idPrioridade: idPrioridade,
+       status: this.status,
+       dataIni: DateConvert.formatDateYYYYMMDD(this.dataIni, '-'),
+       dataFim: DateConvert.formatDateYYYYMMDD(this.dataFim, '-')};
+
+    window.localStorage.setItem(environment.keyParamListMovPre, JSON.stringify(param));
 
     if (idCategoria != null) {
       this.arMovPrevistas = this.arMovPrevistasAux.filter(m => m.itemMovimentacao.categoria.id == idCategoria);
@@ -123,15 +146,48 @@ export class MovPrevistaListComponent implements OnInit {
   }
 
   private movPrevistaList() {
-    this.actResourceRoute.data.subscribe(
-      (sucess: { resolveResources: MovimentacaoPrevista[] }) => {
-        debugger;
-        //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
-        this.arMovPrevistas = sucess.resolveResources;
-        this.arMovPrevistasAux = sucess.resolveResources;
-        this.calcularSaldo();
-      }
-    );
+
+    //pegando os parâmetros da última consulta..
+    var param = window.localStorage.getItem(environment.keyParamListMovPre);
+
+    if(param!= null){
+       this.paramListMovPre = JSON.parse(param);
+
+       if(this.paramListMovPre.idCategoria!=null){
+        this.formGroup.get('idCategoria').setValue(this.paramListMovPre.idCategoria);
+       }
+
+       if(this.paramListMovPre.idItemMovimentacao!=null){
+        this.formGroup.get('idItemMovimentacao').setValue(this.paramListMovPre.idItemMovimentacao);
+       }
+
+       if(this.paramListMovPre.idFormaPagamento!=null){
+        this.formGroup.get('idFormaPagamento').setValue(this.paramListMovPre.idFormaPagamento);
+       }
+
+       if(this.paramListMovPre.idPrioridade!=null){
+        this.formGroup.get('idPrioridade').setValue(this.paramListMovPre.idPrioridade);
+       }
+
+       this.status = this.paramListMovPre.status;
+       this.dataIni = DateConvert.stringToDate(this.paramListMovPre.dataIni, '-');
+       this.dataFim = DateConvert.stringToDate(this.paramListMovPre.dataFim, '-');
+
+       this.filtrarTablePorPeriodo();
+       this.filtrarTablePorParametros();
+
+    }else{
+      this.actResourceRoute.data.subscribe(
+        (sucess: { resolveResources: MovimentacaoPrevista[] }) => {
+          //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
+          this.arMovPrevistas = sucess.resolveResources;
+          this.arMovPrevistasAux = sucess.resolveResources;
+          this.calcularSaldo();
+        }
+      );
+    }
+
+
   }
 
   private calcularSaldo() {
@@ -156,7 +212,6 @@ export class MovPrevistaListComponent implements OnInit {
   }
 
   private carregaParametros() {
-    debugger;
     this.arStDate = this.actResourceRoute.snapshot.params.dataIni.split('-');
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
     this.arStDate = this.actResourceRoute.snapshot.params.dataFim.split('-');

@@ -7,8 +7,8 @@
                     optionValue="Key" 
                     [showClear]="false" 
                     [filter]="false"
-                    autoDisplayFirst="true"
                     (onChange)="consultarDados()"
+                    autoDisplayFirst="true"
                      >
         </p-dropdown>
     </div>
@@ -20,8 +20,6 @@
                     optionValue="Key" 
                     [showClear]="false" 
                     [filter]="false"
-                    (onChange)="consultarDados()"
-                    (onClear)="consultarDados()"
                     emptyMessage="Tipo não encontrado"
                     autoDisplayFirst="true"
                     *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'" >
@@ -31,17 +29,17 @@
         <label *ngIf="idTipoGrafico=='C'">Categoria:</label>
         <app-dropdown-categoria [form-group]="formGroup" 
                                 [form-control]="formGroup.get('idCategoria')"
-                                placeholder="Todas"
-                                [select-by-tipo-item-mov]="idTipo"
+                                placeholder="--Selecione--"
+                                [select-by-tipo-item-mov]="idTipo"  
                                 (OnChange)="consultarDados()"
-                                (OnClear)="consultarDados()"
+                                (OnClear)="consultarDados()"                             
                                 *ngIf="idTipoGrafico=='C'" >
         </app-dropdown-categoria>
 
         <label *ngIf="idTipoGrafico=='I'">Item Movimentação:</label>
         <app-dropdown-item-movimentacao [form-group]="formGroup"
                                          [form-control]="formGroup.get('idItemMovimentacao')" 
-                                         placeholder="Todas"
+                                         placeholder="--Selecione--"
                                          [select-by-idCategoria]="formGroup.get('idCategoria').value"
                                          [select-by-tipo-item-mov]="idTipo"
                                          (OnChange)="consultarDados()"

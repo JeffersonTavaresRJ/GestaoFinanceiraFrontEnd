@@ -69,12 +69,10 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   }
 
   protected loadResource() {
-    debugger;
     if (this.resourceCurrentAction() == 'edit') {
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovPrev: MovimentacaoPrevista }) => {
-          console.log(sucess);
-          debugger;
+          //console.log(sucess);
           //o resolveMovPrev deve ser o mesmo nome na variável resolve da rota.. 
           this.resourceForm.get('idCategoria').setValue(sucess.resolveMovPrev.itemMovimentacao.categoria.id);
           this.resourceForm.get('idItemMovimentacao').setValue(sucess.resolveMovPrev.itemMovimentacao.id);
@@ -104,7 +102,6 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   gerarRecorrencias() {
     if (this.resourceForm.get('tipoRecorrencia').value == "M" ||
       this.resourceForm.get('tipoRecorrencia').value == "P") {
-      debugger;
       this.movimentacaoPrevista = new MovimentacaoPrevista();
       this.movimentacaoPrevista.itemMovimentacao = this.itemMovimentacao;
       this.movimentacaoPrevista.formaPagamento = this.formaPagamento;

@@ -48,7 +48,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
   constructor(protected injector: Injector,
     private fb: FormBuilder) {
-    debugger;
     this.movRealizadaService = injector.get(MovRealizadaService);
     this.alertMessageForm = injector.get(AlertMessageForm);
     this.actResourceRoute = injector.get(ActivatedRoute);
@@ -167,7 +166,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   editRow(i: number) {
-    debugger;
     this.arForms.controls[i].get('isEdit').setValue(true);
   }
 
@@ -185,7 +183,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       if (fGroup.get('id').value == 0) {
         this.movRealizadaService.post(fGroup).subscribe(
           sucess => {
-            debugger;
             fGroup.get('id').setValue( Number.parseFloat(sucess.id));
             fGroup.get('isEdit').setValue(false);
             this.totalizarValorPago();
@@ -215,7 +212,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   getConta(fGroup: FormGroup, i:number){
-    //debugger;
     var descricao = this.arContas.filter(c=>c.id==fGroup.get('idConta').value).map(function(item, idx){
       return item.descricao
     });
@@ -223,7 +219,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   getFormaPagamento(fGroup: FormGroup, i: number){
-    //debugger;
     var descricao = this.arFormasPagamento.filter(c=>c.id==fGroup.get('idFormaPagamento').value).map(function(item, idx){
       return item.descricao
     });
@@ -242,7 +237,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     _descricaoConta?: string,
     _descricaoFormaPagamento?: string
   ) {
-    debugger;
     this.arForms.push(this.fb.group({
       idItemMovimentacao: [_idItemMovimentacao],
       tipoPrioridade: [_tipoPrioridade],

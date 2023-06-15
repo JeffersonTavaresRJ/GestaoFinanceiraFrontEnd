@@ -40,7 +40,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   autenticar(): void {
-    //debugger;
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));

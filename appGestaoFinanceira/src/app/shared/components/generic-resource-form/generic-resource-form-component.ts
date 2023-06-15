@@ -54,7 +54,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     }
 
     resourceSubmmit() {
-        debugger;
         if (this.resourceCurrentAction() == 'new') {
             this.resourceCreate()
         } else if (this.resourceCurrentAction() == 'edit') {
@@ -72,7 +71,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     resourceErrorsValidations(param: string): any[] {
         if (this.resourceForm.valid && this.validationErrors.length > 0) {
-            // debugger;
             return this.validationErrors.filter(i => i.propertyName.toLowerCase() == param.toLowerCase());
         }
     }
@@ -97,7 +95,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
     protected abstract buildResourceForm();
 
     protected resourceCreate() {
-       //debugger;
        //this.resourceMessageButton = 'Processando...';
         this.resourceService.post(this.resourceForm)
             .subscribe(
