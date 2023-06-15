@@ -1,12 +1,11 @@
-
 th, td {
-    font-size: small;
+    font-size: small;    
     padding: 2px 5px;
 }
 
 .header{
     text-align: center;
-    padding-bottom: 10px;
+    padding-bottom: 1px;
     font-size: medium;
 }
 

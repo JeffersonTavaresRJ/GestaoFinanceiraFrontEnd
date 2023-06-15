@@ -189,6 +189,8 @@ export class MovPrevistaFormControlesComponent implements OnInit {
   post(movPrevistas: MovimentacaoPrevista[]) {
 
     //carregando o array formGroup..
+    this.arFormGroup.length=0;
+    
     movPrevistas.forEach(element=>{
       this.arFormGroup.push(new FormBuilder().group({
         idItemMovimentacao: [element.itemMovimentacao.id],

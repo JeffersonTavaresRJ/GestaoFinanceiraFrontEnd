@@ -2,16 +2,6 @@ import { Component, OnInit,Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogData } from '../_models/dialog-data';
 
-/*export interface DataItems {
-  descricao: string, valor: number, percentual: number;
-}
-
-export interface DialogData{
-  header: string, 
-  dataItems: DataItems[]
-}*/
-
-
 @Component({
   selector: 'app-dialog-list',
   templateUrl: './dialog-list.component.html',
