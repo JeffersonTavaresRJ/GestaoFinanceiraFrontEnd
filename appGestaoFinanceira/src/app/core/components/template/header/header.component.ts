@@ -71,6 +71,7 @@ export class HeaderComponent implements OnInit {
   resetUser(){
       this.usuarioAutenticado=false;
       window.localStorage.removeItem(environment.keyUser);
+      window.localStorage.removeItem(environment.keyParamListMovPre);
     }
 
   }

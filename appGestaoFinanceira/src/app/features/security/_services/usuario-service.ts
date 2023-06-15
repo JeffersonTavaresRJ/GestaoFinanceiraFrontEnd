@@ -21,7 +21,6 @@ export class UsuarioService extends GenericResourceService<Usuario>{
     }    
 
     autenthicate(credentials: Usuario): Observable<Usuario> {
-        //debugger;
         this.setApiOption('/Autenthicate'); 
         return this.http.post(this.getUrl(), credentials)
         .pipe(catchError(this.handlerError)/*, 

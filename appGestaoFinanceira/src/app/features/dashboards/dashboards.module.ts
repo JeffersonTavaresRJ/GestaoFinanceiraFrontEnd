@@ -12,6 +12,9 @@ import { SaldosAnuaisPorContaDashBoardComponent } from './saldos-anuais-conta-da
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ItemMovimentacaoMensalComponent } from './item-movimentacao-mensal/item-movimentacao-mensal.component';
 import { ComponentsModule } from '../-components/-components.module';
+import {MatDialogModule} from '@angular/material/dialog';
+import { DialogListComponent } from './dialog-list/dialog-list.component';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,8 @@ import { ComponentsModule } from '../-components/-components.module';
     RealPrevAnualDashboardComponent,
     SaldosMensaisPorContaDashboardComponent,
     SaldosAnuaisPorContaDashBoardComponent,
-    ItemMovimentacaoMensalComponent
+    ItemMovimentacaoMensalComponent,
+    DialogListComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +34,9 @@ import { ComponentsModule } from '../-components/-components.module';
     CalendarModule,
     ReactiveFormsModule,
     MultiSelectModule,
-    ComponentsModule
+    ComponentsModule,
+    MatDialogModule,
+    OrderModule
   ]
 })
 export class DashboardsModule { }

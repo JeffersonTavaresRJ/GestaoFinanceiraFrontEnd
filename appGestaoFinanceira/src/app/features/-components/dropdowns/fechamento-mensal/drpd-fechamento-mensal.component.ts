@@ -25,7 +25,6 @@ export class DropDownFechamentoMensalComponent {
   populate(){
     this.fechamentoService.getAll().subscribe(
       sucess=>{
-       // debugger;
         this.arFechamentosMensais = sucess;
         console.log("populate dropdwon");
         this.getFechamento();
@@ -41,7 +40,6 @@ export class DropDownFechamentoMensalComponent {
   }
 
   onChange(){
-  //  debugger;
     //enviando o objeto para o componente pai..
     if (this.selectedMesAno!=null){
       this.fechamentoModel = this.arFechamentosMensais

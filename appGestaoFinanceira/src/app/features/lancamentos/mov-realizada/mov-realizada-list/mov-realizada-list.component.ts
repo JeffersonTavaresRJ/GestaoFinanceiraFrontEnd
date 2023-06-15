@@ -45,7 +45,6 @@ export class MovRealizadaListComponent implements OnInit {
   }
 
   filtrarTablePorPeriodo() {
-    debugger;
     this.dataFim = new Date(this.dataIni.getFullYear(),
       this.dataIni.getMonth() + 1,
       0);
@@ -103,7 +102,6 @@ export class MovRealizadaListComponent implements OnInit {
   }
 
   private filtrarTablePorParametros(idConta?: Number, idFormaPagamento?: Number) {
-    debugger;
     this.results = this.resultsAux;
     if (idConta != null){
       this.results = this.resultsAux.filter(m => m.conta.id == idConta);
@@ -120,7 +118,6 @@ export class MovRealizadaListComponent implements OnInit {
   }
 
   private movRealizadaList() {
-    debugger;
     this.arStDate = this.actResourceRoute.snapshot.params.dataIni.split('-');
 
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);

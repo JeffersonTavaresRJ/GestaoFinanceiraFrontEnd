@@ -95,7 +95,6 @@ export class PlanRealAnualDashboardComponent implements OnInit {
   }
 
   renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
-    debugger;
 
     if(this.chart!=null){      
       this.chart.destroy();   
@@ -255,7 +254,6 @@ export class PlanRealAnualDashboardComponent implements OnInit {
   }
 
   private agruparPorMes(arr:Movimentacao[]):DadosChartAnalit[]{
-    //debugger;
     var result:DadosChartAnalit[]=[];
     
     arr.reduce(function(acumulador, obj){

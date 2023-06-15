@@ -16,6 +16,7 @@
                     <div class="col-3">
                         <app-dropdown-item-movimentacao [form-group]="formGroup"
                             [form-control]="formGroup.get('idItemMovimentacao')" placeholder="Item de Movimentação"
+                            [select-by-idCategoria]="formGroup.get('idCategoria').value"
                             (OnChange)="filtrarTablePorParametros($event)">
                         </app-dropdown-item-movimentacao>
                     </div>
