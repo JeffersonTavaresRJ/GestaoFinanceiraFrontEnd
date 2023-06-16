@@ -10,7 +10,7 @@
           <tr *ngFor="let item of data.dataItems | orderBy: 'percentual': 'desc'">
               <td>{{item.descricao}}</td>
               <td class="right">{{item.valor | currency}}</td>
-              <td class="right">{{item.percentual | percent}}</td>
+              <td class="right">{{item.percentual | percent: '1.0-2'}}</td>
           </tr>
       </tbody>
     </table>  

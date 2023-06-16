@@ -111,19 +111,24 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
     var arMovRealFilter = this.arMovReal.filter(f=>f.itemMovimentacao.tipo==tipo &&
                                                    f.tipoPrioridade==prioridade.substring(0,1));
+
     var total = arMovRealFilter.reduce((acum,item)=>{return acum+item.valor;},0);
+
+    //var arMovRealItem = this.movRealPorItemMov(arMovRealFilter);
 
     this.dialogData = new DialogData();
     this.dialogData.header = "Total "+titulo+ ": ("+prioridade+" Prioridade)";
     this.dialogData.backgroundColor = backgroundColor;
-    arMovRealFilter.map(m=>{this.dialogData.dataItems.push(new DataItems(m.itemMovimentacao.descricao,m.valor, m.valor/total))});
+
+    this.movRealPorItemMov(arMovRealFilter).map(m=>
+      {this.dialogData.dataItems.push(new DataItems(m.Descricao, m.Valor, m.Valor/total))});
 
     this.dialog.open(DialogListComponent, {data: this.dialogData});
 
   }
 
   private movRealPorTipo(arr: MovimentacaoRealizada[], idConta?:number):any[]{
-    //agrupando por item de movimentacao..
+    //agrupando por tipo..
     var result = [];
 
     if(idConta>0){
@@ -142,7 +147,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   }
   
   private movRealPorPrioridade(arr: MovimentacaoRealizada[], tipo: String, idConta?:number):any[]{
-    //agrupando por item de movimentacao..
+    //agrupando por prioridade..
     var result = [];
 
     arr = arr.filter(x=>x.itemMovimentacao.tipo==tipo);
@@ -157,6 +162,21 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
           result.push(acumulador[obj.tipoPrioridade]);
       }
       acumulador[obj.tipoPrioridade].Valor+=obj.valor;      
+      return acumulador;
+    }, []);
+    return result;
+  }
+
+  private movRealPorItemMov(arr: MovimentacaoRealizada[]):any[]{
+    //agrupando por item de movimentacao..
+    var result = [];
+
+    arr.reduce(function(acumulador, obj){
+      if (!acumulador[obj.itemMovimentacao.id]){
+          acumulador[obj.itemMovimentacao.id] = {Descricao: obj.itemMovimentacao.descricao, Valor: 0};
+          result.push(acumulador[obj.itemMovimentacao.id]);
+      }
+      acumulador[obj.itemMovimentacao.id].Valor+=obj.valor;      
       return acumulador;
     }, []);
     return result;
