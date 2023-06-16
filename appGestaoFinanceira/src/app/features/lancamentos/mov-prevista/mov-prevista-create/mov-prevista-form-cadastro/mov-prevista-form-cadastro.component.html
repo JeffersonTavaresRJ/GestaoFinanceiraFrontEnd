@@ -28,6 +28,7 @@
                               [disabled]="resourceCurrentAction()=='edit'"
                               [select-by-status]="resourceCurrentAction()=='new'"
                               [select-by-idCategoria]="resourceForm.get('idCategoria').value"
+                              select-by-tipo-operacao="MD"
                               placeholder="Selecione"
                               (OnChange)="getItemMovimentacao($event)">
                         </app-dropdown-item-movimentacao>

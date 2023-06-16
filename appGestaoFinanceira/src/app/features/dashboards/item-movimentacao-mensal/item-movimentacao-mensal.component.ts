@@ -77,7 +77,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
         this.idTipoGrafico=="T"){
 
       this.arItemMovMensalAux = this.arItemMovMensal
-                                  .filter(x=>x.tipoItemMovimentcao==this.idTipo || this.idTipoGrafico=="T")
+                                  .filter(x=>x.tipoItemMovimentcao==this.idTipo || (this.idTipoGrafico=="T" && x.tipoOperacao =="MD"))
                                   .filter(x=>x.idCategoria==idCategoria || idCategoria ==null)
                                   .filter(x=>x.idItemMovimentacao==idItemMov || idItemMov ==null);
 

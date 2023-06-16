@@ -21,7 +21,7 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
   getByDataReferencia(idItemMovimentacao?: number, dataReferencia?: string): Observable<MovimentacaoRealizada[]> {
     this.setApiOption('/GetByDataReferencia');
     var _idItemMovimentacao = idItemMovimentacao!=null || idItemMovimentacao != undefined ? idItemMovimentacao.toString() : ' ';
-    var _dataReferencia = dataReferencia!=null || dataReferencia != undefined ? dataReferencia.toString() : ' ';
+    var _dataReferencia = dataReferencia!=null || dataReferencia != undefined ? dataReferencia.toString().split("T")[0] : ' ';
     return this.http.get<MovimentacaoRealizada[]>(`${this.getUrl()}/${_idItemMovimentacao}/${_dataReferencia}`);
   }
 

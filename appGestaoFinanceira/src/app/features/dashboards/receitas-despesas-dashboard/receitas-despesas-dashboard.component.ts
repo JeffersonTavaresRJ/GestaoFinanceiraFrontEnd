@@ -54,10 +54,11 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
               protected movRealizadaService: MovRealizadaService,
               protected dialog : MatDialog
               ) {
-
+                var dataReferencia;
                 this.actResourceRoute.data.subscribe(
                   (sucess: { resolveFechamento: FechamentoModel[] }) => {
-                             this.arFechamentosMensais = sucess.resolveFechamento;  
+                             this.arFechamentosMensais = sucess.resolveFechamento;
+                             dataReferencia = this.arFechamentosMensais[0].dataReferencia;  
                   }
                 );
             
@@ -69,7 +70,11 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
             
                 this.actResourceRoute.data.subscribe(
                   (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
-                             this.arMovReal = sucess.resolveMovReal;
+                             //considerar somente as Movimentações Diárias..
+                             this.arMovReal = sucess.resolveMovReal
+                                                    .filter(x=>x.itemMovimentacao.tipoOperacao=="MD" &&
+                                                               Date.parse(x.dataReferencia.toString().split("T")[0])==
+                                                               Date.parse(dataReferencia.toString().split("T")[0]));
                              this.arMovRealTipo = this.movRealPorTipo(this.arMovReal);
                                     
                   }
@@ -107,14 +112,16 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     this.renderizarChartTipo(this.arMovRealTipo);
   }
 
-  private openDialog(titulo:string, prioridade: string, tipo: string, backgroundColor : string) {
+  private openDialog(arMovReal: MovimentacaoRealizada[], titulo:string, prioridade: string, tipo: string, backgroundColor : string) {
 
-    var arMovRealFilter = this.arMovReal.filter(f=>f.itemMovimentacao.tipo==tipo &&
-                                                   f.tipoPrioridade==prioridade.substring(0,1));
+    if(this.idConta!= null){
+      arMovReal = arMovReal.filter(x=>x.conta.id == this.idConta);
+    }
+
+    var arMovRealFilter = arMovReal.filter(f=>f.itemMovimentacao.tipo==tipo &&
+                                              f.tipoPrioridade==prioridade.substring(0,1));    
 
     var total = arMovRealFilter.reduce((acum,item)=>{return acum+item.valor;},0);
-
-    //var arMovRealItem = this.movRealPorItemMov(arMovRealFilter);
 
     this.dialogData = new DialogData();
     this.dialogData.header = "Total "+titulo+ ": ("+prioridade+" Prioridade)";
@@ -241,14 +248,14 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
           //utilizando a referência de uma function "()=>{} para invocar functions externos.."
           dataPointSelection: (event:any, chartContext:any, config:any) => {            
             if (config.w.config.chart.id=="chart-tipo"){                           
-              var tipo = config.w.config.labels[config.dataPointIndex];              
+              var tipo                 = config.w.config.labels[config.dataPointIndex];              
               this.arMovRealPrioridade = this.movRealPorPrioridade(this.arMovReal, tipo.substring(0,1), this.idConta);
               this.renderizarChartPrioridade(this.arMovRealPrioridade, tipo);
             }else{
               var prioridade = config.w.config.labels[config.dataPointIndex];
-              var color = config.w.globals.colors[config.dataPointIndex];
-              var tipo = this.arMovRealPrioridade.filter(x=>x.Descricao= prioridade)[0].Tipo;
-              this.openDialog(titulo, prioridade, tipo, color);
+              var color      = config.w.globals.colors[config.dataPointIndex];
+              var tipo       = this.arMovRealPrioridade.filter(x=>x.Descricao= prioridade)[0].Tipo;
+              this.openDialog(this.arMovReal, titulo, prioridade, tipo, color);
             }
           }
         }
