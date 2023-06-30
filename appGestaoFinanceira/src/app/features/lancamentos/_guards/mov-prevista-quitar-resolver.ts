@@ -13,7 +13,7 @@ export class MovPrevistaQuitarResolver implements Resolve<MovimentacaoRealizada[
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
     this.idItemMovimentacao = activatedRouteSnapshot.params['idItemMov'];
     this.dataReferencia = activatedRouteSnapshot.params['dataRef'];
-    return this.movRealizadaService.getByDataReferencia(this.idItemMovimentacao, this.dataReferencia);
+    return this.movRealizadaService.getByDataReferencia(this.dataReferencia, this.idItemMovimentacao);
   }
 
 }
