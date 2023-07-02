@@ -51,7 +51,8 @@ export class ItemMovimentacaoFormComponent extends GenericResourceFormComponent<
       descricao: [null, Validators.required],
       tipo: [null, Validators.required],
       status: [null],
-      idCategoria: [null, Validators.required]
+      idCategoria: [null, Validators.required],
+      tipoOperacao:[null]
     });
   };
 
@@ -60,11 +61,13 @@ export class ItemMovimentacaoFormComponent extends GenericResourceFormComponent<
       this.actResourceRoute.data.subscribe(
         (sucess:{resolveResource:ItemMovimentacao})=>{
           //o resolveResource deve ser o mesmo nome na variável resolve da rota.. 
+          debugger;
           this.resourceForm.get('id').setValue(sucess.resolveResource.id);
           this.resourceForm.get('descricao').setValue(sucess.resolveResource.descricao);
           this.resourceForm.get('tipo').setValue(sucess.resolveResource.tipo);
           this.resourceForm.get('status').setValue(sucess.resolveResource.status);
           this.resourceForm.get('idCategoria').setValue(sucess.resolveResource.categoria.id);
+          this.resourceForm.get('tipoOperacao').setValue(sucess.resolveResource.tipoOperacao);
         },
         (error) => this.resourceActionForError(error)
       );
