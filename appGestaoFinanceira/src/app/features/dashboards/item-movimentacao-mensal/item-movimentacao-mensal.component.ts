@@ -114,7 +114,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       var arPercent: number[]=[];
       this.arDadosChartDates.forEach(dataRef=>{
         
-        var valor =  tipoGrafico=="T"? this.arItemMovMensalAux.filter(x=>x.descricaoTipoItemMovimentcao == name &&
+        var valor =  tipoGrafico=="T"? this.arItemMovMensalAux.filter(x=>x.descricaoTipoItemMovimentacao == name &&
                                                                         Date.parse(x.dataReferencia.toString()) == 
                                                                         Date.parse(dataRef.toString()))
                                                               .reduce((acum, item)=>{return acum+item.valorMensal},0):
@@ -140,7 +140,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   }
 
   private parametrosGrafico(array:any[],tipoVisualizacao:string):string[]{
-    return array.map(x=>{ return tipoVisualizacao=='T'? x.descricaoTipoItemMovimentcao :
+    return array.map(x=>{ return tipoVisualizacao=='T'? x.descricaoTipoItemMovimentacao :
                                  tipoVisualizacao=='C'? x.descricaoCategoria :
                                  x.descricaoItemMovimentacao;                
                       })
