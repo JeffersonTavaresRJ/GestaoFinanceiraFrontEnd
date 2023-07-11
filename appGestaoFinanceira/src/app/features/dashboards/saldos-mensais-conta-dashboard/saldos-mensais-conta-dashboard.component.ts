@@ -19,8 +19,9 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   arSelectedContas:any[]=[]; 
   arSeries: ContaMensal[]=[];
   ano: string;
-  chbxAgrupar: boolean;
+  chbxAgrupar: boolean=true;
   chart: ApexCharts;
+  limiteContas: number;
 
   constructor(private actResourceRoute: ActivatedRoute) { 
     this.actResourceRoute.data.subscribe(
@@ -45,12 +46,29 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   }
   
   filtrarDados(){
-    this.arSaldosAux = this.arSaldos;
-    this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
+    this.arSaldosAux = this.arSaldos; 
+
     if(this.chbxAgrupar){
-      this.populateAgrupado(this.arSaldosAux); 
+      this.limiteContas= this.arContas.length;
+
+      this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
+      this.populateAgrupado(this.arSaldosAux);       
+
     }else{
+
+      this.limiteContas=2;
+      //ao desmarcar checkbox de agrupamento, manter somente 1 conta na geração do gráfico..
+      if(this.arSelectedContas.length ==this.arContas.length){        
+        var idx = this.arContas.length-1;
+        while(idx != 1){
+          this.arSelectedContas.splice(idx,1);
+          idx--;
+        }
+      }
+
+      this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
       this.populateDetalhado(this.arSaldosAux); 
+      
     }
     this.renderizarChart();
   }
