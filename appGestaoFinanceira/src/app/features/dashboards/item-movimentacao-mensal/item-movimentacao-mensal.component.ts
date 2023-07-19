@@ -76,18 +76,28 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
         (idItemMov != null && this.idTipoGrafico=="I") ||
         this.idTipoGrafico=="T"){
 
-      this.arItemMovMensalAux = this.arItemMovMensal
-                                  .filter(x=>x.tipoItemMovimentcao==this.idTipo || this.idTipoGrafico=="T")
-                                  .filter(x=>x.idCategoria==idCategoria || idCategoria ==null)
-                                  .filter(x=>x.idItemMovimentacao==idItemMov || idItemMov ==null);
+          if(this.idTipoGrafico=="T"){
+            this.arItemMovMensalAux = this.arItemMovMensal.filter(x=> x.tipoOperacao =="MD");
 
-      this.isRenderChart=this.arItemMovMensalAux.length >0;
+          }else if(this.idTipoGrafico=="C"){
+            this.arItemMovMensalAux = this.arItemMovMensal
+                                          .filter(x=> x.idCategoria==idCategoria)
+                                          .filter(x=>x.tipoItemMovimentacao==this.idTipo)
+                                          .filter(x=> x.tipoOperacao =="MD");
+          }
+          else{
+            this.arItemMovMensalAux = this.arItemMovMensal
+                                          .filter(x=>x.idItemMovimentacao==idItemMov)
+                                          .filter(x=>x.tipoItemMovimentacao==this.idTipo);
+          }          
 
-      if(this.isRenderChart){
-         this.montarArrayPeriodo(this.idTipoGrafico, this.dataIni, this.dataFim);
-         var title = this.idTipoGrafico=="T"? "Receitas x Despesas ": this.arDadosChart[0].name;
-         this.renderizarChart(this.arDadosChart, title.toString());      
-      }    
+          this.isRenderChart=this.arItemMovMensalAux.length >0;
+
+          if(this.isRenderChart){
+             this.montarArrayPeriodo(this.idTipoGrafico, this.dataIni, this.dataFim);
+             var title = this.idTipoGrafico=="T"? "Receitas x Despesas ": this.arDadosChart[0].name;
+             this.renderizarChart(this.arDadosChart, title.toString());      
+          }    
     }    
   }
 
@@ -114,7 +124,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       var arPercent: number[]=[];
       this.arDadosChartDates.forEach(dataRef=>{
         
-        var valor =  tipoGrafico=="T"? this.arItemMovMensalAux.filter(x=>x.descricaoTipoItemMovimentcao == name &&
+        var valor =  tipoGrafico=="T"? this.arItemMovMensalAux.filter(x=>x.descricaoTipoItemMovimentacao == name &&
                                                                         Date.parse(x.dataReferencia.toString()) == 
                                                                         Date.parse(dataRef.toString()))
                                                               .reduce((acum, item)=>{return acum+item.valorMensal},0):
@@ -140,7 +150,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   }
 
   private parametrosGrafico(array:any[],tipoVisualizacao:string):string[]{
-    return array.map(x=>{ return tipoVisualizacao=='T'? x.descricaoTipoItemMovimentcao :
+    return array.map(x=>{ return tipoVisualizacao=='T'? x.descricaoTipoItemMovimentacao :
                                  tipoVisualizacao=='C'? x.descricaoCategoria :
                                  x.descricaoItemMovimentacao;                
                       })

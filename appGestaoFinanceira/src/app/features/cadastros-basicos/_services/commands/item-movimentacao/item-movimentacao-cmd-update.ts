@@ -9,7 +9,8 @@ export class ItemMovimentacaoCommandUpdate extends GenericCommand {
         public descricao: string = null,
         public tipo: string = null,
         public status: boolean = null,
-        public idCategoria: number = null
+        public idCategoria: number = null,
+        public tipoOperacao: string = null
     ) { super(); };
 
     static convertFormGroupToCommand(formGroup: FormGroup):ItemMovimentacaoCommandUpdate{
@@ -18,7 +19,8 @@ export class ItemMovimentacaoCommandUpdate extends GenericCommand {
             formGroup.get('descricao').value,
             formGroup.get('tipo').value,
             formGroup.get('status').value,
-            formGroup.get('idCategoria').value      
+            formGroup.get('idCategoria').value,
+            formGroup.get('tipoOperacao').value       
         )
     }
 }

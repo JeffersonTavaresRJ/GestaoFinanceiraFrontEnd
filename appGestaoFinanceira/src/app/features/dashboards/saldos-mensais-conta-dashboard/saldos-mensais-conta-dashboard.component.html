@@ -6,9 +6,10 @@
                        optionValue="id"
                        optionLabel="descricao"
                        displaySelectedLabel="true"
-                       [maxSelectedLabels]="1" 
+                       [maxSelectedLabels]="1"
+                       [selectionLimit]="limiteContas" 
                        [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
-                       [showHeader]="true"
+                       [showHeader]="false"
                        [panelStyle]="{'width':'100px'}"
                        [filter]="false"
                        (onChange)="filtrarDados()">

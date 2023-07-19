@@ -46,21 +46,26 @@ export class RealPrevAnualDashboardComponent implements OnInit {
 
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovPrev: MovimentacaoPrevista[] }) => {
-                   this.arMovPrev = sucess.resolveMovPrev;
+                   //considerar somente Movimentações Diárias..
+                   this.arMovPrev = sucess.resolveMovPrev
+                                          .filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
                           
         }
       );
   
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
-                   this.arMovReal = sucess.resolveMovReal;                 
+                     //considerar somente Movimentações Diárias..
+                     this.arMovReal = sucess.resolveMovReal
+                                            .filter(x=>x.itemMovimentacao.tipoOperacao=="MD");                 
                           
         }
       );
 
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveItemMov: ItemMovimentacao[] }) => {
-                   this.arItensMov = sucess.resolveItemMov;
+                  //considerar somente Movimentações Diárias..
+                   this.arItensMov = sucess.resolveItemMov.filter(i=>i.tipoOperacao=="MD");
                    this.arItensMovAux = this.arItensMov;                
                           
         }

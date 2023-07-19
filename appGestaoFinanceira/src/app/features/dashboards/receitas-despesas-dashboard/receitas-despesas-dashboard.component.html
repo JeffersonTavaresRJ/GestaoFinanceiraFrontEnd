@@ -17,23 +17,6 @@
                       autoDisplayFirst="true">
        </p-dropdown>
   </div>
-  <div class="field col-4">
-    <label for="drpdConta">Conta:</label>
-    <p-dropdown       [options]="arContas" 
-                      inputId="drpdConta"
-                      optionLabel="descricao" 
-                      optionValue="id" 
-                      [virtualScroll]="arContas.length >=5" 
-                      [(ngModel)]="idConta"
-                      [showClear]="true" 
-                      [filter]="false"
-                      (onChange)="onChangeConta()"
-                      emptyMessage="Não encontrado"
-                      placeholder="Todas"
-                      styleClass="p-conta"
-                      autoDisplayFirst="false">
-    </p-dropdown>
-  </div> 
 </div>
 <hr>
 <div *ngIf="arMovRealTipo.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">

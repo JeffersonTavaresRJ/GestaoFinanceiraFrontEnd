@@ -23,13 +23,11 @@ export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevi
     return this.http.get<MovimentacaoPrevista>(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`);
   }
 
-  getByDataVencimento(dataVencIni: string=null, dataVencFim: string=null, idItemMovimentacao: number=null): Observable<MovimentacaoPrevista[]> {
+  getByDataVencimento(dataVencIni: string, dataVencFim: string, idItemMovimentacao: number=null): Observable<MovimentacaoPrevista[]> {
     this.setApiOption('/GetByDataVencimento');
     //parâmetro opcional da API..
     var _idItemMovimentacao = idItemMovimentacao!=null || idItemMovimentacao != undefined ? idItemMovimentacao.toString() : ' ';
-    var _dataVencIni = dataVencIni!=null || dataVencIni != undefined ? dataVencIni.toString() : ' ';
-    var _dataVencFim = dataVencFim!=null || dataVencFim != undefined ? dataVencFim.toString() : ' ';
-    return this.http.get<MovimentacaoPrevista[]>(`${this.getUrl()}/${_dataVencIni}/${_dataVencFim}/${_idItemMovimentacao}`);
+    return this.http.get<MovimentacaoPrevista[]>(`${this.getUrl()}/${dataVencIni}/${dataVencFim}/${_idItemMovimentacao}`);
   }
 
   public GetAllStatus(): Observable<any> {

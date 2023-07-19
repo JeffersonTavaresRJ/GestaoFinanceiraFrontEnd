@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, ActivatedRouteSnapshot } from '@angular/router';
 import { Error404Component } from './core/components/error404/error404.component';
 import { AuthGuard } from './core/security/auth-guard';
-import { ReceitasDespesasDashboardComponent } from './features/dashboards/receitas-despesas-dashboard/receitas-despesas-dashboard.component';
 
 //importando os componentes que iremos mapear
 import { LoginFormComponent } from './features/security/login-form/login-form.component';
@@ -27,6 +26,12 @@ import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-previ
 import { MovRealizadaListComponent } from './features/lancamentos/mov-realizada/mov-realizada-list/mov-realizada-list.component';
 import { MovRealizadaFormCadastroComponent } from './features/lancamentos/mov-realizada/mov-realizada-form-cadastro/mov-realizada-form-cadastro.component';
 import { FechamentoComponent} from './features/lancamentos/fechamento/fechamento.component';
+import { PlanRealAnualDashboardComponent } from './features/dashboards/plan-real-anual-dashboard/plan-real-anual-dashboard.component';
+import { RealPrevAnualDashboardComponent } from './features/dashboards/real-prev-anual-dashboard/real-prev-anual-dashboard.component';
+import { SaldosMensaisPorContaDashboardComponent } from './features/dashboards/saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
+import { SaldosAnuaisPorContaDashBoardComponent } from './features/dashboards/saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
+import { ItemMovimentacaoMensalComponent } from './features/dashboards/item-movimentacao-mensal/item-movimentacao-mensal.component';
+import { ReceitasDespesasDashboardComponent } from './features/dashboards/receitas-despesas-dashboard/receitas-despesas-dashboard.component';
 
 import { CategoriaListResolver } from './features/cadastros-basicos/_guards/categoria-list-resolver';
 import { ContaListResolver } from './features/cadastros-basicos/_guards/conta-list-resolver';
@@ -41,18 +46,11 @@ import { MovPrevistaFormResolver } from './features/lancamentos/_guards/mov-prev
 import { MovRealizadaListResolver } from './features/lancamentos/_guards/mov-realizada-list-resolver';
 import { MovRealizadaFormResolver } from './features/lancamentos/_guards/mov-realizada-form-resolver';
 import { MovPrevistaQuitarResolver } from './features/lancamentos/_guards/mov-prevista-quitar-resolver';
-import { MovRealizadaGroupByContaResolver } from './features/lancamentos/_guards/mov-realizada-gb-conta-resolver';
 import { FechamentoListResolver } from './features/lancamentos/_guards/fechamento-list-resolver';
-import { MovRealizadaListDataRefResolver } from './features/lancamentos/_guards/mov-realizada-list-data-ref-resolver';
-import { PlanRealAnualDashboardComponent } from './features/dashboards/plan-real-anual-dashboard/plan-real-anual-dashboard.component';
 import { MovRealizadaListAnualResolver } from './features/dashboards/_guards/mov-realizada-list-anual-resolver';
-import { RealPrevAnualDashboardComponent } from './features/dashboards/real-prev-anual-dashboard/real-prev-anual-dashboard.component';
 import { SaldoAnualPorContaListResolver } from './features/dashboards/_guards/saldo-anual-por-conta-list-resolver';
 import { SaldoMensalPorContaListResolver } from './features/dashboards/_guards/saldo-mensal-por-conta-list-resolver';
-import { SaldosMensaisPorContaDashboardComponent } from './features/dashboards/saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
-import { SaldosAnuaisPorContaDashBoardComponent } from './features/dashboards/saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
 import { ItemMovimentacaoMensalListResolver } from './features/dashboards/_guards/item-movimentacao-mensal-list-resolver';
-import { ItemMovimentacaoMensalComponent } from './features/dashboards/item-movimentacao-mensal/item-movimentacao-mensal.component';
 
 //criando o mapeamento de rotas dos componentes
 
@@ -146,19 +144,12 @@ const routes: Routes = [
     //================================================================================================
      { path: 'fechamento', component: FechamentoComponent,
      canActivate:[AuthGuard],
-     resolve: {resolveFechamento: FechamentoListResolver,
-              resolveMovPrev: MovPrevistaListResolver,
-              resolveMovReal: MovRealizadaGroupByContaResolver
-            }
-        },
+     resolve: {resolveFechamento: FechamentoListResolver} },
 
     //================================================================================================
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
      canActivate:[AuthGuard],
-     resolve:{resolveFechamento: FechamentoListResolver,
-              resolveConta: ContaListResolver,
-              resolveMovReal: MovRealizadaListDataRefResolver}
-    },
+     resolve:{resolveFechamento: FechamentoListResolver} },
 
     //================================================================================================
     { path: 'plan-real-anual-dashboard/:dataIni/:dataFim', component: PlanRealAnualDashboardComponent,
@@ -214,8 +205,6 @@ const routes: Routes = [
                MovRealizadaFormResolver,
                MovPrevistaQuitarResolver,
                FechamentoListResolver,
-               MovRealizadaGroupByContaResolver,
-               MovRealizadaListDataRefResolver,
                MovRealizadaListAnualResolver,
                SaldoAnualPorContaListResolver,
                SaldoMensalPorContaListResolver,
