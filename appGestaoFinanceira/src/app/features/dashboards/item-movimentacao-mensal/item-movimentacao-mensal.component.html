@@ -20,6 +20,7 @@
                     optionValue="Key" 
                     [showClear]="false" 
                     [filter]="false"
+                    (onChange)="consultarDados()"
                     emptyMessage="Tipo não encontrado"
                     autoDisplayFirst="true"
                     *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'" >

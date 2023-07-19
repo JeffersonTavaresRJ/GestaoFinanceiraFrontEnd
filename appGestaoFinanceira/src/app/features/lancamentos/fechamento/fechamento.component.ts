@@ -52,22 +52,28 @@ export class FechamentoComponent implements OnInit {
   
     this.activatedRoute.data.subscribe(
       (sucess: { resolveFechamento: any[] }) => {
-        this.arFechamentosMensais = sucess.resolveFechamento;        
+
+        this.arFechamentosMensais = sucess.resolveFechamento; 
+        this.selectedMesAno = this.arFechamentosMensais[0].dataReferencia.toString(); 
+        
+        var d = new Date(this.selectedMesAno);
+        var dataVencIni = DateConvert.formatDateYYYYMMDD(new Date(d.getFullYear(), d.getMonth(), 1), '-');
+        var dataVencFim = DateConvert.formatDateYYYYMMDD(new Date(d.getFullYear(), d.getMonth()+1, 0), '-');
+
+        this.movPrevistaService.getByDataVencimento(dataVencIni, dataVencFim).subscribe(
+          success=>{
+            this.movPrevistaGroupBy(success);
+
+            this.movRealizadaService.GetMaxGroupBySaldoConta(dataVencFim).subscribe(
+              success=>{
+                this.arMovReal=success;
+                this.addArrayFormReal();
+                this.alteraLayout(10);       
+              }
+            )
+          }
+        );
       });
-
-      this.activatedRoute.data.subscribe(
-        (sucess: { resolveMovPrev: any[] }) => {
-          this.movPrevistaGroupBy(sucess.resolveMovPrev);
-      });
-
-      this.activatedRoute.data.subscribe(
-        (sucess: { resolveMovReal: any[] }) => {
-          this.arMovReal=sucess.resolveMovReal;
-          this.addArrayFormReal();
-          this.alteraLayout(10);       
-      });
-
-
   }
 
   firstNext(){

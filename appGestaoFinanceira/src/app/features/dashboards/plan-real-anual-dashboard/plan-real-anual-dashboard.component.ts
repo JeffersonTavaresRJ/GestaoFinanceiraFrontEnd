@@ -43,14 +43,18 @@ export class PlanRealAnualDashboardComponent implements OnInit {
 
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveMovPrev: MovimentacaoPrevista[] }) => {
-                 this.arMovPrev = sucess.resolveMovPrev;
+                 //considerar somente movimentações diárias..
+                 this.arMovPrev = sucess.resolveMovPrev
+                                        .filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
                         
       }
     );
 
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
-                 this.arMovReal = sucess.resolveMovReal;
+                  //considerar somente movimentações diárias..
+                  this.arMovReal = sucess.resolveMovReal
+                                         .filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
                         
       }
     );

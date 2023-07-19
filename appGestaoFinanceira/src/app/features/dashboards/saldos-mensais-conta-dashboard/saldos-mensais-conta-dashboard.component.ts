@@ -19,22 +19,27 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   arSelectedContas:any[]=[]; 
   arSeries: ContaMensal[]=[];
   ano: string;
-  chbxAgrupar: boolean;
+  chbxAgrupar: boolean=true;
   chart: ApexCharts;
+  limiteContas: number;
 
-  constructor(private actResourceRoute: ActivatedRoute) { 
+  constructor(private actResourceRoute: ActivatedRoute) {     
+    
+    this.actResourceRoute.data.subscribe(
+      (sucess: { resolveConta: Conta[] }) => {
+                 this.arContas = sucess.resolveConta; 
+                 this.arContas.sort((a,b)=>{
+                  return a.descricao < b.descricao? -1 : 1
+                 }); 
+      }
+    );
+
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveSaldoMensalConta: any[] }) => {
                  this.arSaldos = sucess.resolveSaldoMensalConta;
                  this.arSaldos.forEach(x=>{
                       this.arSelectedContas.push(x.idConta);
-                 });                 
-      }
-    );
-    
-    this.actResourceRoute.data.subscribe(
-      (sucess: { resolveConta: Conta[] }) => {
-                 this.arContas = sucess.resolveConta;  
+                 });               
       }
     );
 
@@ -43,14 +48,31 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.filtrarDados();
   }
-  
+ 
   filtrarDados(){
-    this.arSaldosAux = this.arSaldos;
-    this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
+    this.arSaldosAux = this.arSaldos; 
+
     if(this.chbxAgrupar){
-      this.populateAgrupado(this.arSaldosAux); 
+      this.limiteContas= this.arContas.length;
+
+      /*tratamento para que o componente p-multiselect entenda que ocorreu edição 
+         e habilite as demais opções*/ 
+      this.arSelectedContas = this.arSelectedContas;
+
+      this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
+      this.populateAgrupado(this.arSaldosAux);       
+
     }else{
+      this.limiteContas=2;
+      //ao desmarcar checkbox de agrupamento, manter somente 1 conta na geração do gráfico..      
+      if(this.arSelectedContas.length == this.arContas.length){
+        this.arSelectedContas.length=0;
+        this.arSelectedContas=[this.arContas[0].id];        
+      }
+
+      this.arSaldosAux = this.arSaldosAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
       this.populateDetalhado(this.arSaldosAux); 
+     
     }
     this.renderizarChart();
   }
@@ -83,18 +105,18 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
                               e.outubro,
                               e.novembro,
                               e.dezembro),
-                             data: new Array(e.percJaneiro, 
-                                             e.percFevereiro, 
-                                             e.percMarco,
-                                             e.percAbril,
-                                             e.percMaio,
-                                             e.percJunho,
-                                             e.percJulho,
-                                             e.percAgosto,
-                                             e.percSetembro,
-                                             e.percOutubro,
-                                             e.percNovembro,
-                                             e.percDezembro)};                  
+                             data: new Array(e.percJaneiro==-1 ? 0 : e.percJaneiro, 
+                                             e.percFevereiro==-1 ? 0 :e.percFevereiro, 
+                                             e.percMarco==-1 ? 0 :e.percMarco,
+                                             e.percAbril==-1 ? 0 :e.percAbril,
+                                             e.percMaio==-1 ? 0 :e.percMaio,
+                                             e.percJunho==-1 ? 0 :e.percJunho,
+                                             e.percJulho==-1 ? 0 :e.percJulho,
+                                             e.percAgosto==-1 ? 0 :e.percAgosto,
+                                             e.percSetembro==-1 ? 0 :e.percSetembro,
+                                             e.percOutubro==-1 ? 0 :e.percOutubro,
+                                             e.percNovembro==-1 ? 0 :e.percNovembro,
+                                             e.percDezembro==-1 ? 0 :e.percDezembro)};                  
       this.arSeries.push(dados);
      });
   }
@@ -194,7 +216,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
       },
       labels: {
         formatter: (value) => { 
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") 
+          return formatPercent(Number.parseFloat(value), "PT-BR", "0.0-2") 
         }
       },
       min: -1
@@ -205,7 +227,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
     tooltip: {
       y: {
         formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") + 
+          return formatPercent(Number.parseFloat(value), "PT-BR", "0.0-2") + 
           ' (' + formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$") +')'
         }
       }        

@@ -4,6 +4,7 @@ import { Usuario } from 'src/app/features/security/_models/usuario-model';
 import { environment } from 'src/environments/environment';
 import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MovimentacaoRealizada } from 'src/app/features/lancamentos/_models/mov-realizada-model.';
 
 @Component({
   selector: 'app-header',
@@ -58,7 +59,9 @@ export class HeaderComponent implements OnInit {
     this.dataFimMenos06Meses = new Date(this.dataIniMenos06Meses.getFullYear(),
                                         this.dataIniMenos06Meses.getMonth()+12, 0);
 
-    this.bsUpdateUsuario.getEMail().subscribe(valor => this.user_name = valor);
+    this.bsUpdateUsuario.getEMail().subscribe(valor =>{
+      this.user_name = valor
+    });
   }
 
   resultEvent(event: any) {

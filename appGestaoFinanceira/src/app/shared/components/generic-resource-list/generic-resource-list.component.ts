@@ -31,6 +31,7 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
       (sucess:{resolveResources:T[]})=>{
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
         this.resources=sucess.resolveResources
+        this.filtroOnInit();
       }
     );    
   }
@@ -65,4 +66,6 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
   ngOnDestroy() {
     this.setResourceApiOption('');
   }
+
+  filtroOnInit(){};
 }

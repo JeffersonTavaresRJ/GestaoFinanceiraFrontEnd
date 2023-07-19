@@ -13,15 +13,15 @@ export class DropDownItemMovimentacaoComponent
 
   @Input('select-by-idCategoria') idCategoria: boolean;
   @Input('select-by-tipo-item-mov') idTipoItemMov: string;
+  @Input('select-by-tipo-operacao') tipoOperacao: string;
 
   constructor(protected itemMovimentacaoService: ItemMovimentacaoService) { 
     super(itemMovimentacaoService);    
   }
   
   filtroOnInit(){
-    if(this.idTipoItemMov != null){
-      this.filtrarPorTipoItemMov(this.idTipoItemMov);
-    }
+    this.filtrarPorTipoOperacao(this.tipoOperacao);
+    this.filtrarPorTipoItemMov(this.idTipoItemMov);    
   }
 
   ngOnChanges(changes: SimpleChanges){
@@ -34,7 +34,7 @@ export class DropDownItemMovimentacaoComponent
       } 
       if(changes.idCategoria){
         this.filtrarPorCategoria(changes.idCategoria.currentValue);
-      }      
+      }
     }     
   }
   
@@ -71,4 +71,11 @@ export class DropDownItemMovimentacaoComponent
       this._onClear.emit();
     }    
   } 
+
+  private filtrarPorTipoOperacao(tipoOperacao:string){
+    if(tipoOperacao!= null){
+      this.arResourceModel = this.arResourceModelAux.filter(i=>i.tipoOperacao==tipoOperacao);
+      this.arResourceModelAux = this.arResourceModel;
+    }    
+  }
 }

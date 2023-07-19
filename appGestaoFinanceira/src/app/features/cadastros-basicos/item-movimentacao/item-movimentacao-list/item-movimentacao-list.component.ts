@@ -15,4 +15,9 @@ export class ItemMovimentacaoListComponent extends GenericResourceListComponent<
     super(injector, itemMovimentacaoService )
   } 
 
+  filtroOnInit(){
+    this.resources = this.resources.filter(i=>i.tipoOperacao=="MD");
+  };
+
+
 }
