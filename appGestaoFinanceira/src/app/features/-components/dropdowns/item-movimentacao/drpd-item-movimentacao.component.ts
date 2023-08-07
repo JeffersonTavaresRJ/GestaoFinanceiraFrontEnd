@@ -57,19 +57,14 @@ export class DropDownItemMovimentacaoComponent
 
   private filtrarPorTipoItemMov(idTipoItemMov: string){   
     this.arResourceModel = this.arResourceModelAux;    
-    if(idTipoItemMov != null ){
-      this.arResourceModel = this.arResourceModel.filter(i=>i.tipo==idTipoItemMov);
-      //se tiver somente um item, seta no dropdown o valor..
-      if(this.arResourceModel.length==1){
-        this.formControl.setValue(this.arResourceModel[0].id);
-        //envia a instância do objeto selecionado para o componente pai..
-        this._onChange.emit(this.arResourceModel[0]);
-      }     
-    }else{
-      //limpa o dropdown e dispara qualquer function mencionado no evento OnClear do dropdown
-      this.formControl.setValue(null);
-      this._onClear.emit();
+    this.arResourceModel = this.arResourceModel.filter(i=>i.tipo==idTipoItemMov || idTipoItemMov == null);
+    //se tiver somente um item, seta no dropdown o valor..
+    if(this.arResourceModel.length==1){
+      this.formControl.setValue(this.arResourceModel[0].id);
+      //envia a instância do objeto selecionado para o componente pai..
+      this._onChange.emit(this.arResourceModel[0]);
     }    
+      
   } 
 
   private filtrarPorTipoOperacao(tipoOperacao:string){
