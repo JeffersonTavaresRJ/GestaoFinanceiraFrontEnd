@@ -6,6 +6,8 @@ import { ContaCommandCreate } from "./commands/conta/conta-cmd-create";
 import { ContaCommandDelete } from "./commands/conta/conta-cmd-delete";
 import { ContaCommandUpdate } from "./commands/conta/conta-cmd-update";
 import { catchError } from "rxjs/operators";
+import { HttpHeaders} from "@angular/common/http";
+import { environment } from '../../../../environments/environment';
 @Injectable({
     providedIn: 'root'
 })
@@ -23,5 +25,10 @@ export class ContaService extends GenericResourceService<Conta>{
           .pipe(catchError(this.handlerError)/*,
                 --comentado para ler o retorno da mensagem de sucesso da API..
                 map(()=>resource)*/);
-      }
+    }
+    getReport(): Observable<any>{
+        this.setApiOption('/GetReport');
+        return this.http.get(this.getUrl(), {responseType: 'blob'})
+          .pipe(catchError(this.handlerError));
+    }
 }
