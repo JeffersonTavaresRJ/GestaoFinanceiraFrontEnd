@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Observable, throwError } from "rxjs";
 import { environment } from 'src/environments/environment';
+import { catchError } from "rxjs/operators";
 
 export abstract class GenericReaderResourceService<T extends Object>{
 
@@ -47,6 +48,12 @@ export abstract class GenericReaderResourceService<T extends Object>{
     get(): Observable<any> {
         return this.http.get<any>(this.getUrl());
      }
+
+    GetAllReportExcel(): Observable<any>{
+        this.setApiOption('/GetAllReportExcel');
+        return this.http.get(this.getUrl(), {responseType: 'blob'})
+          .pipe(catchError(this.handlerError));
+    }
 
     protected handlerError(error: any): Observable<any> {
         console.error("ERRO NA REQUISIÇÃO =>" || error);

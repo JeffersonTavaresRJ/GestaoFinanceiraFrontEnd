@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { GenericResourceListComponent } from 'src/app/shared/components/generic-resource-list/generic-resource-list.component';
 import { Conta } from '../../_models/conta-model';
 import { ContaService } from '../../_services/conta-service';
+import { Reports } from 'src/app/shared/functions/reports';
 
 @Component({
   selector: 'app-conta-list',
@@ -13,6 +14,5 @@ export class ContaListComponent extends GenericResourceListComponent<Conta> {
   constructor(protected injector: Injector,
               private contaService: ContaService) {
     super(injector, contaService);
-   } 
-
+   }
 }

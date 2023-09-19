@@ -5,8 +5,8 @@
 export const environment = {
   production: true,
   //apiUrl: 'http://jeftavaresrn-001-site1.ctempurl.com/',
-  apiUrl:'http://gestaofinanceiraapidsv/',
-  //apiUrl: 'https://localhost:44385/',
+  //apiUrl:'http://gestaofinanceiraapidsv/',
+  apiUrl: 'https://localhost:50064/',
   keyUser:'usuario',
   keyParamListMovPre: 'ParamListMovPre'
 };
