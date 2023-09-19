@@ -14,14 +14,5 @@ export class ContaListComponent extends GenericResourceListComponent<Conta> {
   constructor(protected injector: Injector,
               private contaService: ContaService) {
     super(injector, contaService);
-   } 
-
-   public gerarExcel(){
-    this.contaService.getReport().subscribe(
-      success=>{
-        Reports.download(success, "EXCEL", "Contas");
-      }
-    );    
    }
-
 }

@@ -7,7 +7,9 @@
                 </app-header-page-title>
             </div>
             <div class="card-body">
-                <button (click)="gerarExcel()">Gerar Excel</button>
+                <button (click)="gerarExcel()" class="btn-excel">
+                    <img src="assets/icons/excel.png" class="img-excel"/>
+                </button>
                 <div *ngIf="resources.length > 0 else loading">
                     <table class="table table-hover">
                         <thead>

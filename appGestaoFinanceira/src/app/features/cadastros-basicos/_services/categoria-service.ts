@@ -24,5 +24,11 @@ export class CategoriaService extends GenericResourceService<Categoria>{
           map(this.jsonDataToResources.bind(this)),
           catchError(this.handlerError)
         );        
-      }
+    }
+
+    GetAllReportExcel(): Observable<any>{
+      this.setApiOption('/GetAllReportExcel');
+      return this.http.get(this.getUrl(), {responseType: 'blob'})
+        .pipe(catchError(this.handlerError));
+  }
 }

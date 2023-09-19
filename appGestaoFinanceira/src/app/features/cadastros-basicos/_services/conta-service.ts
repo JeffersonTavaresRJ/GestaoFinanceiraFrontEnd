@@ -26,9 +26,4 @@ export class ContaService extends GenericResourceService<Conta>{
                 --comentado para ler o retorno da mensagem de sucesso da API..
                 map(()=>resource)*/);
     }
-    getReport(): Observable<any>{
-        this.setApiOption('/GetReport');
-        return this.http.get(this.getUrl(), {responseType: 'blob'})
-          .pipe(catchError(this.handlerError));
-    }
 }

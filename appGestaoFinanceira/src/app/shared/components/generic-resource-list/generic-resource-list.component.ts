@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GenericResourceModel } from '../../_models/generic-resource-model';
 import { GenericResourceService } from '../../_services/generic-resource-service';
 import { AlertMessageForm } from '../alert-form/alert-message-form';
+import { Reports } from 'src/app/shared/functions/reports';
 
 @Directive()
 export abstract class GenericResourceListComponent<T extends GenericResourceModel>
@@ -62,6 +63,14 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
       error => this.resourceAlertMessage.showError(error, 'Sr. Usuário')
     )
   }
+
+  public gerarExcel(){
+    this.resourceService.GetAllReportExcel().subscribe(
+      success=>{
+        Reports.download(success, "EXCEL", "Lista");
+      }
+    );    
+   }
 
   ngOnDestroy() {
     this.setResourceApiOption('');
