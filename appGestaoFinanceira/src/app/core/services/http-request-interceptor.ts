@@ -52,9 +52,10 @@ export class HttpRequestInterceptor implements HttpInterceptor {
 
         //chamada recursiva para o próximo request..      
         return next.handle(request)
-        .pipe(  
+        .pipe( 
               map(event=>{return event;}), 
               catchError(e=>{
+                debugger;
                 if (e.status == 0) {
                     //servidor fora
                     this.alertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');
@@ -68,6 +69,9 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 else if (e.status == 418) {
                     //exceções customizadas
                     this.alertMessage.showInfo(e.error, 'Sr. Usuário');
+                }else if (e.status == 404) {
+                    //exceções customizadas
+                    this.alertMessage.showInfo("Dados não encontrados", 'Sr. Usuário');
                 } else if (e.status == 500) {
                     //error status code 500..
                     this.alertMessage.showError(e.error, 'Sr. Usuário');

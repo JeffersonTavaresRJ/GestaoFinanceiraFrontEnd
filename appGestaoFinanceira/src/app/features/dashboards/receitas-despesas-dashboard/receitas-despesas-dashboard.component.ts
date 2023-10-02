@@ -12,11 +12,11 @@ import * as ApexCharts from 'apexcharts';
 import { FechamentoModel } from '../../lancamentos/_models/fechamento-model';
 import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
-import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogListComponent } from '../dialog-list/dialog-list.component';
 import { DataItems, DialogData } from '../_models/dialog-data';
+import { Reports } from 'src/app/shared/functions/reports';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 
 
@@ -47,6 +47,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   dialogData: DialogData;
   selectedMesAno: string=""; 
   idConta: number;
+  idContas:number[]=[];
   chartTipo: ApexCharts;
   chartPrioridade: ApexCharts;
   headerTitle: String;
@@ -92,6 +93,16 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     
   }
 
+  public gerarExcel(){
+ 
+    debugger;
+    this.idContas=[10];
+    this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.idContas, '2023-08-31').subscribe(
+      success=>{
+        Reports.download(success, "EXCEL", "Movimentações Mensais "+this.selectedMesAno);
+      }
+    );    
+   }
 
   private openDialog(arMovReal: MovimentacaoRealizada[], titulo:string, prioridade: string, tipo: string, backgroundColor : string) {
 
