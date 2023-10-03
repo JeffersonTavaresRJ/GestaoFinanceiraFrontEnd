@@ -17,6 +17,26 @@
                       autoDisplayFirst="true">
        </p-dropdown>
   </div>
+  <div class="field col-4">
+    <label for="drpdConta">Conta:</label>
+    <p-multiSelect [options]="arContas" 
+                       [(ngModel)]="arSelectedContas"
+                       defaultLabel="Todas as Contas" 
+                       optionValue="id"
+                       optionLabel="descricao"
+                       displaySelectedLabel="true"
+                       [maxSelectedLabels]="1" 
+                       [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
+                       [showHeader]="true"
+                       [panelStyle]="{'width':'100px'}"
+                       [filter]="false">
+        </p-multiSelect>
+     <button (click)="gerarExcel()" class="btn-excel"
+         pTooltip="Gerar excel por Conta" tooltipPosition="bottom">
+      <img src="assets/icons/excel.png" class="img-excel"/>
+     </button>
+     
+</div>
 </div>
 <hr>
 <div *ngIf="arMovRealTipo.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">

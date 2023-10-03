@@ -12,12 +12,13 @@ import * as ApexCharts from 'apexcharts';
 import { FechamentoModel } from '../../lancamentos/_models/fechamento-model';
 import { MovRealizadaService } from '../../lancamentos/_services/mov-realizada-service';
 import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
-import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogListComponent } from '../dialog-list/dialog-list.component';
 import { DataItems, DialogData } from '../_models/dialog-data';
+import { Reports } from 'src/app/shared/functions/reports';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { Conta } from '../../cadastros-basicos/_models/conta-model';
 
 
 export type ChartOptions = {
@@ -42,11 +43,14 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   labelsPrioridade:string[] = [];
   arFechamentosMensais:FechamentoModel[];
   arMovReal: MovimentacaoRealizada[]=[];
+  arSelectedContas:any[]=[]; 
+  arContas: Conta[];
   arMovRealTipo: any[]=[];
   arMovRealPrioridade: any[]=[];
   dialogData: DialogData;
   selectedMesAno: string=""; 
   idConta: number;
+  idContas:number[]=[];
   chartTipo: ApexCharts;
   chartPrioridade: ApexCharts;
   headerTitle: String;
@@ -70,7 +74,13 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
                               }
                              );
                   }
-                )}
+                );
+                this.actResourceRoute.data.subscribe(
+                  (sucess: { resolveConta: Conta[] }) => {
+                             this.arContas = sucess.resolveConta;
+                  }
+                );
+              }
 
   ngOnInit(): void {}
 
@@ -92,6 +102,16 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     
   }
 
+  public gerarExcel(){
+ 
+    debugger;
+    var dataReferencia = this.selectedMesAno.substring(0,10);
+    this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.arSelectedContas, dataReferencia).subscribe(
+      success=>{
+        Reports.download(success, "EXCEL", "Movimentações Mensais "+dataReferencia.substring(0,8));
+      }
+    );    
+   }
 
   private openDialog(arMovReal: MovimentacaoRealizada[], titulo:string, prioridade: string, tipo: string, backgroundColor : string) {
 
