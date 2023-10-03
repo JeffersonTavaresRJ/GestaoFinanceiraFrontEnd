@@ -17,7 +17,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogListComponent } from '../dialog-list/dialog-list.component';
 import { DataItems, DialogData } from '../_models/dialog-data';
 import { Reports } from 'src/app/shared/functions/reports';
-import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
 
 
@@ -108,7 +107,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     var dataReferencia = this.selectedMesAno.substring(0,10);
     this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.arSelectedContas, dataReferencia).subscribe(
       success=>{
-        Reports.download(success, "EXCEL", "Movimentações Mensais "+dataReferencia.substring(0,8));
+        Reports.download(success, "EXCEL", "Movimentações Mensais "+dataReferencia.substring(0,7));
       }
     );    
    }
