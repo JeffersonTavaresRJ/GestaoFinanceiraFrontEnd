@@ -15,6 +15,7 @@ import { ComponentsModule } from '../-components/-components.module';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DialogListComponent } from './dialog-list/dialog-list.component';
 import { OrderModule } from 'ngx-order-pipe';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { OrderModule } from 'ngx-order-pipe';
     MultiSelectModule,
     ComponentsModule,
     MatDialogModule,
-    OrderModule
+    OrderModule,
+    TooltipModule
   ]
 })
 export class DashboardsModule { }

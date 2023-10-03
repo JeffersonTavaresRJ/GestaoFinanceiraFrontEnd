@@ -149,7 +149,8 @@ const routes: Routes = [
     //================================================================================================
     { path: 'receitas-despesas-dashboard', component: ReceitasDespesasDashboardComponent,
      canActivate:[AuthGuard],
-     resolve:{resolveFechamento: FechamentoListResolver} },
+     resolve:{resolveFechamento: FechamentoListResolver,
+              resolveConta: ContaListResolver} },
 
     //================================================================================================
     { path: 'plan-real-anual-dashboard/:dataIni/:dataFim', component: PlanRealAnualDashboardComponent,

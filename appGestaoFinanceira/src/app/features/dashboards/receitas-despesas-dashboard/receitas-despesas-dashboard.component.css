@@ -3,6 +3,29 @@
   left:-1px;
 }
 
+:host ::ng-deep .p-multiselect{
+  font-size: small;
+  width: 220px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+:host ::ng-deep .p-multiselect-label {
+  font-size: small !important
+}
+
+:host ::ng-deep .p-multiselect-item {
+  font-size: small !important
+}
+
+:host ::ng-deep .p-multiselect-empty-message {
+  font-size: small !important
+}
+
+:host ::ng-deep .p-checkbox-box {
+  font-size: small !important
+}
+
 :host ::ng-deep .p-inputtext {
   font-size: small !important;
   text-align:center !important;

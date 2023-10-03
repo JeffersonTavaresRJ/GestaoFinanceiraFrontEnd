@@ -18,6 +18,7 @@ import { DialogListComponent } from '../dialog-list/dialog-list.component';
 import { DataItems, DialogData } from '../_models/dialog-data';
 import { Reports } from 'src/app/shared/functions/reports';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { Conta } from '../../cadastros-basicos/_models/conta-model';
 
 
 export type ChartOptions = {
@@ -42,6 +43,8 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   labelsPrioridade:string[] = [];
   arFechamentosMensais:FechamentoModel[];
   arMovReal: MovimentacaoRealizada[]=[];
+  arSelectedContas:any[]=[]; 
+  arContas: Conta[];
   arMovRealTipo: any[]=[];
   arMovRealPrioridade: any[]=[];
   dialogData: DialogData;
@@ -71,7 +74,13 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
                               }
                              );
                   }
-                )}
+                );
+                this.actResourceRoute.data.subscribe(
+                  (sucess: { resolveConta: Conta[] }) => {
+                             this.arContas = sucess.resolveConta;
+                  }
+                );
+              }
 
   ngOnInit(): void {}
 
@@ -96,10 +105,10 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   public gerarExcel(){
  
     debugger;
-    this.idContas=[10];
-    this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.idContas, '2023-08-31').subscribe(
+    var dataReferencia = this.selectedMesAno.substring(0,10);
+    this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.arSelectedContas, dataReferencia).subscribe(
       success=>{
-        Reports.download(success, "EXCEL", "Movimentações Mensais "+this.selectedMesAno);
+        Reports.download(success, "EXCEL", "Movimentações Mensais "+dataReferencia.substring(0,8));
       }
     );    
    }
