@@ -20,7 +20,8 @@ export class ContaFormComponent extends GenericResourceFormComponent<Conta> {
      this.resourceForm = this.resourceFormBuilder.group({
        id:[null],
        descricao: [null,Validators.required],
-       status:[null]
+       status:[null],
+       defaultConta:[null]
      });
     }
 
