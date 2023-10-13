@@ -20,6 +20,17 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     MovimentacaoRealizadaCommandDelete.convertFormGroupToCommand); 
   }
 
+  Transferir(idConta: number, idContaDestino: number, dataMovimentacaoRealizada: string, valor: number): Observable<any>{
+    this.setApiOption('/TransferenciaContas');
+    var param = {
+        idConta: idConta,
+        idContaDestino: idContaDestino,
+        dataMovimentacaoRealizada: dataMovimentacaoRealizada,
+        valor: valor
+      }
+      return this.http.post(this.getUrl(), param);
+    }
+
   getByDataReferencia(dataReferencia: string, idItemMovimentacao?: number): Observable<MovimentacaoRealizada[]> {
     this.setApiOption('/GetByDataReferencia');
     var _idItemMovimentacao = idItemMovimentacao!=null || idItemMovimentacao != undefined ? idItemMovimentacao.toString() : ' ';

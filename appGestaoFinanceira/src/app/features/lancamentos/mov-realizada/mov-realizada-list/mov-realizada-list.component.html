@@ -2,20 +2,33 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row" style="border-bottom: 1px solid #DCDCDC; margin-bottom: 7px;">
-                    <app-header-page-title header-title="Lançamentos Diários" header-button-label="+ Novo Lançamento"
-                        [header-button-link]="['/mov-realizada/new',dataIni | DateFormatToString, dataFim | DateFormatToString]">
-                    </app-header-page-title>
+                <div class="row my-1"
+                    style="border-bottom: 1px solid #DCDCDC; padding-bottom:10px; margin-bottom:10px;">
+                    <div class="col-4">
+                        <h4>Lançamentos Diários</h4>
+                    </div>
+                    <div class="col-4" style="text-align: center;">
+                        <button class="btn btn-button bg-dark text-light" *ngIf="results.length > 0"
+                            (click)="displayTransfer = true">
+                            Transferir
+                        </button>
+                    </div>
+                    <div class="col-4" style="text-align: right;">
+                        <a class="btn btn-button bg-dark text-light"
+                            [routerLink]="['/mov-realizada/new',dataIni | DateFormatToString, dataFim | DateFormatToString]">
+                            + Novo Lançamento
+                        </a>
+                    </div>
                 </div>
-                <div class="row">
+                <div class="row" style="padding-top:7px;">
                     <div class="col-4">
                         <app-dropdown-conta [form-group]="formGroup" [form-control]="formGroup.get('idConta')"
                             placeholder="Informe a Conta" (OnChange)="getConta($event)">
                         </app-dropdown-conta>
                     </div>
                     <div class="col-4">
-                        <app-dropdown-forma-pagamento [form-group]="formGroup" [form-control]="formGroup.get('idFormaPagamento')"
-                            placeholder="Forma de Pagamento" 
+                        <app-dropdown-forma-pagamento [form-group]="formGroup"
+                            [form-control]="formGroup.get('idFormaPagamento')" placeholder="Forma de Pagamento"
                             (OnChange)="getFormaPagamento()">
                         </app-dropdown-forma-pagamento>
                     </div>
@@ -39,7 +52,8 @@
                     </div>
                 </div>
                 <div class="row" id="dvRow" *ngFor="let movRealizada of item.movimentacoesRealizadas;">
-                    <div class="col-12 card" id="dvDetalhe" [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
+                    <div class="col-12 card" id="dvDetalhe"
+                        [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-1" style="padding-top: 0.3rem;">
@@ -63,24 +77,24 @@
                                     {{idx}}
                                     {{movRealizada.itemMovimentacao.categoria.descricao}}<br>
                                     <strong>{{movRealizada.itemMovimentacao.descricao}}</strong>
-                                    ( {{movRealizada.formaPagamento.descricao}} )                                    
+                                    ( {{movRealizada.formaPagamento.descricao}} )
                                 </div>
                                 <div class="col-3" style="padding-top: 0.5rem;">
-                                    <button class="btn btn-outline-dark btn-sm me-3" 
-                                            *ngIf="item.status=='F'"
-                                            (click)="modalDetalhe(movRealizada)">
-                                            Detalhe
+                                    <button class="btn btn-outline-dark btn-sm me-3"
+                                        *ngIf="item.status=='F' || movRealizada.itemMovimentacao.tipoOperacao=='TC'"
+                                        (click)="modalDetalhe(movRealizada)">
+                                        Detalhe
                                     </button>
-                                    <a  [routerLink]="['/mov-realizada/edit',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]" 
-                                        *ngIf="item.status=='A'" class="btn btn btn-outline-secondary me-1 btn-sm">
+                                    <a [routerLink]="['/mov-realizada/edit',movRealizada.id, dataIni | DateFormatToString, dataFim | DateFormatToString]"
+                                        *ngIf="item.status=='A' && movRealizada.itemMovimentacao.tipoOperacao!='TC'"
+                                        class="btn btn btn-outline-secondary me-1 btn-sm">
                                         Editar
                                     </a>
-                                    <button class="btn btn btn-outline-secondary btn-sm" 
-                                            *ngIf="item.status=='A'"
-                                            (click)="modalDeleteMessage(movRealizada.id)"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalDelete">
-                                            Excluir
+                                    <button class="btn btn btn-outline-secondary btn-sm"
+                                        *ngIf="item.status=='A' && movRealizada.itemMovimentacao.tipoOperacao!='TC'"
+                                        (click)="modalDeleteMessage(movRealizada.id)" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Excluir
                                     </button>
                                 </div>
                                 <div class="col-2" style="text-align:right; padding-top: 1.3rem;">
@@ -95,7 +109,7 @@
             </div>
             <div id="loading" *ngIf="results.length == 0">
                 <strong>Dados não encontrados</strong>
-            </div>                
+            </div>
         </div>
     </div>
 
@@ -105,46 +119,95 @@
     </app-modal-interrogative-form>
 
     <p-dialog header="Detalhe Lançamento" [(visible)]="displayDetalhe" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false">
-    
-    <div class="row">
-        <div class="col-4">
-            <label>Categoria:</label>
-            <p><strong>{{movimentacaoRealizadaDetalhe.itemMovimentacao.categoria.descricao}}</strong></p>
-        </div>
-        <div class="col-4">
-            <label>Item de Movimentacao:</label>
-            <p><strong>{{movimentacaoRealizadaDetalhe.itemMovimentacao.descricao}}</strong></p>            
-        </div>
-        <div class="col-4">
-            <label>Prioridade:</label>
-            <p><strong>{{movimentacaoRealizadaDetalhe.tipoPrioridadeDescricao}}</strong></p>            
-        </div>        
-    </div>    
-    <div class="row">        
-        <div class="col-4">
-            <label>Forma de Pagamento:</label>
-            <p><strong>{{movimentacaoRealizadaDetalhe.formaPagamento.descricao}}</strong></p>            
-        </div>
-        <div class="col-4">
-            <label>Data do Pagamento:</label>
-            <p><strong>{{movimentacaoRealizadaDetalhe.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong></p>            
-        </div>        
-        <div class="col-4">
-            <label>Valor:</label>
-            <p><strong>{{movimentacaoRealizadaDetalhe.valor | currency}}</strong></p>            
+        [draggable]="false" [resizable]="false">
+
+        <div class="row">
+            <div class="col-4">
+                <label>Categoria:</label>
+                <p><strong>{{movimentacaoRealizadaDetalhe.itemMovimentacao.categoria.descricao}}</strong></p>
+            </div>
+            <div class="col-4">
+                <label>Item de Movimentacao:</label>
+                <p><strong>{{movimentacaoRealizadaDetalhe.itemMovimentacao.descricao}}</strong></p>
+            </div>
+            <div class="col-4">
+                <label>Prioridade:</label>
+                <p><strong>{{movimentacaoRealizadaDetalhe.tipoPrioridadeDescricao}}</strong></p>
+            </div>
         </div>
         <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                      <h6 class="card-subtitle mb-2 text-muted">Observação:</h6>
-                      <p class="card-text">
-                        <strong>{{movimentacaoRealizadaDetalhe.observacao}}</strong>
-                      </p>
+            <div class="col-4">
+                <label>Forma de Pagamento:</label>
+                <p><strong>{{movimentacaoRealizadaDetalhe.formaPagamento.descricao}}</strong></p>
+            </div>
+            <div class="col-4">
+                <label>Data do Pagamento:</label>
+                <p><strong>{{movimentacaoRealizadaDetalhe.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong></p>
+            </div>
+            <div class="col-4">
+                <label>Valor:</label>
+                <p><strong>{{movimentacaoRealizadaDetalhe.valor | currency}}</strong></p>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Observação:</h6>
+                            <p class="card-text">
+                                <strong>{{movimentacaoRealizadaDetalhe.observacao}}</strong>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</p-dialog>
+    </p-dialog>
+
+
+    <p-dialog header="Efetuar Transferência" [(visible)]="displayTransfer" [modal]="true" [style]="{width: '50vw'}"
+        [draggable]="false" [resizable]="false">
+
+
+        <div class="row card-conta">
+            <div class="col-4">
+                <h6 class="card-subtitle mb-2 text-body-secondary">Conta a ser debitada:</h6>
+                <p *ngIf="contaDisplay!=null"><strong>{{contaDisplay.descricao}}</strong></p>
+            </div>
+            <div class="col-4">
+                <h6 class="card-subtitle mb-2 text-body-secondary">Saldo disponível:</h6>
+                <p><strong> {{saldoAtualConta | currency}}</strong></p>
+            </div>
+        </div>
+
+        <form [formGroup]="formGroupTransfer" (submit)="Tranferir()" class="card-conta">
+            <div class="row mb-3">
+                <div class="col-4">
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Conta:</h6>
+                    <app-dropdown-conta [form-group]="formGroupTransfer"
+                        [form-control]="formGroupTransfer.get('idContaDestino')" placeholder="Informe a Conta">
+                    </app-dropdown-conta>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Data:</h6>
+                    <input pInputText formControlName="dataMovimentacaoRealizada"
+                        type="date" placeholder="Informe a Data"/>
+                </div>
+                <div class="col-6">
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Valor:</h6>
+                    <p-inputNumber formControlName="valor" inputId="locale-german" mode="decimal" locale="de-DE"
+                        placeholder="Informe o Valor" [minFractionDigits]="2">
+                    </p-inputNumber>
+                </div>
+            </div>
+            <div class="row mb-3" style="text-align: right;">
+                <div class="col-12" style="padding-right: 45px;">
+                    <app-button-submmit-form [button-disabled]="!formGroupTransfer.valid"
+                        button-path-ico="assets/icons/autorenew_white_18dp.svg" button-title="Transferir">
+                    </app-button-submmit-form>
+                </div>
+            </div>
+        </form>
+
+    </p-dialog>
