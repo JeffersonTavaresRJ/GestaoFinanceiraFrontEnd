@@ -75,9 +75,11 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 } else if (e.status == 500) {
                     //error status code 500..
                     this.alertMessage.showError(e.error, 'Sr. Usuário');
+                } else if(e.status == 400){
+                    this.alertMessage.showErrors(e.error[0].errors, "Lista de Erros:");
                 } else if (e.status != 400){
                     this.alertMessage.showError(e.error, 'Sr. Usuário');
-                }
+                }                
                 return throwError(e);
                }),
                //ao finalizar qq operação, oculta o loading..                

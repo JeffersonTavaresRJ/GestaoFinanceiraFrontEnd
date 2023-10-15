@@ -1,11 +1,22 @@
 <app-header></app-header>
 
-<div class="container mt-3">  
-  <router-outlet></router-outlet>
+<div class="container mt-3">
+    <router-outlet></router-outlet>
 </div>
-<ngx-spinner bdColor = "rgba(0,0,0,0.8)" 
-   size = "medium" 
-   color = "#f6f5f5" 
-   type = "timer" 
-   [fullScreen] = "true">
+<ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#f6f5f5" type="timer" [fullScreen]="true">
 </ngx-spinner>
+
+
+<p-toast position="center" key="message" (onClose)="onReject()" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="p-flex p-flex-column" style="flex: 1">
+            <div class="p-text-center">
+                <i [class]="iconeMessage" style="font-size: 3rem"></i>
+                <h4>{{title}}</h4>
+                <ul>
+                   <li *ngFor="let item of messages">{{item}}</li>
+                </ul>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>

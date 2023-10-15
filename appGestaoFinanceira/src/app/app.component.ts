@@ -2,20 +2,31 @@ import { Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BSHttpLoading } from './core/services/bs-http-loading';
 import { PrimeNGConfig } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { BSMessage } from './core/services/bs-message';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [MessageService]
 })
 
-export class AppComponent{
+export class AppComponent {
   title = 'Gestao Financeira';
+  titleMessage: string;
+  iconeMessage: string;
+  messages: string[] = [];
+
+
 
   constructor(private bsHttpLoading: BSHttpLoading,
+    private bsMessage: BSMessage,
+    private messageService: MessageService,
     private spinner: NgxSpinnerService,
-    private config: PrimeNGConfig) {
-    this.bsHttpLoading.getLoading().subscribe(      
+    private config: PrimeNGConfig
+  ) {
+    this.bsHttpLoading.getLoading().subscribe(
       value => {
         if (value) {
           this.spinner.show();
@@ -27,7 +38,15 @@ export class AppComponent{
           }, 100);*/
         }
       }
-    );
+    );    
+
+    this.bsMessage.get().subscribe(toastMessage => {
+      this.titleMessage = toastMessage.title;
+      this.iconeMessage = toastMessage.icone;
+      this.messages = toastMessage.messages;
+      this.messageService.add({ key: 'message', sticky: true, severity: toastMessage.severity });
+    });
+
 
     this.config.setTranslation({
       "startsWith": "Começa com",
@@ -73,4 +92,13 @@ export class AppComponent{
     });
 
   }
+
+  onReject() {
+    this.messageService.clear('message');
+  }
+
+
+
+
+
 }

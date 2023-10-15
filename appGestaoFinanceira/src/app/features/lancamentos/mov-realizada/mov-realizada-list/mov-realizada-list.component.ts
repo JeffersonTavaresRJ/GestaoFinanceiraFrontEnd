@@ -115,9 +115,7 @@ export class MovRealizadaListComponent implements OnInit {
     .subscribe(success=>{
       this.alertMessageForm.showSuccess(success.message, 'Sr. Usuário');
           this.filtrarTablePorPeriodo()
-    }, error=>{
-      this.alertMessageForm.showError(error.errors, 'Sr. Usuário');
-    })
+    });
   }
 
   eventDelete(event) {
