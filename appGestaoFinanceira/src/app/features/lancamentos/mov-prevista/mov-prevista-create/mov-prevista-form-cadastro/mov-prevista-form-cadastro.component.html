@@ -35,8 +35,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idItemMovimentacao')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idItemMovimentacao')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
@@ -50,8 +52,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('tipoPrioridade')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipoPrioridade')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
             </div>
 
@@ -69,8 +73,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idFormaPagamento')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idFormaPagamento')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
                 <div class="form-group col-4">
                     <label for="dataVencimento">Data de Vencimento:</label>
@@ -79,8 +85,10 @@
                     </p-calendar> 
                     <app-field-validation-form [form-control]="resourceForm.get('dataVencimento')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('dataVencimento')">
                     </app-field-server-errors-form>
+                    -->
 
                 </div>
                 <div class="form-group col-3">
@@ -89,8 +97,10 @@
                         [minFractionDigits]="2">
                     </p-inputNumber>
                     <app-field-validation-form [form-control]="resourceForm.get('valor')"></app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('valor')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
             </div>
 
@@ -100,9 +110,11 @@
                         <textarea formControlName="observacao" id="float-input" rows="2" cols="70"
                             pInputTextarea></textarea>
                         <label for="float-input">Observação</label>
-                    </span>                    
+                    </span> 
+                    <!--                 
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('movimentacao.observacao')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
 
                 <div class="p-fluid col-4">
@@ -118,8 +130,10 @@
                         </div>
                         <app-field-validation-form [form-control]="resourceForm.get('tipoRecorrencia')">
                         </app-field-validation-form>
+                        <!--
                         <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipoRecorrencia')">
                         </app-field-server-errors-form>
+                        -->
                     </div>
                 </div>
             </div>

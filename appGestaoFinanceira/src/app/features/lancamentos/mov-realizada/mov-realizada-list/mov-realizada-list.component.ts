@@ -46,9 +46,9 @@ export class MovRealizadaListComponent implements OnInit {
 
     this.formGroupTransfer = this.formBuilder.group({
       idConta:[null, Validators.required],
-      idContaDestino: [null, Validators.required],
+      idContaDestino: [null,Validators.required],
       dataMovimentacaoRealizada: [null, Validators.required],
-      valor:[null, Validators.required]
+      valor:[null,Validators.required]
     })
   }
 
@@ -113,7 +113,7 @@ export class MovRealizadaListComponent implements OnInit {
 
     this.movRealizadaService.Transferir(idConta, idContaDestino, dataMovimentacaoRealizada, valor)
     .subscribe(success=>{
-      this.alertMessageForm.showSuccess(success.message, 'Sr. Usuário');
+      this.alertMessageForm.showSuccess(success.message);
           this.filtrarTablePorPeriodo()
     });
   }
@@ -122,7 +122,7 @@ export class MovRealizadaListComponent implements OnInit {
     if (event) {
       this.movRealizadaService.deleteById(this.idMovimentacaoRealizada)
         .subscribe(success => {
-          this.alertMessageForm.showSuccess(success.message, 'Sr. Usuário');
+          this.alertMessageForm.showSuccess(success.message);
           this.filtrarTablePorPeriodo()
         });
     }
@@ -139,7 +139,7 @@ export class MovRealizadaListComponent implements OnInit {
       } 
 
     }else{
-      this.alertMessageForm.showError("A conta deve ser informada", "Sr. Usuário");
+      this.alertMessageForm.showError("A conta deve ser informada");
     }
 
     if(idFormaPagamento != null){

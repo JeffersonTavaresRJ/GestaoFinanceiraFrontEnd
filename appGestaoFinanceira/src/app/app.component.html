@@ -10,13 +10,20 @@
 <p-toast position="center" key="message" (onClose)="onReject()" [baseZIndex]="5000">
     <ng-template let-message pTemplate="message">
         <div class="p-flex p-flex-column" style="flex: 1">
-            <div class="p-text-center">
-                <i [class]="iconeMessage" style="font-size: 3rem"></i>
-                <h4>{{title}}</h4>
-                <ul>
-                   <li *ngFor="let item of messages">{{item}}</li>
-                </ul>
+            <div class="text-center">
+                <i [class]="iconeMessage" style="font-size: 2rem"></i>
+                <h6>{{title}}</h6>
             </div>
+            <div *ngFor="let item of messages">
+                <p [class.text-left]="messages.length > 1" [class.text-center]="messages.length == 1">
+                    {{item}}
+                </p>
+            </div>
+            <!--
+            <ul *ngIf="messages.length > 1" class="p-text">
+                <li *ngFor="let item of messages">{{item}}</li>
+            </ul>
+            -->
         </div>
     </ng-template>
 </p-toast>

@@ -8,27 +8,38 @@ import { BSMessage } from 'src/app/core/services/bs-message';
 })
 export class AlertMessageForm{
     
-    constructor(private toastr: ToastrService, private bsMessage: BSMessage){} 
-
-     showSuccess(message: string, title: string){
-        this.toastr.success(message, title);
-    }
+    constructor(private toastr: ToastrService, private bsMessage: BSMessage){}
     
-    showErrors(messages: string[], title: string){
-        this.bsMessage.set("pi pi-exclamation-circle", "error", title, messages);
+    arMessages: string[]=[];
+
+     showSuccess(message: string){
+        this.arMessages.length=0;
+        this.arMessages.push(message);
+        this.bsMessage.set("pi pi-check-circle", "success", this.arMessages);
     }
 
-    showError(message: string, title: string){
-        this.toastr.error(message, title);
-    }
-    
-    showInfo(message: string, title: string){
-        this.toastr.info(message, title);
+    showInfo(message: string){
+        this.arMessages.length=0;
+        this.arMessages.push(message);
+        this.bsMessage.set("pi pi-info-circle", "info", this.arMessages);
         
     }
     
-    showWarning(message: string, title: string){
-        this.toastr.warning(message, title);
+    showWarning(message: string){
+        this.arMessages.length=0;
+        this.arMessages.push(message);
+        this.bsMessage.set("pi pi-exclamation-circle", "warn", this.arMessages);
     }
+    
+    showErrors(messages: string[]){
+        this.bsMessage.set("pi pi-times-circle", "error", messages);
+    }
+
+    showError(message: string){
+        this.arMessages.length=0;
+        this.arMessages.push(message);
+        this.bsMessage.set("pi pi-times-circle", "error", this.arMessages);
+    }   
+    
 
 }

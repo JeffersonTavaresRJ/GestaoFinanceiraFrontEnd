@@ -6,7 +6,6 @@ export class ToastMessage {
   constructor(
     public icone: string = '',
     public severity: string = '',
-    public title: string = '',
     public messages: string[]=[]
   ) { }
 }
@@ -17,8 +16,8 @@ export class ToastMessage {
 export class BSMessage {
   private toastMessage = new BehaviorSubject<ToastMessage>(new ToastMessage());
 
-  set(icone: string, severity:string, title:string, messages:string[]) {
-    this.toastMessage.next(new ToastMessage(icone, severity, title, messages));
+  set(icone: string, severity:string, messages:string[]) {
+    this.toastMessage.next(new ToastMessage(icone, severity, messages));
   }
   
   get() {

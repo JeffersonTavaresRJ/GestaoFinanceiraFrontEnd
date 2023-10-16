@@ -50,35 +50,36 @@ export class HttpRequestInterceptor implements HttpInterceptor {
             }            
         }      
 
-        //chamada recursiva para o próximo request..      
+        //chamada recursiva para o próximo request.. 
+        //debugger;     
         return next.handle(request)
         .pipe( 
-              map(event=>{return event;}), 
+              map(event=>{return event;}),
               catchError(e=>{
                 debugger;
                 if (e.status == 0) {
                     //servidor fora
-                    this.alertMessage.showError('Erro de conexão com o servidor', 'Sr. Usuário');
+                    this.alertMessage.showError('Erro de conexão com o servidor');
                 }
                 else if (e.status == 401 || e.status == 403) {
                     //token expirado
-                    this.alertMessage.showInfo('Sessão expirada', 'Operação Cancelada');
+                    this.alertMessage.showInfo('Sessão expirada');
                     this.bsAutenticarUsuario.set(false);            
                     this.router.navigate(['/login']);
                 }
                 else if (e.status == 418) {
                     //exceções customizadas
-                    this.alertMessage.showInfo(e.error, 'Sr. Usuário');
+                    this.alertMessage.showInfo(e.error);
                 }else if (e.status == 404) {
                     //exceções customizadas
-                    this.alertMessage.showInfo("Dados não encontrados", 'Sr. Usuário');
+                    this.alertMessage.showInfo("Dados não encontrados");
                 } else if (e.status == 500) {
                     //error status code 500..
-                    this.alertMessage.showError(e.error, 'Sr. Usuário');
+                    this.alertMessage.showError(e.error);
                 } else if(e.status == 400){
-                    this.alertMessage.showErrors(e.error[0].errors, "Lista de Erros:");
+                    this.alertMessage.showErrors(e.error[0].errors);
                 } else if (e.status != 400){
-                    this.alertMessage.showError(e.error, 'Sr. Usuário');
+                    this.alertMessage.showError(e.error);
                 }                
                 return throwError(e);
                }),

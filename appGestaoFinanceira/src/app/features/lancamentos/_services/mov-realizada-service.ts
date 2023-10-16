@@ -22,6 +22,7 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
 
   Transferir(idConta: number, idContaDestino: number, dataMovimentacaoRealizada: string, valor: number): Observable<any>{
     this.setApiOption('/TransferenciaContas');
+    debugger;
     var param = {
         idConta: idConta,
         idContaDestino: idContaDestino,

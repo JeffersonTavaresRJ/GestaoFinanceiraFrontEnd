@@ -36,8 +36,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idItemMovimentacao')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idItemMovimentacao')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
@@ -52,8 +54,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('tipoPrioridade')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('tipoPrioridade')">
                     </app-field-server-errors-form>
+                    -->
                 </div>                
             </div>
 
@@ -71,8 +75,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idFormaPagamento')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idFormaPagamento')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
@@ -84,9 +90,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('dataMovimentacaoRealizada')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('dataMovimentacaoRealizada')">
                     </app-field-server-errors-form>
-
+                    -->
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
@@ -97,8 +104,10 @@
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{resourceForm.get('valor').value | currency }}</strong></p>
                     </div>                    
                     <app-field-validation-form [form-control]="resourceForm.get('valor')"></app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('valor')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
             </div>
 
@@ -108,9 +117,11 @@
                         <textarea formControlName="observacao" id="float-input" rows="2" cols="70"
                             pInputTextarea></textarea>
                         <label for="float-input">Observação</label>
-                    </span>                            
+                    </span>  
+                    <!--                          
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('observacao')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
@@ -125,8 +136,10 @@
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idConta')">
                     </app-field-validation-form>
+                    <!--
                     <app-field-server-errors-form [server-errors]="resourceErrorsValidations('idConta')">
                     </app-field-server-errors-form>
+                    -->
                 </div>
             </div>
 

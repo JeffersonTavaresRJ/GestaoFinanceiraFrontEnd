@@ -61,7 +61,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
         } else if (this.resourceCurrentAction() == 'delete') {
             this.resourceDelete()
         } else {
-            this.resourceAlertMessage.showError('Rota não encontrada', 'Sr. Usuário');
+            this.resourceAlertMessage.showError('Rota não encontrada');
         }
     }
 
@@ -100,7 +100,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();
-                    this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+                    this.resourceAlertMessage.showSuccess(sucess.message);
                 },
                 error => { this.resourceActionForError(error) }
             );
@@ -112,7 +112,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();
-                    this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+                    this.resourceAlertMessage.showSuccess(sucess.message);
                 },
                 error => { this.resourceActionForError(error) }
             );
@@ -124,7 +124,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             .subscribe(
                 sucess => {
                     this.resourceActionForSucess();
-                    this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+                    this.resourceAlertMessage.showSuccess(sucess.message);
                 },
                 error => { this.resourceActionForError(error) }
             );
@@ -147,11 +147,14 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected resourceActionForError(e){
         this.resourceMessageButton = null;
+        /*
         if (e.status == 400) {
             //validações da API (BadRequest) 
             this.validationErrors = e.error;         
         }
+        */
     }
+    
     protected resourceCreatePageTitle():string{
         return 'Novo';
     }

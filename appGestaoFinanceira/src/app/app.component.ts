@@ -41,7 +41,6 @@ export class AppComponent {
     );    
 
     this.bsMessage.get().subscribe(toastMessage => {
-      this.titleMessage = toastMessage.title;
       this.iconeMessage = toastMessage.icone;
       this.messages = toastMessage.messages;
       this.messageService.add({ key: 'message', sticky: true, severity: toastMessage.severity });
