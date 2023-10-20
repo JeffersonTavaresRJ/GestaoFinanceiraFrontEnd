@@ -16,6 +16,7 @@ export class AppComponent {
   title = 'Gestao Financeira';
   titleMessage: string;
   iconeMessage: string;
+  bBadRequest: boolean;
   messages: string[] = [];
 
 
@@ -43,6 +44,7 @@ export class AppComponent {
     this.bsMessage.get().subscribe(toastMessage => {
       this.iconeMessage = toastMessage.icone;
       this.messages = toastMessage.messages;
+      this.bBadRequest = toastMessage.codHttpRequest ==400;
       this.messageService.add({ key: 'message', sticky: true, severity: toastMessage.severity });
     });
 

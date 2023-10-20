@@ -1,3 +1,8 @@
+.icone-header{
+    font-size: 20px;
+    padding-right: 10px;
+}
+
 .container{
     font-size: 15px;
 }
@@ -5,7 +10,7 @@
 .text-center{
     text-align: center;
     margin-top: 15px;    
-    font-size: small;
+    font-size: medium;
 }
 
 .text-left{
