@@ -3,24 +3,24 @@
 <div class="container mt-3">
     <router-outlet></router-outlet>
 </div>
+
+<div class="footer">
+    <p-messages [(value)]="messages[0]" [(severity)]="severityMessage"></p-messages>
+    {{messages[0]}}
+</div>
+
+
 <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#f6f5f5" type="timer" [fullScreen]="true">
 </ngx-spinner>
 
 
-<p-toast position="center" key="message" (onClose)="onReject()" [baseZIndex]="5000">
-    <ng-template let-message pTemplate="message">
+<p-toast position="center" key="dialog" (onClose)="onReject()" [baseZIndex]="5000">
+    <ng-template pTemplate="message">
         <div class="p-flex p-flex-column" style="flex: 1">
-            <div class="row">
-                <div class="col-12 align-center">
-                    <i [class]="iconeMessage" class="icone-header"></i>
-                    <strong style="margin-bottom: 10px;">{{title}}</strong>
-                </div>
-            </div>
-            <div *ngFor="let item of messages">
-                <p class="text-center" *ngIf="bBadRequest==false">
-                    {{item}}
-                </p>
-                <div class="text-left" *ngIf="bBadRequest==true">
+            <div class="text-center">
+                <i [class]="iconeMessage" class="icone-header"></i>
+                <p><strong>{{title}}</strong></p>
+                <div *ngFor="let item of messages" class="text-justify">
                     <strong>{{item.propertyName}}</strong>
                     <ul>
                         <li *ngFor="let error of item.errors">{{error}}</li>

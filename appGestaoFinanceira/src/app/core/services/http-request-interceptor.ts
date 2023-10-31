@@ -69,7 +69,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 }
                 else if (e.status == 418) {
                     //exceções customizadas
-                    this.alertMessage.showInfo(e.error, e.status);
+                    this.alertMessage.showWarning(e.error, e.status);
                 }else if (e.status == 404) {
                     //exceções customizadas
                     this.alertMessage.showInfo("Dados não encontrados", e.status);

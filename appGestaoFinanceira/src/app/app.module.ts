@@ -26,6 +26,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {ToastModule} from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
 
 
 const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
@@ -46,7 +47,8 @@ const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
     AppRoutingModule,
     RouterModule,
     BrowserAnimationsModule,
-    ToastModule
+    ToastModule,
+    MessagesModule
   ],
   providers: [
     RxJS_Services,

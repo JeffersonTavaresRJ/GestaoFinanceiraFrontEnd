@@ -16,7 +16,8 @@ export class AppComponent {
   title = 'Gestao Financeira';
   titleMessage: string;
   iconeMessage: string;
-  bBadRequest: boolean;
+  severityMessage: string;
+  isVisible: boolean;
   messages: string[] = [];
 
 
@@ -39,13 +40,23 @@ export class AppComponent {
           }, 100);*/
         }
       }
-    );    
+    );
 
     this.bsMessage.get().subscribe(toastMessage => {
-      this.iconeMessage = toastMessage.icone;
+
       this.messages = toastMessage.messages;
-      this.bBadRequest = toastMessage.codHttpRequest ==400;
-      this.messageService.add({ key: 'message', sticky: true, severity: toastMessage.severity });
+      if (toastMessage.codHttpRequest == 400) {
+        this.iconeMessage = toastMessage.icone;        
+        this.severityMessage = toastMessage.severity;
+        this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
+      } else {
+        this.isVisible = true;
+        this.messageService.add({severity: toastMessage.severity, summary: toastMessage.title, detail: toastMessage.messages[0] });
+        setTimeout(() => {
+          this.isVisible = false;
+          }, 10000);
+      }
+
     });
 
 
