@@ -13,6 +13,7 @@ import { Usuario } from '../../features/security/_models/usuario-model';
 import { AlertMessageForm } from '../../shared/components/alert-form/alert-message-form';
 import { BSAutenticarUsuario } from './bs-autenticar-usuario';
 import { Router } from '@angular/router';
+import { BSMessage } from './bs-message';
 
 /**
  * This class is for intercepting http requests. When a request starts, we set the loadingSub property
@@ -27,6 +28,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         public bsHttpLoading: BSHttpLoading,
         public alertMessage: AlertMessageForm,
         public bsAutenticarUsuario : BSAutenticarUsuario,
+        //public bsMessage: BSMessage,
         public router : Router
     ) { }
 
@@ -69,6 +71,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 }
                 else if (e.status == 418) {
                     //exceções customizadas
+                    //this.bsMessage.set("pi pi-exclamation-triangle", "warn", e.status, "Atenção:", e.error);
                     this.alertMessage.showWarning(e.error, e.status);
                 }else if (e.status == 404) {
                     //exceções customizadas

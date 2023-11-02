@@ -27,9 +27,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {ToastModule} from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
+import { BSMessage } from './core/services/bs-message';
+import { MessageService } from 'primeng/api';
 
 
-const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
+const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading, BSMessage, MessageService];
 
 @NgModule({
   declarations: [

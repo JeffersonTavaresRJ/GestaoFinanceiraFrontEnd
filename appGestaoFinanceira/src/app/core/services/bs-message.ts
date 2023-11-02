@@ -12,9 +12,7 @@ export class ToastMessage {
   ) { }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class BSMessage {
   private toastMessage = new BehaviorSubject<ToastMessage>(new ToastMessage());
 

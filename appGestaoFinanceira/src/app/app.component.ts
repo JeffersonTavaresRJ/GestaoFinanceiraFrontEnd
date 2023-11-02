@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BSHttpLoading } from './core/services/bs-http-loading';
 import { PrimeNGConfig } from 'primeng/api';
@@ -8,8 +8,7 @@ import { BSMessage } from './core/services/bs-message';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: [MessageService]
+  styleUrls: ['./app.component.css']
 })
 
 export class AppComponent {
@@ -17,7 +16,6 @@ export class AppComponent {
   titleMessage: string;
   iconeMessage: string;
   severityMessage: string;
-  isVisible: boolean;
   messages: string[] = [];
 
 
@@ -39,26 +37,28 @@ export class AppComponent {
             this.spinner.hide();
           }, 100);*/
         }
+
       }
     );
 
+    debugger;
     this.bsMessage.get().subscribe(toastMessage => {
 
-      this.messages = toastMessage.messages;
-      if (toastMessage.codHttpRequest == 400) {
-        this.iconeMessage = toastMessage.icone;        
-        this.severityMessage = toastMessage.severity;
-        this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
-      } else {
-        this.isVisible = true;
-        this.messageService.add({severity: toastMessage.severity, summary: toastMessage.title, detail: toastMessage.messages[0] });
-        setTimeout(() => {
-          this.isVisible = false;
-          }, 10000);
+      debugger;
+      if (toastMessage.codHttpRequest > 0) {
+        this.messages = toastMessage.messages;
+        this.iconeMessage = toastMessage.icone;
+
+        if (toastMessage.codHttpRequest == 400) {
+          this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
+        } else {
+          var footer = document.getElementById('footer');
+          this.messageFooter(footer, toastMessage.severity);
+        }
+        this.bsMessage.set(null, null, null, null, null);
       }
 
     });
-
 
     this.config.setTranslation({
       "startsWith": "Começa com",
@@ -105,12 +105,19 @@ export class AppComponent {
 
   }
 
-  onReject() {
-    this.messageService.clear('message');
+  messageFooter(footer, severity) {
+    if (footer != null) {
+      footer.classList.remove('hidden');
+      footer.classList.add('footer');
+      footer.classList.add(severity);
+      setTimeout(function () {
+        footer.classList.add('hidden');
+      }, 5000);
+    }
   }
 
-
-
-
+  onClose() {
+    this.messageService.clear('dialog');
+  }
 
 }

@@ -4,9 +4,11 @@
     <router-outlet></router-outlet>
 </div>
 
-<div class="footer">
-    <p-messages [(value)]="messages[0]" [(severity)]="severityMessage"></p-messages>
-    {{messages[0]}}
+<div id="footer" class="hidden">
+    <div class="container-message">
+        <i [class]="iconeMessage" style="font-size: 1rem; margin-right: 5px;"></i>
+        {{messages[0]}}
+    </div>    
 </div>
 
 
@@ -14,7 +16,7 @@
 </ngx-spinner>
 
 
-<p-toast position="center" key="dialog" (onClose)="onReject()" [baseZIndex]="5000">
+<p-toast position="center" key="dialog" (onClose)="onClose()" [baseZIndex]="5000">
     <ng-template pTemplate="message">
         <div class="p-flex p-flex-column" style="flex: 1">
             <div class="text-center">
