@@ -137,7 +137,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
             if (this.redirectRouterLink == '/login') {
                 this.bsAutenticarUsuario.set(false);
             }
-            this.router.navigate([this.redirectRouterLink]);
+           // this.router.navigate([this.redirectRouterLink]);
 
         } else {
             this.resourceMessageButton = null;

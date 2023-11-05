@@ -2,8 +2,12 @@
     font-size: 2rem;
 }
 
-.container-message{
-    margin: auto;
+.space-between{
+    justify-content: space-between; /*Um componente a direita e outro à esquerda (flexbox)*/
+}
+
+.vertical-center{
+    /*margin: auto;*/
     display: flex;
     align-items: center; /* Centraliza verticalmente */
 }

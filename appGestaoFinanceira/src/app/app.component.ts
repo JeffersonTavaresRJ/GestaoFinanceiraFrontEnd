@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BSHttpLoading } from './core/services/bs-http-loading';
 import { PrimeNGConfig } from 'primeng/api';
@@ -15,8 +15,10 @@ export class AppComponent {
   title = 'Gestao Financeira';
   titleMessage: string;
   iconeMessage: string;
-  severityMessage: string;
+  severityOld: string;
+  closeError: boolean;
   messages: string[] = [];
+  footer:any;
 
 
 
@@ -26,39 +28,20 @@ export class AppComponent {
     private spinner: NgxSpinnerService,
     private config: PrimeNGConfig
   ) {
+
     this.bsHttpLoading.getLoading().subscribe(
       value => {
         if (value) {
           this.spinner.show();
+          this.footer = document.getElementById('footer');   
+          this.footer.classList.add('hidden');       
         } else {
           this.spinner.hide();
-          /*setTimeout(() => {
-            spinner ends after 1 seconds 
-            this.spinner.hide();
-          }, 100);*/
+          this.bsMessage.clear();
         }
 
       }
     );
-
-    debugger;
-    this.bsMessage.get().subscribe(toastMessage => {
-
-      debugger;
-      if (toastMessage.codHttpRequest > 0) {
-        this.messages = toastMessage.messages;
-        this.iconeMessage = toastMessage.icone;
-
-        if (toastMessage.codHttpRequest == 400) {
-          this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
-        } else {
-          var footer = document.getElementById('footer');
-          this.messageFooter(footer, toastMessage.severity);
-        }
-        this.bsMessage.set(null, null, null, null, null);
-      }
-
-    });
 
     this.config.setTranslation({
       "startsWith": "Começa com",
@@ -105,19 +88,50 @@ export class AppComponent {
 
   }
 
-  messageFooter(footer, severity) {
-    if (footer != null) {
-      footer.classList.remove('hidden');
-      footer.classList.add('footer');
-      footer.classList.add(severity);
-      setTimeout(function () {
-        footer.classList.add('hidden');
-      }, 5000);
-    }
+  /*Evento que detecta qualquer alteração ocorrida nos elementos do component..*/
+  ngDoCheck() {  
+
+    this.bsMessage.get().subscribe(toastMessage => {
+      //debugger;
+      if (toastMessage.severity != null) {
+        this.messages = toastMessage.messages;
+        this.iconeMessage = toastMessage.icone;
+
+        if (toastMessage.codHttpRequest == 400) {
+          this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
+        } else {
+          this.messageFooter(toastMessage.severity);
+        }
+      }
+    });
   }
 
   onClose() {
     this.messageService.clear('dialog');
+    this.footer.classList.add('hidden');
+  }
+
+  private messageFooter(severity) {
+    if (this.footer != null) {
+
+      this.footer.classList.remove(this.severityOld);
+      this.footer.classList.remove('hidden');
+
+      this.footer.classList.add('footer');
+      this.footer.classList.add(severity);
+
+      this.closeError = severity == "error";
+
+      if (this.closeError == false) {
+        setTimeout(function () {
+          this.footer.classList.add('hidden');
+        }, 5000);
+      }
+
+      if (this.severityOld != severity) {
+        this.severityOld = severity;
+      }
+    }
   }
 
 }

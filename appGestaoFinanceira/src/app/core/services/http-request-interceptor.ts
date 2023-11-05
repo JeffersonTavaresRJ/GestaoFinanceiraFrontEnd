@@ -37,6 +37,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         //contador de requests..
+        
         ++this._countRequests;
         //loading ativo..
         this.bsHttpLoading.setLoading(true);
@@ -53,12 +54,13 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         }      
 
         //chamada recursiva para o próximo request.. 
-        //debugger;     
+        //debugger; 
+        //console.log("this._countRequests: "|| this._countRequests);    
         return next.handle(request)
         .pipe( 
               map(event=>{return event;}),
               catchError(e=>{
-                debugger;
+                //debugger;
                 if (e.status == 0) {
                     //servidor fora
                     this.alertMessage.showError('Erro de conexão com o servidor', e.status);
@@ -71,7 +73,6 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 }
                 else if (e.status == 418) {
                     //exceções customizadas
-                    //this.bsMessage.set("pi pi-exclamation-triangle", "warn", e.status, "Atenção:", e.error);
                     this.alertMessage.showWarning(e.error, e.status);
                 }else if (e.status == 404) {
                     //exceções customizadas
