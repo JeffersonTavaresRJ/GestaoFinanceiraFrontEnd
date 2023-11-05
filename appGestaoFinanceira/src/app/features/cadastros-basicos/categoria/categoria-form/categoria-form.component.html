@@ -12,8 +12,9 @@
               (keyup)="resourceClearValidations()" />
              
             <app-field-validation-form [form-control]="resourceForm.get('descricao')"></app-field-validation-form>
+            <!--
             <app-field-server-errors-form [server-errors]="resourceErrorsValidations('descricao')"></app-field-server-errors-form>
-  
+            -->
           </div>              
         </div>
      
@@ -31,7 +32,9 @@
                   </label>
                 </div>
                 <app-field-validation-form [form-control]="resourceForm.get('status')"></app-field-validation-form>
+                <!--
                 <app-field-server-errors-form [server-errors]="resourceErrorsValidations('status')"></app-field-server-errors-form>
+                -->
               </div>
             </div>          
           </div>

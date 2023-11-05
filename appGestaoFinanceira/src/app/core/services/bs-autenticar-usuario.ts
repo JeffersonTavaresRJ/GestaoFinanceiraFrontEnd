@@ -4,7 +4,6 @@ import { BehaviorSubject } from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-
 export class BSAutenticarUsuario {
     private autenticado = new BehaviorSubject<boolean>(false);
 

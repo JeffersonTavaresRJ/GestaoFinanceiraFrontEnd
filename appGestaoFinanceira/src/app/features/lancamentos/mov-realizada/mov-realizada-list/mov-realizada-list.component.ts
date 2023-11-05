@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
 import { ContaService } from 'src/app/features/cadastros-basicos/_services/conta-service';
@@ -18,15 +19,19 @@ export class MovRealizadaListComponent implements OnInit {
   results: any[];
   resultsAux: any[];
   formGroup: FormGroup;
+  formGroupTransfer: FormGroup;
 
   dataReferencia: Date;
   arStDate: string[];
   dataIni: Date;
   dataFim: Date;
   displayDetalhe:boolean;
+  displayTransfer: boolean;
   idMovimentacaoRealizada: number;
   movimentacaoRealizadaDetalhe: MovimentacaoRealizada = new MovimentacaoRealizada();
-  contaOld: Conta;
+  contaDisplay: Conta;
+  saldoAtualConta: number;
+  idContaDestino: number;
 
 
   constructor(private actResourceRoute: ActivatedRoute,
@@ -38,6 +43,13 @@ export class MovRealizadaListComponent implements OnInit {
       idConta: [null],
       idFormaPagamento: [null]
     });
+
+    this.formGroupTransfer = this.formBuilder.group({
+      idConta:[null, Validators.required],
+      idContaDestino: [null,Validators.required],
+      dataMovimentacaoRealizada: [null, Validators.required],
+      valor:[null,Validators.required]
+    })
   }
 
   ngOnInit(): void {
@@ -52,6 +64,7 @@ export class MovRealizadaListComponent implements OnInit {
     this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(this.dataIni.toString(), '-'),
       DateConvert.formatDateYYYYMMDD(this.dataFim.toString(), '-')).subscribe(
         (sucess: any[]) => {
+          debugger;
           this.results = sucess;
           this.resultsAux = this.results;
           this.filtrarTablePorParametros(this.formGroup.get('idConta').value, this.formGroup.get('idFormaPagamento').value);
@@ -60,11 +73,12 @@ export class MovRealizadaListComponent implements OnInit {
 
   getConta(conta: Conta){
     //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
-    if(this.contaOld != null){
-      this.contaOld.defaultConta = 'N';
-      this.contaService.putConta(this.contaOld).subscribe(
+    if(this.contaDisplay != null){
+      this.contaDisplay.defaultConta = 'N';
+      this.contaService.putConta(this.contaDisplay).subscribe(
         sucess=>{
-          this.contaOld = conta;
+          this.contaDisplay = conta;
+          this.formGroupTransfer.get('idConta').setValue(conta.id);
         }
       )
     }
@@ -72,7 +86,7 @@ export class MovRealizadaListComponent implements OnInit {
     conta.defaultConta = 'S';
     this.contaService.putConta(conta).subscribe(
       sucess=>{
-        this.contaOld = conta;
+        this.contaDisplay = conta;
         this.filtrarTablePorParametros(conta.id, this.formGroup.get('idFormaPagamento').value);
       }
     )
@@ -91,11 +105,24 @@ export class MovRealizadaListComponent implements OnInit {
    this.movimentacaoRealizadaDetalhe = movimentacaoRealizada;
   }
 
+  Tranferir(){
+    var idConta = this.formGroupTransfer.get('idConta').value;
+    var idContaDestino = this.formGroupTransfer.get('idContaDestino').value;
+    var dataMovimentacaoRealizada = this.formGroupTransfer.get('dataMovimentacaoRealizada').value;
+    var valor = this.formGroupTransfer.get('valor').value;
+
+    this.movRealizadaService.Transferir(idConta, idContaDestino, dataMovimentacaoRealizada, valor)
+    .subscribe(success=>{
+      this.alertMessageForm.showSuccess(success.message);
+          this.filtrarTablePorPeriodo()
+    });
+  }
+
   eventDelete(event) {
     if (event) {
       this.movRealizadaService.deleteById(this.idMovimentacaoRealizada)
-        .subscribe(sucess => {
-          this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
+        .subscribe(success => {
+          this.alertMessageForm.showSuccess(success.message);
           this.filtrarTablePorPeriodo()
         });
     }
@@ -103,10 +130,16 @@ export class MovRealizadaListComponent implements OnInit {
 
   private filtrarTablePorParametros(idConta?: Number, idFormaPagamento?: Number) {
     this.results = this.resultsAux;
-    if (idConta != null){
-      this.results = this.resultsAux.filter(m => m.conta.id == idConta);
+    if (idConta != null){  
+
+      this.results = this.resultsAux.filter(m => m.conta.id == idConta); 
+
+      if(this.results.length>0){
+        this.saldoAtualConta = this.results[0].valor;
+      } 
+
     }else{
-      this.alertMessageForm.showError("A conta deve ser informada", "Sr. Usuário");
+      this.alertMessageForm.showError("A conta deve ser informada");
     }
 
     if(idFormaPagamento != null){
@@ -118,6 +151,7 @@ export class MovRealizadaListComponent implements OnInit {
   }
 
   private movRealizadaList() {
+    this.saldoAtualConta = 0;
     this.arStDate = this.actResourceRoute.snapshot.params.dataIni.split('-');
 
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
@@ -134,9 +168,10 @@ export class MovRealizadaListComponent implements OnInit {
         //Setando a conta default como parâmetro de pesquisa..
         this.contaService.getAll().subscribe(
           sucess=>{
-            this.contaOld = sucess.filter(x=>x.defaultConta=="S")[0];
-            this.formGroup.get('idConta').setValue(this.contaOld.id);
-            this.filtrarTablePorParametros(this.contaOld.id, this.formGroup.get('idFormaPagamento').value);            
+            this.contaDisplay = sucess.filter(x=>x.defaultConta=="S")[0];
+            this.formGroup.get('idConta').setValue(this.contaDisplay.id);
+            this.formGroupTransfer.get('idConta').setValue(this.contaDisplay.id);
+            this.filtrarTablePorParametros(this.contaDisplay.id, this.formGroup.get('idFormaPagamento').value);            
           }
         )
         

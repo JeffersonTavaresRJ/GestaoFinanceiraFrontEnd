@@ -5,6 +5,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
+
 import ptBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(ptBr);
@@ -24,10 +25,13 @@ import { LancamentosModule } from './features/lancamentos/lancamentos.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import {ToastModule} from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
+import { BSMessage } from './core/services/bs-message';
+import { MessageService } from 'primeng/api';
 
 
-
-const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
+const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading, BSMessage, MessageService];
 
 @NgModule({
   declarations: [
@@ -44,7 +48,9 @@ const RxJS_Services = [HttpRequestInterceptor, BSHttpLoading];
     DashboardsModule,
     AppRoutingModule,
     RouterModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ToastModule,
+    MessagesModule
   ],
   providers: [
     RxJS_Services,

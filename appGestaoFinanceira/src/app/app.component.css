@@ -1,3 +1,53 @@
-.container{
-    font-size: 15px;
+.icone-header {
+    font-size: 2rem;
+}
+
+.space-between{
+    justify-content: space-between; /*Um componente a direita e outro à esquerda (flexbox)*/
+}
+
+.vertical-center{
+    /*margin: auto;*/
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    opacity: 1;
+    font-size: small;
+    transition: opacity 1s ease;
+    /* Adiciona uma transição de 1 segundo para o efeito de fade */
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.success{
+    background-color: #2E8B57;
+    color: #fff;
+}
+
+.info{
+    background-color: #778899;
+    color: #fff;
+}
+
+.warn{
+    background-color: #FAFAD2;
+    color: #000;
+}
+
+.error{
+    background-color: #A52A2A;
+    color: #fff;
+}
+
+:host ::ng-deep .p-message {
+    font-size: small;
 }

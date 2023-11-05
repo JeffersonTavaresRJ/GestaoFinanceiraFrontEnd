@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { FormaPagamentoService } from 'src/app/features/cadastros-basicos/_services/forma-pagamento-service';
 import { MovimentacaoPrevista } from '../../../_models/mov-prevista-model';
@@ -6,7 +6,7 @@ import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { ConfirmationService } from 'primeng/api';
 import { MovPrevistaService } from '../../../_services/mov-prevista-service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -98,7 +98,7 @@ export class MovPrevistaFormControlesComponent implements OnInit {
   onRowEditSave(movPrevista: MovimentacaoPrevista, ri: number) {
     //crítica do valor..
     if (!(Number.parseFloat(this.arStValor[ri]) > 0)) {
-      this.alertMessageForm.showError("Valor Inválido", "Sr. Usuário");
+      this.alertMessageForm.showError("Valor Inválido");
       return false;
     }
 
@@ -107,7 +107,7 @@ export class MovPrevistaFormControlesComponent implements OnInit {
 
     if (Number.parseInt(this.arStDate[2]) != movPrevista.dataReferencia.getFullYear() ||
       (Number.parseInt(this.arStDate[1]) - 1) != movPrevista.dataReferencia.getMonth()) {
-      this.alertMessageForm.showError("Data fora do mês/ano da recorrência", "Sr. Usuário");
+      this.alertMessageForm.showError("Data fora do mês/ano da recorrência");
       return false;
     }
 
@@ -169,7 +169,7 @@ export class MovPrevistaFormControlesComponent implements OnInit {
 
   carregarArrayMovPrevistas(nrTotal: number) {
     if ((this.movimentacaoPrevista.valor / nrTotal) < 1) {
-      this.alertMessageForm.showError("Valor da parcela é menor do que R$1,00. Operação cancelada", "Sr. Usuário");
+      this.alertMessageForm.showError("Valor da parcela é menor do que R$1,00. Operação cancelada");
       return false;
     }
 
@@ -207,12 +207,12 @@ export class MovPrevistaFormControlesComponent implements OnInit {
     
 
     this.movPrevistaService.postArray(this.arFormGroup).subscribe(
-      sucess => { this.alertMessageForm.showSuccess(sucess.message, "Sr. Usuário") },
-      error => { this.actionForError(error); }
+      sucess => { this.alertMessageForm.showSuccess(sucess.message) }/*,
+      error => { this.actionForError(error); }*/
     );
 
   }
-
+/*
   private actionForError(e) {
     if (e.status == 400) {
       //validações da API (BadRequest) 
@@ -220,7 +220,7 @@ export class MovPrevistaFormControlesComponent implements OnInit {
       this.displayError = true;
     }
   }
-
+*/
   clearValidations() {
     this.arvalidationErrors = [];
     this.displayError = false;

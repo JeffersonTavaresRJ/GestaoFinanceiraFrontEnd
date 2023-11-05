@@ -93,7 +93,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
     this.movimentacaoPrevistaService.postArray([this.resourceForm])
       .subscribe(
         sucess => {
-          this.resourceAlertMessage.showSuccess(sucess.message, 'Sr. Usuário');
+          this.resourceAlertMessage.showSuccess(sucess.message);
         },
         error => { this.resourceActionForError(error) }
       );

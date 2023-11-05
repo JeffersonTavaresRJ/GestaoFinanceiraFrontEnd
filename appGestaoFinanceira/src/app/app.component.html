@@ -1,11 +1,35 @@
 <app-header></app-header>
 
-<div class="container mt-3">  
-  <router-outlet></router-outlet>
+<div class="container mt-3">
+    <router-outlet></router-outlet>
 </div>
-<ngx-spinner bdColor = "rgba(0,0,0,0.8)" 
-   size = "medium" 
-   color = "#f6f5f5" 
-   type = "timer" 
-   [fullScreen] = "true">
+
+<div id="footer" class="hidden">
+    <div class="vertical-center space-between">
+        <div class="vertical-center">
+            <i [class]="iconeMessage" style="font-size: 1rem; margin-right: 5px;"></i>
+            {{messages[0]}}
+        </div>
+        <i *ngIf="closeError" class="pi pi-times" style="font-size: 0.7rem" (click)="onClose()"></i>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#f6f5f5" type="timer" [fullScreen]="true">
 </ngx-spinner>
+
+<p-toast position="center" key="dialog" (onClose)="onClose()" [baseZIndex]="5000">
+    <ng-template pTemplate="message">
+        <div class="p-flex p-flex-column" style="flex: 1">
+            <div class="text-center">
+                <i [class]="iconeMessage" class="icone-header"></i>
+                <p><strong>{{title}}</strong></p>
+                <div *ngFor="let item of messages" class="text-justify">
+                    <strong>{{item.propertyName}}</strong>
+                    <ul>
+                        <li *ngFor="let error of item.errors">{{error}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>

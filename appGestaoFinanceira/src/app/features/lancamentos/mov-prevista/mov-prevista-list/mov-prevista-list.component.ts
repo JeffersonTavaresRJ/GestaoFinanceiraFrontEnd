@@ -66,7 +66,7 @@ export class MovPrevistaListComponent implements OnInit {
       this.dataFim.getMonth() + 1,
       0);
     if (this.dataFim < this.dataIni) {
-      this.alertMessageForm.showError("O período informado possui o mês/ano inicial maior do que o mês/ano final", "Sr. Usuário");
+      this.alertMessageForm.showError("O período informado possui o mês/ano inicial maior do que o mês/ano final");
       return false;
     }
     this.movPrevistaService.getByDataVencimento(DateConvert.formatDateYYYYMMDD(this.dataIni, '-'),
@@ -130,7 +130,7 @@ export class MovPrevistaListComponent implements OnInit {
     if (event) {
       this.movPrevistaService.delete(this.idItemMovimentacao, DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-'))
         .subscribe(sucess => {
-          this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
+          this.alertMessageForm.showSuccess(sucess.message);
           this.filtrarTablePorPeriodo()
         });
     }

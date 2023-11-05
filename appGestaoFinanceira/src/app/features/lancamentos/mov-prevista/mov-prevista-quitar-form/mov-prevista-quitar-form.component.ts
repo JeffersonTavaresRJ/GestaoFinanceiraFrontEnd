@@ -128,11 +128,11 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         sucess => {
           this.arForms.removeAt(this.idxDelete);
           this.totalizarValorPago();
-          this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');
-        },
+          this.alertMessageForm.showSuccess(sucess.message);
+        }/*,
         error => {
           this.actionForError(error)
-        });
+        }*/);
     }
   }
 
@@ -161,7 +161,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         this.movimentacaoPrevista.observacao,
         0, dataMovimentacaoRealizada, null, null, this.movimentacaoPrevista.valor, true);
     } else {
-      this.alertMessageForm.showError("O limite máximo são 10 registros.", "Operação cancelada");
+      this.alertMessageForm.showError("O limite máximo são 10 registros.");
     }
   }
 
@@ -186,22 +186,22 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
             fGroup.get('id').setValue( Number.parseFloat(sucess.id));
             fGroup.get('isEdit').setValue(false);
             this.totalizarValorPago();
-            this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');            
-          },
+            this.alertMessageForm.showSuccess(sucess.message);            
+          }/*,
           error => {
             this.actionForError(error)
-          });
+          }*/);
 
       } else {
         this.movRealizadaService.put(fGroup).subscribe(
           sucess => {
             fGroup.get('isEdit').setValue(false);
             this.totalizarValorPago();
-            this.alertMessageForm.showSuccess(sucess.message, 'Sr. Usuário');            
-          },
+            this.alertMessageForm.showSuccess(sucess.message);            
+          }/*,
           error => {
             this.actionForError(error)
-          });
+          }*/);
       }
     }
   }
@@ -261,6 +261,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     });
   }
 
+  /*
   private actionForError(e) {
     if (e.status == 400) {
       //validações da API (BadRequest) 
@@ -268,5 +269,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       this.displayDialogErrors = true;
     }
   }
+  */
 
 }

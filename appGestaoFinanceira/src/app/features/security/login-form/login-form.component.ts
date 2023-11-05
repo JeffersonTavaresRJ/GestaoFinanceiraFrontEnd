@@ -5,8 +5,6 @@ import { environment } from 'src/environments/environment';
 import { BSAutenticarUsuario } from 'src/app/core/services/bs-autenticar-usuario';
 import { Router } from '@angular/router';
 import { BSUpdateUsuario } from 'src/app/core/services/bs-update-usuario';
-import { MessageService } from 'primeng/api';
-
 
 @Component({
   selector: 'app-login-form',

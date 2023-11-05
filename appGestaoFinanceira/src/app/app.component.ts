@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BSHttpLoading } from './core/services/bs-http-loading';
 import { PrimeNGConfig } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { BSMessage } from './core/services/bs-message';
 
 @Component({
   selector: 'app-root',
@@ -9,23 +11,35 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent{
+export class AppComponent {
   title = 'Gestao Financeira';
+  titleMessage: string;
+  iconeMessage: string;
+  severityOld: string;
+  closeError: boolean;
+  messages: string[] = [];
+  footer:any;
+
+
 
   constructor(private bsHttpLoading: BSHttpLoading,
+    private bsMessage: BSMessage,
+    private messageService: MessageService,
     private spinner: NgxSpinnerService,
-    private config: PrimeNGConfig) {
-    this.bsHttpLoading.getLoading().subscribe(      
+    private config: PrimeNGConfig
+  ) {
+
+    this.bsHttpLoading.getLoading().subscribe(
       value => {
         if (value) {
           this.spinner.show();
+          this.footer = document.getElementById('footer');   
+          this.footer.classList.add('hidden');       
         } else {
           this.spinner.hide();
-          /*setTimeout(() => {
-            spinner ends after 1 seconds 
-            this.spinner.hide();
-          }, 100);*/
+          this.bsMessage.clear();
         }
+
       }
     );
 
@@ -73,4 +87,51 @@ export class AppComponent{
     });
 
   }
+
+  /*Evento que detecta qualquer alteração ocorrida nos elementos do component..*/
+  ngDoCheck() {  
+
+    this.bsMessage.get().subscribe(toastMessage => {
+      //debugger;
+      if (toastMessage.severity != null) {
+        this.messages = toastMessage.messages;
+        this.iconeMessage = toastMessage.icone;
+
+        if (toastMessage.codHttpRequest == 400) {
+          this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
+        } else {
+          this.messageFooter(toastMessage.severity);
+        }
+      }
+    });
+  }
+
+  onClose() {
+    this.messageService.clear('dialog');
+    this.footer.classList.add('hidden');
+  }
+
+  private messageFooter(severity) {
+    if (this.footer != null) {
+
+      this.footer.classList.remove(this.severityOld);
+      this.footer.classList.remove('hidden');
+
+      this.footer.classList.add('footer');
+      this.footer.classList.add(severity);
+
+      this.closeError = severity == "error";
+
+      if (this.closeError == false) {
+        setTimeout(function () {
+          this.footer.classList.add('hidden');
+        }, 5000);
+      }
+
+      if (this.severityOld != severity) {
+        this.severityOld = severity;
+      }
+    }
+  }
+
 }
