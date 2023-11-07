@@ -36,6 +36,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   }
 
   protected buildResourceForm() {
+    /*
     this.resourceForm = this.resourceFormBuilder.group({
       idCategoria: [null],
       idItemMovimentacao: [null, Validators.required],
@@ -46,6 +47,22 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
       valor: [null, Validators.required],
       status: [null],
       idFormaPagamento: [null, Validators.required],
+      tipoRecorrencia: ['N'],
+      nrParcela: [1],
+      nrParcelaTotal: [1]
+    });
+    */
+
+    this.resourceForm = this.resourceFormBuilder.group({
+      idCategoria: [0],
+      idItemMovimentacao: [0],
+      dataReferencia: [null],
+      tipoPrioridade: [null],
+      observacao: [null],
+      dataVencimento: [null],
+      valor: [null],
+      status: [null],
+      idFormaPagamento: [0],
       tipoRecorrencia: ['N'],
       nrParcela: [1],
       nrParcelaTotal: [1]
@@ -91,7 +108,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   protected resourceCreate() {
     //classe colocada entre colchetes para ser considerada como array de 01 elemento..
     this.movimentacaoPrevistaService.postArray([this.resourceForm])
-      .subscribe(
+      .subscribe(        
         sucess => {
           this.resourceAlertMessage.showSuccess(sucess.message);
         },
