@@ -16,7 +16,6 @@ export class BSMessage {
   private toastMessage = new BehaviorSubject<ToastMessage>(new ToastMessage());
 
   set(icone: string, severity:string, codHttpRequest: number, messages:any[]) {
-    console.log("BSMessage");
     this.toastMessage.next(new ToastMessage(icone, severity, codHttpRequest, messages));
   }
 

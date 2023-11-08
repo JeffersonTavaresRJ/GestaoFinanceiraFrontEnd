@@ -23,12 +23,12 @@
             <div class="text-center">
                 <i [class]="iconeMessage" class="icone-header"></i>
                 <p><strong>{{title}}</strong></p>
-                <div *ngFor="let item of messages" class="text-justify">
-                    <strong>{{item.propertyName}}</strong>
-                    <ul>
-                        <li *ngFor="let error of item.errors">{{error}}</li>
-                    </ul>
-                </div>
+            </div>
+            <div *ngFor="let item of messages" class="text-left small">
+                <strong>{{item.propertyName}}</strong>
+                <ul>
+                    <li *ngFor="let error of item.errors">{{error}}</li>
+                </ul>
             </div>
         </div>
     </ng-template>

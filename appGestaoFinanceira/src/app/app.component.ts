@@ -18,8 +18,7 @@ export class AppComponent {
   severityOld: string;
   closeError: boolean;
   messages: any[] = [];
-  footer:any;
-  cont: number=0;
+  footer: any;
 
   constructor(private bsHttpLoading: BSHttpLoading,
     private bsMessage: BSMessage,
@@ -28,16 +27,16 @@ export class AppComponent {
     private config: PrimeNGConfig
   ) {
 
+    this.message();
+
     this.bsHttpLoading.getLoading().subscribe(
       value => {
         if (value) {
           this.spinner.show();
-          this.footer=document.getElementById('footer');   
-          this.footer.classList.add('hidden');       
+          this.footer = document.getElementById('footer');
+          this.footer.classList.add('hidden');
         } else {
-          console.log("getLoading: "+ value);
-          this.spinner.hide();          
-          this.message();
+          this.spinner.hide();
         }
       });
 
@@ -91,17 +90,17 @@ export class AppComponent {
     this.footer.classList.add('hidden');
   }
 
-  private message(){
-    debugger;
+  private message() {
+    //debugger;
     this.bsMessage.get().subscribe(toastMessage => {
       if (toastMessage.severity != null) {
-        debugger;
+        //debugger;
         this.messages = toastMessage.messages;
         this.iconeMessage = toastMessage.icone;
 
+        console.log(this.messages);
+
         if (toastMessage.codHttpRequest == 400) {
-          console.log("dialog: "+ ++this.cont);
-          console.log("severity: "+ toastMessage.severity);
           this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
         } else {
           this.messageFooter(toastMessage.severity);
