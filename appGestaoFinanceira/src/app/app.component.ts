@@ -98,8 +98,6 @@ export class AppComponent {
         this.messages = toastMessage.messages;
         this.iconeMessage = toastMessage.icone;
 
-        console.log(this.messages);
-
         if (toastMessage.codHttpRequest == 400) {
           this.messageService.add({ key: 'dialog', sticky: true, severity: toastMessage.severity });
         } else {
