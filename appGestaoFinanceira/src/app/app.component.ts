@@ -17,10 +17,8 @@ export class AppComponent {
   iconeMessage: string;
   severityOld: string;
   closeError: boolean;
-  messages: string[] = [];
-  footer:any;
-
-
+  messages: any[] = [];
+  footer: any;
 
   constructor(private bsHttpLoading: BSHttpLoading,
     private bsMessage: BSMessage,
@@ -29,19 +27,18 @@ export class AppComponent {
     private config: PrimeNGConfig
   ) {
 
+    this.message();
+
     this.bsHttpLoading.getLoading().subscribe(
       value => {
         if (value) {
           this.spinner.show();
-          this.footer = document.getElementById('footer');   
-          this.footer.classList.add('hidden');       
+          this.footer = document.getElementById('footer');
+          this.footer.classList.add('hidden');
         } else {
           this.spinner.hide();
-          this.bsMessage.clear();
         }
-
-      }
-    );
+      });
 
     this.config.setTranslation({
       "startsWith": "Começa com",
@@ -88,12 +85,16 @@ export class AppComponent {
 
   }
 
-  /*Evento que detecta qualquer alteração ocorrida nos elementos do component..*/
-  ngDoCheck() {  
+  onClose() {
+    this.messageService.clear('dialog');
+    this.footer.classList.add('hidden');
+  }
 
+  private message() {
+    //debugger;
     this.bsMessage.get().subscribe(toastMessage => {
-      //debugger;
       if (toastMessage.severity != null) {
+        //debugger;
         this.messages = toastMessage.messages;
         this.iconeMessage = toastMessage.icone;
 
@@ -102,13 +103,9 @@ export class AppComponent {
         } else {
           this.messageFooter(toastMessage.severity);
         }
+        this.bsMessage.clear();
       }
     });
-  }
-
-  onClose() {
-    this.messageService.clear('dialog');
-    this.footer.classList.add('hidden');
   }
 
   private messageFooter(severity) {

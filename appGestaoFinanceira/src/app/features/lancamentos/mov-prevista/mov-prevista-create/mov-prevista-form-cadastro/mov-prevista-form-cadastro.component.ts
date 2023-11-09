@@ -36,6 +36,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   }
 
   protected buildResourceForm() {
+    
     this.resourceForm = this.resourceFormBuilder.group({
       idCategoria: [null],
       idItemMovimentacao: [null, Validators.required],
@@ -50,7 +51,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
       nrParcela: [1],
       nrParcelaTotal: [1]
     });
-
+    
     this.movimentacaoPrevistaService.GetAllTiposRecorrencias().subscribe(
       (result) => { this.arTiposRecorrencia = result; });
 
@@ -91,7 +92,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   protected resourceCreate() {
     //classe colocada entre colchetes para ser considerada como array de 01 elemento..
     this.movimentacaoPrevistaService.postArray([this.resourceForm])
-      .subscribe(
+      .subscribe(        
         sucess => {
           this.resourceAlertMessage.showSuccess(sucess.message);
         },

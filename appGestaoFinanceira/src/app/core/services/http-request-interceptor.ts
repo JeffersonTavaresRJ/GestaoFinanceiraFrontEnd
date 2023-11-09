@@ -93,6 +93,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                     --this._countRequests;
                     //enquanto tiver requests sendo realizado, manter o loading ativo..
                     this.bsHttpLoading.setLoading(this._countRequests>0);
+
                  })
               );
     };
