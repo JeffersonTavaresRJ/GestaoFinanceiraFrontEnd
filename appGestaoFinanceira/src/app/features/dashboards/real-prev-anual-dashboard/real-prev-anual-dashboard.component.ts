@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
-import { Conta } from '../../cadastros-basicos/_models/conta-model';
 import { MovimentacaoPrevista } from '../../lancamentos/_models/mov-prevista-model';
-import { MovimentacaoRealizada } from '../../lancamentos/_models/mov-realizada-model.';
-import { Movimentacao } from '../../lancamentos/_models/movimentacao';
-import { DadosChartAnalitico } from '../_models/dados-chart-analitico';
 import { formatCurrency } from '@angular/common';
 import { Categoria } from '../../cadastros-basicos/_models/categoria-model';
 import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimentacao-model';
-import { DateCalculo } from 'src/app/shared/functions/date-calculo';
-
-interface DadosChart{data:string; valor?:Number};
+import { DadosChartItem } from '../_models/dados-chart-item';
 
 @Component({
   selector: 'app-real-prev-anual-dashboard',
@@ -20,25 +14,16 @@ interface DadosChart{data:string; valor?:Number};
 })
 export class RealPrevAnualDashboardComponent implements OnInit {
   arMovPrev: MovimentacaoPrevista[];
-  arMovReal: MovimentacaoRealizada[];
   arMovPrevAux: MovimentacaoPrevista[];
-  arMovRealAux: MovimentacaoRealizada[];
-  arDadosChart:DadosChart[]=[];
-  arDadosChartReal:DadosChart[]=[];
-  arDadosChartPrev:DadosChart[]=[];
-  arDadosChartValues: Number[]=[];
+  arDadosChartSeries:DadosChartItem[]=[];
   arDadosChartDates: string[]=[];
-  arContasAux: Conta[]=[];
   arCategoriasAux: Categoria[]=[];
   arItensMov: ItemMovimentacao[]=[];
   arItensMovAux: ItemMovimentacao[]=[];
-  idConta:Number=null;
   idCategoria:Number=null;
   idItemMovimentacao:Number=null;
   dataIni: Date;
   dataFim: Date;
-  dataIniPrev: Date;
-  rdbTipo: string="D";
   isRenderChart:boolean;
   chart:ApexCharts;
 
@@ -54,27 +39,10 @@ export class RealPrevAnualDashboardComponent implements OnInit {
       );
   
       this.actResourceRoute.data.subscribe(
-        (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
-                     //considerar somente Movimentações Diárias..
-                     this.arMovReal = sucess.resolveMovReal
-                                            .filter(x=>x.itemMovimentacao.tipoOperacao=="MD");                 
-                          
-        }
-      );
-
-      this.actResourceRoute.data.subscribe(
         (sucess: { resolveItemMov: ItemMovimentacao[] }) => {
                   //considerar somente Movimentações Diárias..
                    this.arItensMov = sucess.resolveItemMov.filter(i=>i.tipoOperacao=="MD");
                    this.arItensMovAux = this.arItensMov;                
-                          
-        }
-      );
-
-      this.actResourceRoute.data.subscribe(
-        (sucess: { resolveConta: Conta[] }) => {
-                   //this.arContas = sucess.resolveConta;
-                   this.arContasAux = sucess.resolveConta;                 
                           
         }
       );
@@ -83,80 +51,28 @@ export class RealPrevAnualDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.dataIni = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataIni, '-');
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
-    this.renderizarChart(this.arMovPrev, this.arMovReal);
+    this.renderizarChart(this.arMovPrev);
   }
 
-  renderizarChart(arpMovPrev: MovimentacaoPrevista[], arpMovReal: MovimentacaoRealizada[]) {
+  renderizarChart(arpMovPrev: MovimentacaoPrevista[]) {
 
     this.popularDropdowns();   
     
 
-    this.arMovRealAux = arpMovReal.filter(x=>x.itemMovimentacao.tipo== this.rdbTipo)
-                                  .filter(x=>x.itemMovimentacao.categoria.id == this.idCategoria || this.idCategoria==null)
-                                  .filter(x=>x.itemMovimentacao.id == this.idItemMovimentacao || this.idItemMovimentacao==null)
-                                  .filter(x=>x.conta.id==this.idConta || this.idConta ==null);
+    this.arMovPrevAux = arpMovPrev.filter(x=>x.itemMovimentacao.categoria.id == this.idCategoria || this.idCategoria==null)
+                                  .filter(x=>x.itemMovimentacao.id == this.idItemMovimentacao || this.idItemMovimentacao==null);
 
-    this.arMovPrevAux = arpMovPrev.filter(x=>x.itemMovimentacao.tipo== this.rdbTipo)
-                                  .filter(x=>x.itemMovimentacao.categoria.id == this.idCategoria || this.idCategoria==null)
-                                  .filter(x=>x.itemMovimentacao.id == this.idItemMovimentacao || this.idItemMovimentacao==null)
-                                  .filter(x=>this.arMovRealAux.filter(x=>x.conta.id == this.idConta || this.idConta == null)
-                                                              .map((e)=>{return e.itemMovimentacao.id})
-                                                              .includes(x.itemMovimentacao.id));
-
-    this.isRenderChart = this.arMovPrevAux.length > 0 || this.arMovRealAux.length > 0;
+    this.isRenderChart = this.arMovPrevAux.length > 0;
 
     if(this.chart!=null){      
       this.chart.destroy();   
     }
 
     if (this.isRenderChart){
-          //recupera a data da ÚLTIMA MOVIMENTAÇÃO REALIZADA..
-          this.dataIniPrev = arpMovReal.sort(function(a,b)
-                                            {return(((Date.parse(b.dataMovimentacaoRealizada.toString()) - 
-                                                      Date.parse(a.dataMovimentacaoRealizada.toString()))));
-                                            })[0].dataReferencia;
+   
+          this.montarArrayPeriodo(this.dataIni, this.dataFim);
 
-
-          var dataFimReal = new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()-5, 0);
-    
-          //filtra os ÚLTIMOS meses da movimentação prevista APÓS a última MOVIMENTAÇÃO REALIZADA..
-          this.arMovPrevAux = this.arMovPrevAux.filter((x:MovimentacaoPrevista)=>
-                                                     {return Date.parse(x.dataVencimento.toString()) 
-                                                           > Date.parse(this.dataIniPrev.toString()) &&
-                                                             Date.parse(x.dataVencimento.toString()) 
-                                                           <= Date.parse(this.dataFim.toString())});
-
-
-
-          //filtra os PRIMEIROS 6 meses da movimentação realizada..
-          this.arMovRealAux = this.arMovRealAux.filter((x:MovimentacaoRealizada)=>
-                                                    {return Date.parse(x.dataMovimentacaoRealizada.toString())  
-                                                         >= Date.parse(this.dataIni.toString()) &&
-                                                            Date.parse(x.dataMovimentacaoRealizada.toString())  
-                                                          <= Date.parse(dataFimReal.toString())});
-
-          this.montarArrayPeriodo(this.dataFim);
-
-          this.arDadosChartPrev = this.agruparPorMes(this.arMovPrevAux);
-          this.arDadosChartReal = this.agruparPorMes(this.arMovRealAux);
-
-          this.arDadosChart = this.arDadosChart.map((e)=>{
-          this.arDadosChartReal.forEach(z=>{
-              e.valor=e.data==z.data? z.valor: e.valor;
-            })
-            this.arDadosChartPrev.forEach(z=>{
-              e.valor=e.data==z.data? z.valor: e.valor;
-            })
-            return e;
-          });
-          
-          this.arDadosChartDates.length=0;
-          this.arDadosChartValues.length=0;
-          this.arDadosChart.forEach(x=>{
-            this.arDadosChartDates.push(x.data);
-            this.arDadosChartValues.push(x.valor);
-          });
-                                   
+          this.agruparPorMes(this.arMovPrevAux, this.idCategoria, this.idItemMovimentacao);
 
           var options = this.options();      
           this.chart = new ApexCharts(document.querySelector("#chart-real-prev"), options);
@@ -165,105 +81,117 @@ export class RealPrevAnualDashboardComponent implements OnInit {
   } 
   
 
-  private montarArrayPeriodo(dataFim: any) {
-    var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()+2, 0);
-    this.arDadosChart.length=0;
+  private montarArrayPeriodo(dataIni: any, dataFim: any) {
+    this.arDadosChartDates.length=0;
     for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {
-         var dados: DadosChart={data:DateConvert.formatDateMMYYYY(data,'/'), valor:0};
-         this.arDadosChart.push(dados);
-    }   
+         this.arDadosChartDates.push(DateConvert.formatDateMMYYYY(data,'/'));
+    }  
   }
 
-  private agruparPorMes(arr:Movimentacao[]):DadosChart[]{
-    var result:DadosChart[]=[];
+  private agruparPorMes(arMovimentacaoPrevista:MovimentacaoPrevista[], idCategoria?:Number, idItemMovimentacao?:Number){
     
-    arr.reduce(function(acumulador, obj){
-      //a chave do array do acumulador é a dataReferencia + tipo..
-      var idx = DateConvert.formatDateYYYYMMDD(obj.dataReferencia, '-')+' - '+obj.itemMovimentacao.tipo;
+    if(idCategoria==null && idItemMovimentacao==null){
 
-      if (!acumulador[idx]){          
-        var row:DadosChartAnalitico = new DadosChartAnalitico(
-                                    DateConvert.formatDateMMYYYY(obj.dataReferencia,'/'), 
-                                    obj.itemMovimentacao.tipo, 
-                                    obj.itemMovimentacao.tipoDescricao, 
-                                    0);
-        acumulador[idx]=row;
-        result.push(acumulador[idx]);
-      }
-      acumulador[idx].valor+=obj.valor;
-      
-      return acumulador;
-    }, []);
-    return result;
+      arMovimentacaoPrevista
+        .map(x => x.itemMovimentacao.tipoDescricao)
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .forEach(
+          tipoDescricao=>{
+            var dadosChart = new DadosChartItem(tipoDescricao, []);
+
+            this.arDadosChartDates.forEach(
+              dataReferencia=>{
+                let valor: number=0;
+                arMovimentacaoPrevista
+                             .filter(mp=>DateConvert.formatDateMMYYYY(mp.dataReferencia, "/")==dataReferencia &&
+                                     mp.itemMovimentacao.tipoDescricao==tipoDescricao)
+                             .forEach(mp=>{valor+= mp.valor});
+                        
+                dadosChart.data.push(valor);
+            }
+          );   
+          this.arDadosChartSeries.push(dadosChart);  
+        });
+     
+
+    }else{
+
+    }
   }  
 
   private options():any{
     return {
-      series: [{
-      name: 'Valor',
-      data: this.arDadosChartValues
-    }],
-      chart: {
-      height: 350,
-      type: 'line',
-    },
-    forecastDataPoints: {
-      /*qtde meses que as linhas que serão pontilhadas*/
-      count: DateCalculo.totalMeses(new Date(this.dataIniPrev.toString()), this.dataFim)
-    },
-    stroke: {
-      width: 5,
-      curve: 'smooth'
-    },
-    xaxis: {
-      type: 'string',
-      categories: this.arDadosChartDates,
-      tickAmount: 10
-    },
-    yaxis: {
+      series: this.arDadosChartSeries,
+        chart: {
+        height: 350,
+        type: 'line',
+        dropShadow: {
+          enabled: true,
+          color: '#000',
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2
+        },
+        toolbar: {
+          show: false
+        }
+      },
+      colors: ['#A52A2A','#1C86EE'],
+      dataLabels: {
+        enabled: true,
+        formatter(val) {
+          return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
+        }
+      },
+      stroke: {
+        curve: 'smooth'
+      },
       title: {
-        text: 'Valor',
+        text: 'Movimentações Previstas',
+        align: 'left'
       },
-      labels: {
-        formatter: (value) => { return formatCurrency(Number.parseFloat(value), "PT-BR", "R$") }
+      grid: {
+        borderColor: '#e7e7e7',
+        row: {
+          colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+          opacity: 0.5
+        },
       },
-      min: 0
-    },
-    title: {
-      text: 'Movimentação Anual: Realizada e Prevista',
-      align: 'left',
-      style: {
-        fontSize: "16px",
-        color: '#666'
+      markers: {
+        size: 1
+      },
+      xaxis: {
+        categories: this.arDadosChartDates        
+      },
+      yaxis: {
+        title: {
+          text: 'Valor'
+        },
+        min: 10,
+        max: 10000
+      },
+      legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        floating: true,
+        offsetY: -25,
+        offsetX: -5,
+        formatter(val) {
+          return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
+        }
       }
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shade: 'dark',
-        gradientToColors: [ '#FDD835'],
-        shadeIntensity: 1,
-        type: 'horizontal',
-        opacityFrom: 1,
-        opacityTo: 1,
-        stops: [0, 100, 100, 100]
-      },
-    }
+      
     }
   }
 
   private popularDropdowns(){
 
-    this.arCategoriasAux = this.arItensMov.filter(x=>x.tipo==this.rdbTipo)
-                                          .map((e)=>{return e.categoria});
+    this.arCategoriasAux = this.arItensMov.map((e)=>{return e.categoria});
 
     let uniqueCategoria = [...new Map(this.arCategoriasAux.map((item) => [item["id"], item]))
-                                                          .values(), ];
-    
+                                                          .values(), ];    
     this.arCategoriasAux = uniqueCategoria;
-
-
-    this.arItensMovAux = this.arItensMov.filter(x=>x.tipo==this.rdbTipo);
 
     if(this.idCategoria != null){
       this.arItensMovAux = this.arItensMovAux.filter(x=>x.categoria.id ==this.idCategoria);

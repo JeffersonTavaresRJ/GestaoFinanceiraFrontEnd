@@ -44,8 +44,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveMovPrev: MovimentacaoPrevista[] }) => {
                  //considerar somente movimentações diárias..
-                 this.arMovPrev = sucess.resolveMovPrev
-                                        .filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
+                 this.arMovPrev = sucess.resolveMovPrev;
                         
       }
     );
@@ -53,8 +52,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
                   //considerar somente movimentações diárias..
-                  this.arMovReal = sucess.resolveMovReal
-                                         .filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
+                  this.arMovReal = sucess.resolveMovReal;
                         
       }
     );
@@ -69,23 +67,19 @@ export class PlanRealAnualDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
-    this.montarArrayPeriodo(this.dataFim);
     this.renderizarChart(this.arMovPrev, this.arMovReal);
   }
  
   populate(){
     this.arMovPrev.length=0;
-    this.arMovReal.length=0;    
-  
-
-    this.montarArrayPeriodo(new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()+1, 0));
+    this.arMovReal.length=0;
 
     var dataIni = DateConvert.formatDateYYYYMMDD(new Date(this.dataFim.getFullYear()-1, this.dataFim.getMonth(), 1),'-');
     var dataFim = DateConvert.formatDateYYYYMMDD(new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()+1, 0), '-');
 
     this.movPrevistaService.getByDataVencimento(dataIni, dataFim).subscribe(
       (success:MovimentacaoPrevista[])=>{
-        this.arMovPrev = success;        
+        this.arMovPrev = success; 
 
         this.movRealizadaService.GetByDataMovimentacaoRealizada(dataIni, dataFim).subscribe(
           (success:MovimentacaoRealizada[])=>{
@@ -99,6 +93,10 @@ export class PlanRealAnualDashboardComponent implements OnInit {
   }
 
   renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
+
+    //considerar somente Movimentações Diárias..
+    arMovPrevista = arMovPrevista.filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
+    arMovRealizada= arMovRealizada.filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
 
     if(this.chart!=null){      
       this.chart.destroy();   
@@ -148,6 +146,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
     //limpeza dos valores: planejado, receita e despesa..
     this.montarArrayPeriodo(this.dataFim);
 
+    debugger;
     this.arDadosChart = this.arDadosChart.map((e)=>{
       arMovPrevGroup.forEach(p=>{
           e.Planejado = e.Data == p.Data && p.Tipo==this.rdbTipo? p.Valor:e.Planejado;                 
@@ -248,7 +247,12 @@ export class PlanRealAnualDashboardComponent implements OnInit {
     this.chart.render();
   }
 
+  convertToLastDay(){
+    this.dataFim =  new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()+1, 0);   
+  }
+
   private montarArrayPeriodo(dataFim: Date){
+    debugger;
     var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()+1, 0);
     this.arDadosChart.length=0;
     for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {

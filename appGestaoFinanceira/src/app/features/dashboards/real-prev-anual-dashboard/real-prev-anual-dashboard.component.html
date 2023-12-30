@@ -1,20 +1,4 @@
 <div class="row justify-content-around mb-1"> 
-    <div class="col-3">
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioTipo" 
-                   [(ngModel)]="rdbTipo" value="D" (change)="renderizarChart(arMovPrev, arMovReal)" checked>
-            <label class="form-check-label">
-              Movimentação por Despesa
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioTipo" 
-                  [(ngModel)]="rdbTipo" value="R" (change)="renderizarChart(arMovPrev, arMovReal)">
-            <label class="form-check-label">
-              Movimentação por Receita
-            </label>
-          </div>
-    </div>
     <div class="field col-3">
       <label for="drpdCategoria">Categoria:</label>
       <p-dropdown       [options]="arCategoriasAux" 
@@ -25,7 +9,7 @@
                         [(ngModel)]="idCategoria"
                         [showClear]="true" 
                         [filter]="false"
-                        (onChange)="renderizarChart(arMovPrev, arMovReal)"
+                        (onChange)="renderizarChart(arMovPrev)"
                         (onClear)="idCategoria=null"
                         emptyMessage="Não encontrado"
                         placeholder="Todas"
@@ -43,7 +27,7 @@
                         [(ngModel)]="idItemMovimentacao"
                         [showClear]="true" 
                         [filter]="false"
-                        (onChange)="renderizarChart(arMovPrev, arMovReal)"
+                        (onChange)="renderizarChart(arMovPrev)"
                         (onClear)="idItemMovimentacao=null"
                         emptyMessage="Não encontrado"
                         placeholder="Todas"
@@ -51,23 +35,6 @@
                         autoDisplayFirst="false">
       </p-dropdown>
     </div>
-    <div class="field col-3">
-      <label for="drpdConta">Conta: &nbsp;&nbsp;&nbsp;&nbsp;</label>
-      <p-dropdown       [options]="arContasAux" 
-                        inputId="drpdConta"
-                        optionLabel="descricao" 
-                        optionValue="id" 
-                        [virtualScroll]="arContasAux.length >=5" 
-                        [(ngModel)]="idConta"
-                        [showClear]="true" 
-                        [filter]="false"
-                        (onChange)="renderizarChart(arMovPrev, arMovReal)"
-                        emptyMessage="Não encontrado"
-                        placeholder="Todas"
-                        styleClass="p-dropdown-class"
-                        autoDisplayFirst="false">
-      </p-dropdown>
-    </div> 
 </div>
 <hr>
 <div *ngIf="isRenderChart==false" style="text-align: center; padding-top: 7rem; height: 16rem;">
