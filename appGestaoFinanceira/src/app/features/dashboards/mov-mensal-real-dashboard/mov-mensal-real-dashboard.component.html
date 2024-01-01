@@ -1,7 +1,7 @@
 <div class="row justify-content-around mb-1"> 
     <div class="field col-3">
       <label for="monthpicker" style="margin-right:5px;">Mês/Ano:</label>
-      <p-calendar [(ngModel)]="dataFim" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" (onSelect)="populate()"></p-calendar>
+      <p-calendar [(ngModel)]="dataFim" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" (onSelect)="convertToLastDay(); populate()"></p-calendar>
     </div>
     <div class="field col-4">
       <label for="drpdConta">Conta:</label>

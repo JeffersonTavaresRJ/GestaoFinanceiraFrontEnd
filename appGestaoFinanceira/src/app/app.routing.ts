@@ -26,8 +26,8 @@ import { MovPrevistaQuitarFormComponent } from './features/lancamentos/mov-previ
 import { MovRealizadaListComponent } from './features/lancamentos/mov-realizada/mov-realizada-list/mov-realizada-list.component';
 import { MovRealizadaFormCadastroComponent } from './features/lancamentos/mov-realizada/mov-realizada-form-cadastro/mov-realizada-form-cadastro.component';
 import { FechamentoComponent} from './features/lancamentos/fechamento/fechamento.component';
-import { PlanRealAnualDashboardComponent } from './features/dashboards/plan-real-anual-dashboard/plan-real-anual-dashboard.component';
-import { RealPrevAnualDashboardComponent } from './features/dashboards/real-prev-anual-dashboard/real-prev-anual-dashboard.component';
+import { MovMensalRealDashboardComponent } from './features/dashboards/mov-mensal-real-dashboard/mov-mensal-real-dashboard.component';
+import { MovMensalPrevDashboardComponent } from './features/dashboards/mov-mensal-prev-dashboard/mov-mensal-prev-dashboard.component';
 import { SaldosMensaisPorContaDashboardComponent } from './features/dashboards/saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
 import { SaldosAnuaisPorContaDashBoardComponent } from './features/dashboards/saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
 import { ItemMovimentacaoMensalComponent } from './features/dashboards/item-movimentacao-mensal/item-movimentacao-mensal.component';
@@ -153,19 +153,17 @@ const routes: Routes = [
               resolveConta: ContaListResolver} },
 
     //================================================================================================
-    { path: 'plan-real-anual-dashboard/:dataIni/:dataFim', component: PlanRealAnualDashboardComponent,
+    { path: 'mov-mensal-real-dashboard/:dataIni/:dataFim', component: MovMensalRealDashboardComponent,
      canActivate:[AuthGuard],
      resolve:{resolveMovPrev: MovPrevistaListResolver,
               resolveMovReal: MovRealizadaListAnualResolver,
               resolveConta: ContaListResolver}
     },
     //=================================================================================================
-     { path: 'real-prev-anual-dashboard/:dataIni/:dataFim', component: RealPrevAnualDashboardComponent,
+     { path: 'mov-mensal-prev-dashboard/:dataIni/:dataFim', component: MovMensalPrevDashboardComponent,
      canActivate:[AuthGuard],
      resolve:{resolveMovPrev: MovPrevistaListResolver,
-              resolveMovReal: MovRealizadaListAnualResolver,
-              resolveItemMov: ItemMovimentacaoListResolver,
-              resolveConta: ContaListResolver}
+              resolveItemMov: ItemMovimentacaoListResolver}
     },
     //=================================================================================================
     {path: 'saldos-mensais-conta-dashboard/:ano', component: SaldosMensaisPorContaDashboardComponent,

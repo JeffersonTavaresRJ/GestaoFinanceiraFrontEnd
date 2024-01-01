@@ -4,9 +4,9 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReceitasDespesasDashboardComponent } from './receitas-despesas-dashboard/receitas-despesas-dashboard.component';
-import { PlanRealAnualDashboardComponent } from './plan-real-anual-dashboard/plan-real-anual-dashboard.component';
+import { MovMensalRealDashboardComponent } from './mov-mensal-real-dashboard/mov-mensal-real-dashboard.component';
 import { CalendarModule } from 'primeng/calendar';
-import { RealPrevAnualDashboardComponent } from './real-prev-anual-dashboard/real-prev-anual-dashboard.component';
+import { MovMensalPrevDashboardComponent } from './mov-mensal-prev-dashboard/mov-mensal-prev-dashboard.component';
 import { SaldosMensaisPorContaDashboardComponent } from './saldos-mensais-conta-dashboard/saldos-mensais-conta-dashboard.component';
 import { SaldosAnuaisPorContaDashBoardComponent } from './saldos-anuais-conta-dashboard/saldos-anuais-conta-dashboard.component';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -20,8 +20,8 @@ import { TooltipModule } from 'primeng/tooltip';
 @NgModule({
   declarations: [
     ReceitasDespesasDashboardComponent,
-    PlanRealAnualDashboardComponent,
-    RealPrevAnualDashboardComponent,
+    MovMensalRealDashboardComponent,
+    MovMensalPrevDashboardComponent,
     SaldosMensaisPorContaDashboardComponent,
     SaldosAnuaisPorContaDashBoardComponent,
     ItemMovimentacaoMensalComponent,
