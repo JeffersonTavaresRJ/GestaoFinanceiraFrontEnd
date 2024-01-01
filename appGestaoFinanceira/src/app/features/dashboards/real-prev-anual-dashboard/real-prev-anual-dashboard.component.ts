@@ -79,8 +79,7 @@ export class RealPrevAnualDashboardComponent implements OnInit {
           this.chart.render();
     }    
   } 
-  
-
+ 
   private montarArrayPeriodo(dataIni: any, dataFim: any) {
     this.arDadosChartDates.length=0;
     for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {
@@ -90,7 +89,9 @@ export class RealPrevAnualDashboardComponent implements OnInit {
 
   private agruparPorMes(arMovimentacaoPrevista:MovimentacaoPrevista[], idCategoria?:Number, idItemMovimentacao?:Number){
     
-    if(idCategoria==null && idItemMovimentacao==null){
+    this.arDadosChartSeries.length=0;    
+
+    if(idCategoria==null && idItemMovimentacao==null){      
 
       arMovimentacaoPrevista
         .map(x => x.itemMovimentacao.tipoDescricao)
@@ -111,10 +112,55 @@ export class RealPrevAnualDashboardComponent implements OnInit {
             }
           );   
           this.arDadosChartSeries.push(dadosChart);  
-        });
+      });
      
 
-    }else{
+    }else if (idItemMovimentacao!= null){
+
+      arMovimentacaoPrevista
+        .filter(x=>x.itemMovimentacao.id==idItemMovimentacao)
+        .map(x =>x.itemMovimentacao.descricao)
+        .filter((value, index, self) => self.indexOf(value) === index)        
+        .forEach(
+          descricao=>{
+            var dadosChart = new DadosChartItem(descricao, []);
+
+            this.arDadosChartDates.forEach(
+              dataReferencia=>{
+                let valor: number=0;
+                arMovimentacaoPrevista
+                             .filter(mp=>DateConvert.formatDateMMYYYY(mp.dataReferencia, "/")==dataReferencia)
+                             .forEach(mp=>{valor+= mp.valor});
+                        
+                dadosChart.data.push(valor);
+            }
+          );   
+          this.arDadosChartSeries.push(dadosChart);  
+      });
+
+    }else if(idCategoria!=null){
+
+      arMovimentacaoPrevista
+      .filter(x=>x.itemMovimentacao.categoria.id==idCategoria)
+      .map(x =>x.itemMovimentacao.categoria.descricao)   
+      .filter((value, index, self) => self.indexOf(value) === index)     
+      .forEach(
+        descricao=>{
+          debugger;
+          var dadosChart = new DadosChartItem(descricao, []);
+
+          this.arDadosChartDates.forEach(
+            dataReferencia=>{
+              let valor: number=0;
+              arMovimentacaoPrevista
+                           .filter(mp=>DateConvert.formatDateMMYYYY(mp.dataReferencia, "/")==dataReferencia)
+                           .forEach(mp=>{valor+= mp.valor});
+                      
+              dadosChart.data.push(valor);
+          }
+        );   
+        this.arDadosChartSeries.push(dadosChart);  
+    });
 
     }
   }  
@@ -139,9 +185,9 @@ export class RealPrevAnualDashboardComponent implements OnInit {
       },
       colors: ['#A52A2A','#1C86EE'],
       dataLabels: {
-        enabled: true,
-        formatter(val) {
-          return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
+        enabled: false,
+        formatter(value) {
+          return formatCurrency(Number.parseFloat(value), "PT-BR", "R$");
         }
       },
       stroke: {
@@ -168,18 +214,18 @@ export class RealPrevAnualDashboardComponent implements OnInit {
         title: {
           text: 'Valor'
         },
-        min: 10,
-        max: 10000
+        labels: {
+          formatter: (value) => { 
+            return formatCurrency(Number.parseFloat(value), "PT-BR", "R$"); 
+          }
+        },
       },
       legend: {
         position: 'top',
         horizontalAlign: 'right',
         floating: true,
         offsetY: -25,
-        offsetX: -5,
-        formatter(val) {
-          return formatCurrency(Number.parseFloat(val), "PT-BR", "R$");
-        }
+        offsetX: -5
       }
       
     }
@@ -194,11 +240,11 @@ export class RealPrevAnualDashboardComponent implements OnInit {
     this.arCategoriasAux = uniqueCategoria;
 
     if(this.idCategoria != null){
-      this.arItensMovAux = this.arItensMovAux.filter(x=>x.categoria.id ==this.idCategoria);
+      this.arItensMovAux = this.arItensMov.filter(x=>x.categoria.id ==this.idCategoria);
     }
 
     if(this.idItemMovimentacao != null){
-      this.arCategoriasAux = this.arItensMovAux.filter(x=>x.id ==this.idItemMovimentacao)
+      this.arCategoriasAux = this.arItensMov.filter(x=>x.id ==this.idItemMovimentacao)
                                                .map((e)=>{return e.categoria});
     }
 
