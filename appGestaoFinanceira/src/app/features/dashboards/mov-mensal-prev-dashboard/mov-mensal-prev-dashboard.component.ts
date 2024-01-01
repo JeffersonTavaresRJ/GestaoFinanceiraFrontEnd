@@ -8,11 +8,11 @@ import { ItemMovimentacao } from '../../cadastros-basicos/_models/item-movimenta
 import { DadosChartItem } from '../_models/dados-chart-item';
 
 @Component({
-  selector: 'app-real-prev-anual-dashboard',
-  templateUrl: './real-prev-anual-dashboard.component.html',
-  styleUrls: ['./real-prev-anual-dashboard.component.css']
+  selector: 'app-mov-mensal-prev-dashboard',
+  templateUrl: './mov-mensal-prev-dashboard.component.html',
+  styleUrls: ['./mov-mensal-prev-dashboard.component.css']
 })
-export class RealPrevAnualDashboardComponent implements OnInit {
+export class MovMensalPrevDashboardComponent implements OnInit {
   arMovPrev: MovimentacaoPrevista[];
   arMovPrevAux: MovimentacaoPrevista[];
   arDadosChartSeries:DadosChartItem[]=[];
@@ -194,7 +194,7 @@ export class RealPrevAnualDashboardComponent implements OnInit {
         curve: 'smooth'
       },
       title: {
-        text: 'Movimentações Previstas',
+        text: 'Movimentações Mensais Previstas',
         align: 'left'
       },
       grid: {

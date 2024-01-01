@@ -13,13 +13,13 @@ interface DadosChartSintet{ Data?: string; Planejado?: Number; Receita?: Number;
 interface DadosChartAnalit{ Data?: string; Tipo?: string; TipoDescricao?: string; Valor?:Number };
 
 @Component({
-  selector: 'app-plan-real-anual-dashboard',
-  templateUrl: './plan-real-anual-dashboard.component.html',
-  styleUrls: ['./plan-real-anual-dashboard.component.css']
+  selector: 'app-mov-mensal-real-dashboard',
+  templateUrl: './mov-mensal-real-dashboard.component.html',
+  styleUrls: ['./mov-mensal-real-dashboard.component.css']
 })
 
 
-export class PlanRealAnualDashboardComponent implements OnInit {
+export class MovMensalRealDashboardComponent implements OnInit {
 
   arMovPrev: MovimentacaoPrevista[]=[];
   arMovReal: MovimentacaoRealizada[]=[];
@@ -196,7 +196,7 @@ export class PlanRealAnualDashboardComponent implements OnInit {
       }
     },
     title: {
-      text: 'Movimentação Anual: Planejada x Realizada',
+      text: 'Movimentações Mensais Realizadas',
       align: 'left',
       style: {
         fontSize: "16px",
