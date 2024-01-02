@@ -60,7 +60,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         .pipe( 
               map(event=>{return event;}),
               catchError(e=>{
-                //debugger;
+                debugger;
                 if (e.status == 0) {
                     //servidor fora
                     this.alertMessage.showError('Erro de conexão com o servidor', e.status);
@@ -78,8 +78,18 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                     //exceções customizadas
                     this.alertMessage.showInfo("Dados não encontrados", e.status);
                 } else if (e.status == 500) {
-                    //error status code 500..
-                    this.alertMessage.showError(e.error, e.status);
+                    if (e.error instanceof Blob) {
+                       // Se o erro for um blob, você pode tentar converter para texto
+                       const reader = new FileReader();
+                       reader.onload = () => {
+                         const texto = reader.result as string;
+                         this.alertMessage.showError(texto, e.status);
+                       };
+                       reader.readAsText(e.error);
+                    } else {
+                       //Se não for, trata normalmente..
+                       this.alertMessage.showError(e.error, e.status);
+                    }                    
                 } else if(e.status == 400){
                     this.alertMessage.showErrors(e.error, e.status);
                 } else if (e.status != 400){
