@@ -204,14 +204,14 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
       labels: {
         formatter: (value) => {
           if(checkPercent){
-            return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2")
+            return formatPercent(Number.parseFloat(value), "PT-BR", "1.0-2")
           }else{
             return formatCurrency(Number.parseFloat(value), "PT-BR", "R$") 
           } 
           
         }
-      },
-      min: 0
+      }/*,
+      min: 0*/
     },
     xaxis: {
       categories: arAno,
@@ -224,7 +224,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           var valorToolTip ="";
           debugger;
           if(checkPercent){
-            valorPercent =formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2");
+            valorPercent =formatPercent(Number.parseFloat(value), "PT-BR", "1.0-2");
             valorCurrency=formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$");
             valorToolTip = valorPercent + ' ('+ valorCurrency + ')';
           }else{
@@ -236,7 +236,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         }
       }        
     },
-    };
+  };
   }  
 
 }
