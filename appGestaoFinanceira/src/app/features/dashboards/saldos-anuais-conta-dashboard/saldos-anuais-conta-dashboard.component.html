@@ -20,6 +20,12 @@
             Agrupar por contas selecionadas
         </label>
     </div>
+    <div class="col-3 mt-2 form-check">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="chbxPercent" id="chbxPercent" (change)="filtrarDados(arSaldos, anoIni, anoFim)">
+        <label class="form-check-label" for="flexCheckDefault">
+            Visão por Percentual
+        </label>
+    </div>
 </div>
 <hr>
 <div class="row justify-content-around">

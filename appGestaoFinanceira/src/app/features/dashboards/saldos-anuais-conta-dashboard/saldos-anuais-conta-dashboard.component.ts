@@ -22,6 +22,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   anoIni:number;
   anoFim:number;
   chbxAgrupar: boolean;
+  chbxPercent: boolean;
   chart: ApexCharts;
 
   constructor(private actResourceRoute: ActivatedRoute) { 
@@ -52,7 +53,10 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     for(let ano=this.anoIni; ano <= this.anoFim; ano++){
       //carga do array de categorias do chart..
       this.arAno.push(ano);
-    }  
+    }
+    
+    this.chbxAgrupar = true;
+    this.chbxPercent = true;
 
     this.filtrarDados(this.arSaldos, this.anoIni, this.anoFim);
   }
@@ -74,7 +78,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   }
 
   private renderizarChart(arDadosChart: ContaAnual[], arAno: number[]){   
-    var options = this.options(arDadosChart, arAno);
+    var options = this.options(arDadosChart, arAno, this.chbxPercent);
 
     if(this.chart!=null){      
       this.chart.destroy();   
@@ -128,8 +132,14 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           dat.push(PercentCalculo.calcularPercentual(valorAtual, valorAnter));
           val.push(valorAtual);
         }
-        x.data = dat;
-        x.valor = val;
+        if(this.chbxPercent){
+          x.data = dat;
+          x.valor = val;
+        }else{
+          x.data = val;
+          x.valor = dat;
+        }
+       
         return x;
     })  
   }
@@ -144,14 +154,20 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           valorAtual = valorAtual == undefined ? 0 : valorAtual;
           valorAnter = valorAnter == undefined ? 0 : valorAnter;
 
-          x.data[b]  = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
-          x.valor[b] = valorAtual;
+          if(this.chbxPercent){
+            x.data[b]  = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
+            x.valor[b] = valorAtual;
+          }else{
+            x.data[b]  = valorAtual;
+            x.valor[b] = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
+          }
+          
           b++;
         }
     })  
   }  
 
-  private options(arSeries: ContaAnual[], arAno: number[]):any{
+  private options(arSeries: ContaAnual[], arAno: number[], checkPercent: boolean):any{
     return {
       series: arSeries,
       chart: {
@@ -186,8 +202,13 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         text: '%',
       },
       labels: {
-        formatter: (value) => { 
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") 
+        formatter: (value) => {
+          if(checkPercent){
+            return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2")
+          }else{
+            return formatCurrency(Number.parseFloat(value), "PT-BR", "R$") 
+          } 
+          
         }
       },
       min: 0
@@ -198,8 +219,20 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     tooltip: {
       y: {
         formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-          return formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2") + 
-          ' (' + formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$") +')'
+          var valorPercent ="";
+          var valorCurrency="";
+          var valorToolTip ="";
+          debugger;
+          if(checkPercent){
+            valorPercent =formatPercent(Number.parseFloat(value), "PT-BR", "2.0-2");
+            valorCurrency=formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$");
+            valorToolTip = valorPercent + ' ('+ valorCurrency + ')';
+          }else{
+            valorPercent =formatPercent(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "2.0-2");
+            valorCurrency=formatCurrency(Number.parseFloat(value), "PT-BR", "R$");
+            valorToolTip = valorCurrency + ' ('+ valorPercent + ')';
+          }
+          return valorToolTip;          
         }
       }        
     },
