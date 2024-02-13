@@ -228,7 +228,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
             valorCurrency=formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$");
             valorToolTip = valorPercent + ' ('+ valorCurrency + ')';
           }else{
-            valorPercent =formatPercent(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "2.0-2");
+            valorPercent =formatPercent(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "1.0-2");
             valorCurrency=formatCurrency(Number.parseFloat(value), "PT-BR", "R$");
             valorToolTip = valorCurrency + ' ('+ valorPercent + ')';
           }
