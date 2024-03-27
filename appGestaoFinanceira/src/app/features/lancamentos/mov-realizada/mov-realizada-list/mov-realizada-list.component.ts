@@ -16,8 +16,9 @@ import { MovRealizadaService } from '../../_services/mov-realizada-service';
 })
 export class MovRealizadaListComponent implements OnInit {
 
-  results: any[];
-  resultsAux: any[];
+  results: any[]=[];
+  resultsAux: any[]=[];
+  arMovReal: any[];
   formGroup: FormGroup;
   formGroupTransfer: FormGroup;
 
@@ -61,12 +62,15 @@ export class MovRealizadaListComponent implements OnInit {
       this.dataIni.getMonth() + 1,
       0);
 
+    this.results.length=0;
+    this.resultsAux.length=0;
+
     this.movRealizadaService.GetGroupBySaldoDiario(DateConvert.formatDateYYYYMMDD(this.dataIni.toString(), '-'),
       DateConvert.formatDateYYYYMMDD(this.dataFim.toString(), '-')).subscribe(
         (sucess: any[]) => {
-          debugger;
-          this.results = sucess;
-          this.resultsAux = this.results;
+          //debugger;
+          this.results=sucess.slice();
+          this.resultsAux=sucess.slice();
           this.filtrarTablePorParametros(this.formGroup.get('idConta').value, this.formGroup.get('idFormaPagamento').value);
         });
   }
@@ -129,10 +133,13 @@ export class MovRealizadaListComponent implements OnInit {
   }
 
   private filtrarTablePorParametros(idConta?: Number, idFormaPagamento?: Number) {
-    this.results = this.resultsAux;
+
+    debugger;
+    this.results.length=0;
+
     if (idConta != null){  
 
-      this.results = this.resultsAux.filter(m => m.conta.id == idConta); 
+      this.results=this.resultsAux.filter(m => m.conta.id == idConta).slice(); 
 
       if(this.results.length>0){
         this.saldoAtualConta = this.results[0].valor;
@@ -142,12 +149,16 @@ export class MovRealizadaListComponent implements OnInit {
       this.alertMessageForm.showError("A conta deve ser informada");
     }
 
+
     if(idFormaPagamento != null){
-      this.results = this.resultsAux
-                         .filter(m => m.movimentacoesRealizadas
-                                      .filter(x=>x.formaPagamento.id== idFormaPagamento)
-                                      .map((e)=>{return e.idConta}).includes(m.idConta));
+      debugger;       
+      this.results = this.results
+                         .filter(m => this.filterFormaPagamento(m.movimentacoesRealizadas, idFormaPagamento));
     }
+  }
+
+  private filterFormaPagamento(array:any[], id): boolean{
+    return array.filter(x=>x.formaPagamento.id==id).length>0;
   }
 
   private movRealizadaList() {
@@ -160,10 +171,13 @@ export class MovRealizadaListComponent implements OnInit {
     this.arStDate = this.actResourceRoute.snapshot.params.dataFim.split('-');
     this.dataFim = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
 
+    this.results.length=0;
+    this.resultsAux.length=0;
+
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveMovReal: any[] }) => {
-        this.results = sucess.resolveMovReal;
-        this.resultsAux = this.results;
+        this.results=sucess.resolveMovReal.slice();
+        this.resultsAux=sucess.resolveMovReal.slice();
 
         //Setando a conta default como parâmetro de pesquisa..
         this.contaService.getAll().subscribe(
@@ -178,6 +192,4 @@ export class MovRealizadaListComponent implements OnInit {
       }
     );
   }
-
-
 }
