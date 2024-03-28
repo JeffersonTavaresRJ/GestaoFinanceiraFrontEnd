@@ -1,11 +1,10 @@
 import { Directive, EventEmitter, Input, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GenericResourceModel } from "../../_models/generic-resource-model";
 import { GenericResourceService } from "../../_services/generic-resource-service";
-import { Observable } from "rxjs";
+import { GenericResourceDropdownModel } from "./generic-resource-dropdown-model";
 
 @Directive()
-export abstract class GenericResourceDropDownComponent<T extends GenericResourceModel> implements OnInit {
+export abstract class GenericResourceDropDownComponent<T extends GenericResourceDropdownModel> implements OnInit {
     
   @Input('form-group') formGroupResource: FormGroup;
   @Input('form-control') formControl: FormControl;
@@ -56,7 +55,7 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
     filtrarPorStatus(status: boolean){
       this.arResourceModel = this.arResourceModelAux;
       if(status){
-       // this.arResourceModel = this.arResourceModel.filter(r=>r.status==status);
+        this.arResourceModel = this.arResourceModel.filter(r=>r.status==status);
       }  
     }
 
