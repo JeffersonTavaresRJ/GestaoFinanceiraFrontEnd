@@ -69,6 +69,7 @@
                                [form-group]="resourceForm"
                                [form-control]="resourceForm.get('idFormaPagamento')"
                                (OnChange)="resourceClearValidations()"
+                               [select-by-status]="resourceCurrentAction()=='new'"
                                placeholder="Selecione">
                         </app-dropdown-forma-pagamento>
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoFormaPagamento}}</strong></p>
@@ -130,6 +131,7 @@
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('idConta')"
                               (OnChange)="resourceClearValidations()"
+                              [select-by-status]="resourceCurrentAction()=='new'"
                               placeholder="Selecione">
                         </app-dropdown-conta>
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoConta}}</strong></p>

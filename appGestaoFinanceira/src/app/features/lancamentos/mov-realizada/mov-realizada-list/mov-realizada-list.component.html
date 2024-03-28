@@ -22,8 +22,11 @@
                 </div>
                 <div class="row" style="padding-top:7px;">
                     <div class="col-4">
-                        <app-dropdown-conta [form-group]="formGroup" [form-control]="formGroup.get('idConta')"
-                            placeholder="Informe a Conta" (OnChange)="getConta($event)">
+                        <app-dropdown-conta [form-group]="formGroup" 
+                                            [form-control]="formGroup.get('idConta')"
+                                            [select-by-status]="true"
+                                            placeholder="Informe a Conta" 
+                                            (OnChange)="getConta($event)">
                         </app-dropdown-conta>
                     </div>
                     <div class="col-4">

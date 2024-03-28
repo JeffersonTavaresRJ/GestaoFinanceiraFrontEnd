@@ -218,8 +218,8 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
         formatter: (value) => { 
           return formatPercent(Number.parseFloat(value), "PT-BR", "0.0-2") 
         }
-      },
-      min: -1
+      }/*,
+      min: -1*/
     },
     xaxis: {
       categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
