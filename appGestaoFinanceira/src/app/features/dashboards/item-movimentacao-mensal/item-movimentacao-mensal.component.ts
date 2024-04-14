@@ -65,7 +65,12 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
 
     var idCategoria = null;
     var idItemMov = null;
+    var idConta = null;
 
+    debugger;
+    idConta = this.formGroup.get('idConta').value;
+
+    
     if (this.idTipoGrafico!="T"){
       idCategoria = this.formGroup.get('idCategoria').value;
       idItemMov = this.formGroup.get('idItemMovimentacao').value;
@@ -89,7 +94,11 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
             this.arItemMovMensalAux = this.arItemMovMensal
                                           .filter(x=>x.idItemMovimentacao==idItemMov)
                                           .filter(x=>x.tipoItemMovimentacao==this.idTipo);
-          }          
+          }
+          
+          if(idConta != null){
+            this.arItemMovMensalAux = this.arItemMovMensalAux.filter(x=> x.idConta==idConta);
+          } 
 
           this.isRenderChart=this.arItemMovMensalAux.length >0;
 
@@ -98,7 +107,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
              var title = this.idTipoGrafico=="T"? "Receitas x Despesas ": this.arDadosChart[0].name;
              this.renderizarChart(this.arDadosChart, title.toString());      
           }    
-    }    
+    }      
+
   }
 
   private builderForm() {
