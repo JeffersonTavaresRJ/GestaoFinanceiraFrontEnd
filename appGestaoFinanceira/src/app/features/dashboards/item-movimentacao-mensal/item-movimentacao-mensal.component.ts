@@ -104,7 +104,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   private builderForm() {
     this.formGroup = this.formBuilder.group({
       idCategoria: [null],
-      idItemMovimentacao: [null]
+      idItemMovimentacao: [null],
+      idConta:[null]
     });
   }
 

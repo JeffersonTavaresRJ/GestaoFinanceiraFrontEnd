@@ -1,20 +1,23 @@
-<div class="row justify-content-around">
-    <div class="col-3">
-        <label>Visualização:</label>
-        <p-dropdown [options]="arTiposGrafico" 
-                    [(ngModel)]="idTipoGrafico"
-                    optionLabel="Value" 
-                    optionValue="Key" 
-                    [showClear]="false" 
-                    [filter]="false"
-                    (onChange)="consultarDados()"
-                    autoDisplayFirst="true"
-                     >
-        </p-dropdown>
+<div class="row">
+    <div class="p-fluid col-3">
+        <div class="p-field">
+            <label>Visualização:</label>
+            <p-dropdown [options]="arTiposGrafico" 
+                        [(ngModel)]="idTipoGrafico"
+                        optionLabel="Value" 
+                        optionValue="Key" 
+                        [showClear]="false" 
+                        [filter]="false"
+                        (onChange)="consultarDados()"
+                        autoDisplayFirst="true"
+                         >
+            </p-dropdown>
+        </div>        
     </div>
-    <div class="col-3">
-        <label *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'" style="margin-right:10px">Tipo:</label>
-        <p-dropdown [options]="arTipos" 
+    <div class="p-fluid col-3" *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'">
+        <div class="p-field">
+            <label>Tipo:</label>
+            <p-dropdown [options]="arTipos" 
                     [(ngModel)]="idTipo"
                     optionLabel="Value" 
                     optionValue="Key" 
@@ -22,31 +25,45 @@
                     [filter]="false"
                     (onChange)="consultarDados()"
                     emptyMessage="Tipo não encontrado"
-                    autoDisplayFirst="true"
-                    *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'" >
-        </p-dropdown>
+                    autoDisplayFirst="true">
+            </p-dropdown>
+        </div>        
     </div>
-    <div class="col-3">
-        <label *ngIf="idTipoGrafico=='C'">Categoria:</label>
-        <app-dropdown-categoria [form-group]="formGroup" 
+    <div class="p-fluid col-3" *ngIf="idTipoGrafico=='C'">
+        <div class="p-field">
+            <label>Categoria:</label>
+            <app-dropdown-categoria [form-group]="formGroup" 
                                 [form-control]="formGroup.get('idCategoria')"
                                 placeholder="--Selecione--"
                                 [select-by-tipo-item-mov]="idTipo"  
                                 (OnChange)="consultarDados()"
-                                (OnClear)="consultarDados()"                             
-                                *ngIf="idTipoGrafico=='C'" >
-        </app-dropdown-categoria>
-
-        <label *ngIf="idTipoGrafico=='I'">Item Movimentação:</label>
-        <app-dropdown-item-movimentacao [form-group]="formGroup"
+                                (OnClear)="consultarDados()">
+            </app-dropdown-categoria>
+        </div>        
+    </div>
+    <div class="p-fluid col-3" *ngIf="idTipoGrafico=='I'">
+        <div class="p-field">
+            <label>Item Movimentação:</label>
+            <app-dropdown-item-movimentacao [form-group]="formGroup"
                                          [form-control]="formGroup.get('idItemMovimentacao')" 
                                          placeholder="--Selecione--"
                                          [select-by-idCategoria]="formGroup.get('idCategoria').value"
                                          [select-by-tipo-item-mov]="idTipo"
                                          (OnChange)="consultarDados()"
-                                         (OnClear)="consultarDados()"
-                                         *ngIf="idTipoGrafico=='I'" >
-        </app-dropdown-item-movimentacao>
+                                         (OnClear)="consultarDados()">
+            </app-dropdown-item-movimentacao>
+        </div>        
+    </div>
+    <div class="p-fluid col-3" *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'">
+        <div class="p-field">
+            <label>Conta:</label>
+            <app-dropdown-conta [form-group]="formGroup" 
+                                [form-control]="formGroup.get('idConta')"
+                                placeholder="--Opcional--"
+                                (OnChange)="consultarDados()"
+                                (OnClear)="consultarDados()">
+            </app-dropdown-conta>
+        </div>        
     </div>
 </div>
 <hr>
