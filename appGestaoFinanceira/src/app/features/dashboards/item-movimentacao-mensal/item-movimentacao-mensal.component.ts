@@ -67,7 +67,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     var idItemMov = null;
     var idConta = null;
 
-    debugger;
+    //debugger;
     idConta = this.formGroup.get('idConta').value;
 
     
@@ -158,6 +158,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       var dados: DadosChart={name: z, data: arData, percent: arPercent};
       this.arDadosChart.push(dados);  
     }); 
+    debugger;
+    this.arDadosChart.sort((a, b)=>{return a.name > b.name ? 1 :-1});
   }
 
   private parametrosGrafico(array:any[],tipoVisualizacao:string):string[]{
@@ -170,7 +172,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     });
   }
 
-  private renderizarChart(arDadosChart: DadosChart[], title: string){   
+  private renderizarChart(arDadosChart: DadosChart[], title: string){ 
+    debugger;  
     var options = this.options(arDadosChart, title);
 
     if(this.chart!=null){      
@@ -191,6 +194,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
         enabled: false
       }
     },
+    colors: arSeries.length > 1? ['#A52A2A', '#1C86EE'] : 
+            this.idTipo=="D"? ['#A52A2A'] : ['#1C86EE'],
     dataLabels: {
       enabled: false
     },
