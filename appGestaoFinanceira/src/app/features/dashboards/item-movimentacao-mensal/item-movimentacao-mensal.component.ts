@@ -65,7 +65,12 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
 
     var idCategoria = null;
     var idItemMov = null;
+    var idConta = null;
 
+    //debugger;
+    idConta = this.formGroup.get('idConta').value;
+
+    
     if (this.idTipoGrafico!="T"){
       idCategoria = this.formGroup.get('idCategoria').value;
       idItemMov = this.formGroup.get('idItemMovimentacao').value;
@@ -89,7 +94,11 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
             this.arItemMovMensalAux = this.arItemMovMensal
                                           .filter(x=>x.idItemMovimentacao==idItemMov)
                                           .filter(x=>x.tipoItemMovimentacao==this.idTipo);
-          }          
+          }
+          
+          if(idConta != null){
+            this.arItemMovMensalAux = this.arItemMovMensalAux.filter(x=> x.idConta==idConta);
+          } 
 
           this.isRenderChart=this.arItemMovMensalAux.length >0;
 
@@ -98,13 +107,15 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
              var title = this.idTipoGrafico=="T"? "Receitas x Despesas ": this.arDadosChart[0].name;
              this.renderizarChart(this.arDadosChart, title.toString());      
           }    
-    }    
+    }      
+
   }
 
   private builderForm() {
     this.formGroup = this.formBuilder.group({
       idCategoria: [null],
-      idItemMovimentacao: [null]
+      idItemMovimentacao: [null],
+      idConta:[null]
     });
   }
 
@@ -147,6 +158,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       var dados: DadosChart={name: z, data: arData, percent: arPercent};
       this.arDadosChart.push(dados);  
     }); 
+    debugger;
+    this.arDadosChart.sort((a, b)=>{return a.name > b.name ? 1 :-1});
   }
 
   private parametrosGrafico(array:any[],tipoVisualizacao:string):string[]{
@@ -159,7 +172,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     });
   }
 
-  private renderizarChart(arDadosChart: DadosChart[], title: string){   
+  private renderizarChart(arDadosChart: DadosChart[], title: string){ 
+    debugger;  
     var options = this.options(arDadosChart, title);
 
     if(this.chart!=null){      
@@ -180,6 +194,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
         enabled: false
       }
     },
+    colors: arSeries.length > 1? ['#A52A2A', '#1C86EE'] : 
+            this.idTipo=="D"? ['#A52A2A'] : ['#1C86EE'],
     dataLabels: {
       enabled: false
     },
