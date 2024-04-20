@@ -3,6 +3,10 @@
   left:-1px;
 }
 
+.label-pesquisa{
+  font-size: 14px;
+}
+
 :host ::ng-deep .p-multiselect{
   font-size: small;
   width: 220px;

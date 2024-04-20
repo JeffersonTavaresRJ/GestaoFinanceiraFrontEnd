@@ -19,6 +19,7 @@ import { DataItems, DialogData } from '../_models/dialog-data';
 import { Reports } from 'src/app/shared/functions/reports';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
 
+interface MesesAnteriores{id: number, descricao: string};
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -40,15 +41,18 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   labelsTipo:string[] = [];
   seriesPrioridade:Number[] = [];
   labelsPrioridade:string[] = [];
+  arTotalMeses:number[]=[2,3,4,5,6,7,8,9,10,11,12];
   arFechamentosMensais:FechamentoModel[];
   arMovReal: MovimentacaoRealizada[]=[];
   arSelectedContas:any[]=[]; 
   arContas: Conta[];
   arMovRealTipo: any[]=[];
   arMovRealPrioridade: any[]=[];
+  arMesesAnteriores:MesesAnteriores[]=[];
   dialogData: DialogData;
   selectedMesAno: string=""; 
   idConta: number;
+  totalMeses: number;
   idContas:number[]=[];
   chartTipo: ApexCharts;
   chartPrioridade: ApexCharts;
@@ -81,7 +85,9 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
                 );
               }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.popularMesesAnteriores(12);
+  }
 
   onChangeFechamento(){    
     this.movRealizadaService.getByDataReferencia(this.selectedMesAno).subscribe(
@@ -105,11 +111,21 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
  
     debugger;
     var dataReferencia = this.selectedMesAno.substring(0,10);
-    this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.arSelectedContas, dataReferencia).subscribe(
+    this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.arSelectedContas, dataReferencia, this.totalMeses).subscribe(
       success=>{
         Reports.download(success, "EXCEL", "Movimentações Mensais "+dataReferencia.substring(0,7));
       }
     );    
+   }
+
+   private popularMesesAnteriores(total: number){
+    var x = 2;
+    debugger;
+    while(x <= total){
+      var item: MesesAnteriores={id: x, descricao: "Últimos "+ x.toString() + " meses anteriores"};
+      this.arMesesAnteriores.push(item);
+      x++;
+    }    
    }
 
   private openDialog(arMovReal: MovimentacaoRealizada[], titulo:string, prioridade: string, tipo: string, backgroundColor : string) {
