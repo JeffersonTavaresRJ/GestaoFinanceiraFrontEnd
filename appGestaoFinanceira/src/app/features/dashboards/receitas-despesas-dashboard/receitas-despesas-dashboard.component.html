@@ -1,9 +1,9 @@
 <div class="row justify-content-around mb-1"> 
-  <div class="col-4" style="padding-top: 1%;">
-    <h6>Despesas x Receitas Mensais</h6>
+  <div class="col-2" style="padding-top: 1%;">
+    <h6>Despesas x Receitas</h6>
   </div> 
-  <div class="field col-4">
-      <label for="drpdMesAno">Mês/Ano:</label>
+  <div class="field col-3">
+      <label for="drpdMesAno" class="label-pesquisa">Mês/Ano:</label>
       <p-dropdown [options]="arFechamentosMensais" 
                       inputId="drpdMesAno"
                       optionLabel="mesAno" 
@@ -17,26 +17,40 @@
                       autoDisplayFirst="true">
        </p-dropdown>
   </div>
-  <div class="field col-4">
-    <label for="drpdConta">Conta:</label>
-    <p-multiSelect [options]="arContas" 
-                       [(ngModel)]="arSelectedContas"
-                       defaultLabel="Todas as Contas" 
-                       optionValue="id"
-                       optionLabel="descricao"
-                       displaySelectedLabel="true"
-                       [maxSelectedLabels]="1" 
-                       [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
-                       [showHeader]="true"
-                       [panelStyle]="{'width':'100px'}"
-                       [filter]="false">
-        </p-multiSelect>
-     <button (click)="gerarExcel()" class="btn-excel"
-         pTooltip="Gerar excel por Conta" tooltipPosition="bottom">
-      <img src="assets/icons/excel.png" class="img-excel"/>
-     </button>
-     
-</div>
+  <div class="card col-7">
+    <label class="label-pesquisa mb-1">Gerar Excel</label>
+    <p>
+      <label for="drpdConta" class="label-pesquisa">Conta:</label>
+      <p-multiSelect [options]="arContas" 
+                         [(ngModel)]="arSelectedContas"
+                         defaultLabel="Todas as Contas" 
+                         optionValue="id"
+                         optionLabel="descricao"
+                         displaySelectedLabel="true"
+                         [maxSelectedLabels]="1" 
+                         [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
+                         [showHeader]="true"
+                         [panelStyle]="{'width':'100px'}"
+                         [filter]="false">
+      </p-multiSelect>
+      <label for="drpdTotalMeses" class="label-pesquisa">Período:</label>
+      <p-dropdown [options]="arMesesAnteriores"
+                      optionValue="id"
+                      optionLabel="descricao" 
+                      inputId="drpdTotalMeses"
+                      [(ngModel)]="totalMeses"
+                      [virtualScroll]="arMesesAnteriores.length >=5" 
+                      [showClear]="false" 
+                      [filter]="false"
+                      emptyMessage="--Selecione--"
+                      autoDisplayFirst="true">
+      </p-dropdown>
+      <button (click)="gerarExcel()" class="btn-excel" style="margin-left: 10px;"
+              pTooltip="Gerar excel por Conta" tooltipPosition="bottom">
+              <img src="assets/icons/excel.png" class="img-excel"/>
+       </button>
+    </p>    
+  </div>
 </div>
 <hr>
 <div *ngIf="arMovRealTipo.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">

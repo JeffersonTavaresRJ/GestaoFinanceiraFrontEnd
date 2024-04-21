@@ -58,10 +58,11 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     return this.http.get<any[]>(`${this.getUrl()}/${dataReferencia}`);
   } 
   
-  GetByMovimentacaoRealizadaMensalReportExcel(idContas={}, dataReferencia: string): Observable<any>{
+  GetByMovimentacaoRealizadaMensalReportExcel(idContas={}, dataReferencia: string, totalMeses): Observable<any>{
     var param = {
       idContas: idContas,
-      dataReferencia: dataReferencia
+      dataReferencia: dataReferencia,
+      totalMeses: totalMeses
     }
     this.setApiOption('/GetByMovimentacaoRealizadaMensalReportExcel');
     return this.http.post(this.getUrl(), param, {responseType: "blob"});
