@@ -6,6 +6,7 @@ import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 import { MovimentacaoPrevistaCommandCreate } from './_commands/mov-prevista/mov-prevista-cmd-create';
 import { MovimentacaoPrevistaCommandDelete } from './_commands/mov-prevista/mov-prevista-cmd-delete';
 import { MovimentacaoPrevistaCommandUpdate } from './_commands/mov-prevista/mov-prevista-cmd-update';
+import { GenericResourceDropDownEnumModel } from '../../../shared/components/generic-resource-dropdown/models/generic-resource-dropdown-enum-model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,14 +31,20 @@ export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevi
     return this.http.get<MovimentacaoPrevista[]>(`${this.getUrl()}/${dataVencIni}/${dataVencFim}/${_idItemMovimentacao}`);
   }
 
-  public GetAllStatus(): Observable<any> {
+  public GetAllStatus(): Observable <GenericResourceDropDownEnumModel[]> {
     this.setApiOption('/GetAllStatus');
-    return this.http.get(this.getUrl());
+    return this.http.get<GenericResourceDropDownEnumModel[]>(this.getUrl());
   }
 
-  public GetAllPrioridades(): Observable<any> {
+  public GetAllPrioridades(): Observable<GenericResourceDropDownEnumModel[]> {
+    debugger;
     this.setApiOption('/GetAllPrioridades');
-    return this.http.get(this.getUrl());
+    return this.http.get<GenericResourceDropDownEnumModel[]>(this.getUrl());
+  }
+
+  public GetAllEnuns(endPoint:String): Observable <GenericResourceDropDownEnumModel[]> {
+    this.setApiOption(`${endPoint}`);
+    return this.http.get<GenericResourceDropDownEnumModel[]>(this.getUrl());
   }
 
   public GetAllTiposRecorrencias(): Observable<any> {
