@@ -1,6 +1,4 @@
 export class GenericResourceDropDownEnumModel{
-    constructor(
-        public key: string=null,
-        public value: string=null){
-    }
+    public key: string=null;
+    public value: string=null;
 }
