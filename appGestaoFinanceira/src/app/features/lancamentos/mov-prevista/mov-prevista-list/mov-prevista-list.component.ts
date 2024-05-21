@@ -99,19 +99,19 @@ export class MovPrevistaListComponent implements OnInit {
     window.localStorage.setItem(environment.keyParamListMovPre, JSON.stringify(param));
 
     if (idCategoria != null) {
-      this.arMovPrevistas = this.arMovPrevistasAux.filter(m => m.itemMovimentacao.categoria.id == idCategoria);
+      this.arMovPrevistas = this.arMovPrevistas.filter(m => m.itemMovimentacao.categoria.id == idCategoria);
     }
     if (idItemMovimentacao != null) {
-      this.arMovPrevistas = this.arMovPrevistasAux.filter(m => m.itemMovimentacao.id == idItemMovimentacao);
+      this.arMovPrevistas = this.arMovPrevistas.filter(m => m.itemMovimentacao.id == idItemMovimentacao);
     }
     if (idFormaPagamento != null) {
-      this.arMovPrevistas = this.arMovPrevistasAux.filter(m => m.formaPagamento.id == idFormaPagamento);
+      this.arMovPrevistas = this.arMovPrevistas.filter(m => m.formaPagamento.id == idFormaPagamento);
     }
     if (idPrioridade != null) {
-      this.arMovPrevistas = this.arMovPrevistasAux.filter(m => m.tipoPrioridade == idPrioridade);
+      this.arMovPrevistas = this.arMovPrevistas.filter(m => m.tipoPrioridade == idPrioridade);
     }
     if (this.status != null) {
-      this.arMovPrevistas = this.arMovPrevistasAux.filter(m => m.status == this.status);
+      this.arMovPrevistas = this.arMovPrevistas.filter(m => m.status == this.status);
     }
     this.calcularSaldo();
   }

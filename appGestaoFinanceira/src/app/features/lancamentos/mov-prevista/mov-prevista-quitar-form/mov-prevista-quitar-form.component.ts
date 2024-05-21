@@ -62,7 +62,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveConta: Conta[] }) => {
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
-        this.arContas = sucess.resolveConta;        
+        this.arContas = sucess.resolveConta.filter(c=>c.status==true);        
       }
     );
 
@@ -70,7 +70,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveFormPag: FormaPagamento[] }) => {
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
-        this.arFormasPagamento = sucess.resolveFormPag;        
+        this.arFormasPagamento = sucess.resolveFormPag.filter(c=>c.status==true);         
       }
     );
 
@@ -137,6 +137,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   addRow() {
+    debugger;
     //incrementando a data da movimentação realizada..
     var dataMovimentacaoRealizada = this.movimentacaoPrevista.dataVencimento;
 
@@ -179,9 +180,14 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
   salvar(fGroup: FormGroup, i: number) {
     debugger;
+    //tratamento para converter string em Date..
+    var dataMovReal = DateConvert.stringToDate(fGroup.get('dataMovimentacaoRealizada').value, "-");
+    fGroup.get('dataMovimentacaoRealizada').setValue(dataMovReal);
+    
     if (fGroup.get('isEdit').value == true) {
 
       if (fGroup.get('id').value == 0) {
+
         this.movRealizadaService.post(fGroup).subscribe(
           sucess => {
             fGroup.get('id').setValue( Number.parseFloat(sucess.id));
