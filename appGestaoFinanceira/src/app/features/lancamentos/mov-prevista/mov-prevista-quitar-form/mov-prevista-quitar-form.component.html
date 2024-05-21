@@ -51,10 +51,16 @@
                     <form class="tr" [formGroup]="fGroup" *ngFor="let fGroup of arForms.controls; let i=index;"
                         (submit)="salvar(fGroup, i)">
                         <div class="td" style="text-align:center">
+                            <!--
                             <p-calendar *ngIf="fGroup.get('isEdit').value == true"
                                          dateFormat="dd/mm/yy"
                                          formControlName="dataMovimentacaoRealizada" 
-                                         [touchUI]="true" [readonlyInput]="true"></p-calendar>
+                                         [touchUI]="true" [readonlyInput]="true">
+                            </p-calendar>
+                            -->
+                            <input *ngIf="fGroup.get('isEdit').value == true"
+                                   pInputText formControlName="dataMovimentacaoRealizada"
+                                   type="date" placeholder="Informe a Data"/>
                             <span *ngIf="fGroup.get('isEdit').value == false">
                                 {{fGroup.get('dataMovimentacaoRealizada').value | date:'dd/MM/yyyy' }}
                             </span>

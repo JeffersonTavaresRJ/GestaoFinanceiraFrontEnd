@@ -26,7 +26,7 @@
 
 :host ::ng-deep .p-dropdown {
   font-size: small !important;
-  width: 250px !important;
+  width: 300px !important;
 }
 
 :host ::ng-deep .p-calendar {
@@ -35,6 +35,10 @@
 
 :host ::ng-deep .p-dropdown-item {
   font-size: small !important
+}
+
+:host ::ng-deep cdk-virtual-scroll-viewport{
+  height: 140px !important;
 }
 
 :host ::ng-deep .p-datepicker-group-container {

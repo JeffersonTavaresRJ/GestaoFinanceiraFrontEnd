@@ -186,10 +186,13 @@
 
         <form [formGroup]="formGroupTransfer" (submit)="Tranferir()" class="card-conta">
             <div class="row mb-3">
-                <div class="col-4">
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Conta:</h6>
-                    <app-dropdown-conta [form-group]="formGroupTransfer"
-                        [form-control]="formGroupTransfer.get('idContaDestino')" placeholder="Informe a Conta">
+                <div class="col-6">
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Conta de Destino:</h6>
+                    <app-dropdown-conta 
+                        [form-group]="formGroupTransfer"
+                        [form-control]="formGroupTransfer.get('idContaDestino')"
+                        [select-by-status]="true" 
+                        placeholder="Informe a Conta">
                     </app-dropdown-conta>
                 </div>
             </div>
