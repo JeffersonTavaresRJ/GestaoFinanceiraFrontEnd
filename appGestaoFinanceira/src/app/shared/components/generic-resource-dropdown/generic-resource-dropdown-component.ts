@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GenericResourceService } from "../../_services/generic-resource-service";
-import { GenericResourceDropdownModel } from "./generic-resource-dropdown-model";
+import { GenericResourceDropdownModel } from "./models/generic-resource-dropdown-model";
 
 @Directive()
 export abstract class GenericResourceDropDownComponent<T extends GenericResourceDropdownModel> implements OnInit {

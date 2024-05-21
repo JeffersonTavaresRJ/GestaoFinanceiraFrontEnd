@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
-import { enumModel } from 'src/app/shared/_models/generic-enum-model';
 import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
 import { MovPrevistaService } from '../../_services/mov-prevista-service';
 import { environment } from 'src/environments/environment';
+import { GenericResourceDropDownEnumModel } from 'src/app/shared/components/generic-resource-dropdown/models/generic-resource-dropdown-enum-model';
 
 interface ParamListMovPre{
   idCategoria?: number, 
@@ -43,7 +43,7 @@ export class MovPrevistaListComponent implements OnInit {
   paramListMovPre: ParamListMovPre;
 
 
-  arEnumStatus: enumModel[];
+  arEnumStatus: GenericResourceDropDownEnumModel[];
   arMovPrevistas: MovimentacaoPrevista[];
   arMovPrevistasAux: MovimentacaoPrevista[];
   detalheMovimentacaoPrevista: MovimentacaoPrevista = new MovimentacaoPrevista();

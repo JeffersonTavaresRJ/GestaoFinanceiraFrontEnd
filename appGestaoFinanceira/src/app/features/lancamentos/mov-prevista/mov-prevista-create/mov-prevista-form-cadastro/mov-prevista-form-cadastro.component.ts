@@ -4,10 +4,10 @@ import { ConfirmationService } from 'primeng/api';
 import { ItemMovimentacao } from 'src/app/features/cadastros-basicos/_models/item-movimentacao-model';
 import { MovimentacaoPrevista } from '../../../_models/mov-prevista-model';
 import { MovPrevistaService } from '../../../_services/mov-prevista-service';
-import { enumModel } from 'src/app/shared/_models/generic-enum-model';
 import { FormaPagamento } from 'src/app/features/cadastros-basicos/_models/forma-pagamento';
 import { Categoria } from 'src/app/features/cadastros-basicos/_models/categoria-model';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
+import { GenericResourceDropDownEnumModel } from 'src/app/shared/components/generic-resource-dropdown/models/generic-resource-dropdown-enum-model';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   itemMovimentacao: ItemMovimentacao;
   formaPagamento: FormaPagamento = new FormaPagamento();
 
-  arTiposRecorrencia: enumModel[];
+  arTiposRecorrencia: GenericResourceDropDownEnumModel[];
   arMovPrevistas: MovimentacaoPrevista[] = [];
 
   constructor(protected injector: Injector,

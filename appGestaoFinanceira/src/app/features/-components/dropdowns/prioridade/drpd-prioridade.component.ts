@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component} from '@angular/core';
+import { GenericResourceDropDownEnumComponent } from 'src/app/shared/components/generic-resource-dropdown/generic-resource-dropdown-enum.component';
 import { MovPrevistaService } from 'src/app/features/lancamentos/_services/mov-prevista-service';
 
 @Component({
@@ -7,23 +7,15 @@ import { MovPrevistaService } from 'src/app/features/lancamentos/_services/mov-p
   templateUrl: './drpd-prioridade.component.html',
   styleUrls: ['./drpd-prioridade.component.css']
 })
-export class DropDownPrioridadeComponent{
-
-  @Input('form-group') formGroupResource: FormGroup;
-  @Input('form-control') formControl: FormControl;
-  @Input('disabled') isDisabled: boolean;
-  @Input('placeholder') placeholder: string;
-  @Output('OnChange') _onChange = new EventEmitter();
-
-  arAny: any[] = [];
-
+export class DropDownPrioridadeComponent extends GenericResourceDropDownEnumComponent{
   constructor(protected movPrevistaService: MovPrevistaService) {
-    this.movPrevistaService.GetAllPrioridades().subscribe(
-      (result) => { this.arAny = result; }
-    );
+    super();    
   }
-
-  onChange() {
-    this._onChange.emit(true);
+  onPopulate(){
+    this.movPrevistaService.GetAllPrioridades().subscribe(
+      success=>{ 
+        this.arEnum = success
+      }
+    )
   }
 }
