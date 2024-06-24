@@ -59,7 +59,7 @@
                          *ngIf="(formGroup.get('idFormaPagamento').value!=null && 
                                  formGroup.get('idFormaPagamento').value == movRealizada.formaPagamento.id) ||
                                 (formGroup.get('idFormaPagamento').value==null)"
-                        [class.text-success]="movRealizada.itemMovimentacao.tipo=='R'">
+                        [class.text-success]="movRealizada.itemMovimentacao.tipo=='R' && movRealizada.valor > 0">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-1" style="padding-top: 0.3rem;">                                    
