@@ -239,7 +239,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       y: {
         formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
           return formatCurrency(Number.parseFloat(value),  "PT-BR", "R$") + 
-          ' (' + formatPercent(Number.parseFloat(w.globals.initialSeries[seriesIndex].percent[dataPointIndex]), "PT-BR", "2.0-2") +')'
+          ' (' + formatPercent(Number.parseFloat(w.globals.initialSeries[seriesIndex].percent[dataPointIndex]), "PT-BR", "0.0-2") +')'
         }
       }        
     },
