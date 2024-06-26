@@ -147,29 +147,18 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         return x;
     })  
   }
-  
-  private populateAgrupado(arSaldos: any[], anoIni: number, anoFim:number){
-      var meses=this.dataAtual.getMonth()+1;
-      var dataExp=0;
-      var valorExp=0;
-      //var checkPercentual = this.chbxPercent;
 
-      var arDadosChartFetch = this.arDadosChart.slice();
-      this.arDadosChart.length=0;
-      var arDat: number[]=[];
-      var arVal: number[]=[];
-      var dat: number;
-      var val: number;
+  private populateAgrupado(arSaldos: any[], anoInicial: number, anoFinal:number){
+    var perExp: number;
+    var valExp: number;
+    var meses=this.dataAtual.getMonth()+1;
 
+    this.arDadosChart=this.arDadosChart.map((x)=>{
+        var dat: number[]=[];
+        var val: number[]=[];
 
-      arDadosChartFetch.forEach((item)=>{
-        arDat.length=0;
-        arVal.length=0;
-
-        for(let ano=anoIni; ano <= anoFim; ano++){
-          debugger;
-
-          if(item.id >=0){
+        for(let ano = anoInicial; ano <= anoFinal; ano++){
+            debugger;
             var valorAtual = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
             var valorAnter = arSaldos.filter(z=>z.ano==ano-1).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
       
@@ -177,52 +166,32 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
             valorAnter = valorAnter == undefined ? 0 : valorAnter;
 
             var percentualAtual = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
-          }
 
-          if(this.chbxPercent){
-
-            if(item.id >=0){
-              dat  = percentualAtual;
-              val = valorAtual;
-
-              if(ano==anoFim){
-                 dataExp  = (percentualAtual / meses) * 12;
-                 valorExp = (valorAtual / meses) * 12;
-                 var valorteste = (valorAnter * dataExp) + valorAnter; 
-             }
-
-           }else{
-              dat = dataExp;
-              val = valorExp;
-           }
-           arDat.push(dat);
-           arVal.push(val);
-         }else{
-
-            if(item.id >=0){
-               dat  = valorAtual;
-               val = percentualAtual;
-
-               if(ano==anoFim){
-                  dataExp  = (valorAtual / meses) * 12;
-                  valorExp = (percentualAtual / meses)  * 12;
-                  //valorExp = (x.valor[b-1] * dataExp) + x.valor[b-1]; 
-               }
-
-            }else{
-               dat = valorExp;
-               val = dataExp;
+            if(x.id >= 0 && ano==anoFinal){
+                 perExp = (percentualAtual / meses) * 12;
+                 valExp = (valorAnter * perExp) + valorAnter;
             }
-            arDat.push(dat);
-            arVal.push(val);        
-         }         
-        }
-        var dados: ContaAnual={id: item.id, name: item.name, data: arDat, valor: arVal};
-        this.arDadosChart.push(dados);
-      });
- } 
-  
 
+            if(x.id < 0){
+              percentualAtual = perExp;
+              valorAtual = valExp;
+            }
+          
+            dat.push(percentualAtual);
+            val.push(valorAtual);
+        }
+
+        if(this.chbxPercent){
+          x.data = dat;
+          x.valor = val;
+        }else{
+          x.data = val;
+          x.valor = dat;
+        }
+       
+        return x;
+    })  
+  }
 
   private options(arSeries: ContaAnual[], arAno: number[], checkPercent: boolean):any{
     return {
