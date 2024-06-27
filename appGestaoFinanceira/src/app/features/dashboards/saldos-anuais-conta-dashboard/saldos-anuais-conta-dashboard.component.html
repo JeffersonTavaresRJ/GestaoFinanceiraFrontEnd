@@ -1,13 +1,14 @@
 <div class="row">
     <div class="col-3">
+        {{this.labelContasSelecionadas}}
         <p-multiSelect [options]="arContas" 
                        [(ngModel)]="arSelectedContas"
                        defaultLabel="Todas as Contas" 
                        optionValue="id"
                        optionLabel="descricao"
                        displaySelectedLabel="true"
-                       [maxSelectedLabels]="1" 
-                       [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
+                       [maxSelectedLabels]="0"
+                       [(selectedItemsLabel)]=labelContasSelecionadas
                        [showHeader]="true"
                        [panelStyle]="{'width':'100px'}"
                        [filter]="false"
