@@ -5,7 +5,8 @@ export class Conta extends GenericResourceModel{
         public id?: number,
         public descricao: string = '',
         public status?: boolean,
-        public defaultConta:string = 'N'
+        public defaultConta:string = 'N',
+        public tipo:string = 'I'
     ) {
         super();
     }

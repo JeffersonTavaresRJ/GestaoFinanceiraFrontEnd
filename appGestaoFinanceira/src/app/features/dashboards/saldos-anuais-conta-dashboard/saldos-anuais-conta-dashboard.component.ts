@@ -21,7 +21,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   ano: string;
   descricaoConta: String;
   labelContasSelecionadas:string;
-  limitSelection:number;
+  limiteContas:number;
   anoIni:number;
   anoFim:number;
   dataAtual: Date = new Date();
@@ -40,7 +40,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveConta: Conta[] }) => {
-                 this.arContas = sucess.resolveConta;
+                 this.arContas = sucess.resolveConta.filter(c=>c.tipo=="I");
       }
     );
 
@@ -50,7 +50,6 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
 
     var arIdContas = this.arContas.filter(c=>this.arSaldos.map((e)=>{return e.idConta}).includes(c.id));
     this.arSelectedContas = arIdContas.map((e)=>{return e.id}); 
-    this.limitSelection = this.arSelectedContas.length;
 
     this.anoIni = Number.parseInt(this.actResourceRoute.snapshot.params.anoInicial);
     this.anoFim = Number.parseInt(this.actResourceRoute.snapshot.params.anoFinal); 
@@ -63,28 +62,19 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     this.chbxAgrupar = true;
     this.chbxPercent = true;
 
+    this.limiteContas=null;
     this.filtrarDados(this.arSaldos, this.anoIni, this.anoFim);
+  }
+
+  tratarSelecao(){
+    this.limiteContas = !this.chbxAgrupar ? 2:null;
+    this.arSelectedContas=[];
   }
 
   filtrarDados(arSaldos: any[], anoIni:number, anoFim: number){ 
     debugger;
-    /*
-    if(!this.chbxAgrupar){
-      this.limitSelection=2;
-      this.arSelectedContas.length=1;
-    }
-    */
-
-    this.labelContasSelecionadas="";
-
-    if(this.arSelectedContas.length > 1){
-      this.labelContasSelecionadas = "("+this.arSelectedContas.length.toString()+") contas teste";
-    }else{
-      this.descricaoConta = this.arContas.filter(c=>c.id==this.arSelectedContas[0]).map((e)=>{return e.descricao})[0];
-      this.labelContasSelecionadas =this.descricaoConta.toString();
-    }
-    
     var arSaldosAux         = arSaldos.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta)); 
+    this.arContasDadosChart = [];
     this.arContasDadosChart = this.arContas.filter(c=>arSaldosAux.map((s)=>{return s.idConta}).includes(c.id));
     
 
@@ -111,7 +101,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   }
 
   private montarArrayPeriodo(anoIni: number, anoFim: number, arContas?:Conta[]) {
-    this.arDadosChart.length=0;
+    this.arDadosChart=[];
     var dat: number[]=[];
     var val: number[]=[];
 
@@ -127,14 +117,14 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         var dados: ContaAnual={id: x.id, name: x.descricao, data: dat, valor: val};
         this.arDadosChart.push(dados); 
         
-        if(arContas.length=1){
+        if(arContas.length==1){
           var expectativa: ContaAnual={id: -1, name: "Expectativa para "+ anoFim.toString(), data: dat, valor: val};
           this.arDadosChart.push(expectativa); 
         }
         
       });
 
-    }else{
+    }else if (this.arSelectedContas.length > 0){
       for(let ano=anoIni; ano <= anoFim; ano++){
          dat.push(0);
          val.push(0);         
@@ -166,11 +156,11 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           
           if(x.id >= 0 && ano==anoFinal){
             valExp = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.saldoEsperado}).reduce((acum, item)=>{return acum+item},0);
-            perExp = PercentCalculo.calcularPercentual(valExp, valorAnter);                 
+            perExp = PercentCalculo.calcularPercentual(valExp, valorAnter==0 ? valorAtual : valorAnter);                 
           }
 
           if(x.id >= 0){
-            dat.push(PercentCalculo.calcularPercentual(valorAtual, valorAnter));
+            dat.push(PercentCalculo.calcularPercentual(valorAtual, valorAnter==0 ? valorAtual : valorAnter));
             val.push(valorAtual);
           }else{
             dat.push(perExp);
