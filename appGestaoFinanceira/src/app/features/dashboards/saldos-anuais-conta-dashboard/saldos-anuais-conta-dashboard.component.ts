@@ -24,6 +24,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   limiteContas:number;
   anoIni:number;
   anoFim:number;
+  expMax:number;
   dataAtual: Date = new Date();
   chbxAgrupar: boolean;
   chbxPercent: boolean;
@@ -143,16 +144,22 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   private populateDetalhado(arSaldos: any[], anoInicial: number, anoFinal:number){
     var perExp: number;
     var valExp: number;
+    this.expMax = 0;
     this.arDadosChart=this.arDadosChart.map((x)=>{
         var dat: number[]=[];
         var val: number[]=[];
         for(let ano = anoInicial; ano <= anoFinal; ano++){
+          debugger;
           var valorAtual = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.saldo})[0];
           var valorAnter = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano-1).map((e)=>{return e.saldo})[0];
+          var valorInici = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.valorInicial})[0];
           
           valorAtual = valorAtual == undefined ? 0 : valorAtual;
           valorAnter = valorAnter == undefined ? 0 : valorAnter;
 
+          if(valorAtual > 0 && valorAnter == 0){
+            valorAnter = valorInici;
+          }
           
           if(x.id >= 0 && ano==anoFinal){
             valExp = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.saldoEsperado}).reduce((acum, item)=>{return acum+item},0);
@@ -175,6 +182,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           x.data = val;
           x.valor = dat;
         }
+        this.expMax = x.data[0];
        
         return x;
     })  
@@ -183,6 +191,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   private populateAgrupado(arSaldos: any[], anoInicial: number, anoFinal:number){
     var perExp: number;
     var valExp: number;
+    this.expMax = 0;
     this.arDadosChart=this.arDadosChart.map((x)=>{
         var dat: number[]=[];
         var val: number[]=[];
@@ -191,9 +200,14 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
             debugger;
             var valorAtual = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
             var valorAnter = arSaldos.filter(z=>z.ano==ano-1).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
-      
+            var valorInici = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.valorInicial}).reduce((acum, item)=>{return acum+item},0);
+
             valorAtual = valorAtual == undefined ? 0 : valorAtual;
             valorAnter = valorAnter == undefined ? 0 : valorAnter;
+
+            if(valorAtual > 0 && valorAnter == 0){
+              valorAnter = valorInici;
+            }
 
             var percentualAtual = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
 
@@ -218,12 +232,27 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           x.data = val;
           x.valor = dat;
         }
+
+        this.expMax = x.data[0];
        
         return x;
     })  
   }
 
   private options(arSeries: ContaAnual[], arAno: number[], checkPercent: boolean):any{
+    var expecMin = (this.expMax-(this.expMax*0.2)).toString();
+    var expecMax = this.expMax.toString();
+
+    if(checkPercent){
+      expecMin = formatPercent(Number.parseFloat(expecMin), "PT-BR", "1.0-2");
+      expecMax = formatPercent(Number.parseFloat(expecMax), "PT-BR", "1.0-2");
+    }else{
+      expecMin = formatCurrency(Number.parseFloat(expecMin), "PT-BR", "R$") 
+      expecMax = formatCurrency(Number.parseFloat(expecMax), "PT-BR", "R$");
+    } 
+
+    var textExp = 'Exp 2024: entre ' + expecMin.toString() + ' a ' + expecMax.toString();
+debugger;
     return {
       series: arSeries,
       chart: {
@@ -233,6 +262,25 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         enabled: false
       }
     },
+    colors: this.expMax>0? ['#1C86EE', '#FEB019'] : ['#1C86EE', '#A52A2A'],
+    annotations: {
+      yaxis: this.expMax==0? [] : [{
+        y:  this.expMax,
+        y2: this.expMax-(this.expMax*0.2),
+        borderColor: '#000',
+        fillColor: '#FEB019',
+        opacity: 0.2,
+        label: {
+          borderColor: '#333',
+          style: {
+            fontSize: '10px',
+            color: '#333',
+            background: '#FEB019'
+          },
+          text: textExp,
+        }
+    }]},
+
     dataLabels: {
       enabled: false
     },
