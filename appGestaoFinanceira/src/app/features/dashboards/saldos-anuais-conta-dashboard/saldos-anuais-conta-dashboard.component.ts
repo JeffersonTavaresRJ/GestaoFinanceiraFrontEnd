@@ -19,8 +19,13 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   arContasDadosChart:Conta[]=[];
   arAno:number[]=[];
   ano: string;
+  descricaoConta: String;
+  labelContasSelecionadas:string;
+  limiteContas:number;
   anoIni:number;
   anoFim:number;
+  expMax:number;
+  dataAtual: Date = new Date();
   chbxAgrupar: boolean;
   chbxPercent: boolean;
   chart: ApexCharts;
@@ -36,7 +41,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveConta: Conta[] }) => {
-                 this.arContas = sucess.resolveConta;
+                 this.arContas = sucess.resolveConta.filter(c=>c.tipo=="I");
       }
     );
 
@@ -58,12 +63,19 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     this.chbxAgrupar = true;
     this.chbxPercent = true;
 
+    this.limiteContas=null;
     this.filtrarDados(this.arSaldos, this.anoIni, this.anoFim);
   }
 
+  tratarSelecao(){
+    this.limiteContas = !this.chbxAgrupar ? 2:null;
+    this.arSelectedContas=[];
+  }
+
   filtrarDados(arSaldos: any[], anoIni:number, anoFim: number){ 
-    
+    debugger;
     var arSaldosAux         = arSaldos.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta)); 
+    this.arContasDadosChart = [];
     this.arContasDadosChart = this.arContas.filter(c=>arSaldosAux.map((s)=>{return s.idConta}).includes(c.id));
     
 
@@ -77,6 +89,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     this.renderizarChart(this.arDadosChart, this.arAno);
   }
 
+  
   private renderizarChart(arDadosChart: ContaAnual[], arAno: number[]){   
     var options = this.options(arDadosChart, arAno, this.chbxPercent);
 
@@ -89,7 +102,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   }
 
   private montarArrayPeriodo(anoIni: number, anoFim: number, arContas?:Conta[]) {
-    this.arDadosChart.length=0;
+    this.arDadosChart=[];
     var dat: number[]=[];
     var val: number[]=[];
 
@@ -100,37 +113,67 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         for(let ano=anoIni; ano <= anoFim; ano++){
           dat.push(0);
           val.push(0);
-        }  
+        } 
+
         var dados: ContaAnual={id: x.id, name: x.descricao, data: dat, valor: val};
-        this.arDadosChart.push(dados);        
+        this.arDadosChart.push(dados); 
+        
+        if(arContas.length==1){
+          var expectativa: ContaAnual={id: -1, name: "Expectativa para "+ anoFim.toString(), data: dat, valor: val};
+          this.arDadosChart.push(expectativa); 
+        }
+        
       });
 
-  }else{
+    }else if (this.arSelectedContas.length > 0){
       for(let ano=anoIni; ano <= anoFim; ano++){
          dat.push(0);
          val.push(0);         
       }
+      
       var dados: ContaAnual={id: 0, name: this.arSelectedContas.length + " Conta(s) selecionada(s)", data: dat, valor: val};
-      this.arDadosChart.push(dados);   
-    
-  }
-    
+      this.arDadosChart.push(dados);
+
+      var expectativa: ContaAnual={id: -1, name: "Expectativa para "+ anoFim.toString(), data: dat, valor: val};
+      this.arDadosChart.push(expectativa); 
+    }
 
   }
+
 
   private populateDetalhado(arSaldos: any[], anoInicial: number, anoFinal:number){
+    var perExp: number;
+    var valExp: number;
+    this.expMax = 0;
     this.arDadosChart=this.arDadosChart.map((x)=>{
         var dat: number[]=[];
         var val: number[]=[];
         for(let ano = anoInicial; ano <= anoFinal; ano++){
+          debugger;
           var valorAtual = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.saldo})[0];
           var valorAnter = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano-1).map((e)=>{return e.saldo})[0];
+          var valorInici = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.valorInicial})[0];
           
           valorAtual = valorAtual == undefined ? 0 : valorAtual;
           valorAnter = valorAnter == undefined ? 0 : valorAnter;
+
+          if(valorAtual > 0 && valorAnter == 0){
+            valorAnter = valorInici;
+          }
           
-          dat.push(PercentCalculo.calcularPercentual(valorAtual, valorAnter));
-          val.push(valorAtual);
+          if(x.id >= 0 && ano==anoFinal){
+            valExp = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.saldoEsperado}).reduce((acum, item)=>{return acum+item},0);
+            perExp = PercentCalculo.calcularPercentual(valExp, valorAnter==0 ? valorAtual : valorAnter);                 
+          }
+
+          if(x.id >= 0){
+            dat.push(PercentCalculo.calcularPercentual(valorAtual, valorAnter==0 ? valorAtual : valorAnter));
+            val.push(valorAtual);
+          }else{
+            dat.push(perExp);
+            val.push(valExp);
+          }
+
         }
         if(this.chbxPercent){
           x.data = dat;
@@ -139,35 +182,77 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           x.data = val;
           x.valor = dat;
         }
+        this.expMax = x.data[0];
        
         return x;
     })  
   }
-  
-  private populateAgrupado(arSaldos: any[], anoInicial: number, anoFinal:number){
-    this.arDadosChart.map((x)=>{
-        var b=0;
-        for(let ano = anoInicial; ano <= anoFinal; ano++){
-          var valorAtual = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
-          var valorAnter = arSaldos.filter(z=>z.ano==ano-1).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
-          
-          valorAtual = valorAtual == undefined ? 0 : valorAtual;
-          valorAnter = valorAnter == undefined ? 0 : valorAnter;
 
-          if(this.chbxPercent){
-            x.data[b]  = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
-            x.valor[b] = valorAtual;
-          }else{
-            x.data[b]  = valorAtual;
-            x.valor[b] = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
-          }
+  private populateAgrupado(arSaldos: any[], anoInicial: number, anoFinal:number){
+    var perExp: number;
+    var valExp: number;
+    this.expMax = 0;
+    this.arDadosChart=this.arDadosChart.map((x)=>{
+        var dat: number[]=[];
+        var val: number[]=[];
+
+        for(let ano = anoInicial; ano <= anoFinal; ano++){
+            debugger;
+            var valorAtual = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
+            var valorAnter = arSaldos.filter(z=>z.ano==ano-1).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
+            var valorInici = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.valorInicial}).reduce((acum, item)=>{return acum+item},0);
+
+            valorAtual = valorAtual == undefined ? 0 : valorAtual;
+            valorAnter = valorAnter == undefined ? 0 : valorAnter;
+
+            if(valorAtual > 0 && valorAnter == 0){
+              valorAnter = valorInici;
+            }
+
+            var percentualAtual = PercentCalculo.calcularPercentual(valorAtual, valorAnter);
+
+            if(x.id >= 0 && ano==anoFinal){
+                 valExp = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.saldoEsperado}).reduce((acum, item)=>{return acum+item},0);
+                 perExp = PercentCalculo.calcularPercentual(valExp, valorAnter);                 
+            }
+
+            if(x.id < 0){
+              percentualAtual = perExp;
+              valorAtual = valExp;
+            }
           
-          b++;
+            dat.push(percentualAtual);
+            val.push(valorAtual);
         }
+
+        if(this.chbxPercent){
+          x.data = dat;
+          x.valor = val;
+        }else{
+          x.data = val;
+          x.valor = dat;
+        }
+
+        this.expMax = x.data[0];
+       
+        return x;
     })  
-  }  
+  }
 
   private options(arSeries: ContaAnual[], arAno: number[], checkPercent: boolean):any{
+    var expecMin = (this.expMax-(this.expMax*0.2)).toString();
+    var expecMax = this.expMax.toString();
+
+    if(checkPercent){
+      expecMin = formatPercent(Number.parseFloat(expecMin), "PT-BR", "1.0-2");
+      expecMax = formatPercent(Number.parseFloat(expecMax), "PT-BR", "1.0-2");
+    }else{
+      expecMin = formatCurrency(Number.parseFloat(expecMin), "PT-BR", "R$") 
+      expecMax = formatCurrency(Number.parseFloat(expecMax), "PT-BR", "R$");
+    } 
+
+    var textExp = 'Exp 2024: entre ' + expecMin.toString() + ' a ' + expecMax.toString();
+debugger;
     return {
       series: arSeries,
       chart: {
@@ -177,6 +262,25 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         enabled: false
       }
     },
+    colors: this.expMax>0? ['#1C86EE', '#FEB019'] : ['#1C86EE', '#A52A2A'],
+    annotations: {
+      yaxis: this.expMax==0? [] : [{
+        y:  this.expMax,
+        y2: this.expMax-(this.expMax*0.2),
+        borderColor: '#000',
+        fillColor: '#FEB019',
+        opacity: 0.2,
+        label: {
+          borderColor: '#333',
+          style: {
+            fontSize: '10px',
+            color: '#333',
+            background: '#FEB019'
+          },
+          text: textExp,
+        }
+    }]},
+
     dataLabels: {
       enabled: false
     },
@@ -222,7 +326,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
           var valorPercent ="";
           var valorCurrency="";
           var valorToolTip ="";
-          debugger;
+          //debugger;
           if(checkPercent){
             valorPercent =formatPercent(Number.parseFloat(value), "PT-BR", "1.0-2");
             valorCurrency=formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$");
