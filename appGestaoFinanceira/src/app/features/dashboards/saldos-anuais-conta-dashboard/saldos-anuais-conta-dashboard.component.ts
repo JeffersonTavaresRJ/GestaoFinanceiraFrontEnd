@@ -41,7 +41,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveConta: Conta[] }) => {
-                 this.arContas = sucess.resolveConta.filter(c=>c.tipo=="I");
+                 this.arContas = sucess.resolveConta.filter(c=>c.tipo!="MO");
       }
     );
 
@@ -262,7 +262,7 @@ debugger;
         enabled: false
       }
     },
-    colors: this.expMax>0? ['#1C86EE', '#FEB019'] : ['#1C86EE', '#A52A2A'],
+    colors: this.expMax==0? ['#1C86EE', '#A52A2A'] : ['#1C86EE', '#FEB019'],
     annotations: {
       yaxis: this.expMax==0? [] : [{
         y:  this.expMax,
