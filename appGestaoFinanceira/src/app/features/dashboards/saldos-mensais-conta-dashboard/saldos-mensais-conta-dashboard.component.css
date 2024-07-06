@@ -20,7 +20,7 @@
 }
 
 :host ::ng-deep .p-multiselect {
-    width: 250px;
+    width: 320px;
 }
 
 :host ::ng-deep .multiselect-custom-virtual-scroll .p-multiselect {

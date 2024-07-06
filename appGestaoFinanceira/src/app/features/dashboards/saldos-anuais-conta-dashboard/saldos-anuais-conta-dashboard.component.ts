@@ -86,12 +86,12 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
       this.montarArrayPeriodo(anoIni, anoFim, this.arContasDadosChart);
       this.populateDetalhado(arSaldosAux, anoIni, anoFim); 
     }
-    this.renderizarChart(this.arDadosChart, this.arAno);
+    this.renderizarChart(this.arDadosChart, this.arAno, anoFim);
   }
 
   
-  private renderizarChart(arDadosChart: ContaAnual[], arAno: number[]){   
-    var options = this.options(arDadosChart, arAno, this.chbxPercent);
+  private renderizarChart(arDadosChart: ContaAnual[], arAno: number[], anoFim: number){   
+    var options = this.options(arDadosChart, arAno, this.chbxPercent, anoFim);
 
     if(this.chart!=null){      
       this.chart.destroy();   
@@ -139,7 +139,6 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     }
 
   }
-
 
   private populateDetalhado(arSaldos: any[], anoInicial: number, anoFinal:number){
     var perExp: number;
@@ -239,7 +238,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     })  
   }
 
-  private options(arSeries: ContaAnual[], arAno: number[], checkPercent: boolean):any{
+  private options(arSeries: ContaAnual[], arAno: number[], checkPercent: boolean, anoFim: number):any{
     var expecMin = (this.expMax-(this.expMax*0.2)).toString();
     var expecMax = this.expMax.toString();
 
@@ -251,7 +250,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
       expecMax = formatCurrency(Number.parseFloat(expecMax), "PT-BR", "R$");
     } 
 
-    var textExp = 'Exp 2024: entre ' + expecMin.toString() + ' a ' + expecMax.toString();
+    var textExp = 'Exp ' + anoFim +': entre ' + expecMin.toString() + ' a ' + expecMax.toString();
 debugger;
     return {
       series: arSeries,
@@ -303,7 +302,7 @@ debugger;
     },
     yaxis: {
       title: {
-        text: '%',
+        text: '',
       },
       labels: {
         formatter: (value) => {

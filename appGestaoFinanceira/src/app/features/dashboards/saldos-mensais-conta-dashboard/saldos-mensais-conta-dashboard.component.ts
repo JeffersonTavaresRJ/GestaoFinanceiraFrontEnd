@@ -20,6 +20,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   arSeries: ContaMensal[]=[];
   ano: string;
   chbxAgrupar: boolean=true;
+  chbxPercent: boolean=true;
   chart: ApexCharts;
   limiteContas: number;
 
@@ -27,7 +28,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
     
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveConta: Conta[] }) => {
-                 this.arContas = sucess.resolveConta; 
+                 this.arContas = sucess.resolveConta.filter(c=>c.tipo!="MO"); 
                  this.arContas.sort((a,b)=>{
                   return a.descricao < b.descricao? -1 : 1
                  }); 
@@ -47,6 +48,11 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.filtrarDados();
+  }
+
+  tratarSelecao(){
+    this.limiteContas = !this.chbxAgrupar ? 2:null;
+    this.arSelectedContas=[];
   }
  
   filtrarDados(){
@@ -79,7 +85,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
 
   private renderizarChart(){
     var ano = this.actResourceRoute.snapshot.params.ano;
-    var options = this.options(this.arSeries, ano);
+    var options = this.options(this.arSeries, ano, this.chbxPercent);
 
     if(this.chart!=null){      
       this.chart.destroy();   
@@ -92,31 +98,46 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
   private populateDetalhado(arSaldos:any[]){
     this.arSeries.length=0;
     arSaldos.forEach(e=>{
+      var arJan= new Array(e.janeiro,   (e.percJaneiro== -1 ? 0 : e.percJaneiro));
+      var arFev= new Array(e.fevereiro, (e.percFevereiro== -1 ? 0 :e.percFevereiro));
+      var arMar= new Array(e.marco,     (e.percMarco== -1 ? 0 :e.percMarco));
+      var arAbr= new Array(e.abril,     (e.percAbril== -1 ? 0 :e.percAbril));
+      var arMai= new Array(e.maio,      (e.percMaio== -1 ? 0 :e.percMaio));
+      var arJun= new Array(e.junho,     (e.percJunho== -1 ? 0 :e.percJunho));
+      var arJul= new Array(e.julho,     (e.percJulho== -1 ? 0 :e.percJulho));
+      var arAgo= new Array(e.agosto,    (e.percAgosto== -1 ? 0 :e.percAgosto));
+      var arSet= new Array(e.setembro,  (e.percSetembro==-1 ? 0 :e.percSetembro));
+      var arOut= new Array(e.outubro,   (e.percOutubro==-1 ? 0 :e.percOutubro));
+      var arNov= new Array(e.novembro,  (e.percNovembro==-1 ? 0 :e.percNovembro));
+      var arDez= new Array(e.dezembro,  (e.percDezembro==-1 ? 0 :e.percDezembro));
+
       var dados: ContaMensal={name:e.descricaoConta,
-                             valor: new Array(e.janeiro, 
-                              e.fevereiro, 
-                              e.marco,
-                              e.abril,
-                              e.maio,
-                              e.junho,
-                              e.julho,
-                              e.agosto,
-                              e.setembro,
-                              e.outubro,
-                              e.novembro,
-                              e.dezembro),
-                             data: new Array(e.percJaneiro==-1 ? 0 : e.percJaneiro, 
-                                             e.percFevereiro==-1 ? 0 :e.percFevereiro, 
-                                             e.percMarco==-1 ? 0 :e.percMarco,
-                                             e.percAbril==-1 ? 0 :e.percAbril,
-                                             e.percMaio==-1 ? 0 :e.percMaio,
-                                             e.percJunho==-1 ? 0 :e.percJunho,
-                                             e.percJulho==-1 ? 0 :e.percJulho,
-                                             e.percAgosto==-1 ? 0 :e.percAgosto,
-                                             e.percSetembro==-1 ? 0 :e.percSetembro,
-                                             e.percOutubro==-1 ? 0 :e.percOutubro,
-                                             e.percNovembro==-1 ? 0 :e.percNovembro,
-                                             e.percDezembro==-1 ? 0 :e.percDezembro)};                  
+                             valor: new Array(
+                             this.chbxPercent? arJan[0] : arJan[1], 
+                             this.chbxPercent? arFev[0] : arFev[1], 
+                             this.chbxPercent? arMar[0] : arMar[1],
+                             this.chbxPercent? arAbr[0] : arAbr[1],
+                             this.chbxPercent? arMai[0] : arMai[1],
+                             this.chbxPercent? arJun[0] : arJun[1],
+                             this.chbxPercent? arJul[0] : arJul[1],
+                             this.chbxPercent? arAgo[0] : arAgo[1],
+                             this.chbxPercent? arSet[0] : arSet[1],
+                             this.chbxPercent? arOut[0] : arOut[1],
+                             this.chbxPercent? arNov[0] : arNov[1],
+                             this.chbxPercent? arDez[0] : arDez[1]),
+                             data: new Array(
+                              this.chbxPercent? arJan[1] : arJan[0], 
+                              this.chbxPercent? arFev[1] : arFev[0], 
+                              this.chbxPercent? arMar[1] : arMar[0],
+                              this.chbxPercent? arAbr[1] : arAbr[0],
+                              this.chbxPercent? arMai[1] : arMai[0],
+                              this.chbxPercent? arJun[1] : arJun[0],
+                              this.chbxPercent? arJul[1] : arJul[0],
+                              this.chbxPercent? arAgo[1] : arAgo[0],
+                              this.chbxPercent? arSet[1] : arSet[0],
+                              this.chbxPercent? arOut[1] : arOut[0],
+                              this.chbxPercent? arNov[1] : arNov[0],
+                              this.chbxPercent? arDez[1] : arDez[0])};                  
       this.arSeries.push(dados);
      });
   }
@@ -151,36 +172,49 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
       totNov+=e.novembro;
       totDez+=e.dezembro;      
      });
+    var arJan = new Array(totJan, PercentCalculo.calcularPercentual(totJan,totDea));
+    var arFev = new Array(totFev, PercentCalculo.calcularPercentual(totFev,totJan));
+    var arMar = new Array(totMar, PercentCalculo.calcularPercentual(totMar,totFev));
+    var arAbr = new Array(totAbr, PercentCalculo.calcularPercentual(totAbr,totMar));
+    var arMai = new Array(totMai, PercentCalculo.calcularPercentual(totMai,totAbr));
+    var arJun = new Array(totJun, PercentCalculo.calcularPercentual(totJun,totMai));
+    var arJul = new Array(totJul, PercentCalculo.calcularPercentual(totJul,totJun));
+    var arAgo = new Array(totAgo, PercentCalculo.calcularPercentual(totAgo,totJul));
+    var arSet = new Array(totSet, PercentCalculo.calcularPercentual(totSet,totAgo));
+    var arOut = new Array(totOut, PercentCalculo.calcularPercentual(totOut,totSet));
+    var arNov = new Array(totNov, PercentCalculo.calcularPercentual(totNov,totOut));
+    var arDez = new Array(totDez, PercentCalculo.calcularPercentual(totDez,totNov));
     var dados: ContaMensal={ name: arSaldos.length + " Conta(s) selecionada(s)",
-                            valor: new Array(totJan, 
-                                             totFev, 
-                                             totMar,
-                                             totAbr,
-                                             totMai,
-                                             totJun,
-                                             totJul,
-                                             totAgo,
-                                             totSet,
-                                             totOut,
-                                             totNov,
-                                             totDez),
+                            valor: new Array(
+                              this.chbxPercent? arJan[0] : arJan[1], 
+                              this.chbxPercent? arFev[0] : arFev[1], 
+                              this.chbxPercent? arMar[0] : arMar[1],
+                              this.chbxPercent? arAbr[0] : arAbr[1],
+                              this.chbxPercent? arMai[0] : arMai[1],
+                              this.chbxPercent? arJun[0] : arJun[1],
+                              this.chbxPercent? arJul[0] : arJul[1],
+                              this.chbxPercent? arAgo[0] : arAgo[1],
+                              this.chbxPercent? arSet[0] : arSet[1],
+                              this.chbxPercent? arOut[0] : arOut[1],
+                              this.chbxPercent? arNov[0] : arNov[1],
+                              this.chbxPercent? arDez[0] : arDez[1]),
                              data: new Array(
-                             PercentCalculo.calcularPercentual(totJan,totDea), 
-                             PercentCalculo.calcularPercentual(totFev,totJan), 
-                             PercentCalculo.calcularPercentual(totMar,totFev),
-                             PercentCalculo.calcularPercentual(totAbr,totMar),
-                             PercentCalculo.calcularPercentual(totMai,totAbr),
-                             PercentCalculo.calcularPercentual(totJun,totMai),
-                             PercentCalculo.calcularPercentual(totJul,totJun),
-                             PercentCalculo.calcularPercentual(totAgo,totJul),
-                             PercentCalculo.calcularPercentual(totSet,totAgo),
-                             PercentCalculo.calcularPercentual(totOut,totSet),
-                             PercentCalculo.calcularPercentual(totNov,totOut),
-                             PercentCalculo.calcularPercentual(totDez,totNov))};                  
+                              this.chbxPercent? arJan[1] : arJan[0], 
+                              this.chbxPercent? arFev[1] : arFev[0], 
+                              this.chbxPercent? arMar[1] : arMar[0],
+                              this.chbxPercent? arAbr[1] : arAbr[0],
+                              this.chbxPercent? arMai[1] : arMai[0],
+                              this.chbxPercent? arJun[1] : arJun[0],
+                              this.chbxPercent? arJul[1] : arJul[0],
+                              this.chbxPercent? arAgo[1] : arAgo[0],
+                              this.chbxPercent? arSet[1] : arSet[0],
+                              this.chbxPercent? arOut[1] : arOut[0],
+                              this.chbxPercent? arNov[1] : arNov[0],
+                              this.chbxPercent? arDez[1] : arDez[0])};                  
       this.arSeries.push(dados);
   }
 
-  private options(arSeries: ContaMensal[], ano: string):any{
+  private options(arSeries: ContaMensal[], ano: string, checkPercent: boolean):any{
     return {
       series: arSeries,
       chart: {
@@ -212,11 +246,13 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
     },
     yaxis: {
       title: {
-        text: '%',
+        text: '',
       },
       labels: {
         formatter: (value) => { 
-          return formatPercent(Number.parseFloat(value), "PT-BR", "0.0-2") 
+          return checkPercent ?
+                 formatPercent(Number.parseFloat(value), "PT-BR", "0.0-2") :
+                 formatCurrency(Number.parseFloat(value), "PT-BR", "R$");
         }
       }/*,
       min: -1*/
@@ -227,8 +263,14 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
     tooltip: {
       y: {
         formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-          return formatPercent(Number.parseFloat(value), "PT-BR", "0.0-2") + 
-          ' (' + formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$") +')'
+          var valor01 = checkPercent ? 
+                        formatPercent(Number.parseFloat(value), "PT-BR", "0.0-2") : 
+                        formatCurrency(Number.parseFloat(value), "PT-BR", "R$");
+          var valor02 = checkPercent ? 
+                        formatCurrency(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "R$") :
+                        formatPercent(Number.parseFloat(w.globals.initialSeries[seriesIndex].valor[dataPointIndex]), "PT-BR", "0.0-2");
+          
+          return valor01 + ' (' + valor02 +')';
         }
       }        
     },
