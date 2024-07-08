@@ -121,7 +121,7 @@
                     <div *ngIf="resourceCurrentAction()=='new'">
                         <div class="p-field">
                             <label>Recorrência:</label>
-                            <p-dropdown [options]="arTiposRecorrencia" optionLabel="Value" optionValue="Key"
+                            <p-dropdown [options]="arTiposRecorrencia" optionLabel="value" optionValue="key"
                                 formControlName="tipoRecorrencia" placeholder="Selecione a Recorrência"
                                 [showClear]="true" [filter]="false" (keyup)="resourceClearValidations()"
                                 emptyMessage="Recorrência não encontrada" [disabled]="!resourceForm.valid"
