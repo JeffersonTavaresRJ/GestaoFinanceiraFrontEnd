@@ -7,7 +7,8 @@ export class ContaCommandUpdate extends GenericCommand {
         public id: number=null,
         public descricao: string = null,
         public status: boolean = null,
-        public defaultConta: string = 'N'
+        public defaultConta: string = 'N',
+        public tipo: string = null
     ) { super(); };
 
     static convertFormGroupToCommand(formGroup: FormGroup):ContaCommandUpdate{
@@ -15,7 +16,8 @@ export class ContaCommandUpdate extends GenericCommand {
             formGroup.get('id').value,
             formGroup.get('descricao').value,
             formGroup.get('status').value,
-            formGroup.get('defaultConta').value
+            formGroup.get('defaultConta').value,
+            formGroup.get('tipo').value
         )
     }
     static convertModelToCommand(conta: Conta):ContaCommandUpdate{
@@ -23,7 +25,8 @@ export class ContaCommandUpdate extends GenericCommand {
             conta.id,
             conta.descricao,
             conta.status,
-            conta.defaultConta
+            conta.defaultConta,
+            conta.tipo
         )
     }
 }

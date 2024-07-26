@@ -21,7 +21,8 @@ export class ContaFormComponent extends GenericResourceFormComponent<Conta> {
        id:[null],
        descricao: [null,Validators.required],
        status:[null],
-       defaultConta:[null]
+       defaultConta:[null],
+       tipo:[null]
      });
     }
 
