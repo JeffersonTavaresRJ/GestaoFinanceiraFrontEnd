@@ -84,11 +84,15 @@
                 <div class="p-fluid col-4">
                     <div class="p-field">
                         <label for="dataMovimentacaoRealizada">Data do Pagamento:</label>
+                        <input pInputText formControlName="dataMovimentacaoRealizada"
+                           type="date" placeholder="Informe a Data"/>
+                        <!--
                         <p-calendar *ngIf="this.resourceCurrentAction() != 'cons'" inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataMovimentacaoRealizada"
                             [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
                         </p-calendar>
+                        -->
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{resourceForm.get('dataMovimentacaoRealizada').value | date:'dd/MM/yyyy' }}</strong></p>
-                    </div>
+                    </div>                    
                     <app-field-validation-form [form-control]="resourceForm.get('dataMovimentacaoRealizada')">
                     </app-field-validation-form>
                     <!--
@@ -113,9 +117,9 @@
             </div>
 
             <div class="row mt-3" *ngIf="this.resourceCurrentAction() != 'cons'">
-                <div class="p-fluid col-8">
+                <div class="p-fluid col-7">
                     <span class="p-float-label">
-                        <textarea formControlName="observacao" id="float-input" rows="2" cols="70"
+                        <textarea formControlName="observacao" id="float-input" rows="3" cols="70"
                             pInputTextarea></textarea>
                         <label for="float-input">Observação</label>
                     </span>  
@@ -124,7 +128,7 @@
                     </app-field-server-errors-form>
                     -->
                 </div>
-                <div class="p-fluid col-4">
+                <div class="p-fluid col-5">
                     <div class="p-field">
                         <label>Conta:</label>
                         <app-dropdown-conta 

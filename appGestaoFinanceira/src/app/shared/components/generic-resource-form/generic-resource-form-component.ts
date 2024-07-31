@@ -174,7 +174,6 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
                     (sucess:{resolveResource:T})=>{
                       //o resolveResource deve ser o mesmo nome na variável resolve da rota.. 
                       this.resourceForm.patchValue(sucess.resolveResource);
-
                     },
                     (error) => this.resourceActionForError(error)
                   );

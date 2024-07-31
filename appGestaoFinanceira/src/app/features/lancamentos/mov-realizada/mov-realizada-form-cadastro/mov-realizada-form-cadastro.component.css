@@ -1,0 +1,27 @@
+:host ::ng-deep .p-multiselect-label {
+    font-size: small !important
+  }
+  
+  :host ::ng-deep .p-multiselect-item {
+    font-size: small !important
+  }
+  
+  :host ::ng-deep .p-multiselect-empty-message {
+    font-size: small !important
+  }
+  
+  :host ::ng-deep .p-inputtext {
+    font-size: small !important;
+  }
+
+  :host ::ng-deep .p-dropdown {
+    font-size: small !important;
+  }
+
+  :host ::ng-deep .p-dropdown-item {
+    font-size: small !important
+  }
+
+  label {
+    font-size: small;
+  }

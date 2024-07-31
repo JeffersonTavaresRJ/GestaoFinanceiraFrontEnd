@@ -39,6 +39,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
       valor:[null]
     });   
     
+
     this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
     this.arStDate = this.actResourceRoute.snapshot.params.dataRealFim.split('-');
@@ -58,10 +59,15 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   }
 
   protected loadResource() {
+    if (this.resourceCurrentAction() == 'new'){
+      var idConta = Number.parseInt(this.actResourceRoute.snapshot.params.idConta);
+      this.resourceForm.get('idConta').setValue(idConta);
+    }
+
     if (this.resourceCurrentAction() == 'edit' || this.resourceCurrentAction() == 'cons') {
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveMovReal: MovimentacaoRealizada }) => {
-          console.log(sucess);
+          //console.log(sucess);
           //o resolveMovReal deve ser o mesmo nome na variável resolve da rota.. 
           this.resourceForm.get('id').setValue(sucess.resolveMovReal.id);
           this.resourceForm.get('idCategoria').setValue(sucess.resolveMovReal.itemMovimentacao.categoria.id);
@@ -78,6 +84,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.descricaoPrioridade = sucess.resolveMovReal.tipoPrioridadeDescricao;
           this.descricaoFormaPagamento = sucess.resolveMovReal.formaPagamento.descricao;
           this.descricaoConta = sucess.resolveMovReal.conta.descricao;
+          debugger;
         }
       );
     }

@@ -33,6 +33,7 @@ export class MovRealizadaListComponent implements OnInit {
   contaDisplay: Conta;
   saldoAtualConta: number;
   idContaDestino: number;
+  idConta: number;
 
 
   constructor(private actResourceRoute: ActivatedRoute,
@@ -78,7 +79,12 @@ export class MovRealizadaListComponent implements OnInit {
   getConta(conta: Conta){
     //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
     if(this.contaDisplay != null){
+
       this.contaDisplay.defaultConta = 'N';
+
+      //id da conta para o novo lançamento..
+      this.idConta = this.contaDisplay.id;
+
       this.contaService.putConta(this.contaDisplay).subscribe(
         sucess=>{
           this.contaDisplay = conta;
@@ -184,6 +190,10 @@ export class MovRealizadaListComponent implements OnInit {
           sucess=>{
             this.contaDisplay = sucess.filter(x=>x.defaultConta=="S")[0];
             this.formGroup.get('idConta').setValue(this.contaDisplay.id);
+            
+            //id da conta para o novo lançamento..
+            this.idConta = this.contaDisplay.id;
+
             this.formGroupTransfer.get('idConta').setValue(this.contaDisplay.id);
             this.filtrarTablePorParametros(this.contaDisplay.id, this.formGroup.get('idFormaPagamento').value);            
           }

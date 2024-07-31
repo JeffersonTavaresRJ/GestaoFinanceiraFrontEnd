@@ -130,7 +130,7 @@ const routes: Routes = [
                       resolveFormPag: FormaPagamentoListResolver} },
              
     //=================================================================================================
-    { path: 'mov-realizada/new/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
+    { path: 'mov-realizada/new/:idConta/:dataRealIni/:dataRealFim', component: MovRealizadaFormCadastroComponent,
              canActivate:[AuthGuard],
              canDeactivate:[AuthGuard]  },
     //=======rotas com "resolve" devem ficar por último para execução da rota correta==================
