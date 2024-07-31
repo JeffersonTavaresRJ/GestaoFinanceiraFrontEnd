@@ -38,6 +38,7 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveSaldoMensalConta: any[] }) => {
                  this.arSaldos = sucess.resolveSaldoMensalConta;
+                 this.arSaldos = this.arSaldos.filter(x=>this.arContas.some(z=>z.id==x.idConta))
                  this.arSaldos.forEach(x=>{
                       this.arSelectedContas.push(x.idConta);
                  });               

@@ -31,21 +31,26 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   chart: ApexCharts;
 
   constructor(private actResourceRoute: ActivatedRoute) { 
-    
-    this.actResourceRoute.data.subscribe(
-      (sucess: { resolveSaldoAnualConta: any[] }) => {
-                 //ordenar por ano..
-                 this.arSaldos = sucess.resolveSaldoAnualConta.sort((a,b)=>{return a.ano-b.ano});
-      }
-    );
-    
+
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveConta: Conta[] }) => {
                  this.arContas = sucess.resolveConta.filter(c=>c.tipo!="MO");
       }
     );
-
-  }
+    
+    this.actResourceRoute.data.subscribe(
+      (sucess: { resolveSaldoAnualConta: any[] }) => {
+                 //ordenar por ano..                 
+                 this.arSaldos = sucess.resolveSaldoAnualConta.sort((a,b)=>{return a.ano-b.ano});
+                 //filtrando pelas contas do dropdown..
+                 this.arSaldos = this.arSaldos.filter(x=>this.arContas.some(z=>z.id==x.idConta));
+                 //marcando o check no dropdown das contas..
+                 this.arSaldos.forEach(x=>{
+                  this.arSelectedContas.push(x.idConta);
+      }
+    );
+  });
+}
 
   ngOnInit(): void {
 
