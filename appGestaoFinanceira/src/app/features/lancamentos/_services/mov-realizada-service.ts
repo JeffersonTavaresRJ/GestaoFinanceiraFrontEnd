@@ -57,6 +57,11 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
     this.setApiOption('/GetMaxGroupBySaldoConta'); 
     return this.http.get<any[]>(`${this.getUrl()}/${dataReferencia}`);
   } 
+
+  GetSaldoConta(idConta: number, dataReferencia: string): Observable<any> {
+    this.setApiOption('/GetSaldoConta'); 
+    return this.http.get<any[]>(`${this.getUrl()}/${idConta}/${dataReferencia}`);
+  } 
   
   GetByMovimentacaoRealizadaMensalReportExcel(idContas={}, dataReferencia: string, totalMeses): Observable<any>{
     var param = {

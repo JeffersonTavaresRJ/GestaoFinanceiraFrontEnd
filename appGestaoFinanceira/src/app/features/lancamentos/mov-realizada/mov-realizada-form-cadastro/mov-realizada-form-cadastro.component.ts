@@ -3,6 +3,7 @@ import { Validators } from '@angular/forms';
 import { GenericResourceFormComponent } from 'src/app/shared/components/generic-resource-form/generic-resource-form-component';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
+import { DateConvert } from 'src/app/shared/functions/date-convert';
 
 @Component({
   selector: 'app-mov-realizada-form-cadastro',
@@ -20,11 +21,30 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   descricaoPrioridade:string;
   descricaoFormaPagamento: string;
   descricaoConta:string;
+
+  saldoConta: number;
   
   constructor(protected injector: Injector,
     protected movimentacaoRealizadaService: MovRealizadaService) {
     super(injector, movimentacaoRealizadaService, null);
   }
+
+
+  public getSaldoConta(dataFim?:Date){
+    debugger;
+    var idConta = this.resourceForm.get('idConta').value;
+    var dataReferencia = null;
+
+    if (dataFim != null){
+      dataReferencia = dataFim;
+    }else{
+      dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '-');
+      dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
+    }
+    
+    this.movimentacaoRealizadaService.GetSaldoConta(idConta, DateConvert.formatDateYYYYMMDD(dataReferencia,'-'))
+                                     .subscribe( (success:number)=>{this.saldoConta = success});
+    }
 
   protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({
@@ -61,7 +81,8 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   protected loadResource() {
     if (this.resourceCurrentAction() == 'new'){
       var idConta = Number.parseInt(this.actResourceRoute.snapshot.params.idConta);
-      this.resourceForm.get('idConta').setValue(idConta);
+      this.resourceForm.get('idConta').setValue(idConta);      
+      this.getSaldoConta(this.dataFim);
     }
 
     if (this.resourceCurrentAction() == 'edit' || this.resourceCurrentAction() == 'cons') {
@@ -84,7 +105,9 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.descricaoPrioridade = sucess.resolveMovReal.tipoPrioridadeDescricao;
           this.descricaoFormaPagamento = sucess.resolveMovReal.formaPagamento.descricao;
           this.descricaoConta = sucess.resolveMovReal.conta.descricao;
-          debugger;
+
+          this.getSaldoConta()
+          //debugger;
         }
       );
     }
