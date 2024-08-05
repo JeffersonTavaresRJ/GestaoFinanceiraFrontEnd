@@ -31,17 +31,18 @@ export class SaldosMensaisPorContaDashboardComponent implements OnInit {
                  this.arContas = sucess.resolveConta.filter(c=>c.tipo!="MO"); 
                  this.arContas.sort((a,b)=>{
                   return a.descricao < b.descricao? -1 : 1
-                 }); 
+                 });
+                 this.arContas.forEach(x=>{
+                  this.arSelectedContas.push(x.id);
+             });   
       }
     );
 
     this.actResourceRoute.data.subscribe(
       (sucess: { resolveSaldoMensalConta: any[] }) => {
                  this.arSaldos = sucess.resolveSaldoMensalConta;
-                 this.arSaldos = this.arSaldos.filter(x=>this.arContas.some(z=>z.id==x.idConta))
-                 this.arSaldos.forEach(x=>{
-                      this.arSelectedContas.push(x.idConta);
-                 });               
+                 //this.arSaldos = this.arSaldos.filter(x=>this.arContas.some(z=>z.id==x.idConta))
+                              
       }
     );
 
