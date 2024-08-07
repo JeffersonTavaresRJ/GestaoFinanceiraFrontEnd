@@ -17,6 +17,10 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandUpdate{
         var dataMovimentacaoRealizada = formGroup.get('dataMovimentacaoRealizada').value;
+
+        if (typeof dataMovimentacaoRealizada === "string"){
+            dataMovimentacaoRealizada = DateConvert.stringToDate(dataMovimentacaoRealizada, "-");
+        }
         
         return new MovimentacaoRealizadaCommandUpdate(
             Number.parseInt(formGroup.get('id').value),

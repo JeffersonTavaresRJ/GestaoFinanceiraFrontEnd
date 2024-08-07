@@ -96,6 +96,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected resourceCreate() {
        //this.resourceMessageButton = 'Processando...';
+       debugger;
         this.resourceService.post(this.resourceForm)
             .subscribe(
                 sucess => {

@@ -44,6 +44,9 @@ export class DateConvert{
 
     static stringToDate(date:string, separador:string):Date{    
       var arrData = date.split(separador);
+      if(Number.parseInt(arrData[2]) > 31){
+        return new Date(Number.parseInt(arrData[2]), Number.parseInt(arrData[1])-1, Number.parseInt(arrData[0]));
+      }
       //console.log('montagem data: '+arrData[0] + '-' + arrData[1] + '-' + arrData[2]);
       return new Date(Number.parseInt(arrData[0]), Number.parseInt(arrData[1])-1, Number.parseInt(arrData[2]));             
     }   

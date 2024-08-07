@@ -83,14 +83,18 @@
                 </div>
                 <div class="p-fluid col-4">
                     <div class="p-field">
+                        
                         <label for="dataMovimentacaoRealizada">Data do Pagamento:</label>
                         <input pInputText formControlName="dataMovimentacaoRealizada"
+                               value="{{ dataMovimentacaoRealizada | date:'yyyy-MM-dd' }}"
                            type="date" placeholder="Informe a Data"/>
+                           {{dataMovimentacaoRealizada}}
                         <!--
                         <p-calendar *ngIf="this.resourceCurrentAction() != 'cons'" inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataMovimentacaoRealizada"
                             [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
                         </p-calendar>
                         -->
+                       
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{resourceForm.get('dataMovimentacaoRealizada').value | date:'dd/MM/yyyy' }}</strong></p>
                     </div>                    
                     <app-field-validation-form [form-control]="resourceForm.get('dataMovimentacaoRealizada')">

@@ -15,6 +15,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   arStDate: string[];
   dataIni: Date;
   dataFim: Date;
+  dataMovimentacaoRealizada: Date;
 
   descricaoCategoria: string;
   descricaoItemMovimentacao:string;
@@ -38,7 +39,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     if (dataFim != null){
       dataReferencia = dataFim;
     }else{
-      dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '-');
+      dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '/');
       dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
     }
     
@@ -90,10 +91,15 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
         (sucess: { resolveMovReal: MovimentacaoRealizada }) => {
           //console.log(sucess);
           //o resolveMovReal deve ser o mesmo nome na variável resolve da rota.. 
+          debugger;
           this.resourceForm.get('id').setValue(sucess.resolveMovReal.id);
           this.resourceForm.get('idCategoria').setValue(sucess.resolveMovReal.itemMovimentacao.categoria.id);
           this.resourceForm.get('idItemMovimentacao').setValue(sucess.resolveMovReal.itemMovimentacao.id);
-          this.resourceForm.get('dataMovimentacaoRealizada').setValue(new Date(sucess.resolveMovReal.dataMovimentacaoRealizada));
+          //this.resourceForm.get('dataMovimentacaoRealizada').setValue(new Date(sucess.resolveMovReal.dataMovimentacaoRealizada));
+          this.dataMovimentacaoRealizada = DateConvert.stringToDate(sucess.resolveMovReal.dataMovimentacaoRealizada.toString(), "-");
+
+          var dataMovReal = DateConvert.formatDateDDMMYYYY(sucess.resolveMovReal.dataMovimentacaoRealizada, "/");
+          this.resourceForm.get('dataMovimentacaoRealizada').setValue(dataMovReal);
           this.resourceForm.get('tipoPrioridade').setValue(sucess.resolveMovReal.tipoPrioridade);
           this.resourceForm.get('observacao').setValue(sucess.resolveMovReal.observacao);
           this.resourceForm.get('valor').setValue(sucess.resolveMovReal.valor);
