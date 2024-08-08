@@ -7,8 +7,15 @@ export const environment = {
   //apiUrl:'http://gestaofinanceiraapi/',
   //apiUrl: 'http://jeftavaresrn-001-site1.ctempurl.com/',
   //apiUrl:'http://gestaofinanceiraapidsv/',
-  apiUrl: 'https://localhost:50064/',
+  //apiUrl: 'https://localhost:50064/',
   //apiUrl: 'https://localhost:49852/',
+  IdxConnection:2,
+  arApiUrl: [
+    'http://gestaofinanceiraapi/',
+    'http://gestaofinanceiraapidsv/',
+    'https://localhost:50064/',
+    'https://localhost:49852/'],
+  credentials:['jef.tavaresrj@gmail.com', 'adminadmin'],
   keyUser:'usuario',
   keyParamListMovPre: 'ParamListMovPre'
 };

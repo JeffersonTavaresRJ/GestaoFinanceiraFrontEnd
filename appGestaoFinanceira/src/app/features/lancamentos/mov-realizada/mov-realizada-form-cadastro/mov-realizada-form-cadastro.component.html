@@ -88,7 +88,7 @@
                         <input pInputText formControlName="dataMovimentacaoRealizada"
                                value="{{ dataMovimentacaoRealizada | date:'yyyy-MM-dd' }}"
                            type="date" placeholder="Informe a Data"/>
-                           {{dataMovimentacaoRealizada}}
+                           {{dataMovimentacaoRealizada}}, {{ dataMovimentacaoRealizada | date:'dd/MM/yyyy' }}
                         <!--
                         <p-calendar *ngIf="this.resourceCurrentAction() != 'cons'" inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataMovimentacaoRealizada"
                             [showIcon]="true" [readonlyInput]="true" showButtonBar="true">

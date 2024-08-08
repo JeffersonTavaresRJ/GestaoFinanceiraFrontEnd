@@ -27,7 +27,8 @@ export abstract class GenericReaderResourceService<T extends Object>{
     }
 
     protected getUrl(): string {
-        var url = `${environment.apiUrl}${this.apiName}${this.apiOption}`;
+        //var url = `${environment.apiUrl}${this.apiName}${this.apiOption}`;
+        var url = `${this.getApiUrl()}${this.apiName}${this.apiOption}`;
         this.apiOption = '';
         return url;
     }
@@ -58,5 +59,9 @@ export abstract class GenericReaderResourceService<T extends Object>{
     protected handlerError(error: any): Observable<any> {
         console.error("ERRO NA REQUISIÇÃO =>" || error);
         return throwError(error);
+    }
+
+    private getApiUrl():string{
+        return environment.arApiUrl[environment.IdxConnection];
     }
 }

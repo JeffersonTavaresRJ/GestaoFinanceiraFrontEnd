@@ -26,7 +26,13 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
-    window.localStorage.removeItem(environment.keyUser);    
+    window.localStorage.removeItem(environment.keyUser);   
+    
+    if(environment.IdxConnection >0){
+      this.formLogin.get('eMail').setValue(environment.credentials[0]);
+      this.formLogin.get('senha').setValue(environment.credentials[1]);
+      this.autenticar();
+    }
   }
 
   buildForm() {

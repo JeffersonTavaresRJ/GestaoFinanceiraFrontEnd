@@ -96,7 +96,9 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.resourceForm.get('idCategoria').setValue(sucess.resolveMovReal.itemMovimentacao.categoria.id);
           this.resourceForm.get('idItemMovimentacao').setValue(sucess.resolveMovReal.itemMovimentacao.id);
           //this.resourceForm.get('dataMovimentacaoRealizada').setValue(new Date(sucess.resolveMovReal.dataMovimentacaoRealizada));
-          this.dataMovimentacaoRealizada = DateConvert.stringToDate(sucess.resolveMovReal.dataMovimentacaoRealizada.toString(), "-");
+          //this.dataMovimentacaoRealizada = DateConvert.stringToDate(sucess.resolveMovReal.dataMovimentacaoRealizada.toString(), "-");
+          //this.dataMovimentacaoRealizada = sucess.resolveMovReal.dataMovimentacaoRealizada;
+          //this.dataMovimentacaoRealizada = new Date(2024,7,4);
 
           var dataMovReal = DateConvert.formatDateDDMMYYYY(sucess.resolveMovReal.dataMovimentacaoRealizada, "/");
           this.resourceForm.get('dataMovimentacaoRealizada').setValue(dataMovReal);
