@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { GenericResourceModel } from '../../_models/generic-resource-model';
 import { GenericResourceService } from '../../_services/generic-resource-service';
 import { AlertMessageForm } from '../alert-form/alert-message-form';
+import { Observable } from 'rxjs';
 
 
 
@@ -96,7 +97,7 @@ export abstract class GenericResourceFormComponent<T extends GenericResourceMode
 
     protected resourceCreate() {
        //this.resourceMessageButton = 'Processando...';
-       debugger;
+       //debugger;
         this.resourceService.post(this.resourceForm)
             .subscribe(
                 sucess => {

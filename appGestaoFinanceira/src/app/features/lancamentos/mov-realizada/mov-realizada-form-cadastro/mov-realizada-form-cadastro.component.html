@@ -85,16 +85,10 @@
                     <div class="p-field">
                         
                         <label for="dataMovimentacaoRealizada">Data do Pagamento:</label>
-                        <input pInputText formControlName="dataMovimentacaoRealizada"
-                               value="{{ dataMovimentacaoRealizada | date:'yyyy-MM-dd' }}"
-                           type="date" placeholder="Informe a Data"/>
-                           {{dataMovimentacaoRealizada}}, {{ dataMovimentacaoRealizada | date:'dd/MM/yyyy' }}
-                        <!--
-                        <p-calendar *ngIf="this.resourceCurrentAction() != 'cons'" inputId="calendar" dateFormat="dd/mm/yy" formControlName="dataMovimentacaoRealizada"
-                            [showIcon]="true" [readonlyInput]="true" showButtonBar="true">
-                        </p-calendar>
-                        -->
-                       
+                        <input pInputText type="date" 
+                               formControlName="dataMovimentacaoRealizada"
+                               (input)="getSaldoConta()">
+                
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{resourceForm.get('dataMovimentacaoRealizada').value | date:'dd/MM/yyyy' }}</strong></p>
                     </div>                    
                     <app-field-validation-form [form-control]="resourceForm.get('dataMovimentacaoRealizada')">
@@ -121,7 +115,7 @@
             </div>
 
             <div class="row mt-3" *ngIf="this.resourceCurrentAction() != 'cons'">
-                <div class="p-fluid col-7">
+                <div class="p-fluid col-7 mt-2">
                     <span class="p-float-label">
                         <textarea formControlName="observacao" id="float-input" rows="4" cols="70"
                             pInputTextarea></textarea>
@@ -138,12 +132,14 @@
                         <app-dropdown-conta 
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('idConta')"
-                              (OnChange)="resourceClearValidations()"
+                              (OnChange)="resourceClearValidations();getSaldoConta()"
                               [select-by-status]="resourceCurrentAction()=='new'"
                               placeholder="Selecione">
                         </app-dropdown-conta>
-                        <p><label>Saldo: {{saldoConta | currency}}</label></p>
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoConta}}</strong></p>
+                        <div style="border-top: 1px solid #DCDCDC; padding-top:5px">
+                            <label>Saldo da Conta em {{resourceForm.get('dataMovimentacaoRealizada').value | date:'MM/yyyy' }}: {{saldoConta | currency}}</label>
+                        </div>
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idConta')">
                     </app-field-validation-form>

@@ -15,8 +15,8 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   arStDate: string[];
   dataIni: Date;
   dataFim: Date;
-  dataMovimentacaoRealizada: Date;
-
+  dataSaldo: Date;
+  dataMovimentacaoRealizada: string;
   descricaoCategoria: string;
   descricaoItemMovimentacao:string;
   descricaoPrioridade:string;
@@ -30,21 +30,24 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     super(injector, movimentacaoRealizadaService, null);
   }
 
+  protected resourceActionForSucess(){
+    this.getSaldoConta();
+  }
+  
+  public getSaldoConta(){
 
-  public getSaldoConta(dataFim?:Date){
-    debugger;
-    var idConta = this.resourceForm.get('idConta').value;
-    var dataReferencia = null;
-
-    if (dataFim != null){
-      dataReferencia = dataFim;
-    }else{
-      dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '/');
-      dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
-    }
-    
-    this.movimentacaoRealizadaService.GetSaldoConta(idConta, DateConvert.formatDateYYYYMMDD(dataReferencia,'-'))
-                                     .subscribe( (success:number)=>{this.saldoConta = success});
+    var dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '-');
+        dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
+        
+        if(this.dataSaldo == null || 
+          (this.dataSaldo.getFullYear != dataReferencia.getFullYear ||
+           this.dataSaldo.getMonth != dataReferencia.getMonth)
+        ){
+          var idConta = this.resourceForm.get('idConta').value;
+          this.dataSaldo = dataReferencia;              
+          this.movimentacaoRealizadaService.GetSaldoConta(idConta, DateConvert.formatDateYYYYMMDD(dataReferencia,'-'))
+                                           .subscribe( (success:number)=>{this.saldoConta = success});
+        }
     }
 
   protected buildResourceForm() {
@@ -58,8 +61,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
       observacao:[null],
       dataMovimentacaoRealizada:[null, Validators.required],
       valor:[null]
-    });   
-    
+    }); 
 
     this.arStDate = this.actResourceRoute.snapshot.params.dataRealIni.split('-');
     this.dataIni = new Date(this.arStDate[1] + '-' + this.arStDate[2] + '-' + this.arStDate[0]);
@@ -79,11 +81,13 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     return 'Detalhe Lançamento';
   }
 
-  protected loadResource() {
+  protected loadResource(){
+
     if (this.resourceCurrentAction() == 'new'){
       var idConta = Number.parseInt(this.actResourceRoute.snapshot.params.idConta);
-      this.resourceForm.get('idConta').setValue(idConta);      
-      this.getSaldoConta(this.dataFim);
+      this.resourceForm.get('idConta').setValue(idConta);
+      this.resourceForm.get('dataMovimentacaoRealizada').setValue(DateConvert.formatDateYYYYMMDD(this.dataIni, "-"));      
+      this.getSaldoConta();
     }
 
     if (this.resourceCurrentAction() == 'edit' || this.resourceCurrentAction() == 'cons') {
@@ -95,13 +99,10 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.resourceForm.get('id').setValue(sucess.resolveMovReal.id);
           this.resourceForm.get('idCategoria').setValue(sucess.resolveMovReal.itemMovimentacao.categoria.id);
           this.resourceForm.get('idItemMovimentacao').setValue(sucess.resolveMovReal.itemMovimentacao.id);
-          //this.resourceForm.get('dataMovimentacaoRealizada').setValue(new Date(sucess.resolveMovReal.dataMovimentacaoRealizada));
-          //this.dataMovimentacaoRealizada = DateConvert.stringToDate(sucess.resolveMovReal.dataMovimentacaoRealizada.toString(), "-");
-          //this.dataMovimentacaoRealizada = sucess.resolveMovReal.dataMovimentacaoRealizada;
-          //this.dataMovimentacaoRealizada = new Date(2024,7,4);
 
-          var dataMovReal = DateConvert.formatDateDDMMYYYY(sucess.resolveMovReal.dataMovimentacaoRealizada, "/");
+          var dataMovReal = DateConvert.formatDateYYYYMMDD(sucess.resolveMovReal.dataMovimentacaoRealizada, "-");          
           this.resourceForm.get('dataMovimentacaoRealizada').setValue(dataMovReal);
+
           this.resourceForm.get('tipoPrioridade').setValue(sucess.resolveMovReal.tipoPrioridade);
           this.resourceForm.get('observacao').setValue(sucess.resolveMovReal.observacao);
           this.resourceForm.get('valor').setValue(sucess.resolveMovReal.valor);
@@ -115,7 +116,6 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.descricaoConta = sucess.resolveMovReal.conta.descricao;
 
           this.getSaldoConta()
-          //debugger;
         }
       );
     }
