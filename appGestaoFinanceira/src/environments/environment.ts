@@ -4,12 +4,8 @@
 
 export const environment = {
   production: true,
-  //apiUrl:'http://gestaofinanceiraapi/',
-  //apiUrl: 'http://jeftavaresrn-001-site1.ctempurl.com/',
-  //apiUrl:'http://gestaofinanceiraapidsv/',
-  //apiUrl: 'https://localhost:50064/',
-  //apiUrl: 'https://localhost:49852/',
   IdxConnection:2,
+  initRouter:"mov-realizada/new/2015/2024-08-01/2024-08-31",
   arApiUrl: [
     'http://gestaofinanceiraapi/',
     'http://gestaofinanceiraapidsv/',

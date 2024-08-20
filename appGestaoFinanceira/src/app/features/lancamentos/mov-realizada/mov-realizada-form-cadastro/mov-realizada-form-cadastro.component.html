@@ -87,7 +87,7 @@
                         <label for="dataMovimentacaoRealizada">Data do Pagamento:</label>
                         <input pInputText type="date" 
                                formControlName="dataMovimentacaoRealizada"
-                               (input)="getSaldoConta()">
+                               (input)="editForGetSaldoConta()">
                 
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{resourceForm.get('dataMovimentacaoRealizada').value | date:'dd/MM/yyyy' }}</strong></p>
                     </div>                    
@@ -132,7 +132,7 @@
                         <app-dropdown-conta 
                               [form-group]="resourceForm"
                               [form-control]="resourceForm.get('idConta')"
-                              (OnChange)="resourceClearValidations();getSaldoConta()"
+                              (OnChange)="resourceClearValidations();editForGetSaldoConta()"
                               [select-by-status]="resourceCurrentAction()=='new'"
                               placeholder="Selecione">
                         </app-dropdown-conta>

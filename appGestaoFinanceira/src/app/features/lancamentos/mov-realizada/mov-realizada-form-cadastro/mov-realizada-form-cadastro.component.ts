@@ -15,7 +15,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   arStDate: string[];
   dataIni: Date;
   dataFim: Date;
-  dataSaldo: Date;
+  dataReferenciaAnterior: Date;
   dataMovimentacaoRealizada: string;
   descricaoCategoria: string;
   descricaoItemMovimentacao:string;
@@ -24,32 +24,32 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   descricaoConta:string;
 
   saldoConta: number;
+  idContaAnterior: number;
   
   constructor(protected injector: Injector,
     protected movimentacaoRealizadaService: MovRealizadaService) {
     super(injector, movimentacaoRealizadaService, null);
   }
 
-  protected resourceActionForSucess(){
-    this.getSaldoConta();
-  }
-  
-  public getSaldoConta(){
 
+  editForGetSaldoConta(){
+
+    var idConta = this.resourceForm.get('idConta').value;
     var dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '-');
         dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
-        
-        if(this.dataSaldo == null || 
-          (this.dataSaldo.getFullYear != dataReferencia.getFullYear ||
-           this.dataSaldo.getMonth != dataReferencia.getMonth)
-        ){
-          var idConta = this.resourceForm.get('idConta').value;
-          this.dataSaldo = dataReferencia;              
-          this.movimentacaoRealizadaService.GetSaldoConta(idConta, DateConvert.formatDateYYYYMMDD(dataReferencia,'-'))
-                                           .subscribe( (success:number)=>{this.saldoConta = success});
-        }
-    }
-
+  
+    if(this.dataReferenciaAnterior == null || this.idContaAnterior == null ||
+     ((this.dataReferenciaAnterior.getFullYear() != dataReferencia.getFullYear() ||
+       this.dataReferenciaAnterior.getMonth() != dataReferencia.getMonth()) ||
+       this.idContaAnterior != idConta)
+      ){
+        this.idContaAnterior = idConta;
+        this.dataReferenciaAnterior = dataReferencia;  
+        this.getSaldoConta();
+      }
+  
+  }  
+  
   protected buildResourceForm() {
     this.resourceForm = this.resourceFormBuilder.group({
       id: [null],
@@ -79,6 +79,10 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
 
   protected resourceDetalhePageTitle(): string {
     return 'Detalhe Lançamento';
+  }
+
+  protected resourceActionForSucess(){    
+    this.getSaldoConta();
   }
 
   protected loadResource(){
@@ -119,5 +123,13 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
         }
       );
     }
+  }
+
+  private getSaldoConta(){   
+    var idConta=this.resourceForm.get('idConta').value;
+    var dataReferencia = this.resourceForm.get('dataMovimentacaoRealizada').value; 
+
+    this.movimentacaoRealizadaService.GetSaldoConta(idConta, DateConvert.formatDateYYYYMMDD(dataReferencia,'-'))
+    .subscribe( (success:number)=>{this.saldoConta = success});        
   }
 }

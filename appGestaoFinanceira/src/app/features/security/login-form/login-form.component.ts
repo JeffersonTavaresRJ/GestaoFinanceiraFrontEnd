@@ -52,7 +52,7 @@ export class LoginFormComponent implements OnInit {
         this.bsUpdateUsuario.setEmail(this.formLogin.value.eMail);
         this.bsAutenticarUsuario.set(true);       
 
-        this.router.navigate(['/receitas-despesas-dashboard']);
+        this.router.navigate([environment.initRouter]);
       });
       //mensagem de tratamento de erros centralizado no interception..
   }
