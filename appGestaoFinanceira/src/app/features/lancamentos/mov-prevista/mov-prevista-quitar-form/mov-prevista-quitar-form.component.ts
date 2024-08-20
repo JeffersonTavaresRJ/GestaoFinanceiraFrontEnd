@@ -93,7 +93,10 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
             this.movimentacaoPrevista.itemMovimentacao.id,
             this.movimentacaoPrevista.tipoPrioridade,
             this.movimentacaoPrevista.observacao,
-            0, this.movimentacaoPrevista.dataVencimento, null, null, this.movimentacaoPrevista.valor, true);
+            0, 
+            //this.movimentacaoPrevista.dataVencimento, 
+            DateConvert.formatDateYYYYMMDD(this.movimentacaoPrevista.dataVencimento, '-'),
+            null, null, this.movimentacaoPrevista.valor, true);
         } else {
           sucess.resolveMovReal.forEach((element: MovimentacaoRealizada) => {
             this.addArForms(
@@ -101,7 +104,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
               this.movimentacaoPrevista.tipoPrioridade,
               this.movimentacaoPrevista.observacao,
               element.id,
-              element.dataMovimentacaoRealizada,
+              DateConvert.formatDateYYYYMMDD(element.dataMovimentacaoRealizada, '-'),
+              //element.dataMovimentacaoRealizada,
               element.conta.id,
               element.formaPagamento.id,
               element.valor,
@@ -137,12 +141,13 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   addRow() {
-    debugger;
+    //debugger;
     //incrementando a data da movimentação realizada..
     var dataMovimentacaoRealizada = this.movimentacaoPrevista.dataVencimento;
 
     this.arForms.controls.forEach(element => {
-      var dataArray = element.get('dataMovimentacaoRealizada').value;
+      //var dataArray = element.get('dataMovimentacaoRealizada').value;
+      var dataArray = DateConvert.stringToDate(element.get('dataMovimentacaoRealizada').value, '-');
       if (dataArray > dataMovimentacaoRealizada) {
         dataMovimentacaoRealizada = dataArray;
       }
@@ -160,7 +165,10 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         this.movimentacaoPrevista.itemMovimentacao.id,
         this.movimentacaoPrevista.tipoPrioridade,
         this.movimentacaoPrevista.observacao,
-        0, dataMovimentacaoRealizada, null, null, this.movimentacaoPrevista.valor, true);
+        0, 
+        //dataMovimentacaoRealizada, 
+        DateConvert.formatDateYYYYMMDD(dataMovimentacaoRealizada, '-'),
+        null, null, this.movimentacaoPrevista.valor, true);
     } else {
       this.alertMessageForm.showError("O limite máximo são 10 registros.");
     }
@@ -179,11 +187,11 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   salvar(fGroup: FormGroup, i: number) {
-    debugger;
+    //debugger;
     //tratamento para converter string em Date..
-    var dataMovReal = DateConvert.stringToDate(fGroup.get('dataMovimentacaoRealizada').value, "-");
-    fGroup.get('dataMovimentacaoRealizada').setValue(dataMovReal);
-    
+    //var dataMovReal = DateConvert.stringToDate(fGroup.get('dataMovimentacaoRealizada').value, "-");
+    //fGroup.get('dataMovimentacaoRealizada').setValue(dataMovReal);
+
     if (fGroup.get('isEdit').value == true) {
 
       if (fGroup.get('id').value == 0) {
@@ -236,7 +244,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     _tipoPrioridade: string,
     _observacao: string,
     _id: number,
-    _dataMovimentacao: Date,
+    //_dataMovimentacao: Date,
+    _dataMovimentacao: string,
     _idConta: number,
     _idFormaPagamento: number,
     _valor: number,
@@ -249,7 +258,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       tipoPrioridade: [_tipoPrioridade],
       observacao: [_observacao],
       id: [_id],
-      dataMovimentacaoRealizada: [new Date(_dataMovimentacao), Validators.required],
+      dataMovimentacaoRealizada:[DateConvert.formatDateYYYYMMDD(_dataMovimentacao, '-'), Validators.required],
+      //dataMovimentacaoRealizada: [new Date(_dataMovimentacao), Validators.required],
       idConta: [_idConta, Validators.required],
       descricaoConta: [_descricaoConta],
       idFormaPagamento: [_idFormaPagamento, Validators.required],

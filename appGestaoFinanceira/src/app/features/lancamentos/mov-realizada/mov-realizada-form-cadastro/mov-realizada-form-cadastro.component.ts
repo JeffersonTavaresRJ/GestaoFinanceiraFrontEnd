@@ -43,8 +43,6 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
        this.dataReferenciaAnterior.getMonth() != dataReferencia.getMonth()) ||
        this.idContaAnterior != idConta)
       ){
-        this.idContaAnterior = idConta;
-        this.dataReferenciaAnterior = dataReferencia;  
         this.getSaldoConta();
       }
   
@@ -127,8 +125,12 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
 
   private getSaldoConta(){   
     var idConta=this.resourceForm.get('idConta').value;
-    var dataReferencia = this.resourceForm.get('dataMovimentacaoRealizada').value; 
-
+    var dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '-');
+        dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
+        
+    this.idContaAnterior = idConta;
+    this.dataReferenciaAnterior = dataReferencia; 
+    
     this.movimentacaoRealizadaService.GetSaldoConta(idConta, DateConvert.formatDateYYYYMMDD(dataReferencia,'-'))
     .subscribe( (success:number)=>{this.saldoConta = success});        
   }
