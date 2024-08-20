@@ -51,13 +51,6 @@
                     <form class="tr" [formGroup]="fGroup" *ngFor="let fGroup of arForms.controls; let i=index;"
                         (submit)="salvar(fGroup, i)">
                         <div class="td" style="text-align:center">
-                            <!--
-                            <p-calendar *ngIf="fGroup.get('isEdit').value == true"
-                                         dateFormat="dd/mm/yy"
-                                         formControlName="dataMovimentacaoRealizada" 
-                                         [touchUI]="true" [readonlyInput]="true">
-                            </p-calendar>
-                            -->
                             <input *ngIf="fGroup.get('isEdit').value == true"
                                    pInputText formControlName="dataMovimentacaoRealizada"
                                    type="date" placeholder="Informe a Data"/>
@@ -133,24 +126,3 @@
 <app-modal-interrogative-form [modal-interrogative-id]="'modalDelete'" [modal-interrogative-title]="'Sr. Usuário'"
     [modal-interrogative-message]="deleteMessage" (modalInterrogativeResponse)="eventDelete($event)">
 </app-modal-interrogative-form>
-
-<!--
-<p-dialog [modal]="true" [(visible)]="displayDialogErrors" [style]="{width: '50vw'}">
-    <ng-template pTemplate="header">
-        <div style="text-align: left;">
-            <img class="logo" src="assets\icons\report_problem_black_24dp.svg" width="55" height="30">
-            <strong>Erros de Validação</strong>
-        </div>
-    </ng-template>
-
-    <ul>
-        <li *ngFor="let error of arvalidationErrors" class="text-danger">
-            <strong>{{ error.errors }}</strong>
-        </li>
-    </ul>
-
-    <ng-template pTemplate="footer">
-        <p-button icon="pi pi-check" (click)="clearValidations()" label="Ok" styleClass="p-button-text"></p-button>
-    </ng-template>
-</p-dialog>
--->

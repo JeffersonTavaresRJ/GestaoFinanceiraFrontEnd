@@ -31,8 +31,11 @@
                     </div>
                     <div class="col-4">
                         <app-dropdown-forma-pagamento [form-group]="formGroup"
-                            [form-control]="formGroup.get('idFormaPagamento')" placeholder="Forma de Pagamento"
-                            (OnChange)="getFormaPagamento()">
+                            [form-control]="formGroup.get('idFormaPagamento')" 
+                            placeholder="Forma de Pagamento"
+                            (OnChange)="getFormaPagamento()"
+                            [tooltip]="toolTip"
+                            tooltip-position="right">
                         </app-dropdown-forma-pagamento>
                     </div>
                     <div class="col-4">

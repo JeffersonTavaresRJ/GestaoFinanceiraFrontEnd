@@ -94,7 +94,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
             this.movimentacaoPrevista.tipoPrioridade,
             this.movimentacaoPrevista.observacao,
             0, 
-            //this.movimentacaoPrevista.dataVencimento, 
             DateConvert.formatDateYYYYMMDD(this.movimentacaoPrevista.dataVencimento, '-'),
             null, null, this.movimentacaoPrevista.valor, true);
         } else {
@@ -105,7 +104,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
               this.movimentacaoPrevista.observacao,
               element.id,
               DateConvert.formatDateYYYYMMDD(element.dataMovimentacaoRealizada, '-'),
-              //element.dataMovimentacaoRealizada,
               element.conta.id,
               element.formaPagamento.id,
               element.valor,
@@ -141,12 +139,10 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   addRow() {
-    //debugger;
     //incrementando a data da movimentação realizada..
     var dataMovimentacaoRealizada = this.movimentacaoPrevista.dataVencimento;
 
     this.arForms.controls.forEach(element => {
-      //var dataArray = element.get('dataMovimentacaoRealizada').value;
       var dataArray = DateConvert.stringToDate(element.get('dataMovimentacaoRealizada').value, '-');
       if (dataArray > dataMovimentacaoRealizada) {
         dataMovimentacaoRealizada = dataArray;
@@ -166,7 +162,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         this.movimentacaoPrevista.tipoPrioridade,
         this.movimentacaoPrevista.observacao,
         0, 
-        //dataMovimentacaoRealizada, 
         DateConvert.formatDateYYYYMMDD(dataMovimentacaoRealizada, '-'),
         null, null, this.movimentacaoPrevista.valor, true);
     } else {
@@ -187,10 +182,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   salvar(fGroup: FormGroup, i: number) {
-    //debugger;
-    //tratamento para converter string em Date..
-    //var dataMovReal = DateConvert.stringToDate(fGroup.get('dataMovimentacaoRealizada').value, "-");
-    //fGroup.get('dataMovimentacaoRealizada').setValue(dataMovReal);
 
     if (fGroup.get('isEdit').value == true) {
 
@@ -244,7 +235,6 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     _tipoPrioridade: string,
     _observacao: string,
     _id: number,
-    //_dataMovimentacao: Date,
     _dataMovimentacao: string,
     _idConta: number,
     _idFormaPagamento: number,
@@ -252,14 +242,13 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     _isEdit?: boolean,
     _descricaoConta?: string,
     _descricaoFormaPagamento?: string
-  ) {
+  ) {    
     this.arForms.push(this.fb.group({
       idItemMovimentacao: [_idItemMovimentacao],
       tipoPrioridade: [_tipoPrioridade],
       observacao: [_observacao],
       id: [_id],
-      dataMovimentacaoRealizada:[DateConvert.formatDateYYYYMMDD(_dataMovimentacao, '-'), Validators.required],
-      //dataMovimentacaoRealizada: [new Date(_dataMovimentacao), Validators.required],
+      dataMovimentacaoRealizada:[_dataMovimentacao, Validators.required],
       idConta: [_idConta, Validators.required],
       descricaoConta: [_descricaoConta],
       idFormaPagamento: [_idFormaPagamento, Validators.required],
@@ -277,15 +266,5 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       }
     });
   }
-
-  /*
-  private actionForError(e) {
-    if (e.status == 400) {
-      //validações da API (BadRequest) 
-      this.arvalidationErrors = e.error;
-      this.displayDialogErrors = true;
-    }
-  }
-  */
 
 }

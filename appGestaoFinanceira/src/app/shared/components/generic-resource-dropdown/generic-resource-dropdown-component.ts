@@ -12,6 +12,8 @@ export abstract class GenericResourceDropDownComponent<T extends GenericResource
   @Input('select-by-status') status: boolean;
   @Input('placeholder') placeholder:string;
   @Input('input-id') inputId :string;
+  @Input('tooltip') tooltip :string;
+  @Input('tooltip-position') tooltipPosition :string;
   @Output('OnChange') _onChange = new EventEmitter(); 
   @Output('OnClear') _onClear = new EventEmitter(); 
     

@@ -138,7 +138,8 @@
                         </app-dropdown-conta>
                         <p><strong *ngIf="this.resourceCurrentAction() == 'cons'">{{descricaoConta}}</strong></p>
                         <div style="border-top: 1px solid #DCDCDC; padding-top:5px">
-                            <label>Saldo da Conta em {{resourceForm.get('dataMovimentacaoRealizada').value | date:'MM/yyyy' }}: {{saldoConta | currency}}</label>
+                            <label style="font-weight: bold; margin-right: 4px;">Saldo da Conta em {{resourceForm.get('dataMovimentacaoRealizada').value | date:'MM/yyyy' }}:</label>
+                            <label style="font-weight: bold;" [class.text-danger]="saldoConta < 0">{{saldoConta | currency}}</label>
                         </div>
                     </div>
                     <app-field-validation-form [form-control]="resourceForm.get('idConta')">

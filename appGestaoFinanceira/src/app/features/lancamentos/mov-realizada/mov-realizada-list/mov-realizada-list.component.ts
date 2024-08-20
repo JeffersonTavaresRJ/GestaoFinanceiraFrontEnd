@@ -24,6 +24,7 @@ export class MovRealizadaListComponent implements OnInit {
 
   dataReferencia: Date;
   arStDate: string[];
+  toolTip:string=null;
   dataIni: Date;
   dataFim: Date;
   displayDetalhe:boolean;
@@ -34,6 +35,7 @@ export class MovRealizadaListComponent implements OnInit {
   saldoAtualConta: number;
   idContaDestino: number;
   idConta: number;
+  totalPorFormaPagto: number=0;
 
 
   constructor(private actResourceRoute: ActivatedRoute,
@@ -140,8 +142,10 @@ export class MovRealizadaListComponent implements OnInit {
 
   private filtrarTablePorParametros(idConta?: Number, idFormaPagamento?: Number) {
 
-    debugger;
+    //debugger;
     this.results.length=0;
+    this.totalPorFormaPagto=0;
+    this.toolTip=null;
 
     if (idConta != null){  
 
@@ -157,14 +161,25 @@ export class MovRealizadaListComponent implements OnInit {
 
 
     if(idFormaPagamento != null){
-      debugger;       
       this.results = this.results
                          .filter(m => this.filterFormaPagamento(m.movimentacoesRealizadas, idFormaPagamento));
+
+      //totalizando por forma de pagamento..
+      this.results.forEach(x=>{
+        var total = x.movimentacoesRealizadas.reduce((acum,item)=>{
+          return acum + (item.formaPagamento.id!=idFormaPagamento ? 0 : 
+                        (item.itemMovimentacao.tipo==="D" ? item.valor *-1 : item.valor))},0);
+
+        this.totalPorFormaPagto+=total;
+      });
+
+      this.toolTip = `Total: ${Math.abs(this.totalPorFormaPagto).toLocaleString('pt-BR',{ style: 'currency', currency: 'BRL' })}`;
+
     }
   }
 
   private filterFormaPagamento(array:any[], id): boolean{
-    return array.filter(x=>x.formaPagamento.id==id).length>0;
+    return array.filter(x=>x.formaPagamento.id==id).length >0;
   }
 
   private movRealizadaList() {
