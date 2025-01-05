@@ -37,7 +37,6 @@ export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevi
   }
 
   public GetAllPrioridades(): Observable<GenericResourceDropDownEnumModel[]> {
-    debugger;
     this.setApiOption('/GetAllPrioridades');
     return this.http.get<GenericResourceDropDownEnumModel[]>(this.getUrl());
   }
