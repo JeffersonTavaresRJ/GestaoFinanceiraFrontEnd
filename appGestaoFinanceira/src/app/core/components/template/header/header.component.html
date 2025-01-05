@@ -53,9 +53,9 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" routerLink="receitas-despesas-dashboard">Receitas x Despesas Mensais</a></li>
-            <li><a class="dropdown-item" [routerLink]="['item-movimentacao-mensal-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
+            <li><a class="dropdown-item" [routerLink]="['item-movimentacao-mensal-dashboard', dataIniMenos13Meses | DateFormatToString, dataFim | DateFormatToString]">
               Item Movimentação Mensal</a></li>
-            <li><a class="dropdown-item" [routerLink]="['mov-mensal-real-dashboard', dataIniMenos12Meses | DateFormatToString, dataFim | DateFormatToString]">
+            <li><a class="dropdown-item" [routerLink]="['mov-mensal-real-dashboard', dataIniMenos13Meses | DateFormatToString, dataFim | DateFormatToString]">
               Movimentações Mensais Realizadas</a></li>
             <li><a class="dropdown-item" [routerLink]="['mov-mensal-prev-dashboard', dataIni | DateFormatToString, dataFimMais12Meses | DateFormatToString]">
               Movimentações Mensais Previstas</a></li>
