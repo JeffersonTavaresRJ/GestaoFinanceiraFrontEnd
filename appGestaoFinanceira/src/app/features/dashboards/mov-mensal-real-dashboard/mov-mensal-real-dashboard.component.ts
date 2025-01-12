@@ -23,7 +23,6 @@ export class MovMensalRealDashboardComponent implements OnInit {
 
   arMovPrev: MovimentacaoPrevista[]=[];
   arMovReal: MovimentacaoRealizada[]=[];
-  dataIni:Date;
   dataFim:Date;
   mesAno:string;
   idConta:number;
@@ -74,7 +73,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
     this.arMovPrev.length=0;
     this.arMovReal.length=0;
 
-    var dataIni = DateConvert.formatDateYYYYMMDD(new Date(this.dataFim.getFullYear()-1, this.dataFim.getMonth(), 1),'-');
+    var dataIni = DateConvert.formatDateYYYYMMDD(new Date(this.dataFim.getFullYear()-1, this.dataFim.getMonth()==1?12:this.dataFim.getMonth()-1, 1),'-');
     var dataFim = DateConvert.formatDateYYYYMMDD(new Date(this.dataFim.getFullYear(), this.dataFim.getMonth()+1, 0), '-');
 
     this.movPrevistaService.getByDataVencimento(dataIni, dataFim).subscribe(
@@ -253,7 +252,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
 
   private montarArrayPeriodo(dataFim: Date){
     debugger;
-    var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()+1, 0);
+    var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()==1?12:dataFim.getMonth()-1, 1);
     this.arDadosChart.length=0;
     for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {
          var dados: DadosChartSintet={Data:DateConvert.formatDateMMYYYY(data,'/'), Planejado:0, Receita:0, Despesa:0};

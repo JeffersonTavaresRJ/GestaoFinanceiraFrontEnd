@@ -4,6 +4,8 @@ import { GenericResourceFormComponent } from 'src/app/shared/components/generic-
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { Conta } from 'src/app/features/cadastros-basicos/_models/conta-model';
+import { ContaService } from 'src/app/features/cadastros-basicos/_services/conta-service';
 
 @Component({
   selector: 'app-mov-realizada-form-cadastro',
@@ -15,6 +17,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   arStDate: string[];
   dataIni: Date;
   dataFim: Date;
+  contaDisplay: Conta;
   dataReferenciaAnterior: Date;
   dataMovimentacaoRealizada: string;
   descricaoCategoria: string;
@@ -27,6 +30,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
   idContaAnterior: number;
   
   constructor(protected injector: Injector,
+    protected contaService: ContaService,
     protected movimentacaoRealizadaService: MovRealizadaService) {
     super(injector, movimentacaoRealizadaService, null);
   }
@@ -43,7 +47,8 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
        this.dataReferenciaAnterior.getMonth() != dataReferencia.getMonth()) ||
        this.idContaAnterior != idConta)
       ){
-        this.getSaldoConta();
+        this.defaultConta(idConta);
+        this.getSaldoConta(idConta);
       }
   
   }  
@@ -79,8 +84,8 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     return 'Detalhe Lançamento';
   }
 
-  protected resourceActionForSucess(){    
-    this.getSaldoConta();
+  protected resourceActionForSucess(){
+    this.getSaldoConta(this.resourceForm.get('idConta').value);
   }
 
   protected loadResource(){
@@ -89,7 +94,12 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
       var idConta = Number.parseInt(this.actResourceRoute.snapshot.params.idConta);
       this.resourceForm.get('idConta').setValue(idConta);
       this.resourceForm.get('dataMovimentacaoRealizada').setValue(DateConvert.formatDateYYYYMMDD(this.dataIni, "-"));      
-      this.getSaldoConta();
+      
+      this.contaService.getById(idConta).subscribe(
+        success=> this.contaDisplay=success
+      ) 
+      
+      this.getSaldoConta(idConta);
     }
 
     if (this.resourceCurrentAction() == 'edit' || this.resourceCurrentAction() == 'cons') {
@@ -117,14 +127,22 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.descricaoFormaPagamento = sucess.resolveMovReal.formaPagamento.descricao;
           this.descricaoConta = sucess.resolveMovReal.conta.descricao;
 
-          this.getSaldoConta()
+          this.contaService.getById(this.resourceForm.get('idConta').value).subscribe(
+            success=> this.contaDisplay=success
+          ) 
+
+          this.getSaldoConta(sucess.resolveMovReal.conta.id)
         }
       );
     }
+
+    this.contaService.getById(this.resourceForm.get('idConta').value).subscribe(
+      success=> this.contaDisplay=success
+    )    
   }
 
-  private getSaldoConta(){   
-    var idConta=this.resourceForm.get('idConta').value;
+  private getSaldoConta(idConta: number){   
+    //var idConta=this.resourceForm.get('idConta').value;
     var dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '-');
         dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
         
@@ -133,5 +151,23 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     
     this.movimentacaoRealizadaService.GetSaldoConta(idConta, DateConvert.formatDateYYYYMMDD(dataReferencia,'-'))
     .subscribe( (success:number)=>{this.saldoConta = success});        
+  }
+
+  private defaultConta(idConta: number){
+    debugger;
+    if(this.contaDisplay != null){
+      var conta = null;
+      this.contaService.getById(idConta).subscribe(
+        success=>{ 
+          conta=success;
+          conta.defaultConta = 'S';
+          this.contaService.putConta(conta).subscribe(
+            success=>{
+                this.contaDisplay.defaultConta = 'N';
+                this.contaService.putConta(this.contaDisplay).subscribe(
+                  success=> this.contaDisplay = conta
+                )}
+      )});
+    }
   }
 }

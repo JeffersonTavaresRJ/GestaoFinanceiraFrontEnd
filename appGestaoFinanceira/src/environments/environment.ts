@@ -5,8 +5,7 @@
 export const environment = {
   production: true,
   IdxConnection:1,
-  //initRouter:'/mov-realizada/2024-07-01/2024-07-31',
-  initRouter:'/fechamento',
+  initRouter:'/mov-realizada/2025-01-01/2025-01-31',
   arApiUrl: [
     'http://gestaofinanceiraapi/',
     'http://gestaofinanceiraapidsv/',
