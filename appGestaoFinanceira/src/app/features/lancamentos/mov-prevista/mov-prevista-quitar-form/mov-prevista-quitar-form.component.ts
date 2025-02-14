@@ -8,6 +8,8 @@ import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
+import {MatDialog} from '@angular/material/dialog';
+import { DialogMessageInterrogativeComponent } from 'src/app/shared/components/dialogs/dialog-message-interrogative/dialog-message-interrogative.component';
 
 @Component({
   selector: 'app-modal-mov-prevista-quitar-form',
@@ -35,6 +37,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   deleteMessage: string;
 
   valorTotalPago: number = 0;
+  valorTotalaSerPago: number = 0;
   idMovRealizadaDelete: number;
   idxDelete: number;
 
@@ -46,11 +49,13 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   arContas: Conta[]=[];
   arFormasPagamento: FormaPagamento[]=[];
 
-  constructor(protected injector: Injector,
-    private fb: FormBuilder) {
-    this.movRealizadaService = injector.get(MovRealizadaService);
-    this.alertMessageForm = injector.get(AlertMessageForm);
-    this.actResourceRoute = injector.get(ActivatedRoute);
+  constructor(
+    protected injector: Injector,
+    private fb: FormBuilder,
+    public dialog: MatDialog) {
+         this.movRealizadaService = injector.get(MovRealizadaService);
+         this.alertMessageForm = injector.get(AlertMessageForm);
+         this.actResourceRoute = injector.get(ActivatedRoute);
   }
 
 
@@ -129,7 +134,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       this.movRealizadaService.deleteById(this.idMovRealizadaDelete).subscribe(
         sucess => {
           this.arForms.removeAt(this.idxDelete);
-          this.totalizarValorPago();
+          this.valorTotalPago = 0;
+          this.valorTotalPago = this.totalizarValorPago(false);
           this.alertMessageForm.showSuccess(sucess.message);
         }/*,
         error => {
@@ -156,6 +162,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     }
 
     //adicionando o novo form no array..
+    this.valorTotalaSerPago = this.totalizarValorPago(true);
     if (this.arForms.length < 10) {
       this.addArForms(
         this.movimentacaoPrevista.itemMovimentacao.id,
@@ -163,7 +170,10 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         this.movimentacaoPrevista.observacao,
         0, 
         DateConvert.formatDateYYYYMMDD(dataMovimentacaoRealizada, '-'),
-        null, null, this.movimentacaoPrevista.valor, true);
+        null, 
+        null, 
+        this.movimentacaoPrevista.valor<=this.valorTotalaSerPago ? 0 : this.movimentacaoPrevista.valor-this.valorTotalaSerPago, 
+        true);
     } else {
       this.alertMessageForm.showError("O limite máximo são 10 registros.");
     }
@@ -183,7 +193,21 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
   salvar(fGroup: FormGroup, i: number) {
 
-    if (fGroup.get('isEdit').value == true) {
+    debugger;
+
+     if (fGroup.get('isEdit').value == true) {
+
+      var totalLinhasEditadas = this.totalizarLinhasEdicao();
+
+      if(totalLinhasEditadas == 1){
+
+        this.valorTotalaSerPago = this.totalizarValorPago(true);
+
+        if(this.movimentacaoPrevista.valor > this.valorTotalaSerPago){
+            this.openDialog();
+        }
+
+      }
 
       if (fGroup.get('id').value == 0) {
 
@@ -191,7 +215,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
           sucess => {
             fGroup.get('id').setValue( Number.parseFloat(sucess.id));
             fGroup.get('isEdit').setValue(false);
-            this.totalizarValorPago();
+            this.valorTotalPago = 0;
+            this.valorTotalPago = this.totalizarValorPago(false);
             this.alertMessageForm.showSuccess(sucess.message);            
           }/*,
           error => {
@@ -202,7 +227,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         this.movRealizadaService.put(fGroup).subscribe(
           sucess => {
             fGroup.get('isEdit').setValue(false);
-            this.totalizarValorPago();
+            this.valorTotalPago = 0;
+            this.valorTotalPago = this.totalizarValorPago(false);
             this.alertMessageForm.showSuccess(sucess.message);            
           }/*,
           error => {
@@ -258,12 +284,31 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     }));
   }
 
-  private totalizarValorPago() {
-    this.valorTotalPago = 0;
+  private totalizarValorPago(ignorarEdicao: boolean): number {
+    var valorTotal=0;
     this.arForms.controls.forEach(element => {
-      if (element.get('isEdit').value == false) {
-        this.valorTotalPago += element.get('valor').value;
+      if (ignorarEdicao || element.get('isEdit').value == false) {
+        valorTotal += element.get('valor').value;
       }
+    });
+    return valorTotal;
+  }
+
+  private totalizarLinhasEdicao(): number {
+    var total=0;
+    this.arForms.controls.forEach(element => {
+      if (element.get('isEdit').value == true) {
+        total += 1;
+      }
+    });
+    return total;
+  }
+
+  private openDialog() {
+    const dialogRef = this.dialog.open(DialogMessageInterrogativeComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
   }
 
