@@ -191,50 +191,22 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     this.arForms.removeAt(i);
   }
 
-  salvar(fGroup: FormGroup, i: number) {
-
+  salvar(fGroup: FormGroup) {
     debugger;
-
      if (fGroup.get('isEdit').value == true) {
-
       var totalLinhasEditadas = this.totalizarLinhasEdicao();
 
       if(totalLinhasEditadas == 1){
-
         this.valorTotalaSerPago = this.totalizarValorPago(true);
 
         if(this.movimentacaoPrevista.valor > this.valorTotalaSerPago){
-            this.openDialog();
+            this.openDialog(fGroup);
+        }else{
+          this.gravarMovimentacaoRealizada(fGroup);
         }
-
-      }
-
-      if (fGroup.get('id').value == 0) {
-
-        this.movRealizadaService.post(fGroup).subscribe(
-          sucess => {
-            fGroup.get('id').setValue( Number.parseFloat(sucess.id));
-            fGroup.get('isEdit').setValue(false);
-            this.valorTotalPago = 0;
-            this.valorTotalPago = this.totalizarValorPago(false);
-            this.alertMessageForm.showSuccess(sucess.message);            
-          }/*,
-          error => {
-            this.actionForError(error)
-          }*/);
-
-      } else {
-        this.movRealizadaService.put(fGroup).subscribe(
-          sucess => {
-            fGroup.get('isEdit').setValue(false);
-            this.valorTotalPago = 0;
-            this.valorTotalPago = this.totalizarValorPago(false);
-            this.alertMessageForm.showSuccess(sucess.message);            
-          }/*,
-          error => {
-            this.actionForError(error)
-          }*/);
-      }
+      }else{
+        this.gravarMovimentacaoRealizada(fGroup);
+      }      
     }
   }
 
@@ -304,12 +276,47 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     return total;
   }
 
-  private openDialog() {
-    const dialogRef = this.dialog.open(DialogMessageInterrogativeComponent);
+  private openDialog(fGroup: FormGroup) {
+    const dialogRef = this.dialog.open(DialogMessageInterrogativeComponent, {
+      disableClose: true,
+      data:{title:"Sr. Usuário", messageInterrogative:"Deseja encerrar a movimentação prevista mesmo com o valor abaixo do planejado?"}
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      console.log(`Dialog result: ${result==true? "N":"A"}`);
+      this.gravarMovimentacaoRealizada(fGroup, result==true? "N":"A")
     });
+  }
+
+  private gravarMovimentacaoRealizada(fGroup: FormGroup, statusMovPrev: string=null){
+
+    if (fGroup.get('id').value == 0) {
+
+      this.movRealizadaService.post(fGroup).subscribe(
+        sucess => {
+          fGroup.get('id').setValue( Number.parseFloat(sucess.id));
+          fGroup.get('isEdit').setValue(false);
+          this.valorTotalPago = 0;
+          this.valorTotalPago = this.totalizarValorPago(false);
+          this.alertMessageForm.showSuccess(sucess.message);            
+        }/*,
+        error => {
+          this.actionForError(error)
+        }*/);
+
+    } else {
+      this.movRealizadaService.put(fGroup).subscribe(
+        sucess => {
+          fGroup.get('isEdit').setValue(false);
+          this.valorTotalPago = 0;
+          this.valorTotalPago = this.totalizarValorPago(false);
+          this.alertMessageForm.showSuccess(sucess.message);            
+        }/*,
+        error => {
+          this.actionForError(error)
+        }*/);
+    }
+
   }
 
 }

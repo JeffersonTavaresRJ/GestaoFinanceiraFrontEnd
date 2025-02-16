@@ -49,7 +49,7 @@
             <div class="grid-table">
                 <div class="tbody">
                     <form class="tr" [formGroup]="fGroup" *ngFor="let fGroup of arForms.controls; let i=index;"
-                        (submit)="salvar(fGroup, i)">
+                        (submit)="salvar(fGroup)">
                         <div class="td" style="text-align:center">
                             <input *ngIf="fGroup.get('isEdit').value == true"
                                    pInputText formControlName="dataMovimentacaoRealizada"
