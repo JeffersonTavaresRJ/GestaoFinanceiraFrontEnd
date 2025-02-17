@@ -5,7 +5,9 @@ import { MovimentacaoRealizada } from '../_models/mov-realizada-model.';
 import { MovimentacaoRealizadaCommandCreate } from './_commands/mov-realizada/mov-realizada-cmd-create';
 import { MovimentacaoRealizadaCommandDelete } from './_commands/mov-realizada/mov-realizada-cmd-delete';
 import { MovimentacaoRealizadaCommandUpdate } from './_commands/mov-realizada/mov-realizada-cmd-update';
-import { tap } from 'rxjs/operators';
+import { MovimentacaoRealizadaCommandQuitarMovPrev } from './_commands/mov-realizada/mov-realizada-cmd-quitar-mov-prev';
+import { FormGroup } from '@angular/forms';
+import { GenericCommand } from 'src/app/shared/_services/commands/generic-cmd';
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +16,9 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
 
   date: Date;
 
-  paramQuitar = {
-    idItemMovimentacao: Number,
-    dataReferencia: Date,
-    tipoPrioridade: String,
-    observacao: String,
-    dataMovimentacaoRealizada: Date,
-    valor: Number,
-    idFormaPagamento: Number,
-    idConta: Number,
-    statusMovimentacaoPrevista: String
-  };
-
-  constructor(private injector: Injector) { 
+  constructor(private injector: Injector,
+    protected  movRealQuitarMovPrev?: MovimentacaoRealizadaCommandQuitarMovPrev
+  ) { 
     super(injector, 'api/MovimentacaoRealizada',
     MovimentacaoRealizadaCommandCreate.convertFormGroupToCommand,
     MovimentacaoRealizadaCommandUpdate.convertFormGroupToCommand,
@@ -45,12 +37,13 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
       return this.http.post(this.getUrl(), param);
   }
 
-  quitarMovimentacaoPrevista(paramQuitar): Observable<any>{
-    //debugger;
-      if(paramQuitar.idMovimentacaoRealizada > 0){
-        return this.http.put(this.getUrl(), paramQuitar);
+  quitarMovimentacaoPrevista(fGroup: FormGroup): Observable<any>{
+    debugger;
+    var command = MovimentacaoRealizadaCommandQuitarMovPrev.convertFormGroupToCommand(fGroup);
+      if(command.id > 0){
+        return this.http.put(this.getUrl(), command);
       }else{
-        return this.http.post(this.getUrl(), paramQuitar);
+        return this.http.post(this.getUrl(), command);
       }      
   }
 

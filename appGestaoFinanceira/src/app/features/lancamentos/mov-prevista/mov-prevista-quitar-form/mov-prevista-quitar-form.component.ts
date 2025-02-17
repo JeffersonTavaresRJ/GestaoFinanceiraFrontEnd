@@ -253,7 +253,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       descricaoFormaPagamento: [_descricaoFormaPagamento],
       valor: [_valor, Validators.required],
       isEdit: [_isEdit],
-      statusMovimentacaoPrevista: [null]
+      statusMovimentacaoPrevista: []
     }));
   }
 
@@ -293,58 +293,20 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
   private gravarMovimentacaoRealizada(fGroup: FormGroup){
 
-    var param = {
-      idMovimentacaoRealizada: fGroup.get('id').value,
-      idItemMovimentacao: fGroup.get('idItemMovimentacao').value,
-      dataReferencia: fGroup.get('id').value,
-      tipoPrioridade: fGroup.get('tipoPrioridade').value,
-      observacao: fGroup.get('observacao').value,
-      dataMovimentacaoRealizada: fGroup.get('dataMovimentacaoRealizada').value,
-      valor: fGroup.get('valor').value,
-      idFormaPagamento: fGroup.get('idFormaPagamento').value,
-      idConta: fGroup.get('idConta').value,
-      statusMovimentacaoPrevista: fGroup.get('statusMovimentacaoPrevista').value
-    };
-
-    this.movRealizadaService.quitarMovimentacaoPrevista(param).subscribe(
+    this.movRealizadaService.quitarMovimentacaoPrevista(fGroup).subscribe(
       success=>{
-        if(param.idMovimentacaoRealizada==0){
+        console.log(`gravação:`);
+
+        if(fGroup.get('id').value==0){
           fGroup.get('id').setValue( Number.parseFloat(success.id));
         }
+        
         fGroup.get('isEdit').setValue(false);
         this.valorTotalPago = 0;
         this.valorTotalPago = this.totalizarValorPago(false);
         this.alertMessageForm.showSuccess(success.message);
       }
-    )
-
-
-    if (fGroup.get('id').value == 0) {
-
-      this.movRealizadaService.post(fGroup).subscribe(
-        sucess => {
-          fGroup.get('id').setValue( Number.parseFloat(sucess.id));
-          fGroup.get('isEdit').setValue(false);
-          this.valorTotalPago = 0;
-          this.valorTotalPago = this.totalizarValorPago(false);
-          this.alertMessageForm.showSuccess(sucess.message);            
-        }/*,
-        error => {
-          this.actionForError(error)
-        }*/);
-
-    } else {
-      this.movRealizadaService.put(fGroup).subscribe(
-        sucess => {
-          fGroup.get('isEdit').setValue(false);
-          this.valorTotalPago = 0;
-          this.valorTotalPago = this.totalizarValorPago(false);
-          this.alertMessageForm.showSuccess(sucess.message);            
-        }/*,
-        error => {
-          this.actionForError(error)
-        }*/);
-    }
+    )   
 
   }
 
