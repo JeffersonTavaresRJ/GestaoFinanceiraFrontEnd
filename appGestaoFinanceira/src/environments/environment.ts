@@ -4,13 +4,13 @@
 
 export const environment = {
   production: true,
-  IdxConnection:1,
+  IdxConnection:3,
   initRouter:'/mov-prevista/quitar/5106/2025-01-31T03:00:00Z/2025-01-01/2025-01-31',
   arApiUrl: [
     'http://gestaofinanceiraapi/',
     'http://gestaofinanceiraapidsv/',
     'https://localhost:50064/',
-    'https://localhost:49852/'],
+    'https://localhost:44375/'],
   credentials:['jef.tavaresrj@gmail.com', 'adminadmin'],
   keyUser:'usuario',
   keyParamListMovPre: 'ParamListMovPre'

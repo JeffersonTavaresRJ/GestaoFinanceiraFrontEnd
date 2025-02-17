@@ -252,7 +252,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       idFormaPagamento: [_idFormaPagamento, Validators.required],
       descricaoFormaPagamento: [_descricaoFormaPagamento],
       valor: [_valor, Validators.required],
-      isEdit: [_isEdit]
+      isEdit: [_isEdit],
+      statusMovimentacaoPrevista: [null]
     }));
   }
 
@@ -284,11 +285,39 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result==true? "N":"A"}`);
-      this.gravarMovimentacaoRealizada(fGroup, result==true? "N":"A")
+      debugger;
+      fGroup.get('statusMovimentacaoPrevista').setValue(result==true? "N":null)
+      this.gravarMovimentacaoRealizada(fGroup);
     });
   }
 
-  private gravarMovimentacaoRealizada(fGroup: FormGroup, statusMovPrev: string=null){
+  private gravarMovimentacaoRealizada(fGroup: FormGroup){
+
+    var param = {
+      idMovimentacaoRealizada: fGroup.get('id').value,
+      idItemMovimentacao: fGroup.get('idItemMovimentacao').value,
+      dataReferencia: fGroup.get('id').value,
+      tipoPrioridade: fGroup.get('tipoPrioridade').value,
+      observacao: fGroup.get('observacao').value,
+      dataMovimentacaoRealizada: fGroup.get('dataMovimentacaoRealizada').value,
+      valor: fGroup.get('valor').value,
+      idFormaPagamento: fGroup.get('idFormaPagamento').value,
+      idConta: fGroup.get('idConta').value,
+      statusMovimentacaoPrevista: fGroup.get('statusMovimentacaoPrevista').value
+    };
+
+    this.movRealizadaService.quitarMovimentacaoPrevista(param).subscribe(
+      success=>{
+        if(param.idMovimentacaoRealizada==0){
+          fGroup.get('id').setValue( Number.parseFloat(success.id));
+        }
+        fGroup.get('isEdit').setValue(false);
+        this.valorTotalPago = 0;
+        this.valorTotalPago = this.totalizarValorPago(false);
+        this.alertMessageForm.showSuccess(success.message);
+      }
+    )
+
 
     if (fGroup.get('id').value == 0) {
 

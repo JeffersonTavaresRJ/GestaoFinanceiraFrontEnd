@@ -179,6 +179,9 @@ export class FechamentoComponent implements OnInit {
   private movPrevistaGroupBy(arr: MovimentacaoPrevista[]){
     //agrupando itens de despesas e receitas..
     var result = [];
+    //popular somente movimentações previstas quitadas e abertas...
+    arr = arr.filter(mp=>mp.status != "N");
+    
     arr.reduce(function(acumulador, obj){
       if (!acumulador[obj.itemMovimentacao.tipo]){
           acumulador[obj.itemMovimentacao.tipo] = {Tipo: obj.itemMovimentacao.tipoDescricao, ValorEmAberto: 0, ValorQuitado: 0};

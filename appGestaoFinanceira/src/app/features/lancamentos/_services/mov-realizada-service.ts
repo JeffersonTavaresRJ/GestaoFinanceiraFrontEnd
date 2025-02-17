@@ -13,6 +13,19 @@ import { tap } from 'rxjs/operators';
 export class MovRealizadaService extends GenericResourceService<MovimentacaoRealizada> {
 
   date: Date;
+
+  paramQuitar = {
+    idItemMovimentacao: Number,
+    dataReferencia: Date,
+    tipoPrioridade: String,
+    observacao: String,
+    dataMovimentacaoRealizada: Date,
+    valor: Number,
+    idFormaPagamento: Number,
+    idConta: Number,
+    statusMovimentacaoPrevista: String
+  };
+
   constructor(private injector: Injector) { 
     super(injector, 'api/MovimentacaoRealizada',
     MovimentacaoRealizadaCommandCreate.convertFormGroupToCommand,
@@ -22,7 +35,7 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
 
   Transferir(idConta: number, idContaDestino: number, dataMovimentacaoRealizada: string, valor: number): Observable<any>{
     this.setApiOption('/TransferenciaContas');
-    debugger;
+    //debugger;
     var param = {
         idConta: idConta,
         idContaDestino: idContaDestino,
@@ -30,7 +43,16 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
         valor: valor
       }
       return this.http.post(this.getUrl(), param);
-    }
+  }
+
+  quitarMovimentacaoPrevista(paramQuitar): Observable<any>{
+    //debugger;
+      if(paramQuitar.idMovimentacaoRealizada > 0){
+        return this.http.put(this.getUrl(), paramQuitar);
+      }else{
+        return this.http.post(this.getUrl(), paramQuitar);
+      }      
+  }
 
   getByDataReferencia(dataReferencia: string, idItemMovimentacao?: number): Observable<MovimentacaoRealizada[]> {
     this.setApiOption('/GetByDataReferencia');
