@@ -2,25 +2,25 @@ import { FormGroup } from "@angular/forms";
 import { MovimentacaoRealizadaCommandUpdate } from "./mov-realizada-cmd-update";
 
 export class MovimentacaoRealizadaCommandQuitarMovPrev extends MovimentacaoRealizadaCommandUpdate {
-    constructor(
-        public movimentacaoRealizada: MovimentacaoRealizadaCommandUpdate,
-        public statusMovimentacaoPrevista: string = null
-    ) { super(
-        movimentacaoRealizada.id,
-        movimentacaoRealizada.idItemMovimentacao,
-        movimentacaoRealizada.dataReferencia,
-        movimentacaoRealizada.tipoPrioridade,
-        movimentacaoRealizada.observacao,
-        movimentacaoRealizada.dataMovimentacaoRealizada,
-        movimentacaoRealizada.valor,
-        movimentacaoRealizada.idFormaPagamento,
-        movimentacaoRealizada.idConta
-    )};
+
+    static result: MovimentacaoRealizadaCommandUpdate;
+    
+    constructor(public statusMovimentacaoPrevista: string = null){
+        super();
+    };
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandQuitarMovPrev{
-        var movimentacaoRealizadaUpdate= super.convertFormGroupToCommand(formGroup);
-        return new MovimentacaoRealizadaCommandQuitarMovPrev(
-                   movimentacaoRealizadaUpdate, 
-                   formGroup.get('statusMovimentacaoPrevista').value); 
+        var s = super.convertFormGroupToCommand(formGroup);
+        var r = new MovimentacaoRealizadaCommandQuitarMovPrev(formGroup.get('statusMovimentacaoPrevista').value);
+        r.dataMovimentacaoRealizada = s.dataMovimentacaoRealizada;
+        r.dataReferencia = s.dataReferencia;
+        r.id = s.id;
+        r.idConta = s.idConta;
+        r.idFormaPagamento = s.idFormaPagamento;
+        r.idItemMovimentacao = s.idItemMovimentacao;
+        r.observacao = s.observacao;
+        r.tipoPrioridade = s.tipoPrioridade;
+        r.valor = s.valor;
+        return r;
     }
 }

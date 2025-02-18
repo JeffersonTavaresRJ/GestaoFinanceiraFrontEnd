@@ -146,7 +146,7 @@ export class MovMensalPrevDashboardComponent implements OnInit {
       .filter((value, index, self) => self.indexOf(value) === index)     
       .forEach(
         descricao=>{
-          debugger;
+          //debugger;
           var dadosChart = new DadosChartItem(descricao, []);
 
           this.arDadosChartDates.forEach(

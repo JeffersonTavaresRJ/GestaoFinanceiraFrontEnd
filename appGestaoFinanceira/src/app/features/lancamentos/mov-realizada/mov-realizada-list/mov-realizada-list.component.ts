@@ -80,7 +80,7 @@ export class MovRealizadaListComponent implements OnInit {
 
   getConta(conta: Conta){
     //alterando a conta anterior que foi utilizada como filtro para deixar de ser o filtro default para pesquisa..
-    debugger;
+    //debugger;
     if(this.contaDisplay != null){
       
       this.contaDisplay.defaultConta = 'N';

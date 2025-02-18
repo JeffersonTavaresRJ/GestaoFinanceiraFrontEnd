@@ -36,4 +36,6 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
             Number.parseInt(formGroup.get('idConta').value)
         );
     }
+
+    
 }

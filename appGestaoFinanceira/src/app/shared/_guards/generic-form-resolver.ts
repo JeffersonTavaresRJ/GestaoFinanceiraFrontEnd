@@ -9,7 +9,7 @@ export abstract class GenericFormResolver<T extends GenericResourceModel>
 
    resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
       let id= activatedRouteSnapshot.params['id'];
-      console.log('id: '+id);
+      //console.log('id: '+id);
       this.genericResourceService.setApiOption('/GetId');
       return this.genericResourceService.getById(id);
    }

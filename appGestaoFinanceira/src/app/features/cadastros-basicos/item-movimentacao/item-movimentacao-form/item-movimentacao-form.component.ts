@@ -61,7 +61,7 @@ export class ItemMovimentacaoFormComponent extends GenericResourceFormComponent<
       this.actResourceRoute.data.subscribe(
         (sucess:{resolveResource:ItemMovimentacao})=>{
           //o resolveResource deve ser o mesmo nome na variável resolve da rota.. 
-          debugger;
+          //debugger;
           this.resourceForm.get('id').setValue(sucess.resolveResource.id);
           this.resourceForm.get('descricao').setValue(sucess.resolveResource.descricao);
           this.resourceForm.get('tipo').setValue(sucess.resolveResource.tipo);

@@ -145,7 +145,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
     //limpeza dos valores: planejado, receita e despesa..
     this.montarArrayPeriodo(this.dataFim);
 
-    debugger;
+    //debugger;
     this.arDadosChart = this.arDadosChart.map((e)=>{
       arMovPrevGroup.forEach(p=>{
           e.Planejado = e.Data == p.Data && p.Tipo==this.rdbTipo? p.Valor:e.Planejado;                 
@@ -251,7 +251,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
   }
 
   private montarArrayPeriodo(dataFim: Date){
-    debugger;
+    //debugger;
     var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()==1?12:dataFim.getMonth()-1, 1);
     this.arDadosChart.length=0;
     for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {

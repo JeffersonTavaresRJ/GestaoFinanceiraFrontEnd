@@ -26,7 +26,7 @@ export class DropDownFechamentoMensalComponent {
     this.fechamentoService.getAll().subscribe(
       sucess=>{
         this.arFechamentosMensais = sucess;
-        console.log("populate dropdwon");
+        //console.log("populate dropdwon");
         this.getFechamento();
       }
     );

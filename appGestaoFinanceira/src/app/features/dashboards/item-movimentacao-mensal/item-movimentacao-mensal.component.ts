@@ -158,7 +158,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
       var dados: DadosChart={name: z, data: arData, percent: arPercent};
       this.arDadosChart.push(dados);  
     }); 
-    debugger;
+    //debugger;
     this.arDadosChart.sort((a, b)=>{return a.name > b.name ? 1 :-1});
   }
 
@@ -173,7 +173,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   }
 
   private renderizarChart(arDadosChart: DadosChart[], title: string){ 
-    debugger;  
+    //debugger;  
     var options = this.options(arDadosChart, title);
 
     if(this.chart!=null){      

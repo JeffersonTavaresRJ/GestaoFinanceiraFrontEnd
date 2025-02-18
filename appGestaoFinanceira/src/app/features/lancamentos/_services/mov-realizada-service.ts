@@ -16,9 +16,7 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
 
   date: Date;
 
-  constructor(private injector: Injector,
-    protected  movRealQuitarMovPrev?: MovimentacaoRealizadaCommandQuitarMovPrev
-  ) { 
+  constructor(private injector: Injector) { 
     super(injector, 'api/MovimentacaoRealizada',
     MovimentacaoRealizadaCommandCreate.convertFormGroupToCommand,
     MovimentacaoRealizadaCommandUpdate.convertFormGroupToCommand,
@@ -38,7 +36,7 @@ export class MovRealizadaService extends GenericResourceService<MovimentacaoReal
   }
 
   quitarMovimentacaoPrevista(fGroup: FormGroup): Observable<any>{
-    debugger;
+    //debugger;
     var command = MovimentacaoRealizadaCommandQuitarMovPrev.convertFormGroupToCommand(fGroup);
       if(command.id > 0){
         return this.http.put(this.getUrl(), command);

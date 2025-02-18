@@ -78,7 +78,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
   }
 
   filtrarDados(arSaldos: any[], anoIni:number, anoFim: number){ 
-    debugger;
+    //debugger;
     var arSaldosAux         = arSaldos.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta)); 
     this.arContasDadosChart = [];
     this.arContasDadosChart = this.arContas.filter(c=>arSaldosAux.map((s)=>{return s.idConta}).includes(c.id));
@@ -153,7 +153,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         var dat: number[]=[];
         var val: number[]=[];
         for(let ano = anoInicial; ano <= anoFinal; ano++){
-          debugger;
+          //debugger;
           var valorAtual = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.saldo})[0];
           var valorAnter = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano-1).map((e)=>{return e.saldo})[0];
           var valorInici = arSaldos.filter(z=>z.idConta==x.id && z.ano==ano).map((e)=>{return e.valorInicial})[0];
@@ -201,7 +201,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
         var val: number[]=[];
 
         for(let ano = anoInicial; ano <= anoFinal; ano++){
-            debugger;
+            //debugger;
             var valorAtual = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
             var valorAnter = arSaldos.filter(z=>z.ano==ano-1).map((e)=>{return e.saldo}).reduce((acum, item)=>{return acum+item},0);
             var valorInici = arSaldos.filter(z=>z.ano==ano).map((e)=>{return e.valorInicial}).reduce((acum, item)=>{return acum+item},0);
@@ -256,7 +256,7 @@ export class SaldosAnuaisPorContaDashBoardComponent implements OnInit {
     } 
 
     var textExp = 'Exp ' + anoFim +': entre ' + expecMin.toString() + ' a ' + expecMax.toString();
-debugger;
+    //debugger;
     return {
       series: arSeries,
       chart: {

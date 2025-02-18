@@ -109,7 +109,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
   public gerarExcel(){
  
-    debugger;
+    //debugger;
     var dataReferencia = this.selectedMesAno.substring(0,10);
     this.movRealizadaService.GetByMovimentacaoRealizadaMensalReportExcel(this.arSelectedContas, dataReferencia, this.totalMeses).subscribe(
       success=>{
@@ -120,7 +120,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
 
    private popularMesesAnteriores(total: number){
     var x = 2;
-    debugger;
+    //debugger;
     while(x <= total){
       var item: MesesAnteriores={id: x, descricao: "Últimos "+ x.toString() + " meses anteriores"};
       this.arMesesAnteriores.push(item);

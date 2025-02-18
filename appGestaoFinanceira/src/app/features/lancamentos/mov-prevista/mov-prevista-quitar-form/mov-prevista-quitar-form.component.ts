@@ -192,7 +192,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   salvar(fGroup: FormGroup) {
-    debugger;
+    //debugger;
      if (fGroup.get('isEdit').value == true) {
       var totalLinhasEditadas = this.totalizarLinhasEdicao();
 
@@ -284,9 +284,9 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result==true? "N":"A"}`);
-      debugger;
-      fGroup.get('statusMovimentacaoPrevista').setValue(result==true? "N":null)
+      //console.log(`Dialog result: ${result==true? "N":"A"}`);
+      //debugger;
+      fGroup.get('statusMovimentacaoPrevista').setValue(result==true? "N":"A")
       this.gravarMovimentacaoRealizada(fGroup);
     });
   }
