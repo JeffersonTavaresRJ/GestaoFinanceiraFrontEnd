@@ -13,7 +13,6 @@ import { Usuario } from '../../features/security/_models/usuario-model';
 import { AlertMessageForm } from '../../shared/components/alert-form/alert-message-form';
 import { BSAutenticarUsuario } from './bs-autenticar-usuario';
 import { Router } from '@angular/router';
-import { BSMessage } from './bs-message';
 
 /**
  * This class is for intercepting http requests. When a request starts, we set the loadingSub property
@@ -60,7 +59,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         .pipe( 
               map(event=>{return event;}),
               catchError(e=>{
-                debugger;
+                //debugger;
                 if (e.status == 0) {
                     //servidor fora
                     this.alertMessage.showError('Erro de conexão com o servidor', e.status);

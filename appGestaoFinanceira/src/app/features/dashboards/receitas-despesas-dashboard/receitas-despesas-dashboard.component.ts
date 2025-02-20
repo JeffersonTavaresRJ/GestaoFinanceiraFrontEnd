@@ -39,6 +39,7 @@ export type ChartOptions = {
 export class ReceitasDespesasDashboardComponent implements OnInit {
   seriesTipo:Number[] = [];
   labelsTipo:string[] = [];
+  colorsTipo:string[] = [];
   seriesPrioridade:Number[] = [];
   labelsPrioridade:string[] = [];
   arTotalMeses:number[]=[2,3,4,5,6,7,8,9,10,11,12];
@@ -207,13 +208,15 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
  
   private renderizarChartTipo(arr:any[]){
     this.labelsTipo.length=0;
-    this.seriesTipo.length=0;    
+    this.seriesTipo.length=0;   
+    this.colorsTipo.length=0; 
     var saldo=null;
 
     //preenchendo as Series e Labels do chart..
     arr.map(x=>{
       this.labelsTipo.push(x.Descricao);
       this.seriesTipo.push(x.Valor);
+      this.colorsTipo.push(x.Tipo=="D"?"#A52A2A":"#1C86EE");
       saldo+= x.Tipo=="D"? x.Valor*-1 : x.Valor;
     });
 
@@ -254,6 +257,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   }
 
   private options(series:Number[], labels:string[], idChart:string, titulo:string, saldo?:number):any{
+    debugger;
     return {
       chart: {
         width: "100%",
@@ -276,7 +280,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
           }
         }
       },
-      colors: idChart =="chart-tipo"? ['#1C86EE', '#A52A2A'] : undefined,
+      colors: idChart =="chart-tipo"? this.colorsTipo : undefined,
       fill: {
         type: 'solid'
       },
