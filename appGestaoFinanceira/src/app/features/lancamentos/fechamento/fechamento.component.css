@@ -38,7 +38,7 @@
     display: table-cell;
     vertical-align: middle;
     padding-left: 3px;
-    width: 25% !important;
+    width: 20% !important;
   }
 
 .td
@@ -46,7 +46,7 @@
 	display:table-cell;
     vertical-align: middle;
     padding-left: 3px;
-    width: 25% !important;
+    width: 20% !important;
 }
 
 .thead div.tr div.td:last-child{

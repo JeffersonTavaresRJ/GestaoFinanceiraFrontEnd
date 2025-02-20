@@ -34,6 +34,7 @@
         <div class="thead">
             <div class="th"></div>
             <div class="th"style="text-align: right;">Em Aberto</div>
+            <div class="th"style="text-align: right;">Não Aplicado</div>
             <div class="th"style="text-align: right;">Quitado</div>
             <div class="th"></div>
         </div>
@@ -43,6 +44,7 @@
             <form class="tr" [formGroup]="fGroupPrev" *ngFor="let fGroupPrev of arFormsPrev.controls; let i=index;">
               <div class="td">{{fGroupPrev.get('tipo').value}}</div>
               <div class="td" style="text-align: right;">{{fGroupPrev.get('valorEmAberto').value | currency }}</div>
+              <div class="td" style="text-align: right;">{{fGroupPrev.get('valorNaoAplicado').value | currency }}</div>
               <div class="td" style="text-align: right;">{{fGroupPrev.get('valorQuitado').value  | currency}}</div>
               <div class="td" style="text-align: center;">
                 <input *ngIf="status=='A'" class="form-check-input" type="checkbox" formControlName="isChecked" required>

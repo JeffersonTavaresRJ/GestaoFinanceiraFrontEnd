@@ -180,16 +180,19 @@ export class FechamentoComponent implements OnInit {
     //agrupando itens de despesas e receitas..
     var result = [];
     //popular somente movimentações previstas quitadas e abertas...
-    arr = arr.filter(mp=>mp.status != "N");
+    //arr = arr.filter(mp=>mp.status != "N");
     
     arr.reduce(function(acumulador, obj){
       if (!acumulador[obj.itemMovimentacao.tipo]){
-          acumulador[obj.itemMovimentacao.tipo] = {Tipo: obj.itemMovimentacao.tipoDescricao, ValorEmAberto: 0, ValorQuitado: 0};
+          acumulador[obj.itemMovimentacao.tipo] = {Tipo: obj.itemMovimentacao.tipoDescricao, ValorEmAberto: 0, valorNaoAplicado:0, ValorQuitado: 0};
           result.push(acumulador[obj.itemMovimentacao.tipo]);
       }      
       if (obj.status=="Q"){
         acumulador[obj.itemMovimentacao.tipo].ValorQuitado+=obj.valor
-      }else{
+      }else if (obj.status=="N"){
+        acumulador[obj.itemMovimentacao.tipo].valorNaoAplicado+=obj.valor
+      }
+      else{
         acumulador[obj.itemMovimentacao.tipo].ValorEmAberto+=obj.valor
       }
       return acumulador;
@@ -203,6 +206,7 @@ export class FechamentoComponent implements OnInit {
       this.arFormsPrev.push(this.formBuilder.group({
         tipo:[e.Tipo],
         valorEmAberto:[e.ValorEmAberto],
+        valorNaoAplicado:[e.valorNaoAplicado],
         valorQuitado:[e.ValorQuitado],
         isChecked:[""]})
         )
