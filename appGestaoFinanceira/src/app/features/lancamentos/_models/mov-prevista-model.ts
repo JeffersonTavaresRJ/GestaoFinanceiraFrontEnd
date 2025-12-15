@@ -8,14 +8,14 @@ export class MovimentacaoPrevista extends Movimentacao{
     
     constructor(
      public formaPagamento: FormaPagamento = new FormaPagamento(),
-     public idFormaPagamento: number=null,
-     public dataVencimento: Date=null,
-     public movPrevistaStatus: string=null,
-     public movPrevistaStatusDescricao: string=null,
-     public tipoRecorrencia: string=null,
-     public nrParcela: number=null,
-     public nrParcelaTotal: number=null,
-     public status: string=null
+     public idFormaPagamento: number|null=null,
+     public dataVencimento: Date|null=null,
+     public movPrevistaStatus: string|null=null,
+     public movPrevistaStatusDescricao: string|null=null,
+     public tipoRecorrencia: string|null=null,
+     public nrParcela: number|null=null,
+     public nrParcelaTotal: number|null=null,
+     public status: string|null=null
     ){ 
         super();
 
@@ -33,12 +33,12 @@ export class MovimentacaoPrevista extends Movimentacao{
        
             this.movPrev = new MovimentacaoPrevista(); 
             
-            this.movPrev.dataReferencia = new Date(movimentacaoPrevista.dataVencimento.getFullYear(), 
-                                                   movimentacaoPrevista.dataVencimento.getMonth()+item+1,
+            this.movPrev.dataReferencia = new Date(movimentacaoPrevista.dataVencimento!.getFullYear(), 
+                                                   movimentacaoPrevista.dataVencimento!.getMonth()+item+1,
                                                    0);
-            this.movPrev.dataVencimento = new Date(movimentacaoPrevista.dataVencimento.getFullYear(), 
-                                                   movimentacaoPrevista.dataVencimento.getMonth()+item,
-                                                   movimentacaoPrevista.dataVencimento.getDate());
+            this.movPrev.dataVencimento = new Date(movimentacaoPrevista.dataVencimento!.getFullYear(), 
+                                                   movimentacaoPrevista.dataVencimento!.getMonth()+item,
+                                                   movimentacaoPrevista.dataVencimento!.getDate());
 
             //tratamento para o mês de fevereiro, quando o dia for 29 (ano não bissexto),30 ou 31..
             this.movPrev.dataVencimento = this.movPrev.dataVencimento > this.movPrev.dataReferencia ? 
@@ -46,7 +46,7 @@ export class MovimentacaoPrevista extends Movimentacao{
             
             
             this.movPrev.formaPagamento = movimentacaoPrevista.formaPagamento;
-            this.movPrev.idFormaPagamento = movimentacaoPrevista.formaPagamento.id;
+            this.movPrev.idFormaPagamento = movimentacaoPrevista.formaPagamento.id!;
             this.movPrev.itemMovimentacao = movimentacaoPrevista.itemMovimentacao;
             this.movPrev.observacao = movimentacaoPrevista.observacao;
             this.movPrev.movPrevistaStatus = movimentacaoPrevista.movPrevistaStatus;
@@ -80,8 +80,8 @@ export class MovimentacaoPrevista extends Movimentacao{
             item++;
           };
         //ordenação por YYYYMM numérico..
-        this.arMovimentacoesPrevistas.sort(function(a,b){return (((b.dataReferencia.getFullYear()*100)+b.dataReferencia.getMonth())-
-            ((a.dataReferencia.getFullYear()*100)+a.dataReferencia.getMonth()));
+        this.arMovimentacoesPrevistas.sort(function(a,b){return (((b.dataReferencia!.getFullYear()*100)+b.dataReferencia!.getMonth())-
+            ((a.dataReferencia!.getFullYear()*100)+a.dataReferencia!.getMonth()));
         });
         
         return new Observable(o=>{

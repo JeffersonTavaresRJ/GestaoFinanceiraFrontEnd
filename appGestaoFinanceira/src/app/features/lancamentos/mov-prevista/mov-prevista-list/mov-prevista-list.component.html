@@ -42,10 +42,10 @@
                     <div class="col-6">
                         <strong class="font-size-small" style="margin-right: 14px;">Período do Vencimento:</strong>
                         <p-calendar [(ngModel)]="dataIni" view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                            inputId="monthpicker"></p-calendar>
+                            inputId="monthpickerIni"></p-calendar>
                         <strong class="font-size-small" style="margin-right: 5px; margin-left: 5px">a</strong>
                         <p-calendar [(ngModel)]="dataFim" view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                            inputId="monthpicker"></p-calendar>
+                            inputId="monthpickerFim"></p-calendar>
                         <p-button id="pesquisar" icon="pi pi-search" styleClass="p-button-sm p-button-secondary"
                             (click)="filtrarTablePorPeriodo()"></p-button>
                     </div>
@@ -55,7 +55,8 @@
         <table class="table table-dark">
             <thead>
                 <tr>
-                    <th style="text-align:center; width: 10%;">Prioridade</th>
+                    <th style="text-align:center; width: 5%;">Id</th>
+                    <th style="text-align:center; width: 5%;">Prioridade</th>
                     <th style="text-align:center; width: 14%;">Data de Vencimento</th>
                     <th style="width: 20%;">Item de Movimentação</th>
                     <th style="width: 16%;">Forma de Pagamento</th>
@@ -69,6 +70,9 @@
             <table class="table table-hover" *ngIf="arMovPrevistas.length > 0 else loading">
                 <tbody>
                     <tr *ngFor="let movimentacaoPrevista of arMovPrevistas; let i=index;">
+                        <td style="text-align:center; width: 10.2%;">
+                            {{movimentacaoPrevista.id}}
+                        </td>
                         <td style="text-align:center; width: 10.2%;">
                             <span *ngIf="movimentacaoPrevista.tipoPrioridade=='A'">
                                 <img class="logo" src="assets\icons\arrow_circle_up_black_24dp.svg"
@@ -85,7 +89,7 @@
                                     title="Prioridade: {{movimentacaoPrevista.tipoPrioridadeDescricao}}" width="49.5"
                                     height="27">
                             </span>
-                        </td>
+                        </td>                        
                         <td style="text-align:center; width: 14.5%;">
                             {{movimentacaoPrevista.dataVencimento | date:'dd/MM/yyyy'}}
                         </td>
@@ -123,7 +127,7 @@
                             </a>
                             <button *ngIf="movimentacaoPrevista.status=='A'"
                                      class="btn btn-outline-danger btn-sm"
-                                     (click)="modalDeleteMessage(movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia)"
+                                     (click)="modalDeleteMessage(movimentacaoPrevista.id)"
                                      data-bs-toggle="modal" data-bs-target="#modalDelete">
                                 Excluir
                             </button>

@@ -21,7 +21,7 @@ export abstract class GenericResourceService<T extends Object> extends GenericRe
     }
 
     post(formGroup: FormGroup): Observable<any> {   
-       var command = this.convertFormGroupToCmdCreate(formGroup);
+       var command = this.convertFormGroupToCmdCreate!(formGroup);
        return this.http.post(this.getUrl(), command)
         .pipe(catchError(this.handlerError)/*, 
               --comentado para ler o retorno da mensagem de sucesso da API..
@@ -31,7 +31,7 @@ export abstract class GenericResourceService<T extends Object> extends GenericRe
     postArray(formGroup: FormGroup[]): Observable<any> {   
         this.command.length = 0;
         formGroup.forEach(element=>{
-            this.command.push(this.convertFormGroupToCmdCreate(element));
+            this.command.push(this.convertFormGroupToCmdCreate!(element));
         });
 
         return this.http.post(this.getUrl(), this.command)
@@ -41,7 +41,7 @@ export abstract class GenericResourceService<T extends Object> extends GenericRe
     }
 
     put(formGroup: FormGroup): Observable<any> {
-      var command = this.convertFormGroupToCmdUpdate(formGroup);
+      var command = this.convertFormGroupToCmdUpdate!(formGroup);
       return this.http.put(this.getUrl(), command)
         .pipe(catchError(this.handlerError)/*,
               --comentado para ler o retorno da mensagem de sucesso da API..
@@ -70,7 +70,7 @@ export abstract class GenericResourceService<T extends Object> extends GenericRe
     }
 
     deleteByKey(formGroup: FormGroup): Observable<any> {
-        var command = this.convertFormGroupToCmdDelete(formGroup);
+        var command = this.convertFormGroupToCmdDelete!(formGroup);
         return this.http.delete(`${this.getUrl()}/${command}`)
           .pipe(catchError(this.handlerError)/*,
                 --comentado para ler o retorno da mensagem de sucesso da API..

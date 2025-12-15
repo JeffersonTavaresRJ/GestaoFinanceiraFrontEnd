@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { GenericResourceService } from 'src/app/shared/_services/generic-resource-service';
+import { GenericResourceService } from '../../../shared/_services/generic-resource-service';
 import { MovimentacaoPrevista } from '../_models/mov-prevista-model';
 import { MovimentacaoPrevistaCommandCreate } from './_commands/mov-prevista/mov-prevista-cmd-create';
 import { MovimentacaoPrevistaCommandDelete } from './_commands/mov-prevista/mov-prevista-cmd-delete';
@@ -24,7 +24,7 @@ export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevi
     return this.http.get<MovimentacaoPrevista>(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`);
   }
 
-  getByDataVencimento(dataVencIni: string, dataVencFim: string, idItemMovimentacao: number=null): Observable<MovimentacaoPrevista[]> {
+  getByDataVencimento(dataVencIni: string, dataVencFim: string, idItemMovimentacao: number | null=null): Observable<MovimentacaoPrevista[]> {
     this.setApiOption('/GetByDataVencimento');
     //parâmetro opcional da API..
     var _idItemMovimentacao = idItemMovimentacao!=null || idItemMovimentacao != undefined ? idItemMovimentacao.toString() : ' ';

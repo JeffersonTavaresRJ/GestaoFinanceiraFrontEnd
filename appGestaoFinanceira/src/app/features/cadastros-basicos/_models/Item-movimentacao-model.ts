@@ -1,4 +1,4 @@
-import { GenericResourceModel } from "src/app/shared/_models/generic-resource-model";
+import { GenericResourceModel } from "../../../shared/_models/generic-resource-model";
 import { Categoria } from "./categoria-model";
 
 export class ItemMovimentacao extends GenericResourceModel{
@@ -9,7 +9,7 @@ export class ItemMovimentacao extends GenericResourceModel{
         public tipoDescricao: string='',
         public tipoOperacao: string='',
         public status?: boolean,
-        public idCategoria: number=null,
+        public idCategoria: number|null=null,
         public categoria: Categoria = new Categoria()
     ){
         super();

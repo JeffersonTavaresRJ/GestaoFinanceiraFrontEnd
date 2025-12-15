@@ -1,29 +1,28 @@
 import { FormGroup } from "@angular/forms";
-import { GenericCommand } from "src/app/shared/_services/commands/generic-cmd";
-import { MovimentacaoPrevista } from "../../../_models/mov-prevista-model";
+import { GenericCommand } from "../../../../../shared/_services/commands/generic-cmd";
 
 export class MovimentacaoPrevistaCommandUpdate extends GenericCommand {
     constructor(
-        public idItemMovimentacao: number = null,
-        public dataReferencia: Date = null,
-        public tipoPrioridade: string = null,
-        public observacao: string = null,  
-        public dataVencimento: Date = null,
-        public valor: number = null,
-        public status: string = null,
-        public idFormaPagamento: number = null
+        public idItemMovimentacao: number | null = null,
+        public dataReferencia: Date | null = null,
+        public tipoPrioridade: string | null = null,
+        public observacao: string | null = null,  
+        public dataVencimento: Date | null = null,
+        public valor: number | null = null,
+        public status: string | null = null,
+        public idFormaPagamento: number | null = null
     ) { super(); };
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoPrevistaCommandUpdate{
         return new MovimentacaoPrevistaCommandUpdate(
-             Number.parseInt(formGroup.get('idItemMovimentacao').value),
-             formGroup.get('dataReferencia').value,
-             formGroup.get('tipoPrioridade').value,             
-             formGroup.get('observacao').value,
-             formGroup.get('dataVencimento').value,
-             Number.parseFloat(formGroup.get('valor').value),
-             formGroup.get('status').value,
-             Number.parseInt(formGroup.get('idFormaPagamento').value)
+             Number.parseInt(formGroup.get('idItemMovimentacao')!.value),
+             formGroup.get('dataReferencia')!.value,
+             formGroup.get('tipoPrioridade')!.value,             
+             formGroup.get('observacao')!.value,
+             formGroup.get('dataVencimento')!.value,
+             Number.parseFloat(formGroup.get('valor')!.value),
+             formGroup.get('status')!.value,
+             Number.parseInt(formGroup.get('idFormaPagamento')!.value)
          )
      }
 }

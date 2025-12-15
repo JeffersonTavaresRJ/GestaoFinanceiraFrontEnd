@@ -1,12 +1,12 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { AlertMessageForm } from 'src/app/shared/components/alert-form/alert-message-form';
-import { DateConvert } from 'src/app/shared/functions/date-convert';
+import { AlertMessageForm } from '../../../../shared/components/alert-form/alert-message-form';
+import { DateConvert } from '../../../../shared/functions/date-convert';
 import { MovimentacaoPrevista } from '../../_models/mov-prevista-model';
 import { MovPrevistaService } from '../../_services/mov-prevista-service';
-import { environment } from 'src/environments/environment';
-import { GenericResourceDropDownEnumModel } from 'src/app/shared/components/generic-resource-dropdown/models/generic-resource-dropdown-enum-model';
+import { environment } from '../../../../../environments/environment';
+import { GenericResourceDropDownEnumModel } from '../../../../shared/components/generic-resource-dropdown/models/generic-resource-dropdown-enum-model';
 
 interface ParamListMovPre{
   idCategoria?: number, 
@@ -30,22 +30,23 @@ export class MovPrevistaListComponent implements OnInit {
   formGroup: FormGroup;
   formBuilder: FormBuilder;
 
-  arStDate: string[];
+  arStDate: string[]=[];
   status?: string;
-  dataIni: Date;
-  dataFim: Date;
-  index: number;
-  idItemMovimentacao: number;
+  dataIni?: Date;
+  dataFim?: Date;
+  index?: number;
+  id: number=0;
+  idItemMovimentacao?: number;
   valorTotalReceita: number = 0;
   valorTotalDespesa: number = 0;
-  dataReferencia: Date;
-  displayDetalhe: boolean;
-  paramListMovPre: ParamListMovPre;
+  dataReferencia?: Date;
+  displayDetalhe?: boolean;
+  paramListMovPre?: ParamListMovPre;
 
 
-  arEnumStatus: GenericResourceDropDownEnumModel[];
-  arMovPrevistas: MovimentacaoPrevista[];
-  arMovPrevistasAux: MovimentacaoPrevista[];
+  arEnumStatus: GenericResourceDropDownEnumModel[]=[];
+  arMovPrevistas: MovimentacaoPrevista[]=[];
+  arMovPrevistasAux: MovimentacaoPrevista[]=[];
   detalheMovimentacaoPrevista: MovimentacaoPrevista = new MovimentacaoPrevista();
 
   constructor(protected injector: Injector) {
@@ -53,6 +54,15 @@ export class MovPrevistaListComponent implements OnInit {
     this.movPrevistaService = injector.get(MovPrevistaService);
     this.alertMessageForm = injector.get(AlertMessageForm);
     this.formBuilder = injector.get(FormBuilder);
+
+    this.formGroup = this.formBuilder.group({
+      idCategoria: [null],
+      idItemMovimentacao: [null],
+      idFormaPagamento: [null],
+      idPrioridade: [null]
+    });
+    
+
   }
 
   ngOnInit(): void {
@@ -62,29 +72,32 @@ export class MovPrevistaListComponent implements OnInit {
   }
 
   filtrarTablePorPeriodo() {
-    this.dataFim = new Date(this.dataFim.getFullYear(),
-      this.dataFim.getMonth() + 1,
+    debugger;
+    this.dataFim = new Date(this.dataFim!.getFullYear(),
+      this.dataFim!.getMonth() + 1,
       0);
-    if (this.dataFim < this.dataIni) {
+    if (this.dataFim < this.dataIni!) {
       this.alertMessageForm.showError("O período informado possui o mês/ano inicial maior do que o mês/ano final");
       return false;
     }
+    debugger;
     this.movPrevistaService.getByDataVencimento(DateConvert.formatDateYYYYMMDD(this.dataIni, '-'),
       DateConvert.formatDateYYYYMMDD(this.dataFim, '-'))
       .subscribe(result => {
         this.arMovPrevistas = result;
         this.arMovPrevistasAux = result;
-        this.filtrarTablePorParametros();
+        this.filtrarTablePorParametros();        
         this.calcularSaldo();
       });
   }
 
   filtrarTablePorParametros(event?: any) {
+    
     this.arMovPrevistas = this.arMovPrevistasAux;
-    var idCategoria = this.formGroup.get('idCategoria').value;
-    var idItemMovimentacao = this.formGroup.get('idItemMovimentacao').value;
-    var idFormaPagamento = this.formGroup.get('idFormaPagamento').value;
-    var idPrioridade = this.formGroup.get('idPrioridade').value;
+    var idCategoria = this.formGroup.get('idCategoria')!.value;
+    var idItemMovimentacao = this.formGroup.get('idItemMovimentacao')!.value;
+    var idFormaPagamento = this.formGroup.get('idFormaPagamento')!.value;
+    var idPrioridade = this.formGroup.get('idPrioridade')!.value;
     
     //armazenando parâmetros da última consulta..
     var param : ParamListMovPre={
@@ -116,9 +129,8 @@ export class MovPrevistaListComponent implements OnInit {
     this.calcularSaldo();
   }
 
-  modalDeleteMessage(_idItemMovimentacao: number, _dataReferencia: Date) {
-    this.idItemMovimentacao = _idItemMovimentacao;
-    this.dataReferencia = _dataReferencia;
+  modalDeleteMessage(_id: number) {
+    this.id = _id;
   }
 
   modalDetalhe(movimentacaoPrevista: MovimentacaoPrevista){
@@ -126,9 +138,9 @@ export class MovPrevistaListComponent implements OnInit {
     this.detalheMovimentacaoPrevista = movimentacaoPrevista;
  }
 
-  eventDelete(event) {
+  eventDelete(event: any) {
     if (event) {
-      this.movPrevistaService.delete(this.idItemMovimentacao, DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-'))
+      this.movPrevistaService.deleteById(this.id)
         .subscribe(sucess => {
           this.alertMessageForm.showSuccess(sucess.message);
           this.filtrarTablePorPeriodo()
@@ -153,30 +165,31 @@ export class MovPrevistaListComponent implements OnInit {
     if(param!= null){
        this.paramListMovPre = JSON.parse(param);
 
-       if(this.paramListMovPre.idCategoria!=null){
-        this.formGroup.get('idCategoria').setValue(this.paramListMovPre.idCategoria);
+       if(this.paramListMovPre!.idCategoria!=null){
+        this.formGroup.get('idCategoria')!.setValue(this.paramListMovPre!.idCategoria);
        }
 
-       if(this.paramListMovPre.idItemMovimentacao!=null){
-        this.formGroup.get('idItemMovimentacao').setValue(this.paramListMovPre.idItemMovimentacao);
+       if(this.paramListMovPre!.idItemMovimentacao!=null){
+        this.formGroup.get('idItemMovimentacao')!.setValue(this.paramListMovPre!.idItemMovimentacao);
        }
 
-       if(this.paramListMovPre.idFormaPagamento!=null){
-        this.formGroup.get('idFormaPagamento').setValue(this.paramListMovPre.idFormaPagamento);
+       if(this.paramListMovPre!.idFormaPagamento!=null){
+        this.formGroup.get('idFormaPagamento')!.setValue(this.paramListMovPre!.idFormaPagamento);
        }
 
-       if(this.paramListMovPre.idPrioridade!=null){
-        this.formGroup.get('idPrioridade').setValue(this.paramListMovPre.idPrioridade);
+       if(this.paramListMovPre!.idPrioridade!=null){
+        this.formGroup.get('idPrioridade')!.setValue(this.paramListMovPre!.idPrioridade);
        }
 
-       this.status = this.paramListMovPre.status;
-       this.dataIni = DateConvert.stringToDate(this.paramListMovPre.dataIni, '-');
-       this.dataFim = DateConvert.stringToDate(this.paramListMovPre.dataFim, '-');
+       this.status = this.paramListMovPre!.status;
+       this.dataIni = DateConvert.stringToDate(this.paramListMovPre!.dataIni, '-');
+       this.dataFim = DateConvert.stringToDate(this.paramListMovPre!.dataFim, '-');
 
        this.filtrarTablePorPeriodo();
        this.filtrarTablePorParametros();
 
     }else{
+      /*
       this.actResourceRoute.data.subscribe(
         (sucess: { resolveResources: MovimentacaoPrevista[] }) => {
           //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
@@ -185,6 +198,14 @@ export class MovPrevistaListComponent implements OnInit {
           this.calcularSaldo();
         }
       );
+      */     
+     this.actResourceRoute.data.subscribe((success:any)=>{
+        debugger;
+        this.arMovPrevistas = success.resolveResources;
+        this.arMovPrevistasAux = success.resolveResources;
+        this.calcularSaldo();
+
+     });
     }
 
 
@@ -194,7 +215,8 @@ export class MovPrevistaListComponent implements OnInit {
     this.valorTotalDespesa = 0;
     this.valorTotalReceita = 0;
     this.arMovPrevistas.forEach((element: MovimentacaoPrevista) => {
-      if (element.itemMovimentacao.tipo == "D") {
+      
+      if (element.itemMovimentacao.tipo== "D") {
         this.valorTotalDespesa += element.valor;
       } else {
         this.valorTotalReceita += element.valor;
@@ -204,8 +226,8 @@ export class MovPrevistaListComponent implements OnInit {
     //ordenação no formato YYYYMMDD..
     this.arMovPrevistas.sort(function (a, b) {
       return (
-        ((new Date(a.dataVencimento.toString()).getFullYear() * 10000) + (new Date(a.dataVencimento.toString()).getMonth() * 100) + new Date(a.dataVencimento.toString()).getDate()) -
-        ((new Date(b.dataVencimento.toString()).getFullYear() * 10000) + (new Date(b.dataVencimento.toString()).getMonth() * 100) + new Date(b.dataVencimento.toString()).getDate())
+        ((new Date(a.dataVencimento!.toString()).getFullYear() * 10000) + (new Date(a.dataVencimento!.toString()).getMonth() * 100) + new Date(a.dataVencimento!.toString()).getDate()) -
+        ((new Date(b.dataVencimento!.toString()).getFullYear() * 10000) + (new Date(b.dataVencimento!.toString()).getMonth() * 100) + new Date(b.dataVencimento!.toString()).getDate())
       )
     });
 
