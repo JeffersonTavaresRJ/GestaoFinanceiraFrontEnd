@@ -4,6 +4,7 @@ import { MovimentacaoPrevista } from "../../../_models/mov-prevista-model";
 
 export class MovimentacaoPrevistaCommandUpdate extends GenericCommand {
     constructor(
+        public id: number = null,
         public idItemMovimentacao: number = null,
         public dataReferencia: Date = null,
         public tipoPrioridade: string = null,
@@ -16,6 +17,7 @@ export class MovimentacaoPrevistaCommandUpdate extends GenericCommand {
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoPrevistaCommandUpdate{
         return new MovimentacaoPrevistaCommandUpdate(
+             Number.parseInt(formGroup.get('id').value),
              Number.parseInt(formGroup.get('idItemMovimentacao').value),
              formGroup.get('dataReferencia').value,
              formGroup.get('tipoPrioridade').value,             

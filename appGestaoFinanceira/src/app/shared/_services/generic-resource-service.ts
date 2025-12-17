@@ -41,6 +41,7 @@ export abstract class GenericResourceService<T extends Object> extends GenericRe
     }
 
     put(formGroup: FormGroup): Observable<any> {
+      debugger;
       var command = this.convertFormGroupToCmdUpdate(formGroup);
       return this.http.put(this.getUrl(), command)
         .pipe(catchError(this.handlerError)/*,
