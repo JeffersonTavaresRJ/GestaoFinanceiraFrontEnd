@@ -118,7 +118,7 @@ const routes: Routes = [
     { path: 'mov-prevista/controles', 
              component: MovPrevistaFormControlesComponent,
              canActivate:[AuthGuard]},
-    { path: 'mov-prevista/edit/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
+    { path: 'mov-prevista/edit/:id/:dataVencIni/:dataVencFim', component: MovPrevistaFormCadastroComponent,
              canActivate:[AuthGuard],             
              resolve:{resolveMovPrev: MovPrevistaFormResolver}  },
     { path: 'mov-prevista/quitar/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,

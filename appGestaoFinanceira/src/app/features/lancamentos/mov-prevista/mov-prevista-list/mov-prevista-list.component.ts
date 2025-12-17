@@ -35,6 +35,7 @@ export class MovPrevistaListComponent implements OnInit {
   dataIni: Date;
   dataFim: Date;
   index: number;
+  id: number;
   idItemMovimentacao: number;
   valorTotalReceita: number = 0;
   valorTotalDespesa: number = 0;
@@ -116,9 +117,8 @@ export class MovPrevistaListComponent implements OnInit {
     this.calcularSaldo();
   }
 
-  modalDeleteMessage(_idItemMovimentacao: number, _dataReferencia: Date) {
-    this.idItemMovimentacao = _idItemMovimentacao;
-    this.dataReferencia = _dataReferencia;
+  modalDeleteMessage(_id: number) {
+    this.id = _id;
   }
 
   modalDetalhe(movimentacaoPrevista: MovimentacaoPrevista){
@@ -128,7 +128,8 @@ export class MovPrevistaListComponent implements OnInit {
 
   eventDelete(event) {
     if (event) {
-      this.movPrevistaService.delete(this.idItemMovimentacao, DateConvert.formatDateYYYYMMDD(this.dataReferencia, '-'))
+      debugger;
+      this.movPrevistaService.deleteById(this.id)
         .subscribe(sucess => {
           this.alertMessageForm.showSuccess(sucess.message);
           this.filtrarTablePorPeriodo()

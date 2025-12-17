@@ -38,6 +38,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
   protected buildResourceForm() {
     
     this.resourceForm = this.resourceFormBuilder.group({
+      id: [null],
       idCategoria: [null],
       idItemMovimentacao: [null, Validators.required],
       dataReferencia: [null],
@@ -75,6 +76,7 @@ export class MovPrevistaFormCadastroComponent extends GenericResourceFormCompone
         (sucess: { resolveMovPrev: MovimentacaoPrevista }) => {
           //console.log(sucess);
           //o resolveMovPrev deve ser o mesmo nome na variável resolve da rota.. 
+          this.resourceForm.get('id').setValue(sucess.resolveMovPrev.id);
           this.resourceForm.get('idCategoria').setValue(sucess.resolveMovPrev.itemMovimentacao.categoria.id);
           this.resourceForm.get('idItemMovimentacao').setValue(sucess.resolveMovPrev.itemMovimentacao.id);
           this.resourceForm.get('dataReferencia').setValue(new Date(sucess.resolveMovPrev.dataReferencia));

@@ -56,7 +56,8 @@
             <thead>
                 <tr>
                     <th style="text-align:center; width: 10%;">Prioridade</th>
-                    <th style="text-align:center; width: 14%;">Data de Vencimento</th>
+                    <th style="text-align:center; width: 2%;">Id</th>
+                    <th style="text-align:center; width: 12%;">Data de Vencimento</th>
                     <th style="width: 20%;">Item de Movimentação</th>
                     <th style="width: 16%;">Forma de Pagamento</th>
                     <th style="text-align:center; width: 17%;">Valor (R$)</th>
@@ -86,7 +87,10 @@
                                     height="27">
                             </span>
                         </td>
-                        <td style="text-align:center; width: 14.5%;">
+                        <td style="text-align:center; width: 2%;">
+                            {{movimentacaoPrevista.id}}
+                        </td>
+                        <td style="text-align:center; width: 12.5%;">
                             {{movimentacaoPrevista.dataVencimento | date:'dd/MM/yyyy'}}
                         </td>
                         <td style="width: 20.7%;">
@@ -117,13 +121,13 @@
                                 title="Status: {{movimentacaoPrevista.statusDescricao}}" width="49.5" height="27">
                         </td>
                         <td style="text-align:center; width: 15.4%;">
-                            <a [routerLink]="['/mov-prevista/edit',movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia, dataIni | DateFormatToString, dataFim | DateFormatToString]"
+                            <a [routerLink]="['/mov-prevista/edit',movimentacaoPrevista.id, dataIni | DateFormatToString, dataFim | DateFormatToString]"
                                 *ngIf="movimentacaoPrevista.status=='A'" class="btn btn-outline-info btn-sm me-3">
                                 Editar
                             </a>
                             <button *ngIf="movimentacaoPrevista.status=='A'"
                                      class="btn btn-outline-danger btn-sm"
-                                     (click)="modalDeleteMessage(movimentacaoPrevista.itemMovimentacao.id, movimentacaoPrevista.dataReferencia)"
+                                     (click)="modalDeleteMessage(movimentacaoPrevista.id)"
                                      data-bs-toggle="modal" data-bs-target="#modalDelete">
                                 Excluir
                             </button>

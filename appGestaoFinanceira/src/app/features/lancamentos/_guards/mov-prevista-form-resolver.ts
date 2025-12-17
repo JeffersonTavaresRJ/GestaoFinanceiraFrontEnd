@@ -6,16 +6,14 @@ import { MovPrevistaService } from '../_services/mov-prevista-service';
 @Injectable()
 export class MovPrevistaFormResolver implements Resolve<MovimentacaoPrevista> {
 
-  private idItemMovimentacao: number;
-  private dataReferencia: string;
+  private id: number;
   constructor(private movPrevistaService: MovPrevistaService) {
 
   }
 
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot) {
-    this.idItemMovimentacao = activatedRouteSnapshot.params['idItemMov'];
-    this.dataReferencia = activatedRouteSnapshot.params['dataRef'];
-    return this.movPrevistaService.getByKey(this.idItemMovimentacao, this.dataReferencia);
+    this.id = activatedRouteSnapshot.params['id'];
+    return this.movPrevistaService.getById(this.id);
   }
 
 }

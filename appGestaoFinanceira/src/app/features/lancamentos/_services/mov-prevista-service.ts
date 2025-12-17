@@ -49,10 +49,5 @@ export class MovPrevistaService extends GenericResourceService<MovimentacaoPrevi
   public GetAllTiposRecorrencias(): Observable<any> {
     this.setApiOption('/GetAllTipoRecorrencias');
     return this.http.get(this.getUrl());
-  }
-
-  delete(idItemMovimentacao: number, dataReferencia: string): Observable<any> {
-    return this.http.delete(`${this.getUrl()}/${idItemMovimentacao}/${dataReferencia}`)
-      .pipe(catchError(this.handlerError));
-  }
+  }  
 }
