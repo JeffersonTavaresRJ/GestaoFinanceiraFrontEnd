@@ -5,13 +5,17 @@ export class MovimentacaoRealizadaCommandQuitarMovPrev extends MovimentacaoReali
 
     static result: MovimentacaoRealizadaCommandUpdate;
     
-    constructor(public statusMovimentacaoPrevista: string = null){
+    constructor(public statusMovimentacaoPrevista: string = null,
+                public idMovimentacaoPrevista: number = null
+    ){
         super();
     };
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandQuitarMovPrev{
         var s = super.convertFormGroupToCommand(formGroup);
-        var r = new MovimentacaoRealizadaCommandQuitarMovPrev(formGroup.get('statusMovimentacaoPrevista').value);
+        var r = new MovimentacaoRealizadaCommandQuitarMovPrev(
+            formGroup.get('statusMovimentacaoPrevista').value,
+            formGroup.get('idMovimentacaoPrevista').value);
         r.dataMovimentacaoRealizada = s.dataMovimentacaoRealizada;
         r.dataReferencia = s.dataReferencia;
         r.id = s.id;
@@ -21,6 +25,7 @@ export class MovimentacaoRealizadaCommandQuitarMovPrev extends MovimentacaoReali
         r.observacao = s.observacao;
         r.tipoPrioridade = s.tipoPrioridade;
         r.valor = s.valor;
+        r.idMovimentacaoPrevista = s.idMovimentacaoPrevista;
         return r;
     }
 }

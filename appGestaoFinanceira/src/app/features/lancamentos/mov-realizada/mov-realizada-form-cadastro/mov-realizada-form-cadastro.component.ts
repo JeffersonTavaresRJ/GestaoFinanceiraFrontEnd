@@ -57,6 +57,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
     this.resourceForm = this.resourceFormBuilder.group({
       id: [null],
       idCategoria:[null],
+      idMovimentacaoPrevista:[null],
       idItemMovimentacao:[null, Validators.required],
       idConta:[null, Validators.required],
       idFormaPagamento:[null, Validators.required],
@@ -120,6 +121,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
           this.resourceForm.get('valor').setValue(sucess.resolveMovReal.valor);
           this.resourceForm.get('idConta').setValue(sucess.resolveMovReal.conta.id);
           this.resourceForm.get('idFormaPagamento').setValue(sucess.resolveMovReal.formaPagamento.id);
+          this.resourceForm.get('idMovimentacaoPrevista').setValue(sucess.resolveMovReal.idMovimentacaoPrevista);
 
           this.descricaoCategoria = sucess.resolveMovReal.itemMovimentacao.categoria.descricao;
           this.descricaoItemMovimentacao = sucess.resolveMovReal.itemMovimentacao.descricao;

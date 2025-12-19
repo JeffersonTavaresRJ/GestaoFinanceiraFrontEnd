@@ -94,7 +94,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
       (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
         //o resolveResources deve ser o mesmo nome na variável resolve da rota..
         if (sucess.resolveMovReal.length == 0) {
-          this.addArForms(
+          this.addArForms(this.movimentacaoPrevista.id,
             this.movimentacaoPrevista.itemMovimentacao.id,
             this.movimentacaoPrevista.tipoPrioridade,
             this.movimentacaoPrevista.observacao,
@@ -103,7 +103,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
             null, null, this.movimentacaoPrevista.valor, true);
         } else {
           sucess.resolveMovReal.forEach((element: MovimentacaoRealizada) => {
-            this.addArForms(
+            this.addArForms(this.movimentacaoPrevista.id,
               this.movimentacaoPrevista.itemMovimentacao.id,
               this.movimentacaoPrevista.tipoPrioridade,
               this.movimentacaoPrevista.observacao,
@@ -164,7 +164,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     //adicionando o novo form no array..
     this.valorTotalaSerPago = this.totalizarValorPago(true);
     if (this.arForms.length < 10) {
-      this.addArForms(
+      this.addArForms(this.movimentacaoPrevista.id,
         this.movimentacaoPrevista.itemMovimentacao.id,
         this.movimentacaoPrevista.tipoPrioridade,
         this.movimentacaoPrevista.observacao,
@@ -229,7 +229,9 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     this.arForms.controls[i].get('descricaoFormaPagamento').setValue(descricao[0]);  
   }
 
-  private addArForms(_idItemMovimentacao: number,
+  private addArForms(
+    _idMovimentacaoPrevista: number,
+    _idItemMovimentacao: number,
     _tipoPrioridade: string,
     _observacao: string,
     _id: number,
@@ -242,6 +244,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
     _descricaoFormaPagamento?: string
   ) {    
     this.arForms.push(this.fb.group({
+      idMovimentacaoPrevista: [_idMovimentacaoPrevista],
       idItemMovimentacao: [_idItemMovimentacao],
       tipoPrioridade: [_tipoPrioridade],
       observacao: [_observacao],

@@ -12,7 +12,8 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
         public dataMovimentacaoRealizada: Date = null,
         public valor: number = null,
         public idFormaPagamento: number = null,
-        public idConta: number = null
+        public idConta: number = null,
+        public idMovimentacaoPrevista: number = null
     ) { super(); };
 
     static convertFormGroupToCommand(formGroup: FormGroup):MovimentacaoRealizadaCommandUpdate{
@@ -33,8 +34,8 @@ export class MovimentacaoRealizadaCommandUpdate extends GenericCommand {
             dataMovimentacaoRealizada,
             Number.parseFloat(formGroup.get('valor').value),
             Number.parseInt(formGroup.get('idFormaPagamento').value),
-            Number.parseInt(formGroup.get('idConta').value)
-        );
+            Number.parseInt(formGroup.get('idConta').value),
+            Number.parseInt(formGroup.get('idMovimentacaoPrevista').value));
     }
 
     
