@@ -48,6 +48,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   arFormGroup: FormGroup[] = [];
   arContas: Conta[]=[];
   arFormasPagamento: FormaPagamento[]=[];
+  arMovimentacoesRealizadas: MovimentacaoRealizada[]=[];
 
   constructor(
     protected injector: Injector,
@@ -86,14 +87,11 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         this.movimentacaoPrevista = sucess.resolveMovPrev;
         //tratamento para conversão de string para date..
         this.movimentacaoPrevista.dataVencimento = new Date(sucess.resolveMovPrev.dataVencimento);
-      }
-    );
 
-    //leitura do resolver das Movimentações Realizadas..
-    this.actResourceRoute.data.subscribe(
-      (sucess: { resolveMovReal: MovimentacaoRealizada[] }) => {
-        //o resolveResources deve ser o mesmo nome na variável resolve da rota..
-        if (sucess.resolveMovReal.length == 0) {
+        //tratando as movimentacoes realizadas, que foram conciliadas com as movimentações previstas..
+        this.arMovimentacoesRealizadas = sucess.resolveMovPrev.movimentacoesRealizadas;
+
+        if(this.arMovimentacoesRealizadas== null || this.arMovimentacoesRealizadas.length==0){
           this.addArForms(this.movimentacaoPrevista.id,
             this.movimentacaoPrevista.itemMovimentacao.id,
             this.movimentacaoPrevista.tipoPrioridade,
@@ -101,8 +99,8 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
             0, 
             DateConvert.formatDateYYYYMMDD(this.movimentacaoPrevista.dataVencimento, '-'),
             null, null, this.movimentacaoPrevista.valor, true);
-        } else {
-          sucess.resolveMovReal.forEach((element: MovimentacaoRealizada) => {
+        }else{
+          this.arMovimentacoesRealizadas.forEach((element: MovimentacaoRealizada) => {
             this.addArForms(this.movimentacaoPrevista.id,
               this.movimentacaoPrevista.itemMovimentacao.id,
               this.movimentacaoPrevista.tipoPrioridade,
@@ -120,6 +118,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         }
       }
     );
+    
   }
 
   modalDeleteMessage(id: number, dataMovimentacaoRealizada: Date, i:number) {

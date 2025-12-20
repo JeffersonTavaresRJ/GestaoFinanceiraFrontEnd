@@ -1,6 +1,7 @@
 import { Observable} from 'rxjs';
 import {FormaPagamento} from '../../cadastros-basicos/_models/forma-pagamento';
 import { Movimentacao } from "./movimentacao";
+import { MovimentacaoRealizada } from './mov-realizada-model.';
 
 export class MovimentacaoPrevista extends Movimentacao{
     
@@ -15,7 +16,8 @@ export class MovimentacaoPrevista extends Movimentacao{
      public tipoRecorrencia: string=null,
      public nrParcela: number=null,
      public nrParcelaTotal: number=null,
-     public status: string=null
+     public status: string=null,
+     public movimentacoesRealizadas: MovimentacaoRealizada[]=[]
     ){ 
         super();
 

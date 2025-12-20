@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { MovimentacaoRealizada } from '../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../_services/mov-realizada-service';
 
+/*não vou precisar. vai trazer na movimentacao prevista..*/
 @Injectable()
 export class MovPrevistaQuitarResolver implements Resolve<MovimentacaoRealizada[]> {  
   

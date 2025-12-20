@@ -124,7 +124,7 @@ const routes: Routes = [
     { path: 'mov-prevista/quitar/:id/:idItemMov/:dataRef/:dataVencIni/:dataVencFim', component: MovPrevistaQuitarFormComponent,
              canActivate:[AuthGuard], 
              //posso ter qts resolvers que eu quiser...            
-             resolve:{resolveMovReal: MovPrevistaQuitarResolver, 
+             resolve:{//resolveMovReal: MovPrevistaQuitarResolver, 
                       resolveMovPrev: MovPrevistaFormResolver,
                       resolveConta: ContaListResolver,
                       resolveFormPag: FormaPagamentoListResolver} },
