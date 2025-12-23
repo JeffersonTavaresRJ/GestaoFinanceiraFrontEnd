@@ -122,6 +122,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
   }
 
   modalDeleteMessage(id: number, dataMovimentacaoRealizada: Date, i:number) {
+    debugger;
     var stDataMovRealizada = DateConvert.formatDateDDMMYYYY(dataMovimentacaoRealizada, '/');
     this.idxDelete = i;
     this.idMovRealizadaDelete = id;
