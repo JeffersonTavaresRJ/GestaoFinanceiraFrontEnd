@@ -17,22 +17,22 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
         
-      - name: Limpar ambiente e liberar porta 8080
-        shell: powershell
+      #- name: Limpar ambiente e liberar porta 8080
+        #shell: powershell
         # Define que todos os comandos 'run' deste passo rodam dentro da pasta correta
-        working-directory: ./appGestaoFinanceira
-        run: |
+        #working-directory: ./appGestaoFinanceira
+        #run: |
           # 1. Derruba os containers
-          docker-compose down --remove-orphans
+          #docker-compose down --remove-orphans
           
           # 2. Tenta encontrar e matar o processo na porta 8080 (sem dar erro se não houver nada)
-          $conn = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue
-          if ($conn) {
-              Write-Host "Limpando processo na porta 8080..."
-              Stop-Process -Id $conn.OwningProcess -Force
-          } else {
-              Write-Host "Porta 8080 já está livre."
-          }
+          #$conn = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue
+          #if ($conn) {
+              #Write-Host "Limpando processo na porta 8080..."
+              #Stop-Process -Id $conn.OwningProcess -Force
+          #} else {
+              #Write-Host "Porta 8080 já está livre."
+          #}
      
       - name: Build Limpo e Deploy
         # Define que todos os comandos 'run' deste passo rodam dentro da pasta correta
