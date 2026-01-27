@@ -56,3 +56,10 @@ ng g c features/dashboards/receitas-despesas-anual-dashboard
 var response =JSON.parse(pm.response.text());
 var token = response.user.accessToken;
 pm.environment.set('token', token);
+
+##Configuração para o docker
+Diretório: cd Estudos\NetCore\GestaoFinanceira\Fontes\FrontEnd\appGestaoFinanceira
+Comando para construir a imagem: docker build -t app-gestao-financeira .
+Comando para criar o container:
+"docker-compose down" //remove o container..
+"docker-compose up --build -d" //cria novamente..

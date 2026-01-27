@@ -7,7 +7,7 @@
     </div>
   
     <div class="card-body">
-      <form [formGroup]="formLogin" (submit)="autenticar()">
+      <form [formGroup]="formLogin" (ngSubmit)="autenticar()">
         <div class="form-group col-12">
           <label for="name">e-mail:</label>
           <input type="text" class="form-control" formControlName="eMail"/>
@@ -22,7 +22,7 @@
   
         <div class="mt-4" style="text-align: right;">
           <app-button-submmit-form [button-disabled]="!formLogin.valid"
-           button-title="Acessar Sistema" button-path-ico="assets/icons/lock-white-18dp.svg">
+           button-title="Acessar Sistema - Teste01" button-path-ico="assets/icons/lock-white-18dp.svg">
           </app-button-submmit-form>
         </div>
       </form>

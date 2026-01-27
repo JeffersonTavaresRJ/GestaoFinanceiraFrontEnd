@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - rede-gestao-financeira
+    container_name: app-gestao-financeira
+    ports:
+      - "8080:80"
+    restart: always
+networks:
+  rede-gestao-financeira:
+    external: true

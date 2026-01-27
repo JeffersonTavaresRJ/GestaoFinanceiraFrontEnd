@@ -26,13 +26,16 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
-    window.localStorage.removeItem(environment.keyUser);   
-    
+    window.localStorage.removeItem(environment.keyUser); 
+    /*  
+    console.log("Valor idxConnection: "+environment.IdxConnection);
     if(environment.IdxConnection >0){
+      console.log("Executando autenticação");
       this.formLogin.get('eMail').setValue(environment.credentials[0]);
       this.formLogin.get('senha').setValue(environment.credentials[1]);
       this.autenticar();
     }
+    */
   }
 
   buildForm() {
@@ -44,6 +47,10 @@ export class LoginFormComponent implements OnInit {
   }
 
   autenticar(): void {
+    if (this.formLogin.invalid){
+      return;
+    }
+    
     this.usuarioService.autenthicate(this.formLogin.value).subscribe(
       (s: any) => {
         window.localStorage.setItem(environment.keyUser, JSON.stringify(s.user));

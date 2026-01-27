@@ -2,6 +2,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+	"paths": {
+      "src/*": ["src/*"]
+    },
     "outDir": "./out-tsc/app",
     "strictNullChecks": false,
     "types": []
