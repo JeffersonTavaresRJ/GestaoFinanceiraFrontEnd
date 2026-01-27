@@ -41,12 +41,18 @@ jobs:
         #run: npm run build -- --prod
         
       - name: Limpar ambiente e liberar porta 8080
-        shell: pwsh
+        shell: powershell
         run: |
+          # 1. Derruba os containers
           docker-compose down --remove-orphans
-          $process = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue
-          if ($process) {
-            Stop-Process -Id $process.OwningProcess -Force
+          
+          # 2. Tenta encontrar e matar o processo na porta 8080 (sem dar erro se não houver nada)
+          $conn = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue
+          if ($conn) {
+              Write-Host "Limpando processo na porta 8080..."
+              Stop-Process -Id $conn.OwningProcess -Force
+          } else {
+              Write-Host "Porta 8080 já está livre."
           }
      
       - name: Build Limpo e Deploy
