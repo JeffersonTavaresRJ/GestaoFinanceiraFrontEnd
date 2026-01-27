@@ -26,7 +26,7 @@ jobs:
            
       - name: Remove o container e limpa rede 8080
         continue-on-error: true
-        run: ..\..\appGestaoFinanceira\docker-compose down --remove-orphans Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess | Stop-Process -Force
+        run: docker-compose down --remove-orphans Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess | Stop-Process -Force
         
       #- name: Setup Node.js ${{ matrix.node-version }}
         #uses: actions/setup-node@v3
@@ -42,8 +42,8 @@ jobs:
      
       - name: Build Limpo e Deploy
         run: |
-          ..\..\appGestaoFinanceira\docker-compose build --no-cache
-          ..\..\appGestaoFinanceira\docker-compose up -d     
+          docker-compose build --no-cache
+          docker-compose up -d     
        
     #  - name: Build e Up com Docker Compose
         #run: docker-compose up --build -d
