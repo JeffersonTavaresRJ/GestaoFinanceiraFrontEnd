@@ -2,14 +2,14 @@
 
     <div class="card-header bg-dark">
       <div class="center text-white">
-        <strong>Login de Usuário</strong>
+        <strong>Login de Usuário - Teste</strong>
       </div>
     </div>
   
     <div class="card-body">
       <form [formGroup]="formLogin" (ngSubmit)="autenticar()">
         <div class="form-group col-12">
-          <label for="name">e-mail teste 21:</label>
+          <label for="name">e-mail:</label>
           <input type="text" class="form-control" formControlName="eMail"/>
           <app-field-validation-form [form-control] = "formLogin.get('eMail')"></app-field-validation-form>
         </div>
