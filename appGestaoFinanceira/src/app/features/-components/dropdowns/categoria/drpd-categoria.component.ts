@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { Categoria } from 'src/app/features/cadastros-basicos/_models/categoria-model';
 import { ItemMovimentacao } from 'src/app/features/cadastros-basicos/_models/item-movimentacao-model';
 import { CategoriaService } from 'src/app/features/cadastros-basicos/_services/categoria-service';
-import { ItemMovimentacaoService } from 'src/app/features/cadastros-basicos/_services/item-movimentacao-service';
+import { ItemMovimentacaoService } from '../../../../features/cadastros-basicos/_services/item-movimentacao-service';
 import { GenericResourceDropDownComponent } from 'src/app/shared/components/generic-resource-dropdown/generic-resource-dropdown-component';
 
 @Component({

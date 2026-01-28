@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { ItemMovimentacao } from 'src/app/features/cadastros-basicos/_models/item-movimentacao-model';
+import { ItemMovimentacao } from '../../../../features/cadastros-basicos/_models/item-movimentacao-model';
 import { ItemMovimentacaoService } from 'src/app/features/cadastros-basicos/_services/item-movimentacao-service';
 import { GenericResourceDropDownComponent } from 'src/app/shared/components/generic-resource-dropdown/generic-resource-dropdown-component';
 

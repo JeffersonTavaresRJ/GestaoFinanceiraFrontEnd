@@ -1,5 +1,5 @@
-import { GenericResourceModel } from "src/app/shared/_models/generic-resource-model";
-import { ItemMovimentacao } from "src/app/features/cadastros-basicos/_models/item-movimentacao-model";
+import { GenericResourceModel } from "../../../shared/_models/generic-resource-model";
+import { ItemMovimentacao } from "../../../features/cadastros-basicos/_models/item-movimentacao-model";
 
 export class Movimentacao extends GenericResourceModel{
     constructor(
