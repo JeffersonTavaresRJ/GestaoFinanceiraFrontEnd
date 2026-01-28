@@ -19,7 +19,7 @@ jobs:
         
       - name: Limpar ambiente e liberar porta 8080
         shell: powershell
-         Define que todos os comandos 'run' deste passo rodam dentro da pasta correta
+         #Define que todos os comandos 'run' deste passo rodam dentro da pasta correta
         working-directory: ./appGestaoFinanceira
         run: |
           # 1. Derruba os containers
