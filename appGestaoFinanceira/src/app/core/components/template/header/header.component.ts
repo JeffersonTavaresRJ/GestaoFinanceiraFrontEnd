@@ -38,18 +38,20 @@ export class HeaderComponent implements OnInit {
     if (!this.usuarioAutenticado){
       this.resetUser();
     }
-    //debugger;
+    debugger;
     var dataAtual = new Date();
-    
-    this.anoFinal = dataAtual.getFullYear();
-    this.anoInicial = this.anoFinal-5;
+    var anoAtual = dataAtual.getFullYear();
+    var mesAtual = dataAtual.getMonth();
 
-    this.dataIni = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
-    this.dataFim = new Date(dataAtual.getFullYear(), dataAtual.getMonth()+1, 0);
+    this.anoInicial = anoAtual-5;
+    this.anoFinal = anoAtual;    
+
+    this.dataIni = new Date(anoAtual, mesAtual, 1);
+    this.dataFim = new Date(anoAtual, mesAtual+1, 0);
 
 
-    this.dataIniMenos13Meses = new Date(dataAtual.getFullYear()-1, dataAtual.getMonth()==1?12:dataAtual.getMonth()-1, 1);
-    this.dataFimMais12Meses = new Date(dataAtual.getFullYear()+1, dataAtual.getMonth()+1, 0);
+    this.dataIniMenos13Meses = new Date(anoAtual-1, mesAtual==0 ? 11 : mesAtual-1, 1);
+    this.dataFimMais12Meses  = new Date(anoAtual+1, mesAtual+1, 0);
 
     this.bsUpdateUsuario.getEMail().subscribe(valor =>{
       this.user_name = valor

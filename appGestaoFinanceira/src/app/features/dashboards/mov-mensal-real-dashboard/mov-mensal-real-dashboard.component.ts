@@ -23,6 +23,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
 
   arMovPrev: MovimentacaoPrevista[]=[];
   arMovReal: MovimentacaoRealizada[]=[];
+  arMovReal_202601: MovimentacaoRealizada[]=[];
   dataFim:Date;
   mesAno:string;
   idConta:number;
@@ -94,6 +95,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
   renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
 
     //considerar somente Movimentações Diárias..
+    debugger;
     arMovPrevista = arMovPrevista.filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
     arMovRealizada= arMovRealizada.filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
 
@@ -112,7 +114,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
 
     var arrMovReal = new Array();
     arrMovReal = arMovRealizada;
-
+    //debugger;
     //filtro por conta..
     if(this.idConta!=null && this.idConta >0){
        var arr        = new Array();
@@ -252,7 +254,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
 
   private montarArrayPeriodo(dataFim: Date){
     //debugger;
-    var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()==1?12:dataFim.getMonth()-1, 1);
+    var dataIni = new Date(dataFim.getFullYear()-1, dataFim.getMonth()==0 ? 11 : dataFim.getMonth()-1, 1);
     this.arDadosChart.length=0;
     for (let data = dataIni; data <= dataFim; data=new Date(data.getFullYear(), data.getMonth()+2,0)) {
          var dados: DadosChartSintet={Data:DateConvert.formatDateMMYYYY(data,'/'), Planejado:0, Receita:0, Despesa:0};
@@ -264,11 +266,12 @@ export class MovMensalRealDashboardComponent implements OnInit {
     var result:DadosChartAnalit[]=[];
     
     arr.reduce(function(acumulador, obj){
-      //a chave do array do acumulador é a dataReferencia + tipo..
-      var idx = DateConvert.formatDateYYYYMMDD(obj.dataReferencia, '-')+' - '+obj.itemMovimentacao.tipo;
+      //a chave do array do acumulador é a mes/ano + tipo.. 
+       var mesAno = DateConvert.formatDateMMYYYY(obj.dataReferencia, '/');
+      var idx = mesAno +'-'+obj.itemMovimentacao.tipo;
 
       if (!acumulador[idx]){          
-        var row:DadosChartAnalit = {Data: DateConvert.formatDateMMYYYY(obj.dataReferencia,'/'), 
+        var row:DadosChartAnalit = {Data: mesAno, 
                                     Tipo: obj.itemMovimentacao.tipo, 
                                     TipoDescricao: obj.itemMovimentacao.tipoDescricao, 
                                     Valor: 0}

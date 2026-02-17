@@ -4,15 +4,14 @@
 
 export const environment = {
   production: true,
-  IdxConnection:4,
+  IdxConnection:2,
   //initRouter:'/mov-prevista/quitar/5106/2025-01-31T03:00:00Z/2025-01-01/2025-01-31',
   initRouter:'/mov-prevista/2025-11-01/2025-11-30',
   //initRouter:'/fechamento',
   arApiUrl: [
     'http://gestaofinanceiraapi/',
     'http://gestaofinanceiraapidsv/',
-    'https://localhost:50064/',
-    'https://localhost:44375/',
+    'https://localhost:49852/',
     'https://localhost:5001/'],
   credentials:['jef.tavaresrj@gmail.com', 'adminadmin'],
   keyUser:'usuario',
