@@ -20,6 +20,7 @@ import { Reports } from 'src/app/shared/functions/reports';
 import { Conta } from '../../cadastros-basicos/_models/conta-model';
 
 interface MesesAnteriores{id: number, descricao: string};
+interface TipoDialog{ id: string; descricao: string };
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -40,6 +41,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   seriesTipo:Number[] = [];
   labelsTipo:string[] = [];
   colorsTipo:string[] = [];
+  arTipoDialog: TipoDialog[] = [];
   seriesPrioridade:Number[] = [];
   labelsPrioridade:string[] = [];
   arTotalMeses:number[]=[2,3,4,5,6,7,8,9,10,11,12];
@@ -51,13 +53,15 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   arMovRealPrioridade: any[]=[];
   arMesesAnteriores:MesesAnteriores[]=[];
   dialogData: DialogData;
-  selectedMesAno: string=""; 
+  selectedMesAno: string="";
+  selectedTipoDialog: string = ""; 
   idConta: number;
   totalMeses: number;
   idContas:number[]=[];
   chartTipo: ApexCharts;
   chartPrioridade: ApexCharts;
   headerTitle: String;
+  rdbTipo: String;
   
   constructor(private actResourceRoute: ActivatedRoute,
               protected movRealizadaService: MovRealizadaService,
@@ -87,6 +91,8 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
               }
 
   ngOnInit(): void {
+    this.arTipoDialog.push({id:"C", descricao:"Categoria"});
+    this.arTipoDialog.push({id:"I", descricao:"Item de Movimentação"});
     this.popularMesesAnteriores(12);
   }
 
@@ -201,6 +207,22 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
           result.push(acumulador[obj.itemMovimentacao.id]);
       }
       acumulador[obj.itemMovimentacao.id].Valor+=obj.valor;      
+      return acumulador;
+    }, []);
+    return result;
+  }
+
+  private movRealPorCategoria(arr: MovimentacaoRealizada[]):any[]{
+    //agrupando por categoria..
+    var result = [];
+
+    arr.reduce(function(acumulador, obj){
+      var idx = obj.itemMovimentacao.categoria.id;
+      if (!acumulador[idx]){
+          acumulador[idx] = {Descricao: obj.itemMovimentacao.categoria.descricao, Valor: 0};
+          result.push(acumulador[idx]);
+      }
+      acumulador[idx].Valor+=obj.valor;      
       return acumulador;
     }, []);
     return result;

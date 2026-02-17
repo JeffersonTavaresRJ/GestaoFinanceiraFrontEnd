@@ -1,8 +1,9 @@
-<div class="row justify-content-around mb-1"> 
+<div class="row justify-content-around mb-1">
   <div class="col-2" style="padding-top: 1%;">
     <h6>Despesas x Receitas</h6>
   </div> 
   <div class="field col-3">
+    <div class="ms-5">
       <label for="drpdMesAno" class="label-pesquisa">Mês/Ano:</label>
       <p-dropdown [options]="arFechamentosMensais" 
                       inputId="drpdMesAno"
@@ -16,6 +17,19 @@
                       emptyMessage="Não encontrado"
                       autoDisplayFirst="true">
        </p-dropdown>
+    </div>
+    <div class="mt-1">
+      <label for="drpdDialog" class="label-pesquisa">Gerar Dialog por:</label>
+      <p-dropdown [options]="arTipoDialog" 
+                      inputId="drpDialog"
+                      optionLabel="descricao" 
+                      optionValue="id" 
+                      [(ngModel)]="selectedTipoDialog"
+                      [showClear]="false" 
+                      [filter]="false"
+                      autoDisplayFirst="true">
+      </p-dropdown>
+    </div>       
   </div>
   <div class="card col-7">
     <label class="label-pesquisa mb-1">Gerar Excel</label>

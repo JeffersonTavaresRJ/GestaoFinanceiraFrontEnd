@@ -23,7 +23,6 @@ export class MovMensalRealDashboardComponent implements OnInit {
 
   arMovPrev: MovimentacaoPrevista[]=[];
   arMovReal: MovimentacaoRealizada[]=[];
-  arMovReal_202601: MovimentacaoRealizada[]=[];
   dataFim:Date;
   mesAno:string;
   idConta:number;
