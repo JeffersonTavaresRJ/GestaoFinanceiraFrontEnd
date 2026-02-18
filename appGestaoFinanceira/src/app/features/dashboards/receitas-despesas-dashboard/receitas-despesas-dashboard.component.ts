@@ -54,7 +54,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   arMesesAnteriores:MesesAnteriores[]=[];
   dialogData: DialogData;
   selectedMesAno: string="";
-  selectedTipoDialog: string = ""; 
+  selectedTipoDialog: string = "C"; 
   idConta: number;
   totalMeses: number;
   idContas:number[]=[];
@@ -150,8 +150,15 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
     this.dialogData.header = "Total "+titulo+ ": ("+prioridade+" Prioridade)";
     this.dialogData.backgroundColor = backgroundColor;
 
-    this.movRealPorItemMov(arMovRealFilter).map(m=>
+     //debugger;
+    if (this.selectedTipoDialog == "C"){
+      this.movRealPorCategoria(arMovRealFilter).map(m=>
       {this.dialogData.dataItems.push(new DataItems(m.Descricao, m.Valor, m.Valor/total))});
+    }else{
+      this.movRealPorItemMov(arMovRealFilter).map(m=>
+      {this.dialogData.dataItems.push(new DataItems(m.Descricao, m.Valor, m.Valor/total))});
+    }
+    
 
     this.dialog.open(DialogListComponent, {data: this.dialogData});
 
@@ -279,7 +286,7 @@ export class ReceitasDespesasDashboardComponent implements OnInit {
   }
 
   private options(series:Number[], labels:string[], idChart:string, titulo:string, saldo?:number):any{
-    debugger;
+    //debugger;
     return {
       chart: {
         width: "100%",

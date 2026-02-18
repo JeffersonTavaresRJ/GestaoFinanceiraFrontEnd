@@ -40,7 +40,10 @@
 :host ::ng-deep .p-dropdown{
   font-size: 12px;
   margin-left: 5px;
-  width: 195px;
+}
+
+:host ::ng-deep .dropdown-fixo{
+  width: 195px !important;
 }
 
 :host ::ng-deep .p-dropdown-item{

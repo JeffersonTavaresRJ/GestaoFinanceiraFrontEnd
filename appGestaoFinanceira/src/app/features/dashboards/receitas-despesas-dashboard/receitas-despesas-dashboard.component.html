@@ -23,12 +23,14 @@
                       [(ngModel)]="selectedTipoDialog"
                       [showClear]="false" 
                       [filter]="false"
-                      autoDisplayFirst="true">
+                      autoDisplayFirst="true"
+                      styleClass="dropdown-fixo">
         </p-dropdown>
+
     </p>
   </div> 
   <div class="card col-7">
-    <label class="label-pesquisa mb-1">Gerar Excel</label>
+    <label class="label-pesquisa mb-1 mt-1">Gerar Excel:</label>
     <p>
       <label for="drpdConta" class="label-pesquisa">Conta:</label>
       <p-multiSelect [options]="arContas" 
