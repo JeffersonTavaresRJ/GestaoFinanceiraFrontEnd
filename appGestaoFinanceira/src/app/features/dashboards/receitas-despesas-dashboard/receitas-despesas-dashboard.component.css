@@ -4,45 +4,47 @@
 }
 
 .label-pesquisa{
-  font-size: 14px;
+  font-size: 12px;
+  margin-left: 7px;
 }
 
 :host ::ng-deep .p-multiselect{
-  font-size: small;
+  font-size: 12px;
   width: 220px;
-  margin-left: 10px;
+  margin-left: 5px;
   margin-right: 10px;
 }
 
 :host ::ng-deep .p-multiselect-label {
-  font-size: small !important
+  font-size: 12px !important
 }
 
 :host ::ng-deep .p-multiselect-item {
-  font-size: small !important
+  font-size: 12px !important
 }
 
 :host ::ng-deep .p-multiselect-empty-message {
-  font-size: small !important
+  font-size: 12px !important
 }
 
 :host ::ng-deep .p-checkbox-box {
-  font-size: small !important
+  font-size: 12px !important
 }
 
 :host ::ng-deep .p-inputtext {
-  font-size: small !important;
+  font-size: 12px !important;
   text-align:center !important;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 :host ::ng-deep .p-dropdown{
-  font-size: small;
-  margin-left: 10px;
+  font-size: 12px;
+  margin-left: 5px;
+  width: 195px;
 }
 
 :host ::ng-deep .p-dropdown-item{
-  font-size: small;
+  font-size: 12px;
 }
 
 

@@ -1,11 +1,9 @@
 <div class="row justify-content-around mb-1">
-  <div class="col-2" style="padding-top: 1%;">
+  <div class="col-5">
     <h6>Despesas x Receitas</h6>
-  </div> 
-  <div class="field col-3">
-    <div class="ms-5">
-      <label for="drpdMesAno" class="label-pesquisa">Mês/Ano:</label>
-      <p-dropdown [options]="arFechamentosMensais" 
+    <p>
+        <label for="drpdMesAno" class="label-pesquisa">Mês/Ano:</label>
+        <p-dropdown [options]="arFechamentosMensais" 
                       inputId="drpdMesAno"
                       optionLabel="mesAno" 
                       optionValue="dataReferencia" 
@@ -16,11 +14,9 @@
                       (onChange)="onChangeFechamento()"
                       emptyMessage="Não encontrado"
                       autoDisplayFirst="true">
-       </p-dropdown>
-    </div>
-    <div class="mt-1">
-      <label for="drpdDialog" class="label-pesquisa">Gerar Dialog por:</label>
-      <p-dropdown [options]="arTipoDialog" 
+        </p-dropdown>
+        <label for="drpdDialog" class="label-pesquisa">Detalhe por:</label>
+        <p-dropdown [options]="arTipoDialog" 
                       inputId="drpDialog"
                       optionLabel="descricao" 
                       optionValue="id" 
@@ -28,9 +24,9 @@
                       [showClear]="false" 
                       [filter]="false"
                       autoDisplayFirst="true">
-      </p-dropdown>
-    </div>       
-  </div>
+        </p-dropdown>
+    </p>
+  </div> 
   <div class="card col-7">
     <label class="label-pesquisa mb-1">Gerar Excel</label>
     <p>
@@ -66,6 +62,7 @@
     </p>    
   </div>
 </div>
+
 <hr>
 <div *ngIf="arMovRealTipo.length==0" style="text-align: center; padding-top: 7rem; height: 16rem;">
   <strong>Dados não encontrados</strong>
