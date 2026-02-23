@@ -8,11 +8,35 @@
                     header-button-link="new">
                 </app-header-page-title>
             </div>
+            
+
             <div class="card-body">
-                <button (click)="gerarExcel()" class="btn-excel">
-                    <img src="assets/icons/excel.png" class="img-excel"/>
-                </button>
-                <div *ngIf="resources.length > 0 else loading">
+                <div class="row row-itens">
+                    <div class="col-11 col-parametros">
+                        <label>Categoria:</label>
+                        <app-dropdown-categoria [form-group]="formGroup" [form-control]="formGroup.get('idCategoria')"
+                            placeholder="Todas" (OnChange)="filtroPorCategoria()">
+                        </app-dropdown-categoria>
+                        <label>Item de Movimentação:</label>
+                        <form [formGroup]="formGroup">                            
+                            <input type="text" 
+                               class="form-control item-movimentacao"
+                               formControlName="descricao"
+                               (keyup)="filtroPorItemMovimentacao()"/>  
+                        </form>
+                        <!--
+                        <button (click)="filtroPorItemMovimentacao()" class="btn-item-movimentacao">
+                            <img src="assets/icons/search_black_18dp.svg" class=""/>
+                        </button>
+                        -->
+                    </div>
+                    <div class="col-1 col-btn-excel">
+                        <button (click)="gerarExcel()" class="btn-excel">
+                            <img src="assets/icons/excel.png" class="img-excel"/>
+                        </button>
+                    </div>
+                </div>
+                <div class="row" *ngIf="resources.length > 0 else loading">
                     <table class="table table-hover">
                         <thead>
                             <tr class="bg-dark text-light">

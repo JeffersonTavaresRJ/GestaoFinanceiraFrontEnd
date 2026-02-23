@@ -1,10 +1,48 @@
+.row-itens {
+    font-size: small; 
+    margin-bottom: 10px;
+}
+
+.col-parametros{
+    display: flex; 
+    align-items: center;  
+    gap: 10px; 
+}
+
+.item-movimentacao{
+    font-size: small; 
+    width: 200px;
+}
+
+.col-btn-excel{
+    padding-top: 15px;
+    justify-content: flex-end;
+}
+
+:host ::ng-deep .p-dropdown {
+    font-size: small !important;
+    width: 200px !important;
+}
+
+:host ::ng-deep .p-dropdown-item {
+    font-size: small !important
+}
+
+:host ::ng-deep .p-inputtext {
+    font-size: small !important;
+}
+
 .btn-excel{
     width: 20px;
     height: 20px;
-    margin-bottom: 2px;
 }
 
 .img-excel{
     width: 20px;
     height: 20px;
+}
+
+.btn-item-movimentacao{
+    width: 33px;
+    height: 33px;
 }

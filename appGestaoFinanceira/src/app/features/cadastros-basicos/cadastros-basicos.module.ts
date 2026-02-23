@@ -12,7 +12,7 @@ import { FormaPagamentoFormComponent } from './forma-pagamento/forma-pagamento-f
 import { FormaPagamentoListComponent } from './forma-pagamento/forma-pagamento-list/forma-pagamento-list.component';
 import { ItemMovimentacaoFormComponent } from './item-movimentacao/item-movimentacao-form/item-movimentacao-form.component';
 import { ItemMovimentacaoListComponent } from './item-movimentacao/item-movimentacao-list/item-movimentacao-list.component';
-
+import { ComponentsModule } from '../-components/-components.module';
 @NgModule({
   declarations: [
     CategoriaFormComponent,
@@ -29,7 +29,8 @@ import { ItemMovimentacaoListComponent } from './item-movimentacao/item-moviment
     CoreModule,
     SharedModule,
     NgxPaginationModule,
-    OrderModule
+    OrderModule,
+    ComponentsModule
   ]
 })
 export class CadastrosBasicosModule { }

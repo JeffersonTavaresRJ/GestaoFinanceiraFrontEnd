@@ -4,6 +4,7 @@ import { GenericResourceModel } from '../../_models/generic-resource-model';
 import { GenericResourceService } from '../../_services/generic-resource-service';
 import { AlertMessageForm } from '../alert-form/alert-message-form';
 import { Reports } from 'src/app/shared/functions/reports';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Directive()
 export abstract class GenericResourceListComponent<T extends GenericResourceModel>
@@ -16,10 +17,14 @@ export abstract class GenericResourceListComponent<T extends GenericResourceMode
   private resourceDeleteId: number;
   private actResourceRoute: ActivatedRoute;
 
+  public formGroup: FormGroup;
+  public formBuilder: FormBuilder;
+
   constructor(protected injector: Injector,
     private resourceService: GenericResourceService<T>) {
       this.resourceAlertMessage = injector.get(AlertMessageForm);
       this.actResourceRoute = injector.get(ActivatedRoute);
+      this.formBuilder = injector.get(FormBuilder);
       this.resourceMessageTableNotFound = 'Dados não encontrados para a consulta especificada';
   }
 

@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
     if (!this.usuarioAutenticado){
       this.resetUser();
     }
-    debugger;
+    //debugger;
     var dataAtual = new Date();
     var anoAtual = dataAtual.getFullYear();
     var mesAtual = dataAtual.getMonth();
