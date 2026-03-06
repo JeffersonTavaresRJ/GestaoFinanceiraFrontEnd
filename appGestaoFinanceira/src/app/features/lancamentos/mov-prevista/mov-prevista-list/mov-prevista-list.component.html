@@ -87,11 +87,11 @@
                             </span>
                         </td>
                         <td style="text-align:center; width: 12.5%;">
-                            {{movimentacaoPrevista.dataVencimento | date:'dd/MM/yyyy'}}
+                            {{movimentacaoPrevista.dataVencimento | DateUTC }}
                         </td>
                         <td style="width: 20.7%;">
                             <strong>{{movimentacaoPrevista.itemMovimentacao.descricao}}</strong><br>
-                            {{movimentacaoPrevista.itemMovimentacao.categoria.descricao}}
+                            {{movimentacaoPrevista.itemMovimentacao.categoria.descricao}}/{{movimentacaoPrevista.id}}
                         </td>
                         <td style="width: 16.6%;">
                             {{movimentacaoPrevista.formaPagamento.descricao}}
@@ -188,7 +188,7 @@
         </div>
         <div class="col-4">
             <label>Data de Vencimento:</label>
-            <p><strong>{{detalheMovimentacaoPrevista.dataVencimento | date: 'dd/MM/yyyy'}}</strong></p>            
+            <p><strong>{{detalheMovimentacaoPrevista.dataVencimento | DateUTC}}</strong></p>            
         </div>
         <div class="col-4">
             <label>Valor:</label>

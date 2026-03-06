@@ -52,7 +52,7 @@
             <div *ngFor="let item of results; let f = first">
                 <div class="row" id="dvRow" style="margin-top: 2rem;">
                     <div class="col-12" id="dvSaldo">
-                        <strong>{{item.dataSaldo | date: 'dd/MM/yyyy'}}</strong><br>
+                        <strong>{{item.dataSaldo | DateUTC}}</strong><br>
                         <span   *ngIf="f==false || (formGroup.get('idFormaPagamento').value!=null)">Saldo: {{item.valor | currency}}</span>
                         <strong *ngIf="f==true && formGroup.get('idFormaPagamento').value==null"> Saldo atual: {{item.valor | currency}}</strong>
                     </div>
@@ -151,7 +151,7 @@
             </div>
             <div class="col-4">
                 <label>Data do Pagamento:</label>
-                <p><strong>{{movimentacaoRealizadaDetalhe.dataMovimentacaoRealizada | date: 'dd/MM/yyyy'}}</strong></p>
+                <p><strong>{{movimentacaoRealizadaDetalhe.dataMovimentacaoRealizada | DateUTC}}</strong></p>
             </div>
             <div class="col-4">
                 <label>Valor:</label>

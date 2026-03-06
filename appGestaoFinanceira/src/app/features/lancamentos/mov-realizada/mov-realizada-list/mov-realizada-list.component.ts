@@ -9,6 +9,7 @@ import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { MovimentacaoRealizada } from '../../_models/mov-realizada-model.';
 import { MovRealizadaService } from '../../_services/mov-realizada-service';
 
+
 @Component({
   selector: 'app-mov-realizada-list',
   templateUrl: './mov-realizada-list.component.html',
@@ -143,7 +144,7 @@ export class MovRealizadaListComponent implements OnInit {
 
   private filtrarTablePorParametros(idConta?: Number, idFormaPagamento?: Number) {
 
-    //debugger;
+    debugger;
     this.results.length=0;
     this.totalPorFormaPagto=0;
     this.toolTip=null;
@@ -173,10 +174,11 @@ export class MovRealizadaListComponent implements OnInit {
 
         this.totalPorFormaPagto+=total;
       });
-
+      
       this.toolTip = `Total: ${Math.abs(this.totalPorFormaPagto).toLocaleString('pt-BR',{ style: 'currency', currency: 'BRL' })}`;
 
     }
+    console.log(this.results);
   }
 
   private filterFormaPagamento(array:any[], id): boolean{
