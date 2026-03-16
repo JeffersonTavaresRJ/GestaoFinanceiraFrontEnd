@@ -108,7 +108,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
         (sucess: { resolveMovReal: MovimentacaoRealizada }) => {
           //console.log(sucess);
           //o resolveMovReal deve ser o mesmo nome na variável resolve da rota.. 
-          debugger;
+          //debugger;
           this.resourceForm.get('id').setValue(sucess.resolveMovReal.id);
           this.resourceForm.get('idCategoria').setValue(sucess.resolveMovReal.itemMovimentacao.categoria.id);
           this.resourceForm.get('idItemMovimentacao').setValue(sucess.resolveMovReal.itemMovimentacao.id);

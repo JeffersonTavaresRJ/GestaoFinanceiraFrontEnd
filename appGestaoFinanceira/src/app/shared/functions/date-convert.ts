@@ -45,7 +45,6 @@ export class DateConvert{
 
     static stringToDate(dateTime:string, separador:string):Date{  
       //date = date + 'T10:11:08.000Z'; 
-      debugger; 
         var date = dateTime.split("T")[0];//desconsiderando o time da data
 
         var arrData = date.split(separador);
@@ -62,12 +61,29 @@ export class DateConvert{
 
     static convertDate(dateTime: any, separador: string): Date{
         var date=null;
-        if (DateConvert.isDateValid(dateTime)){
-            date = new Date(dateTime);
-        }else{
-            date = DateConvert.stringToDate(dateTime, separador);
-        }
+        
+        if (DateConvert.isDateValid(dateTime) || this.mesString(dateTime)){
+            return new Date(dateTime);
+        } 
+        date = DateConvert.stringToDate(dateTime, separador);        
         return date;
+    }
+
+    static mesString(dateTime: string): boolean{
+
+        return dateTime.toUpperCase().includes("JAN") ||
+               dateTime.toUpperCase().includes("FEB") ||
+               dateTime.toUpperCase().includes("MAR") ||
+               dateTime.toUpperCase().includes("APR") ||
+               dateTime.toUpperCase().includes("MAY") ||
+               dateTime.toUpperCase().includes("JUN") ||
+               dateTime.toUpperCase().includes("JUL") ||
+               dateTime.toUpperCase().includes("AUG") ||
+               dateTime.toUpperCase().includes("SEP") ||
+               dateTime.toUpperCase().includes("OCT") ||
+               dateTime.toUpperCase().includes("NOV") ||
+               dateTime.toUpperCase().includes("DEC");
+
     }
    
 }

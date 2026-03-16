@@ -144,7 +144,7 @@ export class MovRealizadaListComponent implements OnInit {
 
   private filtrarTablePorParametros(idConta?: Number, idFormaPagamento?: Number) {
 
-    debugger;
+    //debugger;
     this.results.length=0;
     this.totalPorFormaPagto=0;
     this.toolTip=null;

@@ -128,7 +128,7 @@ export class MovPrevistaListComponent implements OnInit {
 
   eventDelete(event) {
     if (event) {
-      debugger;
+      //debugger;
       this.movPrevistaService.deleteById(this.id)
         .subscribe(sucess => {
           this.alertMessageForm.showSuccess(sucess.message);
