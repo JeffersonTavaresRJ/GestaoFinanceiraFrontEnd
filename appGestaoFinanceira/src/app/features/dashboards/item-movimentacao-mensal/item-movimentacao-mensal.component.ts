@@ -51,6 +51,7 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
 
   ngOnInit(): void {
     this.builderForm();
+    //debugger;
     this.dataIni = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataIni, '-');
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
     this.consultarDados();

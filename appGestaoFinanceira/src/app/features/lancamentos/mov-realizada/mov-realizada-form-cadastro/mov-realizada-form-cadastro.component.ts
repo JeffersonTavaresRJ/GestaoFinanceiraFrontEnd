@@ -145,7 +145,7 @@ export class MovRealizadaFormCadastroComponent extends GenericResourceFormCompon
 
   private getSaldoConta(idConta: number){   
     //var idConta=this.resourceForm.get('idConta').value;
-    var dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, '-');
+    var dataReferencia = DateConvert.stringToDate(this.resourceForm.get('dataMovimentacaoRealizada').value, "-");
         dataReferencia = new Date(dataReferencia.getFullYear(), dataReferencia.getMonth()+1, 0);
         
     this.idContaAnterior = idConta;

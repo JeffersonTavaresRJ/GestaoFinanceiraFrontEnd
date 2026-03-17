@@ -94,7 +94,7 @@ export class MovMensalRealDashboardComponent implements OnInit {
   renderizarChart(arMovPrevista:MovimentacaoPrevista[], arMovRealizada:MovimentacaoRealizada[]){
 
     //considerar somente Movimentações Diárias..
-    //debugger;
+    debugger;
     arMovPrevista = arMovPrevista.filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
     arMovRealizada= arMovRealizada.filter(x=>x.itemMovimentacao.tipoOperacao=="MD");
 
