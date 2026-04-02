@@ -161,10 +161,28 @@ export class MovRealizadaListComponent implements OnInit {
       this.alertMessageForm.showError("A conta deve ser informada");
     }
 
+    var ano = this.dataIni.getFullYear();
+    var mes = this.dataIni.getMonth();
+    this.results = this.results
+                      .filter(m => {
+                                    /*Não aparecer no extrato quando não houver 
+                                    saldo e nem movimentações realizadas no mês anterior ao selecionado*/
+                                    var iDataSaldo = new Date(m.dataSaldo);
+                                    return !(iDataSaldo.getMonth() != mes && 
+                                             (m.movimentacoesRealizadas == null ||
+                                              m.movimentacoesRealizadas.length==0)) 
+                                    });
+
 
     if(idFormaPagamento != null){
       this.results = this.results
-                         .filter(m => this.filterFormaPagamento(m.movimentacoesRealizadas, idFormaPagamento));
+                         .filter(m => {
+                                        //filtro da forma de pagamento somente do saldo do mês/ano selecionado..
+                                        var iDataSaldo = new Date(m.dataSaldo);
+                                        return iDataSaldo.getFullYear()== ano && 
+                                               iDataSaldo.getMonth() == mes &&
+                                               this.filterFormaPagamento(m.movimentacoesRealizadas, idFormaPagamento)
+                                      });
 
       //totalizando por forma de pagamento..
       this.results.forEach(x=>{
@@ -178,7 +196,7 @@ export class MovRealizadaListComponent implements OnInit {
       this.toolTip = `Total: ${Math.abs(this.totalPorFormaPagto).toLocaleString('pt-BR',{ style: 'currency', currency: 'BRL' })}`;
 
     }
-    console.log(this.results);
+    //console.log(this.results);
   }
 
   private filterFormaPagamento(array:any[], id): boolean{

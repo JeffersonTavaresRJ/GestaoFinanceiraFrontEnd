@@ -302,7 +302,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
     this.movRealizadaService.quitarMovimentacaoPrevista(fGroup).subscribe(
       success=>{
-        console.log(`gravação:`);
+        //console.log(`gravação:`);
 
         if(fGroup.get('id').value==0){
           fGroup.get('id').setValue( Number.parseFloat(success.id));
