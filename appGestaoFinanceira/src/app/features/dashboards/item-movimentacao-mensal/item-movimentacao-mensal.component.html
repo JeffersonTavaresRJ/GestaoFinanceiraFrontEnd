@@ -57,12 +57,21 @@
     <div class="p-fluid col-3" *ngIf="idTipoGrafico=='C' || idTipoGrafico=='I'">
         <div class="p-field">
             <label>Conta:</label>
-            <app-dropdown-conta [form-group]="formGroup" 
-                                [form-control]="formGroup.get('idConta')"
-                                placeholder="--Opcional--"
-                                (OnChange)="consultarDados()"
-                                (OnClear)="consultarDados()">
-            </app-dropdown-conta>
+                    <p-multiSelect [options]="arContas" 
+                       [(ngModel)]="arSelectedContas"
+                       defaultLabel="Informe a conta" 
+                       optionValue="id"
+                       optionLabel="descricao"
+                       displaySelectedLabel="true"                      
+                       [maxSelectedLabels]="1"
+                       [selectionLimit]="limiteContas"
+                       [selectedItemsLabel]="'{0} Conta(s) selecionada(s)'"
+                       [showHeader]="true"
+                       [panelStyle]="{'width':'120px'}"
+                       [filter]="false"
+                       (onChange)="consultarDados()"
+                       (onClear)="consultarDados()">
+                    </p-multiSelect>
         </div>        
     </div>
 </div>

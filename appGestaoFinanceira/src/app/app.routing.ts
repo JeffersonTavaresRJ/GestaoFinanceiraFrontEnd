@@ -180,7 +180,8 @@ const routes: Routes = [
     //=================================================================================================
     {path: 'item-movimentacao-mensal-dashboard/:dataIni/:dataFim', component: ItemMovimentacaoMensalComponent,
      canActivate:[AuthGuard],
-     resolve:{resolveItemMovMensal: ItemMovimentacaoMensalListResolver}
+     resolve:{resolveItemMovMensal: ItemMovimentacaoMensalListResolver,
+              resolveConta: ContaListResolver}
     },
     //=================================================================================================
     { path: '**', component: Error404Component}

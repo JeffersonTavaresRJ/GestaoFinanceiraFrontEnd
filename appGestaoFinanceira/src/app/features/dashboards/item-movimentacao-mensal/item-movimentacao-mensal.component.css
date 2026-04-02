@@ -28,3 +28,15 @@
 :host ::ng-deep .dropdown-custom-virtual-scroll .p-dropdown {
     width: 220px;
 }
+
+:host ::ng-deep .p-multiselect-label {
+    font-size: small !important
+}
+
+:host ::ng-deep .p-multiselect-item {
+    font-size: small !important
+}
+
+:host ::ng-deep .p-multiselect-empty-message {
+    font-size: small !important
+}

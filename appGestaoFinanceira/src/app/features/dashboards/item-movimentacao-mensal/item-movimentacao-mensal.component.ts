@@ -6,6 +6,7 @@ import { formatCurrency, formatPercent } from '@angular/common';
 import { DateConvert } from 'src/app/shared/functions/date-convert';
 import { PercentCalculo } from 'src/app/shared/functions/percent-calculo';
 import { DateCalculo } from 'src/app/shared/functions/date-calculo';
+import { Conta } from '../../cadastros-basicos/_models/conta-model';
 
 
 interface DadosChart{name: string, data: number[], percent: number[]};
@@ -20,8 +21,10 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   arItemMovMensal: any[];
   arItemMovMensalAux: any[];
   arTipos:any[];
+  arSelectedContas:any[]=[]; 
   arDadosChart:DadosChart[]=[];
   arDadosChartDates:Date[]=[];
+  arContas: Conta[];
   arTiposGrafico =[{Key:"T", Value: "Por Tipo"}, 
                    {Key:"C", Value: "Por Categoria"}, 
                    {Key:"I", Value: "Por Item Movimentação"}];
@@ -37,6 +40,12 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
   constructor(private actResourceRoute: ActivatedRoute,
               private itemMovimentacaoService: ItemMovimentacaoService,
               protected formBuilder :FormBuilder) { 
+
+                this.actResourceRoute.data.subscribe(
+                    (sucess: { resolveConta: Conta[] }) => {
+                      //this.arContas = sucess.resolveConta.filter(c=>c.status==true);
+                      this.arContas = sucess.resolveConta;
+                    });
     
                 this.actResourceRoute.data.subscribe(
                     (sucess: { resolveItemMovMensal: any[] }) => {
@@ -56,7 +65,6 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
     this.dataFim = DateConvert.stringToDate(this.actResourceRoute.snapshot.params.dataFim, '-');
     this.consultarDados();
   }
-
 
   consultarDados():void{
 
@@ -97,8 +105,8 @@ export class ItemMovimentacaoMensalComponent implements OnInit {
                                           .filter(x=>x.tipoItemMovimentacao==this.idTipo);
           }
           
-          if(idConta != null){
-            this.arItemMovMensalAux = this.arItemMovMensalAux.filter(x=> x.idConta==idConta);
+          if(this.arSelectedContas.length>0){
+            this.arItemMovMensalAux = this.arItemMovMensalAux.filter(x=>this.arSelectedContas.map((e)=>{return e}).includes(x.idConta));
           } 
 
           this.isRenderChart=this.arItemMovMensalAux.length >0;
