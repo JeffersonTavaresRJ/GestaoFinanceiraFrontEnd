@@ -15,6 +15,11 @@
     font-size: small !important
 }
 
+:host ::ng-deep .p-cell-editing {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+}
+
 .ml-3{
     margin-left: 5% !important;
 }

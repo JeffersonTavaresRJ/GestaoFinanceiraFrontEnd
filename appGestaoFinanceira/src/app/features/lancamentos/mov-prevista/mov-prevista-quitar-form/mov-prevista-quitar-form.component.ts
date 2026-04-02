@@ -14,13 +14,14 @@ import { DialogMessageInterrogativeComponent } from 'src/app/shared/components/d
 @Component({
   selector: 'app-modal-mov-prevista-quitar-form',
   templateUrl: './mov-prevista-quitar-form.component.html',
-  styleUrls: ['./mov-prevista-quitar-form.component.css'],
-  styles: [`
+  styleUrls: ['./mov-prevista-quitar-form.component.css']
+  /*,styles: [`
         :host ::ng-deep .p-cell-editing {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
         }
     `]
+  styles: []*/
 })
 
 export class MovPrevistaQuitarFormComponent implements OnInit {
@@ -61,6 +62,7 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
 
 
   ngOnInit(): void {
+    //debugger;
     this.dataVencIni = this.actResourceRoute.snapshot.params.dataVencIni;
     this.dataVencFim = this.actResourceRoute.snapshot.params.dataVencFim;
 
@@ -86,7 +88,9 @@ export class MovPrevistaQuitarFormComponent implements OnInit {
         //o resolveResources deve ser o mesmo nome na variável resolve da rota.. 
         this.movimentacaoPrevista = sucess.resolveMovPrev;
         //tratamento para conversão de string para date..
-        this.movimentacaoPrevista.dataVencimento = new Date(sucess.resolveMovPrev.dataVencimento);
+        //debugger;
+        //this.movimentacaoPrevista.dataVencimento = new Date(sucess.resolveMovPrev.dataVencimento);
+        this.movimentacaoPrevista.dataVencimento = sucess.resolveMovPrev.dataVencimento;
 
         //tratando as movimentacoes realizadas, que foram conciliadas com as movimentações previstas..
         this.arMovimentacoesRealizadas = sucess.resolveMovPrev.movimentacoesRealizadas;

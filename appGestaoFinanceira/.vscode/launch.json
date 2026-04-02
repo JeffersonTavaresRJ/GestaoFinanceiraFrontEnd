@@ -5,8 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch index.html",
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "chrome",
             "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}"
+        },
+
+        {
+            "name": "Launch index.html",
+            "url": "http://localhost:8080",
             "type": "firefox",
             "request": "launch",
             "reAttach": true,
